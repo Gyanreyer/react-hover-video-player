@@ -1,25 +1,43 @@
-import React, { Component } from "react";
-import { render } from "react-dom";
+import React, { Component } from 'react';
+import { render } from 'react-dom';
 
-import HoverVideoPreview from "../../src";
+import HoverVideoPreview from '../../src/index.js';
 
-export default class Demo extends Component {
-  render() {
-    return (
-      <div>
-        <h1>react-hover-video-preview Demo</h1>
-        <HoverVideoPreview
-          imageSrc="https://via.placeholder.com/150"
-          videoSources={[
-            {
-              src:
-                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-            }
-          ]}
-        />
-      </div>
-    );
-  }
-}
+const Demo = () => (
+  <div>
+    <h1>react-hover-video-preview Demo</h1>
+    <a href="#">
+      <HoverVideoPreview
+        previewOverlay={
+          <div
+            style={{
+              color: 'white',
+              backgroundColor: 'red',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            Check out these butterflies
+          </div>
+        }
+        videoSrc={[
+          {
+            src: 'video/react-hover-video-preview-sample-video.webm',
+            type: 'video/webm',
+          },
+          {
+            src: 'video/react-hover-video-preview-sample-video.mp4',
+            type: 'video/mp4',
+          },
+        ]}
+        style={{ maxWidth: 400 }}
+      />
+    </a>
+  </div>
+);
+export default Demo;
 
-render(<Demo />, document.querySelector("#demo"));
+render(<Demo />, document.querySelector('#demo'));
