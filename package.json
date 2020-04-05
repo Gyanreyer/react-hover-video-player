@@ -17,18 +17,32 @@
     "start": "nwb serve-react-demo",
     "test": "nwb test-react",
     "test:coverage": "nwb test-react --coverage",
-    "test:watch": "nwb test-react --server"
+    "test:watch": "nwb test-react --server",
+    "precommit": "NODE_ENV=production lint-staged"
   },
   "dependencies": {
-    "@emotion/core": "^10.0.28"
+    "@emotion/core": "^10.0.28",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
   },
   "peerDependencies": {
     "react": "16.x"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^3.0.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.1.2",
     "nwb": "0.24.x",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0"
+    "prettier": "^2.0.2",
+    "pretty-quick": "^2.0.1"
   },
   "author": "",
   "homepage": "",
