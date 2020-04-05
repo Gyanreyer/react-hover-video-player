@@ -2,20 +2,28 @@ import { ClassNames } from '@emotion/core';
 import React from 'react';
 
 /**
- * @typedef   {Object}  VideoSource
- * @property  {string}  src   The URL string to use as the video player's src
- * @property  {string}  type  The media type of the video, ie 'video/mp4'
+ * @typedef   {object}  VideoSource
+ * @property  {string}  src - The src URL string to use for a video player source
+ * @property  {string}  type - The media type of the video, ie 'video/mp4'
+ */
+
+/**
+ * @typedef   {object}  VideoCaptionsTrack
+ * @property  {string}  src - The src URL string for the captions track file
+ * @property  {string}  srcLang - The language code for the language that these captions are in
+ * @property  {string}  label - The title of the captions track
  */
 
 /**
  * @component HoverVideoPreview
  *
- * @param {!node}   previewOverlay - The contents to render over the video while it's not playing
- * @param {!(string|VideoSource|VideoSource[])}  videoSrc -
+ * @param {node}   previewOverlay - The contents to render over the video while it's not playing
+ * @param {!(string|string[]|VideoSource|VideoSource[])}  videoSrc -
  *                                                Source(s) to use for the video player. Accepts 3 different formats:
  *                                                - **String**: the URL string to use as the video player's src
  *                                                - **Object**: an object with an `src` attribute defining the src URL and a `type` attribute for the source's media type (ie, 'video/mp4')
  *                                                - **Array**: if you would like to provide multiple sources, you can provide an array of URL strings and/or objects with the shape described above
+ * @param {!(string|string[]|VideoCaptionsTrack|VideoCaptionsTrack[])}
  * @param {bool}    [shouldRestartOnVideoStopped=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the preview
  * @param {number}  [fadeTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
  * @param {func}    [onStartingVideo] - Optional callback for every time the user mouses over or focuses on the hover preview and we attempt to start the video
@@ -39,6 +47,13 @@ const HoverVideoPreview = React.forwardRef(
     {
       previewOverlay,
       videoSrc,
+      videoCaptions,
+      shouldRestartOnVideoStopped = true,
+      overlayFadeTransitionDuration = 400,
+      onStartingVideo,
+      onStartedVideo,
+      onStoppingVideo,
+      onStoppedVideo,
       shouldShowVideoControls = false,
       shouldVideoLoop = true,
       isVideoMuted = true,
@@ -47,12 +62,6 @@ const HoverVideoPreview = React.forwardRef(
       overlayWrapperClassName = '',
       videoClassName = '',
       style = null,
-      shouldRestartOnVideoStopped = true,
-      overlayFadeTransitionDuration = 400,
-      onStartingVideo,
-      onStartedVideo,
-      onStoppingVideo,
-      onStoppedVideo,
     },
     ref
   ) => {
@@ -63,10 +72,12 @@ const HoverVideoPreview = React.forwardRef(
     const playPromiseRef = React.useRef();
 
     // Parse the `videoSrc` prop into an array of VideoSource objects to be used for the video player
-    const videoSources = React.useMemo(() => {
+    const parsedVideoSources = React.useMemo(() => {
       if (videoSrc == null) {
         // A videoSrc value is required in order to make the video player work
-        console.error("Error: 'videoSrc' prop is required");
+        console.error(
+          "Error: 'videoSrc' prop is required for HoverVideoPreview component"
+        );
 
         return [];
       }
@@ -78,7 +89,7 @@ const HoverVideoPreview = React.forwardRef(
           // Parse our video source values into an array of VideoSource objects that can be used to render sources for the video
           .reduce((sourceArray, source) => {
             if (typeof source === 'string') {
-              // If the source is a string, format it into a VideoSource object and add it to the array
+              // If the source is a string, it's an src URL so format it into a VideoSource object and add it to the array
               sourceArray.push({ src: source });
             } else if (source && source.src) {
               // If the source is an object with an src, just add it to the array
@@ -86,7 +97,7 @@ const HoverVideoPreview = React.forwardRef(
             } else {
               // Log an error if one of the videoSrc values is invalid
               console.error(
-                "Error: invalid value provided to 'videoSrc':",
+                "Error: invalid value provided to HoverVideoPreview prop 'videoSrc':",
                 source
               );
             }
@@ -94,7 +105,38 @@ const HoverVideoPreview = React.forwardRef(
             return sourceArray;
           }, [])
       );
-    }, []);
+    }, [videoSrc]);
+
+    const parsedVideoCaptions = React.useMemo(() => {
+      // If no captions were provided, return an empty array
+      if (!videoCaptions) return [];
+
+      return (
+        // Make sure we can treat the videoSrc value as an array
+        []
+          .concat(videoCaptions)
+          // Parse our video captions values into an array of VideoCaptionsTrack
+          // objects that can be used to render caption tracks for the video
+          .reduce((captionsArray, captions) => {
+            if (typeof captions === 'string') {
+              captionsArray.push({ src: captions });
+            } else if (captions && captions.src) {
+              captionsArray.push({
+                src: captions.src,
+                srcLang: captions.srcLang,
+                label: captions.label,
+              });
+            } else {
+              // Log an error if one of the videoCaptions values is invalid
+              console.error(
+                "Error: invalid value provided to HoverVideoPreview prop 'videoCaptions'"
+              );
+            }
+
+            return captionsArray;
+          }, [])
+      );
+    }, [videoCaptions]);
 
     /**
      * @function  attemptStopVideo
@@ -205,6 +247,7 @@ const HoverVideoPreview = React.forwardRef(
                 {previewOverlay}
               </div>
             )}
+            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
             <video
               controls={shouldShowVideoControls}
               loop={shouldVideoLoop}
@@ -220,8 +263,16 @@ const HoverVideoPreview = React.forwardRef(
                 videoClassName
               )}
             >
-              {videoSources.map(({ src, type }) => (
+              {parsedVideoSources.map(({ src, type }) => (
                 <source key={src} src={src} type={type} />
+              ))}
+              {parsedVideoCaptions.map(({ src, srcLang, label }) => (
+                <track
+                  kind="captions"
+                  src={src}
+                  srcLang={srcLang}
+                  label={label}
+                />
               ))}
             </video>
           </div>
