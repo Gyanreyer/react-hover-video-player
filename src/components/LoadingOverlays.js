@@ -1,5 +1,5 @@
-/** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import React from 'react';
+import { css } from 'emotion';
 
 export const LoadingSpinnerOverlay = ({
   spinnerRadius = 30,
@@ -11,7 +11,7 @@ export const LoadingSpinnerOverlay = ({
 
   return (
     <div
-      css={css`
+      className={css`
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.7);
@@ -24,18 +24,18 @@ export const LoadingSpinnerOverlay = ({
       <svg
         viewBox={`0 0 ${spinnerDiameter} ${spinnerDiameter}`}
         xmlns="http://www.w3.org/2000/svg"
-        css={css`
+        className={css`
           width: ${spinnerDiameter}px;
           height: ${spinnerDiameter}px;
 
-          animation: 3s linear infinite spinner-rotate-animation;
+          animation: 1s linear infinite spinner-rotate-animation;
 
           @keyframes spinner-rotate-animation {
             0% {
-              transform: rotate(0deg);
+              transform: rotate(45deg);
             }
             100% {
-              transform: rotate(360deg);
+              transform: rotate(405deg);
             }
           }
         `}
@@ -44,7 +44,7 @@ export const LoadingSpinnerOverlay = ({
           cx={spinnerRadius}
           cy={spinnerRadius}
           r={spinnerRadiusWithStroke}
-          css={css`
+          className={css`
             fill: transparent;
             stroke: white;
             stroke-width: 4;

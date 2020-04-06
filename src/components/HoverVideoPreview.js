@@ -1,12 +1,36 @@
-import { ClassNames } from '@emotion/core';
 import React from 'react';
+import { cx, css } from 'emotion';
 
+import FadeTransition from './FadeTransition';
+
+// Enum for states that the hover preview can be in
 const HOVER_PREVIEW_STATE = {
   stopping: 0,
   stopped: 1,
   loading: 2,
   playing: 3,
 };
+
+const baseContainerStyle = css`
+  position: relative;
+`;
+
+const baseOverlayContainerStyle = css`
+  /* Overlay wrapper should completely cover the dimensions of the video */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+`;
+
+const baseVideoStyle = css`
+  width: 100%;
+  display: block;
+`;
 
 /**
  * @typedef   {object}  VideoSource
@@ -91,7 +115,7 @@ const HoverVideoPreview = React.forwardRef(
 
     React.useEffect(() => {
       // Manually setting the `muted` attribute on the video element via an effect in order
-      // in order to avoid a know React issue with the `muted` prop not applying correctly on initial render
+      // to avoid a know React issue with the `muted` prop not applying correctly on initial render
       // https://github.com/facebook/react/issues/10389
       const { current: videoElement } = videoRef;
       if (isVideoMuted) {
@@ -252,106 +276,57 @@ const HoverVideoPreview = React.forwardRef(
     };
 
     return (
-      <ClassNames>
-        {({ css, cx }) => (
-          <div
-            onMouseEnter={attemptStartVideo}
-            onFocus={attemptStartVideo}
-            onMouseOut={attemptStopVideo}
-            onBlur={attemptStopVideo}
-            className={cx(
-              css`
-                position: relative;
-              `,
-              className
-            )}
-            style={style}
-            ref={ref}
+      <div
+        onMouseEnter={attemptStartVideo}
+        onFocus={attemptStartVideo}
+        onMouseOut={attemptStopVideo}
+        onBlur={attemptStopVideo}
+        className={cx(baseContainerStyle, className)}
+        style={style}
+        ref={ref}
+      >
+        {previewOverlay && (
+          <FadeTransition
+            isVisible={hoverPreviewState <= HOVER_PREVIEW_STATE.loading}
+            duration={overlayFadeTransitionDuration}
+            className={cx(baseOverlayContainerStyle, overlayWrapperClassName)}
           >
-            {previewOverlay && (
-              <div
-                className={cx(
-                  css`
-                    /* Overlay wrapper should completely cover the dimensions of the video */
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    width: 100%;
-                    height: 100%;
-                    pointer-events: none;
-
-                    /* Fade overlay in/out based on whether it should be visible or hidden */
-                    opacity: ${hoverPreviewState <= HOVER_PREVIEW_STATE.loading
-                      ? 1
-                      : 0};
-                    transition: opacity ${overlayFadeTransitionDuration}ms;
-                  `,
-                  overlayWrapperClassName
-                )}
-              >
-                {previewOverlay}
-              </div>
-            )}
-            {previewOverlay && (
-              <div
-                className={cx(
-                  css`
-                    /* Overlay wrapper should completely cover the dimensions of the video */
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    width: 100%;
-                    height: 100%;
-                    z-index: 1;
-                    pointer-events: none;
-
-                    /* Fade overlay in/out based on whether it should be visible or hidden */
-                    opacity: ${hoverPreviewState === HOVER_PREVIEW_STATE.loading
-                      ? 1
-                      : 0};
-                    transition: opacity ${overlayFadeTransitionDuration}ms;
-                  `,
-                  overlayWrapperClassName
-                )}
-              >
-                {loadingStateOverlay}
-              </div>
-            )}
-            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-            <video
-              controls={shouldShowVideoControls}
-              loop={shouldVideoLoop}
-              playsInline
-              preload={videoPreload}
-              ref={videoRef}
-              className={cx(
-                css`
-                  width: 100%;
-                  display: block;
-                `,
-                videoClassName
-              )}
-            >
-              {parsedVideoSources.map(({ src, type }) => (
-                <source key={src} src={src} type={type} />
-              ))}
-              {parsedVideoCaptions.map(({ src, srcLang, label }) => (
-                <track
-                  key={src}
-                  kind="captions"
-                  src={src}
-                  srcLang={srcLang}
-                  label={label}
-                />
-              ))}
-            </video>
-          </div>
+            {previewOverlay}
+          </FadeTransition>
         )}
-      </ClassNames>
+        {loadingStateOverlay && (
+          <FadeTransition
+            isVisible={hoverPreviewState === HOVER_PREVIEW_STATE.loading}
+            duration={overlayFadeTransitionDuration}
+            shouldMountOnEnter
+            className={cx(baseOverlayContainerStyle, overlayWrapperClassName)}
+          >
+            {loadingStateOverlay}
+          </FadeTransition>
+        )}
+        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+        <video
+          controls={shouldShowVideoControls}
+          loop={shouldVideoLoop}
+          playsInline
+          preload={videoPreload}
+          ref={videoRef}
+          className={cx(baseVideoStyle, videoClassName)}
+        >
+          {parsedVideoSources.map(({ src, type }) => (
+            <source key={src} src={src} type={type} />
+          ))}
+          {parsedVideoCaptions.map(({ src, srcLang, label }) => (
+            <track
+              key={src}
+              kind="captions"
+              src={src}
+              srcLang={srcLang}
+              label={label}
+            />
+          ))}
+        </video>
+      </div>
     );
   }
 );

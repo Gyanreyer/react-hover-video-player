@@ -1,40 +1,62 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { css } from 'emotion';
 
 import HoverVideoPreview, { LoadingSpinnerOverlay } from '../../src';
 
+const galleryVideoSources = [
+  [
+    {
+      src: 'video/react-hover-video-preview-sample-video.webm',
+      type: 'video/webm',
+    },
+    {
+      src: 'video/react-hover-video-preview-sample-video.mp4',
+      type: 'video/mp4',
+    },
+  ],
+  'video/react-hover-video-preview-sample-video.mp4',
+  {
+    src: 'video/react-hover-video-preview-sample-video.webm',
+    type: 'video/webm',
+  },
+];
+
 const Demo = () => (
   <div>
-    <h1>react-hover-video-preview Demo</h1>
-    <HoverVideoPreview
-      previewOverlay={
-        <div
-          style={{
-            color: 'white',
-            backgroundColor: 'red',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            height: '100%',
-          }}
-        >
-          Check out these butterflies
-        </div>
-      }
-      loadingStateOverlay={<LoadingSpinnerOverlay />}
-      videoSrc={[
-        {
-          src: 'video/react-hover-video-preview-sample-video.webm',
-          type: 'video/webm',
-        },
-        {
-          src: 'video/react-hover-video-preview-sample-video.mp4',
-          type: 'video/mp4',
-        },
-      ]}
-      style={{ maxWidth: 400 }}
-    />
+    <h1>Example Video Gallery</h1>
+    <div
+      className={css`
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 16px;
+      `}
+    >
+      {galleryVideoSources.map((videoSrc) => (
+        <HoverVideoPreview
+          previewOverlay={
+            <div
+              className={css`
+                color: white;
+                background-color: red;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+              `}
+            >
+              Check out these butterflies
+            </div>
+          }
+          loadingStateOverlay={<LoadingSpinnerOverlay />}
+          videoSrc={videoSrc}
+          className={css`
+            max-width: 400px;
+          `}
+        />
+      ))}
+    </div>
   </div>
 );
 export default Demo;
