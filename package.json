@@ -15,9 +15,8 @@
     "clean": "nwb clean-module && nwb clean-demo",
     "prepublishOnly": "npm run build",
     "start": "nwb serve-react-demo",
-    "test": "nwb test-react",
-    "test:coverage": "nwb test-react --coverage",
-    "test:watch": "nwb test-react --server",
+    "test": "jest",
+    "test:watch": "jest --watch --no-cache",
     "precommit": "NODE_ENV=production lint-staged"
   },
   "dependencies": {
@@ -29,7 +28,11 @@
     "react": "16.x"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.3.0",
+    "@testing-library/react": "^10.0.2",
     "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.2.6",
+    "babel-polyfill": "^6.26.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.10.1",
@@ -38,7 +41,11 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
+    "eslint-plugin-testing-library": "^3.0.2",
     "husky": "^4.2.3",
+    "jest": "^25.2.7",
+    "jsdom": "^16.2.2",
+    "jsdom-global": "^3.0.2",
     "lint-staged": "^10.1.2",
     "nwb": "0.24.x",
     "prettier": "^2.0.2",

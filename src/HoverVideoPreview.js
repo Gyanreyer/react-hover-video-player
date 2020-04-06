@@ -17,22 +17,29 @@ import React from 'react';
 /**
  * @component HoverVideoPreview
  *
- * @param {node}   previewOverlay - The contents to render over the video while it's not playing
- * @param {!(string|string[]|VideoSource|VideoSource[])}  videoSrc -
- *                                                Source(s) to use for the video player. Accepts 3 different formats:
- *                                                - **String**: the URL string to use as the video player's src
- *                                                - **Object**: an object with an `src` attribute defining the src URL and a `type` attribute for the source's media type (ie, 'video/mp4')
- *                                                - **Array**: if you would like to provide multiple sources, you can provide an array of URL strings and/or objects with the shape described above
- * @param {!(string|string[]|VideoCaptionsTrack|VideoCaptionsTrack[])}
+ * @param {!(string|string[]|VideoSource|VideoSource[])}  videoSrc - Source(s) to use for the video player. Accepts 3 different formats:
+ *                                                                   - **String**: the URL string to use as the video player's src
+ *                                                                   - **Object**: an object with attributes:
+ *                                                                     - src: The src URL string to use for a video player source
+ *                                                                     - type: The media type of the video source, ie 'video/mp4'
+ *                                                                   - **Array**: if you would like to provide multiple sources, you can provide an array of URL strings and/or objects with the shape described above
+ * @param {!(string|string[]|VideoCaptionsTrack|VideoCaptionsTrack[])} videoCaptions - Captions track(s) to use for the video player for accessibility. Accepts 3 different formats:
+ *                                                                                     - **String**: the URL string to use as the captions track's src
+ *                                                                                     - **Object**: an object with attributes:
+ *                                                                                       - src: The src URL string for the captions track file
+ *                                                                                       - srcLang: The language code for the language that these captions are in (ie, 'en', 'es', 'fr')
+ *                                                                                       - label: The title of the captions track
+ *                                                                                     - **Array**: if you would like to provide multiple caption tracks, you can provide an array of objects with the shape described above
+ * @param {node}    [previewOverlay] - Contents to render over the video while it's not playing
+ * @param {number}  [overlayFadeTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
  * @param {bool}    [shouldRestartOnVideoStopped=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the preview
- * @param {number}  [fadeTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
  * @param {func}    [onStartingVideo] - Optional callback for every time the user mouses over or focuses on the hover preview and we attempt to start the video
  * @param {func}    [onStartedVideo] - Optional callback for when the video has been successfully started
  * @param {func}    [onStoppingVideo] - Optional callback for every time the user mouses out or blurs the hover preview and we attempt to stop the video
  * @param {func}    [onStoppedVideo] - Optional callback for when the video has successfully been stopped
+ * @param {bool}    [isVideoMuted=true] - Whether the video player should be muted
  * @param {bool}    [shouldShowVideoControls=false] - Whether the video player should show the browser's controls
  * @param {bool}    [shouldVideoLoop=true] - Whether the video player should loop when it reaches the end
- * @param {bool}    [isVideoMuted=true] - Whether the video player should be muted
  * @param {string}  [videoPreload='metadata'] - What the video should preload. Possible values:
  *                                              - 'none': No part of the video will be preloaded before we try to play it
  *                                              - 'metadata' (default): Only the video's metadata will be preloaded, including information such as its length
@@ -45,18 +52,18 @@ import React from 'react';
 const HoverVideoPreview = React.forwardRef(
   (
     {
-      previewOverlay,
       videoSrc,
       videoCaptions,
-      shouldRestartOnVideoStopped = true,
+      previewOverlay,
       overlayFadeTransitionDuration = 400,
+      shouldRestartOnVideoStopped = true,
       onStartingVideo,
       onStartedVideo,
       onStoppingVideo,
       onStoppedVideo,
+      isVideoMuted = true,
       shouldShowVideoControls = false,
       shouldVideoLoop = true,
-      isVideoMuted = true,
       videoPreload = 'metadata',
       className = '',
       overlayWrapperClassName = '',
@@ -70,6 +77,18 @@ const HoverVideoPreview = React.forwardRef(
     const videoRef = React.useRef();
     const pauseVideoTimeoutRef = React.useRef();
     const playPromiseRef = React.useRef();
+
+    React.useEffect(() => {
+      // Manually setting the `muted` attribute on the video element via an effect in order
+      // in order to avoid a know React issue with the `muted` prop not applying correctly on initial render
+      // https://github.com/facebook/react/issues/10389
+      const { current: videoElement } = videoRef;
+      if (isVideoMuted) {
+        videoElement.setAttribute('muted', '');
+      } else {
+        videoElement.removeAttribute('muted');
+      }
+    }, [isVideoMuted]);
 
     // Parse the `videoSrc` prop into an array of VideoSource objects to be used for the video player
     const parsedVideoSources = React.useMemo(() => {
@@ -109,7 +128,7 @@ const HoverVideoPreview = React.forwardRef(
 
     const parsedVideoCaptions = React.useMemo(() => {
       // If no captions were provided, return an empty array
-      if (!videoCaptions) return [];
+      if (videoCaptions == null) return [];
 
       return (
         // Make sure we can treat the videoSrc value as an array
@@ -129,7 +148,8 @@ const HoverVideoPreview = React.forwardRef(
             } else {
               // Log an error if one of the videoCaptions values is invalid
               console.error(
-                "Error: invalid value provided to HoverVideoPreview prop 'videoCaptions'"
+                "Error: invalid value provided to HoverVideoPreview prop 'videoCaptions'",
+                captions
               );
             }
 
@@ -158,11 +178,13 @@ const HoverVideoPreview = React.forwardRef(
         // won't stop until it's fully hidden
         pauseVideoTimeoutRef.current = setTimeout(
           () => {
-            videoRef.current.pause();
+            const { current: videoElement } = videoRef;
+
+            videoElement.pause();
 
             if (shouldRestartOnVideoStopped) {
               // If we should restart the video, reset its time to the beginning
-              videoRef.current.currentTime = 0;
+              videoElement.currentTime = 0;
             }
 
             if (onStoppedVideo) onStoppedVideo();
@@ -193,11 +215,13 @@ const HoverVideoPreview = React.forwardRef(
       // cancel any outstanding timeout that would pause the video
       clearTimeout(pauseVideoTimeoutRef.current);
 
-      if (videoRef.current.paused) {
+      const { current: videoElement } = videoRef;
+
+      if (videoElement.paused) {
         // If the video is not playing already, start playing it
         // Keep a reference to the returned promise for the play attempt so we can avoid interrupting
         // it when we need to pause the video
-        playPromiseRef.current = videoRef.current.play().then(() => {
+        playPromiseRef.current = videoElement.play().then(() => {
           setIsOverlayHidden(true);
           if (onStartedVideo) onStartedVideo();
         });
@@ -251,7 +275,6 @@ const HoverVideoPreview = React.forwardRef(
             <video
               controls={shouldShowVideoControls}
               loop={shouldVideoLoop}
-              muted={isVideoMuted}
               playsInline
               preload={videoPreload}
               ref={videoRef}
@@ -268,6 +291,7 @@ const HoverVideoPreview = React.forwardRef(
               ))}
               {parsedVideoCaptions.map(({ src, srcLang, label }) => (
                 <track
+                  key={src}
                   kind="captions"
                   src={src}
                   srcLang={srcLang}

@@ -1,0 +1,393 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HoverVideoPreview Handles invalid videoCaptions prop values correctly correctly handles receiving a single invalid value for the videoCaptions prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles invalid videoCaptions prop values correctly correctly handles receiving an invalid value in an array for the videoCaptions prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        label="English"
+        src="/fake/captions-file-en.vtt"
+        srclang="en"
+      />
+      <track
+        kind="captions"
+        label="French"
+        src="/fake/captions-file-fr.vtt"
+        srclang="fr"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correctly handles not receiving a videoSrc prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    />
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correctly handles receiving a single invalid value for the videoSrc prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    />
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correctly handles receiving an invalid value in an array for the videoSrc prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="valid-video-file.webm"
+      />
+      <source
+        src="valid-video-file.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly correctly handles receiving a string for the videoCaptions prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        src="/fake/captions-file.vtt"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly correctly handles receiving a valid object for the videoCaptions prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        label="English"
+        src="/fake/captions-file-en.vtt"
+        srclang="en"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly correctly handles receiving an array of objects for the videoCaptions prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        label="English"
+        src="/fake/captions-file-en.vtt"
+        srclang="en"
+      />
+      <track
+        kind="captions"
+        label="French"
+        src="/fake/captions-file-fr.vtt"
+        srclang="fr"
+      />
+      <track
+        kind="captions"
+        label="German"
+        src="/fake/captions-file-de.vtt"
+        srclang="de"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctly handles receiving a string for the videoSrc prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctly handles receiving a valid object for the videoSrc prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctly handles receiving an array of objects for the videoSrc prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.webm"
+        type="video/webm"
+      />
+      <source
+        src="/fake/video-file.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctly handles receiving an array of strings for the videoSrc prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.webm"
+      />
+      <source
+        src="/fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctly handles receiving an array with a mix of strings and objects for the videoSrc prop 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.webm"
+      />
+      <source
+        src="/fake/video-file.avi"
+      />
+      <source
+        src="/fake/video-file.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles video props correctly isVideoMuted prop correctly sets muted attribute on video 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles video props correctly shouldShowVideoControls prop correctly sets controls attribute on video 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles video props correctly shouldVideoLoop prop correctly sets loop attribute on video 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Handles video props correctly videoPreload prop correctly sets preload attribute on video 1`] = `
+<div>
+  <div
+    class="css-8hvobu"
+  >
+    <video
+      class="css-q5gg9"
+      loop=""
+      muted=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
