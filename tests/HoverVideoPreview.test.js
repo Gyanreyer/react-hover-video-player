@@ -11,9 +11,9 @@ const expectVideoHasCorrectAttributes = (
   expect(videoElement).not.toBeNull();
 
   if (muted) {
-    expect(videoElement).toHaveAttribute('muted');
+    expect(videoElement.muted).toBeTruthy();
   } else {
-    expect(videoElement).not.toHaveAttribute('muted');
+    expect(videoElement.muted).not.toBeTruthy();
   }
 
   if (loop) {

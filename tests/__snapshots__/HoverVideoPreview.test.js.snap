@@ -8,7 +8,6 @@ exports[`HoverVideoPreview Handles invalid videoCaptions prop values correctly c
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -28,7 +27,6 @@ exports[`HoverVideoPreview Handles invalid videoCaptions prop values correctly c
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -60,7 +58,6 @@ exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correc
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     />
@@ -76,7 +73,6 @@ exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correc
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     />
@@ -92,7 +88,6 @@ exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correc
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -116,7 +111,6 @@ exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly cor
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -140,7 +134,6 @@ exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly cor
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -166,7 +159,6 @@ exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly cor
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -204,7 +196,6 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -224,7 +215,6 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -245,7 +235,6 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -270,7 +259,6 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -293,7 +281,6 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -320,7 +307,6 @@ exports[`HoverVideoPreview Handles video props correctly isVideoMuted prop corre
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -340,7 +326,6 @@ exports[`HoverVideoPreview Handles video props correctly shouldShowVideoControls
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -360,7 +345,6 @@ exports[`HoverVideoPreview Handles video props correctly shouldVideoLoop prop co
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >
@@ -380,7 +364,6 @@ exports[`HoverVideoPreview Handles video props correctly videoPreload prop corre
     <video
       class="css-1vigk87"
       loop=""
-      muted=""
       playsinline=""
       preload="metadata"
     >

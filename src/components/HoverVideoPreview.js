@@ -118,11 +118,8 @@ const HoverVideoPreview = React.forwardRef(
       // to avoid a know React issue with the `muted` prop not applying correctly on initial render
       // https://github.com/facebook/react/issues/10389
       const { current: videoElement } = videoRef;
-      if (isVideoMuted) {
-        videoElement.setAttribute('muted', '');
-      } else {
-        videoElement.removeAttribute('muted');
-      }
+
+      videoElement.muted = isVideoMuted;
     }, [isVideoMuted]);
 
     // Parse the `videoSrc` prop into an array of VideoSource objects to be used for the video player
