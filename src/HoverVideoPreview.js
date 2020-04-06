@@ -1,6 +1,13 @@
 import { ClassNames } from '@emotion/core';
 import React from 'react';
 
+const HOVER_PREVIEW_STATE = {
+  stopping: 0,
+  stopped: 1,
+  loading: 2,
+  playing: 3,
+};
+
 /**
  * @typedef   {object}  VideoSource
  * @property  {string}  src - The src URL string to use for a video player source
@@ -31,6 +38,7 @@ import React from 'react';
  *                                                                                       - label: The title of the captions track
  *                                                                                     - **Array**: if you would like to provide multiple caption tracks, you can provide an array of objects with the shape described above
  * @param {node}    [previewOverlay] - Contents to render over the video while it's not playing
+ * @param {node}    [loadingStateOverlay] - Contents to render over the video while it's loading
  * @param {number}  [overlayFadeTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
  * @param {bool}    [shouldRestartOnVideoStopped=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the preview
  * @param {func}    [onStartingVideo] - Optional callback for every time the user mouses over or focuses on the hover preview and we attempt to start the video
@@ -55,6 +63,7 @@ const HoverVideoPreview = React.forwardRef(
       videoSrc,
       videoCaptions,
       previewOverlay,
+      loadingStateOverlay,
       overlayFadeTransitionDuration = 400,
       shouldRestartOnVideoStopped = true,
       onStartingVideo,
@@ -72,7 +81,9 @@ const HoverVideoPreview = React.forwardRef(
     },
     ref
   ) => {
-    const [isOverlayHidden, setIsOverlayHidden] = React.useState(false);
+    const [hoverPreviewState, setHoverPreviewState] = React.useState(
+      HOVER_PREVIEW_STATE.stopped
+    );
 
     const videoRef = React.useRef();
     const pauseVideoTimeoutRef = React.useRef();
@@ -168,7 +179,7 @@ const HoverVideoPreview = React.forwardRef(
 
       const stopVideo = () => {
         // Start fading the overlay back in to cover up the video before it's paused
-        setIsOverlayHidden(false);
+        setHoverPreviewState(HOVER_PREVIEW_STATE.stopping);
 
         // If we already had a timeout going to pause the video, cancel it so we can
         // replace it with a new one
@@ -188,6 +199,9 @@ const HoverVideoPreview = React.forwardRef(
             }
 
             if (onStoppedVideo) onStoppedVideo();
+
+            // Mark that the video has been stopped
+            setHoverPreviewState(HOVER_PREVIEW_STATE.stopped);
           },
           previewOverlay ? overlayFadeTransitionDuration : 0
         );
@@ -215,19 +229,25 @@ const HoverVideoPreview = React.forwardRef(
       // cancel any outstanding timeout that would pause the video
       clearTimeout(pauseVideoTimeoutRef.current);
 
-      const { current: videoElement } = videoRef;
+      if (hoverPreviewState <= HOVER_PREVIEW_STATE.stopped) {
+        const { current: videoElement } = videoRef;
 
-      if (videoElement.paused) {
-        // If the video is not playing already, start playing it
-        // Keep a reference to the returned promise for the play attempt so we can avoid interrupting
-        // it when we need to pause the video
-        playPromiseRef.current = videoElement.play().then(() => {
-          setIsOverlayHidden(true);
-          if (onStartedVideo) onStartedVideo();
-        });
-      } else {
-        // If the video is already playing, just make sure we keep the overlay hidden
-        setIsOverlayHidden(true);
+        if (videoElement.paused) {
+          // Mark that we are attempting to play the video and shouild show a loading state
+          setHoverPreviewState(HOVER_PREVIEW_STATE.loading);
+
+          // If the video is not playing already, start playing it
+          // Keep a reference to the returned promise for the play attempt so we can avoid interrupting
+          // it when we need to pause the video
+          playPromiseRef.current = videoElement.play().then(() => {
+            setHoverPreviewState(HOVER_PREVIEW_STATE.playing);
+
+            if (onStartedVideo) onStartedVideo();
+          });
+        } else {
+          // If the video is already playing, just make sure we keep the overlay hidden
+          setHoverPreviewState(HOVER_PREVIEW_STATE.playing);
+        }
       }
     };
 
@@ -260,15 +280,45 @@ const HoverVideoPreview = React.forwardRef(
                     right: 0;
                     width: 100%;
                     height: 100%;
+                    pointer-events: none;
 
                     /* Fade overlay in/out based on whether it should be visible or hidden */
-                    opacity: ${isOverlayHidden ? 0 : 1};
+                    opacity: ${hoverPreviewState <= HOVER_PREVIEW_STATE.loading
+                      ? 1
+                      : 0};
                     transition: opacity ${overlayFadeTransitionDuration}ms;
                   `,
                   overlayWrapperClassName
                 )}
               >
                 {previewOverlay}
+              </div>
+            )}
+            {previewOverlay && (
+              <div
+                className={cx(
+                  css`
+                    /* Overlay wrapper should completely cover the dimensions of the video */
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 1;
+                    pointer-events: none;
+
+                    /* Fade overlay in/out based on whether it should be visible or hidden */
+                    opacity: ${hoverPreviewState === HOVER_PREVIEW_STATE.loading
+                      ? 1
+                      : 0};
+                    transition: opacity ${overlayFadeTransitionDuration}ms;
+                  `,
+                  overlayWrapperClassName
+                )}
+              >
+                {loadingStateOverlay}
               </div>
             )}
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
