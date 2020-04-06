@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import HoverVideoPreview from '../../src';
+import HoverVideoPreview, { LoadingSpinnerOverlay } from '../../src';
 
 const Demo = () => (
   <div>
@@ -22,6 +22,7 @@ const Demo = () => (
           Check out these butterflies
         </div>
       }
+      loadingStateOverlay={<LoadingSpinnerOverlay />}
       videoSrc={[
         {
           src: 'video/react-hover-video-preview-sample-video.webm',

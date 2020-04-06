@@ -1,3 +1,5 @@
-import HoverVideoPreview from './HoverVideoPreview.js';
+import HoverVideoPreview from './HoverVideoPreview';
 
 export default HoverVideoPreview;
+
+export { LoadingSpinnerOverlay } from './LoadingOverlays';
