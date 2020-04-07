@@ -3,8 +3,8 @@ import { cx, css } from 'emotion';
 
 import FadeTransition from './FadeTransition';
 
-// Enum for states that the hover preview can be in
-const HOVER_PREVIEW_STATE = {
+// Enumerates states that the hover player can be in
+const HOVER_PLAYER_STATE = {
   stopped: 0,
   stopping: 1,
   loading: 2,
@@ -64,13 +64,13 @@ const baseVideoStyle = css`
  * @param {bool}    [isFocused=false] - Offers a prop interface for forcing the video to start/stop without DOM events
  *                                        When set to true, the video will begin playing and any events that would normally
  *                                        stop it will be ignored
- * @param {node}    [previewOverlay] - Contents to render over the video while it's not playing
+ * @param {node}    [pausedOverlay] - Contents to render over the video while it's not playing
  * @param {node}    [loadingStateOverlay] - Contents to render over the video while it's loading
  * @param {number}  [overlayFadeTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
- * @param {bool}    [shouldRestartOnVideoStopped=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the preview
- * @param {func}    [onStartingVideo] - Optional callback for every time the user mouses over or focuses on the hover preview and we attempt to start the video
+ * @param {bool}    [shouldRestartOnVideoStopped=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
+ * @param {func}    [onStartingVideo] - Optional callback for every time the user mouses over or focuses on the hover player and we attempt to start the video
  * @param {func}    [onStartedVideo] - Optional callback for when the video has been successfully started
- * @param {func}    [onStoppingVideo] - Optional callback for every time the user mouses out or blurs the hover preview and we attempt to stop the video
+ * @param {func}    [onStoppingVideo] - Optional callback for every time the user mouses out or blurs the hover player and we attempt to stop the video
  * @param {func}    [onStoppedVideo] - Optional callback for when the video has successfully been stopped
  * @param {bool}    [isVideoMuted=true] - Whether the video player should be muted
  * @param {bool}    [shouldShowVideoControls=false] - Whether the video player should show the browser's controls
@@ -83,21 +83,21 @@ const baseVideoStyle = css`
  * @param {string}  [overlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
  * @param {string}  [loadingStateOverlayWrapperClassName] - Optional className to apply custom styling to the loading state overlay contents' wrapper
  * @param {string}  [videoClassName] - Optional className to apply custom styling to the video element
- * @param {object}  [style] - Style object to apply custom CSS styles to the hover preview container
+ * @param {object}  [style] - Style object to apply custom CSS styles to the hover player container
  */
 function HoverVideoPlayer(
   {
     videoSrc,
     videoCaptions,
     isFocused = false,
-    previewOverlay,
-    loadingStateOverlay,
+    pausedOverlay = null,
+    loadingStateOverlay = null,
     overlayFadeTransitionDuration = 400,
     shouldRestartOnVideoStopped = true,
-    onStartingVideo,
-    onStartedVideo,
-    onStoppingVideo,
-    onStoppedVideo,
+    onStartingVideo = null,
+    onStartedVideo = null,
+    onStoppingVideo = null,
+    onStoppedVideo = null,
     isVideoMuted = true,
     shouldShowVideoControls = false,
     shouldVideoLoop = true,
@@ -110,8 +110,8 @@ function HoverVideoPlayer(
   },
   ref
 ) {
-  const [hoverPreviewState, setHoverPreviewState] = React.useState(
-    HOVER_PREVIEW_STATE.stopped
+  const [hoverPlayerState, setHoverPlayerState] = React.useState(
+    HOVER_PLAYER_STATE.stopped
   );
 
   const videoRef = React.useRef();
@@ -189,7 +189,7 @@ function HoverVideoPlayer(
   /**
    * @function  attemptStartVideo
    *
-   * Starts the video and fades the preview overlay out when the user mouses over or focuses in the video container element
+   * Starts the video and fades the paused overlay out when the user mouses over or focuses in the video container element
    */
   function attemptStartVideo() {
     // If we have an onStartingVideo callback, fire it to indicate the video is attempting to start
@@ -200,13 +200,13 @@ function HoverVideoPlayer(
     clearTimeout(pauseVideoTimeoutRef.current);
 
     // If the video is already loading/playing, return early
-    if (hoverPreviewState >= HOVER_PREVIEW_STATE.loading) return;
+    if (hoverPlayerState >= HOVER_PLAYER_STATE.loading) return;
 
     const { current: videoElement } = videoRef;
 
     if (videoElement.paused) {
       // Mark that we are attempting to play the video and should show a loading state
-      setHoverPreviewState(HOVER_PREVIEW_STATE.loading);
+      setHoverPlayerState(HOVER_PLAYER_STATE.loading);
 
       // If the video is not playing already, start playing it
       // Keep a reference to the returned promise for the play attempt so we can avoid interrupting
@@ -214,25 +214,25 @@ function HoverVideoPlayer(
       playPromiseRef.current = videoElement
         .play()
         .catch((error) => {
-          setHoverPreviewState(HOVER_PREVIEW_STATE.stopped);
+          setHoverPlayerState(HOVER_PLAYER_STATE.stopped);
           console.error(error);
         })
         .then(() => {
-          setHoverPreviewState(HOVER_PREVIEW_STATE.playing);
+          setHoverPlayerState(HOVER_PLAYER_STATE.playing);
 
           // If we have an onStartedVideo callback, fire it to indicate the video has successfully started
           if (onStartedVideo) onStartedVideo();
         });
     } else {
       // If the video is already playing, just make sure we keep the overlay hidden
-      setHoverPreviewState(HOVER_PREVIEW_STATE.playing);
+      setHoverPlayerState(HOVER_PLAYER_STATE.playing);
     }
   }
 
   /**
    * @function  attemptStopVideo
    *
-   * Stops the video and fades the preview overlay in when the user mouses out from or blurs the video container element
+   * Stops the video and fades the paused overlay in when the user mouses out from or blurs the video container element
    */
   function attemptStopVideo() {
     // If the isFocused override prop is active, ignore any other events attempting to stop the video
@@ -246,10 +246,10 @@ function HoverVideoPlayer(
     clearTimeout(pauseVideoTimeoutRef.current);
 
     // Return early if the video is already stopped
-    if (hoverPreviewState <= HOVER_PREVIEW_STATE.stopping) return;
+    if (hoverPlayerState <= HOVER_PLAYER_STATE.stopping) return;
 
     // Start fading the overlay back in to cover up the video before it's paused
-    setHoverPreviewState(HOVER_PREVIEW_STATE.stopping);
+    setHoverPlayerState(HOVER_PLAYER_STATE.stopping);
 
     // Set a timeout with the duration of the overlay's fade transition so the video
     // won't stop until it's fully hidden
@@ -266,7 +266,7 @@ function HoverVideoPlayer(
           }
 
           // Mark that the video has been stopped
-          setHoverPreviewState(HOVER_PREVIEW_STATE.stopped);
+          setHoverPlayerState(HOVER_PLAYER_STATE.stopped);
 
           // If we have an onStoppedVideo callback, fire it to indicate the video has been stopped
           if (onStoppedVideo) onStoppedVideo();
@@ -281,7 +281,7 @@ function HoverVideoPlayer(
           stopVideo();
         }
       },
-      previewOverlay ? overlayFadeTransitionDuration : 0
+      pausedOverlay ? overlayFadeTransitionDuration : 0
     );
   }
 
@@ -315,20 +315,20 @@ function HoverVideoPlayer(
       className={cx(baseContainerStyle, className)}
       style={style}
       ref={ref}
-      data-testid="hover-video-preview-container"
+      data-testid="hover-video-player-container"
     >
-      {previewOverlay && (
+      {pausedOverlay && (
         <FadeTransition
-          isVisible={hoverPreviewState <= HOVER_PREVIEW_STATE.loading}
+          isVisible={hoverPlayerState <= HOVER_PLAYER_STATE.loading}
           duration={overlayFadeTransitionDuration}
           className={cx(baseOverlayContainerStyle, overlayWrapperClassName)}
         >
-          {previewOverlay}
+          {pausedOverlay}
         </FadeTransition>
       )}
       {loadingStateOverlay && (
         <FadeTransition
-          isVisible={hoverPreviewState === HOVER_PREVIEW_STATE.loading}
+          isVisible={hoverPlayerState === HOVER_PLAYER_STATE.loading}
           duration={overlayFadeTransitionDuration}
           shouldMountOnEnter
           className={cx(

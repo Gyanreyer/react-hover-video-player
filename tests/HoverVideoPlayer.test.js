@@ -532,7 +532,7 @@ describe('HoverVideoPlayer', () => {
       videoElement.play = jest.fn(() => playPromise);
 
       // Mouse over the container to start playing the video
-      fireEvent.mouseEnter(getByTestId('hover-video-preview-container'));
+      fireEvent.mouseEnter(getByTestId('hover-video-player-container'));
 
       // The onStartingVideo callback should have been called
       expect(onStartingVideo).toHaveBeenCalled();
@@ -571,7 +571,7 @@ describe('HoverVideoPlayer', () => {
       videoElement.play = jest.fn(() => playPromise);
       videoElement.pause = jest.fn();
 
-      const playerContainer = getByTestId('hover-video-preview-container');
+      const playerContainer = getByTestId('hover-video-player-container');
 
       // Mouse over the container to start playing the video
       fireEvent.mouseEnter(playerContainer);
@@ -620,7 +620,7 @@ describe('HoverVideoPlayer', () => {
       expect(queryByTestId('loading-state-overlay')).not.toBeInTheDocument();
 
       // Mouse over the container to start playing the video
-      fireEvent.mouseEnter(getByTestId('hover-video-preview-container'));
+      fireEvent.mouseEnter(getByTestId('hover-video-player-container'));
 
       // We are in a loading state until the play promise is resolved so the loading overlay should now be mounted
       expect(queryByTestId('loading-state-overlay')).toBeInTheDocument();
@@ -642,7 +642,7 @@ describe('HoverVideoPlayer', () => {
      * TESTS THAT STILL NEED TO BE WRITTEN
      *
      * - mouseEnter interrupting mouseLeave
-     * - previewOverlay works correctly as player state changes
+     * - pausedOverlay works correctly as player state changes
      * - shouldRestartOnVideoStopped
      * - mouseLeave in scenario where video.play() didn't return promise
      * - video.play() throws an error

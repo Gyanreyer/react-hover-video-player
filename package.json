@@ -1,6 +1,5 @@
 {
-  "name": "react-hover-video-preview",
-  "version": "0.0.1",
+  "name": "react-hover-video-player",
   "description": "A React component which renders a thumbnail image and transitions to playing a video when the user hovers over it.",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -61,7 +60,10 @@
     "image",
     "thumbnail",
     "hover",
-    "preview",
+    "play",
+    "mouse",
+    "touch",
+    "loading",
     "video",
     "player"
   ]

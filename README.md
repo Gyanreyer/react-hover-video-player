@@ -1,10 +1,12 @@
-# react-hover-video-preview
+# react-hover-video-player
 
 [![Travis][build-badge]][build]
 [![npm package][npm-badge]][npm]
 [![Coveralls][coveralls-badge]][coveralls]
 
-Describe react-hover-video-preview here.
+React component which manages playing a video when the user hovers over it and pausing when they stop.
+
+Also provides support for displaying custom overlays on top of the video while it is in a paused or loading state.
 
 [build-badge]: https://img.shields.io/travis/user/repo/master.png?style=flat-square
 [build]: https://travis-ci.org/user/repo

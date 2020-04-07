@@ -7,17 +7,17 @@ import HoverVideoPlayer, { LoadingSpinnerOverlay } from '../../src';
 const galleryVideoSources = [
   [
     {
-      src: 'video/react-hover-video-preview-sample-video.webm',
+      src: 'video/react-hover-video-player-sample-video.webm',
       type: 'video/webm',
     },
     {
-      src: 'video/react-hover-video-preview-sample-video.mp4',
+      src: 'video/react-hover-video-player-sample-video.mp4',
       type: 'video/mp4',
     },
   ],
-  'video/react-hover-video-preview-sample-video.mp4',
+  'video/react-hover-video-player-sample-video.mp4',
   {
-    src: 'video/react-hover-video-preview-sample-video.webm',
+    src: 'video/react-hover-video-player-sample-video.webm',
     type: 'video/webm',
   },
 ];
@@ -33,7 +33,7 @@ const GalleryVideo = ({ videoSrc }) => {
     >
       <HoverVideoPlayer
         isFocused={isFocused}
-        previewOverlay={
+        pausedOverlay={
           <div
             className={css`
               color: white;
