@@ -85,194 +85,214 @@ const baseVideoStyle = css`
  * @param {string}  [videoClassName] - Optional className to apply custom styling to the video element
  * @param {object}  [style] - Style object to apply custom CSS styles to the hover preview container
  */
-const HoverVideoPreview = React.forwardRef(
-  (
-    {
-      videoSrc,
-      videoCaptions,
-      isFocused = false,
-      previewOverlay,
-      loadingStateOverlay,
-      overlayFadeTransitionDuration = 400,
-      shouldRestartOnVideoStopped = true,
-      onStartingVideo,
-      onStartedVideo,
-      onStoppingVideo,
-      onStoppedVideo,
-      isVideoMuted = true,
-      shouldShowVideoControls = false,
-      shouldVideoLoop = true,
-      videoPreload = 'metadata',
-      className = '',
-      overlayWrapperClassName = '',
-      loadingStateOverlayWrapperClassName = '',
-      videoClassName = '',
-      style = null,
-    },
-    ref
-  ) => {
-    const [hoverPreviewState, setHoverPreviewState] = React.useState(
-      HOVER_PREVIEW_STATE.stopped
-    );
+function HoverVideoPreview(
+  {
+    videoSrc,
+    videoCaptions,
+    isFocused = false,
+    previewOverlay,
+    loadingStateOverlay,
+    overlayFadeTransitionDuration = 400,
+    shouldRestartOnVideoStopped = true,
+    onStartingVideo,
+    onStartedVideo,
+    onStoppingVideo,
+    onStoppedVideo,
+    isVideoMuted = true,
+    shouldShowVideoControls = false,
+    shouldVideoLoop = true,
+    videoPreload = 'metadata',
+    className = '',
+    overlayWrapperClassName = '',
+    loadingStateOverlayWrapperClassName = '',
+    videoClassName = '',
+    style = null,
+  },
+  ref
+) {
+  const [hoverPreviewState, setHoverPreviewState] = React.useState(
+    HOVER_PREVIEW_STATE.stopped
+  );
 
-    const videoRef = React.useRef();
-    const pauseVideoTimeoutRef = React.useRef();
-    const playPromiseRef = React.useRef();
+  const videoRef = React.useRef();
+  const pauseVideoTimeoutRef = React.useRef();
+  const playPromiseRef = React.useRef();
 
-    React.useEffect(() => {
-      // Manually setting the `muted` attribute on the video element via an effect in order
-      // to avoid a know React issue with the `muted` prop not applying correctly on initial render
-      // https://github.com/facebook/react/issues/10389
-      const { current: videoElement } = videoRef;
-
-      videoElement.muted = isVideoMuted;
-    }, [isVideoMuted]);
-
-    // Parse the `videoSrc` prop into an array of VideoSource objects to be used for the video player
-    const parsedVideoSources = React.useMemo(() => {
-      if (videoSrc == null) {
-        // A videoSrc value is required in order to make the video player work
-        console.error(
-          "Error: 'videoSrc' prop is required for HoverVideoPreview component"
-        );
-
-        return [];
-      }
-
-      return (
-        // Make sure we can treat the videoSrc value as an array
-        []
-          .concat(videoSrc)
-          // Parse our video source values into an array of VideoSource objects that can be used to render sources for the video
-          .reduce((sourceArray, source) => {
-            if (typeof source === 'string') {
-              // If the source is a string, it's an src URL so format it into a VideoSource object and add it to the array
-              sourceArray.push({ src: source });
-            } else if (source && source.src) {
-              // If the source is an object with an src, just add it to the array
-              sourceArray.push({ src: source.src, type: source.type });
-            } else {
-              // Log an error if one of the videoSrc values is invalid
-              console.error(
-                "Error: invalid value provided to HoverVideoPreview prop 'videoSrc':",
-                source
-              );
-            }
-
-            return sourceArray;
-          }, [])
+  // Parse the `videoSrc` prop into an array of VideoSource objects to be used for the video player
+  const parsedVideoSources = React.useMemo(() => {
+    if (videoSrc == null) {
+      // A videoSrc value is required in order to make the video player work
+      console.error(
+        "Error: 'videoSrc' prop is required for HoverVideoPreview component"
       );
-    }, [videoSrc]);
 
-    const parsedVideoCaptions = React.useMemo(() => {
-      // If no captions were provided, return an empty array
-      if (videoCaptions == null) return [];
+      return [];
+    }
 
-      return (
-        // Make sure we can treat the videoSrc value as an array
-        []
-          .concat(videoCaptions)
-          // Parse our video captions values into an array of VideoCaptionsTrack
-          // objects that can be used to render caption tracks for the video
-          .reduce((captionsArray, captions) => {
-            if (typeof captions === 'string') {
-              captionsArray.push({ src: captions });
-            } else if (captions && captions.src) {
-              captionsArray.push({
-                src: captions.src,
-                srcLang: captions.srcLang,
-                label: captions.label,
-              });
-            } else {
-              // Log an error if one of the videoCaptions values is invalid
-              console.error(
-                "Error: invalid value provided to HoverVideoPreview prop 'videoCaptions'",
-                captions
-              );
-            }
-
-            return captionsArray;
-          }, [])
-      );
-    }, [videoCaptions]);
-
-    /**
-     * @function  attemptStopVideo
-     *
-     * Stops the video and fades the preview overlay in when the user mouses out from or blurs the video container element
-     */
-    const attemptStopVideo = () => {
-      // If the isFocused override prop is active, ignore any other events attempting to stop the video
-      if (isFocused) return;
-
-      // If we have an onStoppingVideo callback, fire it to indicate the video is in the process of being stopped
-      if (onStoppingVideo) onStoppingVideo();
-
-      // If we already had a timeout going to pause the video, cancel it so we can
-      // replace it with a new one
-      clearTimeout(pauseVideoTimeoutRef.current);
-
-      // Return early if the video is already stopped
-      if (hoverPreviewState <= HOVER_PREVIEW_STATE.stopping) return;
-
-      // Start fading the overlay back in to cover up the video before it's paused
-      setHoverPreviewState(HOVER_PREVIEW_STATE.stopping);
-
-      // Set a timeout with the duration of the overlay's fade transition so the video
-      // won't stop until it's fully hidden
-      pauseVideoTimeoutRef.current = setTimeout(
-        () => {
-          const { current: videoElement } = videoRef;
-
-          const stopVideo = () => {
-            videoElement.pause();
-
-            if (shouldRestartOnVideoStopped) {
-              // If we should restart the video, reset its time to the beginning
-              videoElement.currentTime = 0;
-            }
-
-            // Mark that the video has been stopped
-            setHoverPreviewState(HOVER_PREVIEW_STATE.stopped);
-
-            // If we have an onStoppedVideo callback, fire it to indicate the video has been stopped
-            if (onStoppedVideo) onStoppedVideo();
-          };
-
-          if (playPromiseRef.current instanceof Promise) {
-            // If we have a promise from when we attempted to start playing the video,
-            // ensure we wait to pause until the play promise is completed so we don't interrupt it
-            playPromiseRef.current.finally(stopVideo);
+    return (
+      // Make sure we can treat the videoSrc value as an array
+      []
+        .concat(videoSrc)
+        // Parse our video source values into an array of VideoSource objects that can be used to render sources for the video
+        .reduce((sourceArray, source) => {
+          if (typeof source === 'string') {
+            // If the source is a string, it's an src URL so format it into a VideoSource object and add it to the array
+            sourceArray.push({ src: source });
+          } else if (source && source.src) {
+            // If the source is an object with an src, just add it to the array
+            sourceArray.push({ src: source.src, type: source.type });
           } else {
-            // If we don't have a play attempt promise, just go ahead and pause
-            stopVideo();
+            // Log an error if one of the videoSrc values is invalid
+            console.error(
+              "Error: invalid value provided to HoverVideoPreview prop 'videoSrc':",
+              source
+            );
           }
-        },
-        previewOverlay ? overlayFadeTransitionDuration : 0
-      );
-    };
 
-    /**
-     * @function  attemptStartVideo
-     *
-     * Starts the video and fades the preview overlay out when the user mouses over or focuses in the video container element
-     */
-    const attemptStartVideo = () => {
-      // If we have an onStartingVideo callback, fire it to indicate the video is attempting to start
-      if (onStartingVideo) onStartingVideo();
+          return sourceArray;
+        }, [])
+    );
+  }, [videoSrc]);
 
-      // If the user quickly moved their mouse away and then back over the container,
-      // cancel any outstanding timeout that would pause the video
-      clearTimeout(pauseVideoTimeoutRef.current);
+  const parsedVideoCaptions = React.useMemo(() => {
+    // If no captions were provided, return an empty array
+    if (videoCaptions == null) return [];
 
-      // If the video is already loading/playing, return early
-      if (hoverPreviewState >= HOVER_PREVIEW_STATE.loading) return;
+    return (
+      // Make sure we can treat the videoSrc value as an array
+      []
+        .concat(videoCaptions)
+        // Parse our video captions values into an array of VideoCaptionsTrack
+        // objects that can be used to render caption tracks for the video
+        .reduce((captionsArray, captions) => {
+          if (typeof captions === 'string') {
+            captionsArray.push({ src: captions });
+          } else if (captions && captions.src) {
+            captionsArray.push({
+              src: captions.src,
+              srcLang: captions.srcLang,
+              label: captions.label,
+            });
+          } else {
+            // Log an error if one of the videoCaptions values is invalid
+            console.error(
+              "Error: invalid value provided to HoverVideoPreview prop 'videoCaptions'",
+              captions
+            );
+          }
 
-      const { current: videoElement } = videoRef;
+          return captionsArray;
+        }, [])
+    );
+  }, [videoCaptions]);
 
-      if (videoElement.paused) {
-        // Mark that we are attempting to play the video and should show a loading state
-        setHoverPreviewState(HOVER_PREVIEW_STATE.loading);
+  /**
+   * @function  attemptStartVideo
+   *
+   * Starts the video and fades the preview overlay out when the user mouses over or focuses in the video container element
+   */
+  function attemptStartVideo() {
+    // If we have an onStartingVideo callback, fire it to indicate the video is attempting to start
+    if (onStartingVideo) onStartingVideo();
+
+    // If the user quickly moved their mouse away and then back over the container,
+    // cancel any outstanding timeout that would pause the video
+    clearTimeout(pauseVideoTimeoutRef.current);
+
+    // If the video is already loading/playing, return early
+    if (hoverPreviewState >= HOVER_PREVIEW_STATE.loading) return;
+
+    const { current: videoElement } = videoRef;
+
+    if (videoElement.paused) {
+      // Mark that we are attempting to play the video and should show a loading state
+      setHoverPreviewState(HOVER_PREVIEW_STATE.loading);
+
+      // If the video is not playing already, start playing it
+      // Keep a reference to the returned promise for the play attempt so we can avoid interrupting
+      // it when we need to pause the video
+      playPromiseRef.current = videoElement
+        .play()
+        .catch((error) => {
+          setHoverPreviewState(HOVER_PREVIEW_STATE.stopped);
+          console.error(error);
+        })
+        .then(() => {
+          setHoverPreviewState(HOVER_PREVIEW_STATE.playing);
+
+          // If we have an onStartedVideo callback, fire it to indicate the video has successfully started
+          if (onStartedVideo) onStartedVideo();
+        });
+    } else {
+      // If the video is already playing, just make sure we keep the overlay hidden
+      setHoverPreviewState(HOVER_PREVIEW_STATE.playing);
+    }
+  }
+
+  /**
+   * @function  attemptStopVideo
+   *
+   * Stops the video and fades the preview overlay in when the user mouses out from or blurs the video container element
+   */
+  function attemptStopVideo() {
+    // If the isFocused override prop is active, ignore any other events attempting to stop the video
+    if (isFocused) return;
+
+    // If we have an onStoppingVideo callback, fire it to indicate the video is in the process of being stopped
+    if (onStoppingVideo) onStoppingVideo();
+
+    // If we already had a timeout going to pause the video, cancel it so we can
+    // replace it with a new one
+    clearTimeout(pauseVideoTimeoutRef.current);
+
+    // Return early if the video is already stopped
+    if (hoverPreviewState <= HOVER_PREVIEW_STATE.stopping) return;
+
+    // Start fading the overlay back in to cover up the video before it's paused
+    setHoverPreviewState(HOVER_PREVIEW_STATE.stopping);
+
+    // Set a timeout with the duration of the overlay's fade transition so the video
+    // won't stop until it's fully hidden
+    pauseVideoTimeoutRef.current = setTimeout(
+      () => {
+        const { current: videoElement } = videoRef;
+
+        const stopVideo = () => {
+          videoElement.pause();
+
+          if (shouldRestartOnVideoStopped) {
+            // If we should restart the video, reset its time to the beginning
+            videoElement.currentTime = 0;
+          }
+
+          // Mark that the video has been stopped
+          setHoverPreviewState(HOVER_PREVIEW_STATE.stopped);
+
+          // If we have an onStoppedVideo callback, fire it to indicate the video has been stopped
+          if (onStoppedVideo) onStoppedVideo();
+        };
+
+        if (playPromiseRef.current instanceof Promise) {
+          // If we have a promise from when we attempted to start playing the video,
+          // ensure we wait to pause until the play promise is completed so we don't interrupt it
+          playPromiseRef.current.finally(stopVideo);
+        } else {
+          // If we don't have a play attempt promise, just go ahead and pause
+          stopVideo();
+        }
+      },
+      previewOverlay ? overlayFadeTransitionDuration : 0
+    );
+  }
+
+  React.useEffect(() => {
+    // Manually setting the `muted` attribute on the video element via an effect in order
+    // to avoid a know React issue with the `muted` prop not applying correctly on initial render
+    // https://github.com/facebook/react/issues/10389
+    const { current: videoElement } = videoRef;
+
+    videoElement.muted = isVideoMuted;
+  }, [isVideoMuted]);
 
   React.useEffect(() => {
     // Use effect to start/stop the video when isFocused override prop changes
@@ -286,63 +306,63 @@ const HoverVideoPreview = React.forwardRef(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused]);
 
-    return (
-      <div
-        onMouseEnter={attemptStartVideo}
-        onFocus={attemptStartVideo}
-        onMouseOut={attemptStopVideo}
-        onBlur={attemptStopVideo}
-        className={cx(baseContainerStyle, className)}
-        style={style}
-        ref={ref}
-        data-testid="hover-video-preview-container"
-      >
-        {previewOverlay && (
-          <FadeTransition
-            isVisible={hoverPreviewState <= HOVER_PREVIEW_STATE.loading}
-            duration={overlayFadeTransitionDuration}
-            className={cx(baseOverlayContainerStyle, overlayWrapperClassName)}
-          >
-            {previewOverlay}
-          </FadeTransition>
-        )}
-        {loadingStateOverlay && (
-          <FadeTransition
-            isVisible={hoverPreviewState === HOVER_PREVIEW_STATE.loading}
-            duration={overlayFadeTransitionDuration}
-            shouldMountOnEnter
-            className={cx(
-              baseOverlayContainerStyle,
-              loadingStateOverlayWrapperClassName
-            )}
-          >
-            {loadingStateOverlay}
-          </FadeTransition>
-        )}
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <video
-          controls={shouldShowVideoControls}
-          loop={shouldVideoLoop}
-          playsInline
-          preload={videoPreload}
-          ref={videoRef}
-          className={cx(baseVideoStyle, videoClassName)}
+  return (
+    <div
+      onMouseEnter={attemptStartVideo}
+      onFocus={attemptStartVideo}
+      onMouseOut={attemptStopVideo}
+      onBlur={attemptStopVideo}
+      className={cx(baseContainerStyle, className)}
+      style={style}
+      ref={ref}
+      data-testid="hover-video-preview-container"
+    >
+      {previewOverlay && (
+        <FadeTransition
+          isVisible={hoverPreviewState <= HOVER_PREVIEW_STATE.loading}
+          duration={overlayFadeTransitionDuration}
+          className={cx(baseOverlayContainerStyle, overlayWrapperClassName)}
         >
-          {parsedVideoSources.map(({ src, type }) => (
-            <source key={src} src={src} type={type} />
-          ))}
-          {parsedVideoCaptions.map(({ src, srcLang, label }) => (
-            <track
-              key={src}
-              kind="captions"
-              src={src}
-              srcLang={srcLang}
-              label={label}
-            />
-          ))}
-        </video>
-      </div>
-    );
-});
+          {previewOverlay}
+        </FadeTransition>
+      )}
+      {loadingStateOverlay && (
+        <FadeTransition
+          isVisible={hoverPreviewState === HOVER_PREVIEW_STATE.loading}
+          duration={overlayFadeTransitionDuration}
+          shouldMountOnEnter
+          className={cx(
+            baseOverlayContainerStyle,
+            loadingStateOverlayWrapperClassName
+          )}
+        >
+          {loadingStateOverlay}
+        </FadeTransition>
+      )}
+      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+      <video
+        controls={shouldShowVideoControls}
+        loop={shouldVideoLoop}
+        playsInline
+        preload={videoPreload}
+        ref={videoRef}
+        className={cx(baseVideoStyle, videoClassName)}
+      >
+        {parsedVideoSources.map(({ src, type }) => (
+          <source key={src} src={src} type={type} />
+        ))}
+        {parsedVideoCaptions.map(({ src, srcLang, label }) => (
+          <track
+            key={src}
+            kind="captions"
+            src={src}
+            srcLang={srcLang}
+            label={label}
+          />
+        ))}
+      </video>
+    </div>
+  );
+}
 
-export default HoverVideoPreview;
+export default React.forwardRef(HoverVideoPreview);
