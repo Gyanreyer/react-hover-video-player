@@ -22,6 +22,42 @@ const galleryVideoSources = [
   },
 ];
 
+const GalleryVideo = ({ videoSrc }) => {
+  const [isFocused, setIsFocused] = React.useState(false);
+
+  return (
+    <a
+      href="/hello"
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+    >
+      <HoverVideoPreview
+        isFocused={isFocused}
+        previewOverlay={
+          <div
+            className={css`
+              color: white;
+              background-color: red;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 100%;
+              height: 100%;
+            `}
+          >
+            Check out these butterflies
+          </div>
+        }
+        loadingStateOverlay={<LoadingSpinnerOverlay />}
+        videoSrc={videoSrc}
+        className={css`
+          max-width: 400px;
+        `}
+      />
+    </a>
+  );
+};
+
 const Demo = () => (
   <div>
     <h1>Example Video Gallery</h1>
@@ -33,28 +69,7 @@ const Demo = () => (
       `}
     >
       {galleryVideoSources.map((videoSrc) => (
-        <HoverVideoPreview
-          previewOverlay={
-            <div
-              className={css`
-                color: white;
-                background-color: red;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 100%;
-                height: 100%;
-              `}
-            >
-              Check out these butterflies
-            </div>
-          }
-          loadingStateOverlay={<LoadingSpinnerOverlay />}
-          videoSrc={videoSrc}
-          className={css`
-            max-width: 400px;
-          `}
-        />
+        <GalleryVideo videoSrc={videoSrc} />
       ))}
     </div>
   </div>
