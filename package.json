@@ -1,5 +1,6 @@
 {
   "name": "react-hover-video-player",
+  "version": "0.0.0-development",
   "description": "A React component which renders a thumbnail image and transitions to playing a video when the user hovers over it.",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -12,20 +13,20 @@
   "scripts": {
     "build": "nwb build-react-component",
     "clean": "nwb clean-module && nwb clean-demo",
-    "prepublishOnly": "npm run build",
     "start": "nwb serve-react-demo",
     "test": "jest",
     "test:watch": "jest --watch --no-cache",
-    "precommit": "NODE_ENV=production lint-staged"
+    "semantic-release": "semantic-release",
+    "travis-deploy-once": "travis-deploy-once"
   },
   "dependencies": {
     "emotion": "^10.0.27",
-    "react": "^16.13.0",
+    "react": "^16.8.0",
     "react-dom": "^16.13.0",
     "react-transition-group": "^4.3.0"
   },
   "peerDependencies": {
-    "react": "16.x"
+    "react": "^16.8.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.3.0",
@@ -45,7 +46,9 @@
     "jest": "^25.2.7",
     "lint-staged": "^10.1.2",
     "nwb": "0.24.x",
-    "prettier": "^2.0.2"
+    "prettier": "^2.0.2",
+    "semantic-release": "^17.0.4",
+    "travis-deploy-once": "^5.0.11"
   },
   "author": "",
   "homepage": "",
