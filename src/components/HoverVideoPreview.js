@@ -78,6 +78,7 @@ const baseVideoStyle = css`
  *                                              - 'auto': The entire video will be preloaded even if it may not be played
  * @param {string}  [className] - Optional className to apply custom styling to the container element
  * @param {string}  [overlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
+ * @param {string}  [loadingStateOverlayWrapperClassName] - Optional className to apply custom styling to the loading state overlay contents' wrapper
  * @param {string}  [videoClassName] - Optional className to apply custom styling to the video element
  * @param {object}  [style] - Style object to apply custom CSS styles to the hover preview container
  */
@@ -100,6 +101,7 @@ const HoverVideoPreview = React.forwardRef(
       videoPreload = 'metadata',
       className = '',
       overlayWrapperClassName = '',
+      loadingStateOverlayWrapperClassName = '',
       videoClassName = '',
       style = null,
     },
@@ -196,22 +198,26 @@ const HoverVideoPreview = React.forwardRef(
      * Stops the video and fades the preview overlay in when the user mouses out from or blurs the video container element
      */
     const attemptStopVideo = () => {
+      // If we have an onStoppingVideo callback, fire it to indicate the video is in the process of being stopped
       if (onStoppingVideo) onStoppingVideo();
 
-      const stopVideo = () => {
-        // Start fading the overlay back in to cover up the video before it's paused
-        setHoverPreviewState(HOVER_PREVIEW_STATE.stopping);
+      // If we already had a timeout going to pause the video, cancel it so we can
+      // replace it with a new one
+      clearTimeout(pauseVideoTimeoutRef.current);
 
-        // If we already had a timeout going to pause the video, cancel it so we can
-        // replace it with a new one
-        clearTimeout(pauseVideoTimeoutRef.current);
+      // Return early if the video is already stopped
+      if (hoverPreviewState <= HOVER_PREVIEW_STATE.stopping) return;
 
-        // Set a timeout with the duration of the overlay's fade transition so the video
-        // won't stop until it's fully hidden
-        pauseVideoTimeoutRef.current = setTimeout(
-          () => {
-            const { current: videoElement } = videoRef;
+      // Start fading the overlay back in to cover up the video before it's paused
+      setHoverPreviewState(HOVER_PREVIEW_STATE.stopping);
 
+      // Set a timeout with the duration of the overlay's fade transition so the video
+      // won't stop until it's fully hidden
+      pauseVideoTimeoutRef.current = setTimeout(
+        () => {
+          const { current: videoElement } = videoRef;
+
+          const stopVideo = () => {
             videoElement.pause();
 
             if (shouldRestartOnVideoStopped) {
@@ -219,23 +225,24 @@ const HoverVideoPreview = React.forwardRef(
               videoElement.currentTime = 0;
             }
 
-            if (onStoppedVideo) onStoppedVideo();
-
             // Mark that the video has been stopped
             setHoverPreviewState(HOVER_PREVIEW_STATE.stopped);
-          },
-          previewOverlay ? overlayFadeTransitionDuration : 0
-        );
-      };
 
-      if (playPromiseRef.current instanceof Promise) {
-        // If we have a promise from when we attempted to start playing the video,
-        // ensure we wait to pause until the play promise is completed so we don't interrupt it
-        playPromiseRef.current.finally(stopVideo);
-      } else {
-        // If we don't have a play attempt promise, just go ahead and pause
-        stopVideo();
-      }
+            // If we have an onStoppedVideo callback, fire it to indicate the video has been stopped
+            if (onStoppedVideo) onStoppedVideo();
+          };
+
+          if (playPromiseRef.current instanceof Promise) {
+            // If we have a promise from when we attempted to start playing the video,
+            // ensure we wait to pause until the play promise is completed so we don't interrupt it
+            playPromiseRef.current.finally(stopVideo);
+          } else {
+            // If we don't have a play attempt promise, just go ahead and pause
+            stopVideo();
+          }
+        },
+        previewOverlay ? overlayFadeTransitionDuration : 0
+      );
     };
 
     /**
@@ -244,31 +251,40 @@ const HoverVideoPreview = React.forwardRef(
      * Starts the video and fades the preview overlay out when the user mouses over or focuses in the video container element
      */
     const attemptStartVideo = () => {
+      // If we have an onStartingVideo callback, fire it to indicate the video is attempting to start
       if (onStartingVideo) onStartingVideo();
 
       // If the user quickly moved their mouse away and then back over the container,
       // cancel any outstanding timeout that would pause the video
       clearTimeout(pauseVideoTimeoutRef.current);
 
-      if (hoverPreviewState <= HOVER_PREVIEW_STATE.stopped) {
-        const { current: videoElement } = videoRef;
+      // If the video is already loading/playing, return early
+      if (hoverPreviewState >= HOVER_PREVIEW_STATE.loading) return;
 
-        if (videoElement.paused) {
-          // Mark that we are attempting to play the video and shouild show a loading state
-          setHoverPreviewState(HOVER_PREVIEW_STATE.loading);
+      const { current: videoElement } = videoRef;
 
-          // If the video is not playing already, start playing it
-          // Keep a reference to the returned promise for the play attempt so we can avoid interrupting
-          // it when we need to pause the video
-          playPromiseRef.current = videoElement.play().then(() => {
+      if (videoElement.paused) {
+        // Mark that we are attempting to play the video and should show a loading state
+        setHoverPreviewState(HOVER_PREVIEW_STATE.loading);
+
+        // If the video is not playing already, start playing it
+        // Keep a reference to the returned promise for the play attempt so we can avoid interrupting
+        // it when we need to pause the video
+        playPromiseRef.current = videoElement
+          .play()
+          .catch((error) => {
+            setHoverPreviewState(HOVER_PREVIEW_STATE.stopped);
+            console.error(error);
+          })
+          .then(() => {
             setHoverPreviewState(HOVER_PREVIEW_STATE.playing);
 
+            // If we have an onStartedVideo callback, fire it to indicate the video has successfully started
             if (onStartedVideo) onStartedVideo();
           });
-        } else {
-          // If the video is already playing, just make sure we keep the overlay hidden
-          setHoverPreviewState(HOVER_PREVIEW_STATE.playing);
-        }
+      } else {
+        // If the video is already playing, just make sure we keep the overlay hidden
+        setHoverPreviewState(HOVER_PREVIEW_STATE.playing);
       }
     };
 
@@ -281,6 +297,7 @@ const HoverVideoPreview = React.forwardRef(
         className={cx(baseContainerStyle, className)}
         style={style}
         ref={ref}
+        data-testid="hover-video-preview-container"
       >
         {previewOverlay && (
           <FadeTransition
@@ -296,7 +313,10 @@ const HoverVideoPreview = React.forwardRef(
             isVisible={hoverPreviewState === HOVER_PREVIEW_STATE.loading}
             duration={overlayFadeTransitionDuration}
             shouldMountOnEnter
-            className={cx(baseOverlayContainerStyle, overlayWrapperClassName)}
+            className={cx(
+              baseOverlayContainerStyle,
+              loadingStateOverlayWrapperClassName
+            )}
           >
             {loadingStateOverlay}
           </FadeTransition>
