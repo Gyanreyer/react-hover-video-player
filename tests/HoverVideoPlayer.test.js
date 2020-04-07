@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import HoverVideoPreview from '../src';
+import HoverVideoPlayer from '../src';
 
 const expectVideoHasCorrectAttributes = (
   videoElement,
@@ -33,11 +33,11 @@ const expectVideoHasCorrectAttributes = (
   expect(videoElement).toHaveAttribute('playsInline');
 };
 
-describe('HoverVideoPreview', () => {
+describe('HoverVideoPlayer', () => {
   describe('Handles valid videoSrc prop values correctly', () => {
     test('correctly handles receiving a string for the videoSrc prop', () => {
       const { container } = render(
-        <HoverVideoPreview videoSrc="/fake/video-file.mp4" />
+        <HoverVideoPlayer videoSrc="/fake/video-file.mp4" />
       );
 
       expect(container).toMatchSnapshot();
@@ -53,7 +53,7 @@ describe('HoverVideoPreview', () => {
 
     test('correctly handles receiving an array of strings for the videoSrc prop', () => {
       const { container } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc={['/fake/video-file.webm', '/fake/video-file.mp4']}
         />
       );
@@ -73,7 +73,7 @@ describe('HoverVideoPreview', () => {
 
     test('correctly handles receiving a valid object for the videoSrc prop', () => {
       const { container } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc={{ src: '/fake/video-file.mp4', type: 'video/mp4' }}
         />
       );
@@ -91,7 +91,7 @@ describe('HoverVideoPreview', () => {
 
     test('correctly handles receiving an array of objects for the videoSrc prop', () => {
       const { container } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc={[
             { src: '/fake/video-file.webm', type: 'video/webm' },
             { src: '/fake/video-file.mp4', type: 'video/mp4' },
@@ -114,7 +114,7 @@ describe('HoverVideoPreview', () => {
 
     test('correctly handles receiving an array with a mix of strings and objects for the videoSrc prop', () => {
       const { container } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc={[
             '/fake/video-file.webm',
             { src: '/fake/video-file.avi' },
@@ -153,7 +153,7 @@ describe('HoverVideoPreview', () => {
     });
 
     test('correctly handles not receiving a videoSrc prop', () => {
-      const { container } = render(<HoverVideoPreview />);
+      const { container } = render(<HoverVideoPlayer />);
 
       expect(container).toMatchSnapshot();
 
@@ -166,12 +166,12 @@ describe('HoverVideoPreview', () => {
       // Should have logged an error warning that the 'videoSrc' prop is required
       expect(console.error).toHaveBeenCalledTimes(1);
       expect(console.error).toHaveBeenCalledWith(
-        "Error: 'videoSrc' prop is required for HoverVideoPreview component"
+        "Error: 'videoSrc' prop is required for HoverVideoPlayer component"
       );
     });
 
     test('correctly handles receiving a single invalid value for the videoSrc prop', () => {
-      const { container } = render(<HoverVideoPreview videoSrc={100} />);
+      const { container } = render(<HoverVideoPlayer videoSrc={100} />);
 
       expect(container).toMatchSnapshot();
 
@@ -184,14 +184,14 @@ describe('HoverVideoPreview', () => {
       // Should have logged an error warning that the 'videoSrc' prop is required
       expect(console.error).toHaveBeenCalledTimes(1);
       expect(console.error).toHaveBeenCalledWith(
-        "Error: invalid value provided to HoverVideoPreview prop 'videoSrc':",
+        "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
         100
       );
     });
 
     test('correctly handles receiving an invalid value in an array for the videoSrc prop', () => {
       const { container } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc={[
             'valid-video-file.webm',
             false,
@@ -215,7 +215,7 @@ describe('HoverVideoPreview', () => {
       // Should have logged an error warning that the 'videoSrc' prop is required
       expect(console.error).toHaveBeenCalledTimes(1);
       expect(console.error).toHaveBeenCalledWith(
-        "Error: invalid value provided to HoverVideoPreview prop 'videoSrc':",
+        "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
         false
       );
     });
@@ -224,7 +224,7 @@ describe('HoverVideoPreview', () => {
   describe('Handles valid videoCaptions prop values correctly', () => {
     test('correctly handles receiving a string for the videoCaptions prop', () => {
       const { container } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc="/fake/video-file.mp4"
           videoCaptions="/fake/captions-file.vtt"
         />
@@ -243,7 +243,7 @@ describe('HoverVideoPreview', () => {
 
     test('correctly handles receiving a valid object for the videoCaptions prop', () => {
       const { container } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc="/fake/video-file.mp4"
           videoCaptions={{
             src: '/fake/captions-file-en.vtt',
@@ -271,7 +271,7 @@ describe('HoverVideoPreview', () => {
 
     test('correctly handles receiving an array of objects for the videoCaptions prop', () => {
       const { container } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc="/fake/video-file.mp4"
           videoCaptions={[
             {
@@ -341,7 +341,7 @@ describe('HoverVideoPreview', () => {
 
     test('correctly handles receiving a single invalid value for the videoCaptions prop', () => {
       const { container } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc="fake/video-file.mp4"
           videoCaptions={false}
         />
@@ -358,14 +358,14 @@ describe('HoverVideoPreview', () => {
       // Should have logged an error warning that the 'videoSrc' prop is required
       expect(console.error).toHaveBeenCalledTimes(1);
       expect(console.error).toHaveBeenCalledWith(
-        "Error: invalid value provided to HoverVideoPreview prop 'videoCaptions'",
+        "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
         false
       );
     });
 
     test('correctly handles receiving an invalid value in an array for the videoCaptions prop', () => {
       const { container } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc="fake/video-file.mp4"
           videoCaptions={[
             {
@@ -411,12 +411,12 @@ describe('HoverVideoPreview', () => {
       expect(console.error).toHaveBeenCalledTimes(2);
       expect(console.error).toHaveBeenNthCalledWith(
         1,
-        "Error: invalid value provided to HoverVideoPreview prop 'videoCaptions'",
+        "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
         false
       );
       expect(console.error).toHaveBeenNthCalledWith(
         2,
-        "Error: invalid value provided to HoverVideoPreview prop 'videoCaptions'",
+        "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
         100
       );
     });
@@ -425,7 +425,7 @@ describe('HoverVideoPreview', () => {
   describe('Handles video props correctly', () => {
     test('isVideoMuted prop correctly sets muted attribute on video', () => {
       const { container, rerender } = render(
-        <HoverVideoPreview videoSrc="fake/video-file.mp4" />
+        <HoverVideoPlayer videoSrc="fake/video-file.mp4" />
       );
 
       expect(container).toMatchSnapshot();
@@ -435,7 +435,7 @@ describe('HoverVideoPreview', () => {
 
       // Re-render with the video unmuted
       rerender(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc="fake/video-file.mp4"
           isVideoMuted={false}
         />
@@ -445,7 +445,7 @@ describe('HoverVideoPreview', () => {
 
     test('shouldShowVideoControls prop correctly sets controls attribute on video', () => {
       const { container, rerender } = render(
-        <HoverVideoPreview videoSrc="fake/video-file.mp4" />
+        <HoverVideoPlayer videoSrc="fake/video-file.mp4" />
       );
 
       expect(container).toMatchSnapshot();
@@ -455,7 +455,7 @@ describe('HoverVideoPreview', () => {
 
       // Re-render with controls enabled on the video
       rerender(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc="fake/video-file.mp4"
           shouldShowVideoControls
         />
@@ -465,7 +465,7 @@ describe('HoverVideoPreview', () => {
 
     test('shouldVideoLoop prop correctly sets loop attribute on video', () => {
       const { container, rerender } = render(
-        <HoverVideoPreview videoSrc="fake/video-file.mp4" />
+        <HoverVideoPlayer videoSrc="fake/video-file.mp4" />
       );
 
       expect(container).toMatchSnapshot();
@@ -475,7 +475,7 @@ describe('HoverVideoPreview', () => {
 
       // Re-render with looping disabled on the video
       rerender(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc="fake/video-file.mp4"
           shouldVideoLoop={false}
         />
@@ -485,7 +485,7 @@ describe('HoverVideoPreview', () => {
 
     test('videoPreload prop correctly sets preload attribute on video', () => {
       const { container, rerender } = render(
-        <HoverVideoPreview videoSrc="fake/video-file.mp4" />
+        <HoverVideoPlayer videoSrc="fake/video-file.mp4" />
       );
 
       expect(container).toMatchSnapshot();
@@ -495,7 +495,7 @@ describe('HoverVideoPreview', () => {
 
       // Re-render with an updated video preload value
       rerender(
-        <HoverVideoPreview videoSrc="fake/video-file.mp4" videoPreload="auto" />
+        <HoverVideoPlayer videoSrc="fake/video-file.mp4" videoPreload="auto" />
       );
       expectVideoHasCorrectAttributes(videoElement, { preload: 'auto' });
     });
@@ -515,7 +515,7 @@ describe('HoverVideoPreview', () => {
       const onStartedVideo = jest.fn();
 
       const { container, getByTestId } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc="fake/video-file.mp4"
           onStartingVideo={onStartingVideo}
           onStartedVideo={onStartedVideo}
@@ -553,7 +553,7 @@ describe('HoverVideoPreview', () => {
       const onStoppedVideo = jest.fn();
 
       const { container, getByTestId } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc="fake/video-file.mp4"
           onStoppingVideo={onStoppingVideo}
           onStoppedVideo={onStoppedVideo}
@@ -600,7 +600,7 @@ describe('HoverVideoPreview', () => {
 
     test('loading state overlays are shown and hidden correctly as the video is started', async () => {
       const { container, getByTestId, queryByTestId } = render(
-        <HoverVideoPreview
+        <HoverVideoPlayer
           videoSrc="fake/video-file.mp4"
           loadingStateOverlay={<div data-testid="loading-state-overlay" />}
           overlayFadeTransitionDuration={500}

@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { css } from 'emotion';
 
-import HoverVideoPreview, { LoadingSpinnerOverlay } from '../../src';
+import HoverVideoPlayer, { LoadingSpinnerOverlay } from '../../src';
 
 const galleryVideoSources = [
   [
@@ -31,7 +31,7 @@ const GalleryVideo = ({ videoSrc }) => {
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
     >
-      <HoverVideoPreview
+      <HoverVideoPlayer
         isFocused={isFocused}
         previewOverlay={
           <div

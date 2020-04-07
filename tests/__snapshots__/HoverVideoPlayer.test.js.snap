@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`HoverVideoPreview Goes through flow of starting and stopping the video correctly loading state overlays are shown and hidden correctly as the video is started 1`] = `
+exports[`HoverVideoPlayer Goes through flow of starting and stopping the video correctly loading state overlays are shown and hidden correctly as the video is started 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -20,7 +20,7 @@ exports[`HoverVideoPreview Goes through flow of starting and stopping the video 
 </div>
 `;
 
-exports[`HoverVideoPreview Goes through flow of starting and stopping the video correctly mouseEnter event takes the video through its start flow correctly 1`] = `
+exports[`HoverVideoPlayer Goes through flow of starting and stopping the video correctly mouseEnter event takes the video through its start flow correctly 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -40,7 +40,7 @@ exports[`HoverVideoPreview Goes through flow of starting and stopping the video 
 </div>
 `;
 
-exports[`HoverVideoPreview Goes through flow of starting and stopping the video correctly mouseLeave event takes the video through its stop flow correctly 1`] = `
+exports[`HoverVideoPlayer Goes through flow of starting and stopping the video correctly mouseLeave event takes the video through its stop flow correctly 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -60,7 +60,7 @@ exports[`HoverVideoPreview Goes through flow of starting and stopping the video 
 </div>
 `;
 
-exports[`HoverVideoPreview Handles invalid videoCaptions prop values correctly correctly handles receiving a single invalid value for the videoCaptions prop 1`] = `
+exports[`HoverVideoPlayer Handles invalid videoCaptions prop values correctly correctly handles receiving a single invalid value for the videoCaptions prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -80,7 +80,7 @@ exports[`HoverVideoPreview Handles invalid videoCaptions prop values correctly c
 </div>
 `;
 
-exports[`HoverVideoPreview Handles invalid videoCaptions prop values correctly correctly handles receiving an invalid value in an array for the videoCaptions prop 1`] = `
+exports[`HoverVideoPlayer Handles invalid videoCaptions prop values correctly correctly handles receiving an invalid value in an array for the videoCaptions prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -112,7 +112,7 @@ exports[`HoverVideoPreview Handles invalid videoCaptions prop values correctly c
 </div>
 `;
 
-exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correctly handles not receiving a videoSrc prop 1`] = `
+exports[`HoverVideoPlayer Handles invalid videoSrc prop values correctly correctly handles not receiving a videoSrc prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -128,7 +128,7 @@ exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correc
 </div>
 `;
 
-exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correctly handles receiving a single invalid value for the videoSrc prop 1`] = `
+exports[`HoverVideoPlayer Handles invalid videoSrc prop values correctly correctly handles receiving a single invalid value for the videoSrc prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -144,7 +144,7 @@ exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correc
 </div>
 `;
 
-exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correctly handles receiving an invalid value in an array for the videoSrc prop 1`] = `
+exports[`HoverVideoPlayer Handles invalid videoSrc prop values correctly correctly handles receiving an invalid value in an array for the videoSrc prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -168,7 +168,7 @@ exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correc
 </div>
 `;
 
-exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly correctly handles receiving a string for the videoCaptions prop 1`] = `
+exports[`HoverVideoPlayer Handles valid videoCaptions prop values correctly correctly handles receiving a string for the videoCaptions prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -192,7 +192,7 @@ exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly cor
 </div>
 `;
 
-exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly correctly handles receiving a valid object for the videoCaptions prop 1`] = `
+exports[`HoverVideoPlayer Handles valid videoCaptions prop values correctly correctly handles receiving a valid object for the videoCaptions prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -218,7 +218,7 @@ exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly cor
 </div>
 `;
 
-exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly correctly handles receiving an array of objects for the videoCaptions prop 1`] = `
+exports[`HoverVideoPlayer Handles valid videoCaptions prop values correctly correctly handles receiving an array of objects for the videoCaptions prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -256,7 +256,7 @@ exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly cor
 </div>
 `;
 
-exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctly handles receiving a string for the videoSrc prop 1`] = `
+exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly handles receiving a string for the videoSrc prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -276,7 +276,7 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
 </div>
 `;
 
-exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctly handles receiving a valid object for the videoSrc prop 1`] = `
+exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly handles receiving a valid object for the videoSrc prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -297,7 +297,7 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
 </div>
 `;
 
-exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctly handles receiving an array of objects for the videoSrc prop 1`] = `
+exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly handles receiving an array of objects for the videoSrc prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -322,7 +322,7 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
 </div>
 `;
 
-exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctly handles receiving an array of strings for the videoSrc prop 1`] = `
+exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly handles receiving an array of strings for the videoSrc prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -345,7 +345,7 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
 </div>
 `;
 
-exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctly handles receiving an array with a mix of strings and objects for the videoSrc prop 1`] = `
+exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly handles receiving an array with a mix of strings and objects for the videoSrc prop 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -372,7 +372,7 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
 </div>
 `;
 
-exports[`HoverVideoPreview Handles video props correctly isVideoMuted prop correctly sets muted attribute on video 1`] = `
+exports[`HoverVideoPlayer Handles video props correctly isVideoMuted prop correctly sets muted attribute on video 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -392,7 +392,7 @@ exports[`HoverVideoPreview Handles video props correctly isVideoMuted prop corre
 </div>
 `;
 
-exports[`HoverVideoPreview Handles video props correctly shouldShowVideoControls prop correctly sets controls attribute on video 1`] = `
+exports[`HoverVideoPlayer Handles video props correctly shouldShowVideoControls prop correctly sets controls attribute on video 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -412,7 +412,7 @@ exports[`HoverVideoPreview Handles video props correctly shouldShowVideoControls
 </div>
 `;
 
-exports[`HoverVideoPreview Handles video props correctly shouldVideoLoop prop correctly sets loop attribute on video 1`] = `
+exports[`HoverVideoPlayer Handles video props correctly shouldVideoLoop prop correctly sets loop attribute on video 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -432,7 +432,7 @@ exports[`HoverVideoPreview Handles video props correctly shouldVideoLoop prop co
 </div>
 `;
 
-exports[`HoverVideoPreview Handles video props correctly videoPreload prop correctly sets preload attribute on video 1`] = `
+exports[`HoverVideoPlayer Handles video props correctly videoPreload prop correctly sets preload attribute on video 1`] = `
 <div>
   <div
     class="css-cssveg"

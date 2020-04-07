@@ -5,8 +5,8 @@ import FadeTransition from './FadeTransition';
 
 // Enum for states that the hover preview can be in
 const HOVER_PREVIEW_STATE = {
-  stopping: 0,
-  stopped: 1,
+  stopped: 0,
+  stopping: 1,
   loading: 2,
   playing: 3,
 };
@@ -46,7 +46,7 @@ const baseVideoStyle = css`
  */
 
 /**
- * @component HoverVideoPreview
+ * @component HoverVideoPlayer
  *
  * @param {!(string|string[]|VideoSource|VideoSource[])}  videoSrc - Source(s) to use for the video player. Accepts 3 different formats:
  *                                                                   - **String**: the URL string to use as the video player's src
@@ -85,7 +85,7 @@ const baseVideoStyle = css`
  * @param {string}  [videoClassName] - Optional className to apply custom styling to the video element
  * @param {object}  [style] - Style object to apply custom CSS styles to the hover preview container
  */
-function HoverVideoPreview(
+function HoverVideoPlayer(
   {
     videoSrc,
     videoCaptions,
@@ -123,7 +123,7 @@ function HoverVideoPreview(
     if (videoSrc == null) {
       // A videoSrc value is required in order to make the video player work
       console.error(
-        "Error: 'videoSrc' prop is required for HoverVideoPreview component"
+        "Error: 'videoSrc' prop is required for HoverVideoPlayer component"
       );
 
       return [];
@@ -144,7 +144,7 @@ function HoverVideoPreview(
           } else {
             // Log an error if one of the videoSrc values is invalid
             console.error(
-              "Error: invalid value provided to HoverVideoPreview prop 'videoSrc':",
+              "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
               source
             );
           }
@@ -176,7 +176,7 @@ function HoverVideoPreview(
           } else {
             // Log an error if one of the videoCaptions values is invalid
             console.error(
-              "Error: invalid value provided to HoverVideoPreview prop 'videoCaptions'",
+              "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
               captions
             );
           }
@@ -365,4 +365,4 @@ function HoverVideoPreview(
   );
 }
 
-export default React.forwardRef(HoverVideoPreview);
+export default React.forwardRef(HoverVideoPlayer);

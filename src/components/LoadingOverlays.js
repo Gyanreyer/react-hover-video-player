@@ -4,7 +4,7 @@ import { css } from 'emotion';
 /**
  * @component LoadingSpinnerOverlay
  *
- * Renders a loading overlay for the HoverVideoPreview which shows an animated rotating semi-circle spinner
+ * Renders a loading overlay for the HoverVideoPlayer which shows an animated rotating semi-circle spinner
  *
  * @param {number}  [spinnerDiameter=60] - The pixel width that the spinner circle should display at
  * @param {number}  [strokeWidth=4] - The pixel width of the spinner circle's outline stroke
