@@ -61,6 +61,9 @@ const baseVideoStyle = css`
  *                                                                                       - srcLang: The language code for the language that these captions are in (ie, 'en', 'es', 'fr')
  *                                                                                       - label: The title of the captions track
  *                                                                                     - **Array**: if you would like to provide multiple caption tracks, you can provide an array of objects with the shape described above
+ * @param {bool}    [isFocused=false] - Offers a prop interface for forcing the video to start/stop without DOM events
+ *                                        When set to true, the video will begin playing and any events that would normally
+ *                                        stop it will be ignored
  * @param {node}    [previewOverlay] - Contents to render over the video while it's not playing
  * @param {node}    [loadingStateOverlay] - Contents to render over the video while it's loading
  * @param {number}  [overlayFadeTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
@@ -87,6 +90,7 @@ const HoverVideoPreview = React.forwardRef(
     {
       videoSrc,
       videoCaptions,
+      isFocused = false,
       previewOverlay,
       loadingStateOverlay,
       overlayFadeTransitionDuration = 400,
@@ -198,6 +202,9 @@ const HoverVideoPreview = React.forwardRef(
      * Stops the video and fades the preview overlay in when the user mouses out from or blurs the video container element
      */
     const attemptStopVideo = () => {
+      // If the isFocused override prop is active, ignore any other events attempting to stop the video
+      if (isFocused) return;
+
       // If we have an onStoppingVideo callback, fire it to indicate the video is in the process of being stopped
       if (onStoppingVideo) onStoppingVideo();
 
@@ -267,26 +274,17 @@ const HoverVideoPreview = React.forwardRef(
         // Mark that we are attempting to play the video and should show a loading state
         setHoverPreviewState(HOVER_PREVIEW_STATE.loading);
 
-        // If the video is not playing already, start playing it
-        // Keep a reference to the returned promise for the play attempt so we can avoid interrupting
-        // it when we need to pause the video
-        playPromiseRef.current = videoElement
-          .play()
-          .catch((error) => {
-            setHoverPreviewState(HOVER_PREVIEW_STATE.stopped);
-            console.error(error);
-          })
-          .then(() => {
-            setHoverPreviewState(HOVER_PREVIEW_STATE.playing);
+  React.useEffect(() => {
+    // Use effect to start/stop the video when isFocused override prop changes
+    if (isFocused) {
+      attemptStartVideo();
+    } else {
+      attemptStopVideo();
+    }
 
-            // If we have an onStartedVideo callback, fire it to indicate the video has successfully started
-            if (onStartedVideo) onStartedVideo();
-          });
-      } else {
-        // If the video is already playing, just make sure we keep the overlay hidden
-        setHoverPreviewState(HOVER_PREVIEW_STATE.playing);
-      }
-    };
+    // We really only want to fire this effect when the isFocused prop changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
 
     return (
       <div
@@ -345,7 +343,6 @@ const HoverVideoPreview = React.forwardRef(
         </video>
       </div>
     );
-  }
-);
+});
 
 export default HoverVideoPreview;

@@ -648,6 +648,7 @@ describe('HoverVideoPreview', () => {
      * - video.play() throws an error
      * - mouseEnter fired when video is already playing
      * - coverage for all touch event stuff once that is added
+     * - isFocused prop
      */
   });
 });
