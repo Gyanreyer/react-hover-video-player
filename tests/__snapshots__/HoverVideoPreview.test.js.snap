@@ -1,5 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`HoverVideoPreview Goes through flow of starting and stopping the video correctly loading state overlays are displayed correctly while the video is loading 1`] = `
+<div>
+  <div
+    class="css-cssveg"
+    data-testid="hover-video-preview-container"
+  >
+    <video
+      class="css-1vigk87"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Goes through flow of starting and stopping the video correctly mouseEnter event take the video through its start flow correctly 1`] = `
+<div>
+  <div
+    class="css-cssveg"
+    data-testid="hover-video-preview-container"
+  >
+    <video
+      class="css-1vigk87"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
 exports[`HoverVideoPreview Handles invalid videoCaptions prop values correctly correctly handles receiving a single invalid value for the videoCaptions prop 1`] = `
 <div>
   <div
