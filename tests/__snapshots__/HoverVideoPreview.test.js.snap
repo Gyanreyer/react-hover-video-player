@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`HoverVideoPreview Goes through flow of starting and stopping the video correctly loading state overlays are displayed correctly while the video is loading 1`] = `
+exports[`HoverVideoPreview Goes through flow of starting and stopping the video correctly loading state overlays are shown and hidden correctly as the video is started 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -20,7 +20,27 @@ exports[`HoverVideoPreview Goes through flow of starting and stopping the video 
 </div>
 `;
 
-exports[`HoverVideoPreview Goes through flow of starting and stopping the video correctly mouseEnter event take the video through its start flow correctly 1`] = `
+exports[`HoverVideoPreview Goes through flow of starting and stopping the video correctly mouseEnter event takes the video through its start flow correctly 1`] = `
+<div>
+  <div
+    class="css-cssveg"
+    data-testid="hover-video-preview-container"
+  >
+    <video
+      class="css-1vigk87"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`HoverVideoPreview Goes through flow of starting and stopping the video correctly mouseLeave event takes the video through its stop flow correctly 1`] = `
 <div>
   <div
     class="css-cssveg"
@@ -44,6 +64,7 @@ exports[`HoverVideoPreview Handles invalid videoCaptions prop values correctly c
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -63,6 +84,7 @@ exports[`HoverVideoPreview Handles invalid videoCaptions prop values correctly c
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -94,6 +116,7 @@ exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correc
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -109,6 +132,7 @@ exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correc
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -124,6 +148,7 @@ exports[`HoverVideoPreview Handles invalid videoSrc prop values correctly correc
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -147,6 +172,7 @@ exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly cor
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -170,6 +196,7 @@ exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly cor
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -195,6 +222,7 @@ exports[`HoverVideoPreview Handles valid videoCaptions prop values correctly cor
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -232,6 +260,7 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -251,6 +280,7 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -271,6 +301,7 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -295,6 +326,7 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -317,6 +349,7 @@ exports[`HoverVideoPreview Handles valid videoSrc prop values correctly correctl
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -343,6 +376,7 @@ exports[`HoverVideoPreview Handles video props correctly isVideoMuted prop corre
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -362,6 +396,7 @@ exports[`HoverVideoPreview Handles video props correctly shouldShowVideoControls
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -381,6 +416,7 @@ exports[`HoverVideoPreview Handles video props correctly shouldVideoLoop prop co
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"
@@ -400,6 +436,7 @@ exports[`HoverVideoPreview Handles video props correctly videoPreload prop corre
 <div>
   <div
     class="css-cssveg"
+    data-testid="hover-video-preview-container"
   >
     <video
       class="css-1vigk87"

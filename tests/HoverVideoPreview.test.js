@@ -510,7 +510,7 @@ describe('HoverVideoPreview', () => {
       jest.useRealTimers();
     });
 
-    test('mouseEnter event take the video through its start flow correctly', async () => {
+    test('mouseEnter event takes the video through its start flow correctly', async () => {
       const onStartingVideo = jest.fn();
       const onStartedVideo = jest.fn();
 
@@ -548,7 +548,57 @@ describe('HoverVideoPreview', () => {
       expect(onStartedVideo).toHaveBeenCalled();
     });
 
-    test('loading state overlays are displayed correctly while the video is loading', async () => {
+    test('mouseLeave event takes the video through its stop flow correctly', async () => {
+      const onStoppingVideo = jest.fn();
+      const onStoppedVideo = jest.fn();
+
+      const { container, getByTestId } = render(
+        <HoverVideoPreview
+          videoSrc="fake/video-file.mp4"
+          onStoppingVideo={onStoppingVideo}
+          onStoppedVideo={onStoppedVideo}
+          overlayFadeTransitionDuration={500}
+        />
+      );
+
+      expect(container).toMatchSnapshot();
+
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
+
+      const playPromise = Promise.resolve();
+
+      videoElement.play = jest.fn(() => playPromise);
+      videoElement.pause = jest.fn();
+
+      const playerContainer = getByTestId('hover-video-preview-container');
+
+      // Mouse over the container to start playing the video
+      fireEvent.mouseEnter(playerContainer);
+
+      // Wait until the play promise has resolved
+      await act(() => playPromise);
+
+      // Mouse out of the container to stop playing the video
+      fireEvent.mouseLeave(playerContainer);
+
+      // onStoppingVideo callback should have been called
+      expect(onStoppingVideo).toHaveBeenCalled();
+      // onStoppedVideo callback and video.pause should not be called until the timeout has completed
+      expect(onStoppedVideo).not.toHaveBeenCalled();
+      expect(videoElement.pause).not.toHaveBeenCalled();
+
+      // Advance by the fade transition duration to when the video will be stopped
+      jest.advanceTimersByTime(500);
+
+      // Stopping the video has to wait to make sure the play promise resolved
+      await act(() => playPromise);
+
+      expect(onStoppedVideo).toHaveBeenCalled();
+      expect(videoElement.pause).toHaveBeenCalled();
+    });
+
+    test('loading state overlays are shown and hidden correctly as the video is started', async () => {
       const { container, getByTestId, queryByTestId } = render(
         <HoverVideoPreview
           videoSrc="fake/video-file.mp4"
@@ -587,5 +637,17 @@ describe('HoverVideoPreview', () => {
       // The loading overlay should now be unmounted
       expect(queryByTestId('loading-state-overlay')).not.toBeInTheDocument();
     });
+
+    /**
+     * TESTS THAT STILL NEED TO BE WRITTEN
+     *
+     * - mouseEnter interrupting mouseLeave
+     * - previewOverlay works correctly as player state changes
+     * - shouldRestartOnVideoStopped
+     * - mouseLeave in scenario where video.play() didn't return promise
+     * - video.play() throws an error
+     * - mouseEnter fired when video is already playing
+     * - coverage for all touch event stuff once that is added
+     */
   });
 });
