@@ -7,6 +7,9 @@ module.exports = {
   },
   testRegex: '(/__tests__/.*|\\.(test|spec))\\.jsx?$',
   moduleFileExtensions: ['js', 'json', 'jsx', 'node'],
+  moduleNameMapper: {
+    '\\.(css|less|scss|sss|styl)$': '<rootDir>/node_modules/jest-css-modules',
+  },
   coverageThreshold: {
     global: {
       branches: 30,

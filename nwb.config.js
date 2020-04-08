@@ -4,4 +4,11 @@ module.exports = {
     esModules: true,
     umd: false,
   },
+  webpack: {
+    rules: {
+      css: {
+        modules: true,
+      },
+    },
+  },
 };

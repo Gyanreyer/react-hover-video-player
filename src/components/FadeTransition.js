@@ -1,6 +1,5 @@
 import React from 'react';
 import { Transition } from 'react-transition-group';
-import { cx, css } from 'emotion';
 
 const FadeTransition = ({
   isVisible = false,
@@ -18,18 +17,15 @@ const FadeTransition = ({
   >
     {(transitionState) => (
       <div
-        className={cx(
-          css`
-            /* If the transition state is entering/entered,
-                set the opacity to 1 to fade the contents in  */
-            opacity: ${transitionState === 'entering' ||
-            transitionState === 'entered'
+        style={{
+          // If the transition state is entering/entered, set the opacity to 1 to fade the contents in
+          opacity:
+            transitionState === 'entering' || transitionState === 'entered'
               ? 1
-              : 0};
-            transition: opacity ${duration}ms;
-          `,
-          className
-        )}
+              : 0,
+          transition: `opacity ${duration}ms`,
+        }}
+        className={className}
       >
         {children}
       </div>

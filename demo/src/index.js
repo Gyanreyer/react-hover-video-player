@@ -1,84 +1,42 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { css } from 'emotion';
 
 import HoverVideoPlayer, { LoadingSpinnerOverlay } from '../../src';
 
-const galleryVideoSources = [
-  [
-    {
-      src: 'video/react-hover-video-player-sample-video.webm',
-      type: 'video/webm',
-    },
-    {
-      src: 'video/react-hover-video-player-sample-video.mp4',
-      type: 'video/mp4',
-    },
-  ],
-  'video/react-hover-video-player-sample-video.mp4',
-  {
-    src: 'video/react-hover-video-player-sample-video.webm',
-    type: 'video/webm',
-  },
-];
-
-const GalleryVideo = ({ videoSrc }) => {
-  const [isFocused, setIsFocused] = React.useState(false);
-
-  return (
-    <a
-      href="#top"
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-    >
-      <HoverVideoPlayer
-        isFocused={isFocused}
-        pausedOverlay={
-          <div
-            className={css`
-              color: white;
-              background-color: red;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              width: 100%;
-              height: 100%;
-            `}
-          >
-            Check out these butterflies
-          </div>
-        }
-        loadingStateOverlay={<LoadingSpinnerOverlay />}
-        videoSrc={videoSrc}
-        className={css`
-          max-width: 400px;
-        `}
-      />
-    </a>
-  );
-};
+import styles from './styles.css';
 
 const Demo = () => (
   <div id="top">
     <h1>Example Video Gallery</h1>
-    <div
-      className={css`
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: 16px;
-
-        @media (max-width: 1024px) {
-          grid-template-columns: 1fr 1fr;
+    <div className={styles.GalleryGrid}>
+      <HoverVideoPlayer
+        videoSrc="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        shouldRestartOnVideoStopped={false}
+        pausedOverlay={
+          <img
+            src="image/big_buck_bunny_thumbnail.png"
+            alt="Big Buck Bunny"
+            style={{ width: '100%' }}
+          />
         }
-
-        @media (max-width: 320px) {
-          grid-template-columns: 1fr;
-        }
-      `}
-    >
-      {galleryVideoSources.map((videoSrc) => (
-        <GalleryVideo videoSrc={videoSrc} />
-      ))}
+        loadingOverlay={<LoadingSpinnerOverlay />}
+        style={{
+          maxWidth: 400,
+        }}
+      />
+      <HoverVideoPlayer
+        videoSrc={[
+          {
+            src: 'video/react-hover-video-player-sample-video.webm',
+            type: 'video/webm',
+          },
+          'video/react-hover-video-player-sample-video.mp4',
+        ]}
+        loadingOverlay={<LoadingSpinnerOverlay />}
+        style={{
+          maxWidth: 400,
+        }}
+      />
     </div>
   </div>
 );

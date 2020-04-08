@@ -3,11 +3,11 @@
 exports[`HoverVideoPlayer Goes through flow of starting and stopping the video correctly loading state overlays are shown and hidden correctly as the video is started 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -23,11 +23,11 @@ exports[`HoverVideoPlayer Goes through flow of starting and stopping the video c
 exports[`HoverVideoPlayer Goes through flow of starting and stopping the video correctly mouseEnter event takes the video through its start flow correctly 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -43,11 +43,11 @@ exports[`HoverVideoPlayer Goes through flow of starting and stopping the video c
 exports[`HoverVideoPlayer Goes through flow of starting and stopping the video correctly mouseLeave event takes the video through its stop flow correctly 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -63,11 +63,11 @@ exports[`HoverVideoPlayer Goes through flow of starting and stopping the video c
 exports[`HoverVideoPlayer Handles invalid videoCaptions prop values correctly correctly handles receiving a single invalid value for the videoCaptions prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -83,11 +83,11 @@ exports[`HoverVideoPlayer Handles invalid videoCaptions prop values correctly co
 exports[`HoverVideoPlayer Handles invalid videoCaptions prop values correctly correctly handles receiving an invalid value in an array for the videoCaptions prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -115,11 +115,11 @@ exports[`HoverVideoPlayer Handles invalid videoCaptions prop values correctly co
 exports[`HoverVideoPlayer Handles invalid videoSrc prop values correctly correctly handles not receiving a videoSrc prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -131,11 +131,11 @@ exports[`HoverVideoPlayer Handles invalid videoSrc prop values correctly correct
 exports[`HoverVideoPlayer Handles invalid videoSrc prop values correctly correctly handles receiving a single invalid value for the videoSrc prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -147,11 +147,11 @@ exports[`HoverVideoPlayer Handles invalid videoSrc prop values correctly correct
 exports[`HoverVideoPlayer Handles invalid videoSrc prop values correctly correctly handles receiving an invalid value in an array for the videoSrc prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -171,11 +171,11 @@ exports[`HoverVideoPlayer Handles invalid videoSrc prop values correctly correct
 exports[`HoverVideoPlayer Handles valid videoCaptions prop values correctly correctly handles receiving a string for the videoCaptions prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -195,11 +195,11 @@ exports[`HoverVideoPlayer Handles valid videoCaptions prop values correctly corr
 exports[`HoverVideoPlayer Handles valid videoCaptions prop values correctly correctly handles receiving a valid object for the videoCaptions prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -221,11 +221,11 @@ exports[`HoverVideoPlayer Handles valid videoCaptions prop values correctly corr
 exports[`HoverVideoPlayer Handles valid videoCaptions prop values correctly correctly handles receiving an array of objects for the videoCaptions prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -259,11 +259,11 @@ exports[`HoverVideoPlayer Handles valid videoCaptions prop values correctly corr
 exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly handles receiving a string for the videoSrc prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -279,11 +279,11 @@ exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly
 exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly handles receiving a valid object for the videoSrc prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -300,11 +300,11 @@ exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly
 exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly handles receiving an array of objects for the videoSrc prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -325,11 +325,11 @@ exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly
 exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly handles receiving an array of strings for the videoSrc prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -348,11 +348,11 @@ exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly
 exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly handles receiving an array with a mix of strings and objects for the videoSrc prop 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -375,11 +375,11 @@ exports[`HoverVideoPlayer Handles valid videoSrc prop values correctly correctly
 exports[`HoverVideoPlayer Handles video props correctly isVideoMuted prop correctly sets muted attribute on video 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -395,11 +395,11 @@ exports[`HoverVideoPlayer Handles video props correctly isVideoMuted prop correc
 exports[`HoverVideoPlayer Handles video props correctly shouldShowVideoControls prop correctly sets controls attribute on video 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -415,11 +415,11 @@ exports[`HoverVideoPlayer Handles video props correctly shouldShowVideoControls 
 exports[`HoverVideoPlayer Handles video props correctly shouldVideoLoop prop correctly sets loop attribute on video 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
@@ -435,11 +435,11 @@ exports[`HoverVideoPlayer Handles video props correctly shouldVideoLoop prop cor
 exports[`HoverVideoPlayer Handles video props correctly videoPreload prop correctly sets preload attribute on video 1`] = `
 <div>
   <div
-    class="css-cssveg"
+    class="Container "
     data-testid="hover-video-player-container"
   >
     <video
-      class="css-1vigk87"
+      class="Video "
       loop=""
       playsinline=""
       preload="metadata"
