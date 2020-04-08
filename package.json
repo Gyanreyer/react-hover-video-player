@@ -17,8 +17,7 @@
     "test": "jest",
     "test:watch": "jest --watch --no-cache",
     "semantic-release": "semantic-release",
-    "travis-deploy-once": "travis-deploy-once",
-    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info"
+    "travis-deploy-once": "travis-deploy-once"
   },
   "dependencies": {
     "emotion": "^10.0.27",
