@@ -435,10 +435,7 @@ describe('HoverVideoPlayer', () => {
 
       // Re-render with the video unmuted
       rerender(
-        <HoverVideoPlayer
-          videoSrc="fake/video-file.mp4"
-          isVideoMuted={false}
-        />
+        <HoverVideoPlayer videoSrc="fake/video-file.mp4" isVideoMuted={false} />
       );
       expectVideoHasCorrectAttributes(videoElement, { muted: false });
     });
@@ -529,7 +526,11 @@ describe('HoverVideoPlayer', () => {
 
       const playPromise = Promise.resolve();
 
-      videoElement.play = jest.fn(() => playPromise);
+      videoElement.play = jest.fn(() =>
+        playPromise.then(() => {
+          fireEvent.playing(videoElement);
+        })
+      );
 
       // Mouse over the container to start playing the video
       fireEvent.mouseEnter(getByTestId('hover-video-player-container'));
@@ -568,8 +569,12 @@ describe('HoverVideoPlayer', () => {
 
       const playPromise = Promise.resolve();
 
-      videoElement.play = jest.fn(() => playPromise);
-      videoElement.pause = jest.fn();
+      videoElement.play = jest.fn(() =>
+        playPromise.then(() => {
+          fireEvent.playing(videoElement);
+        })
+      );
+      videoElement.pause = jest.fn(() => fireEvent.pause(videoElement));
 
       const playerContainer = getByTestId('hover-video-player-container');
 
@@ -614,7 +619,12 @@ describe('HoverVideoPlayer', () => {
 
       const playPromise = Promise.resolve();
 
-      videoElement.play = jest.fn(() => playPromise);
+      videoElement.play = jest.fn(() =>
+        playPromise.then(() => {
+          fireEvent.playing(videoElement);
+        })
+      );
+      videoElement.pause = jest.fn(() => fireEvent.pause(videoElement));
 
       // The loading overlay should not be mounted while the player is idle
       expect(queryByTestId('loading-state-overlay')).not.toBeInTheDocument();

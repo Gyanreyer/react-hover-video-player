@@ -27,7 +27,7 @@ const GalleryVideo = ({ videoSrc }) => {
 
   return (
     <a
-      href="/hello"
+      href="#top"
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
     >
@@ -59,13 +59,21 @@ const GalleryVideo = ({ videoSrc }) => {
 };
 
 const Demo = () => (
-  <div>
+  <div id="top">
     <h1>Example Video Gallery</h1>
     <div
       className={css`
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-gap: 16px;
+
+        @media (max-width: 1024px) {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        @media (max-width: 320px) {
+          grid-template-columns: 1fr;
+        }
       `}
     >
       {galleryVideoSources.map((videoSrc) => (
