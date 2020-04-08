@@ -1,7 +1,7 @@
 import React from 'react';
-import { cx, css } from 'emotion';
 
 import FadeTransition from './FadeTransition';
+import styles from '../styles/HoverVideoPlayer.scss';
 
 // Enumerates states that the hover player can be in
 const HOVER_PLAYER_STATE = {
@@ -10,27 +10,6 @@ const HOVER_PLAYER_STATE = {
   loading: 2,
   playing: 3,
 };
-
-const baseContainerStyle = css`
-  position: relative;
-`;
-
-const baseOverlayContainerStyle = css`
-  /* Overlay wrapper should completely cover the dimensions of the video */
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-`;
-
-const baseVideoStyle = css`
-  width: 100%;
-  display: block;
-`;
 
 /**
  * @typedef   {object}  VideoSource
@@ -290,7 +269,7 @@ function HoverVideoPlayer({
       onMouseOut={attemptStopVideo}
       onBlur={attemptStopVideo}
       onTouchStart={attemptStartVideo}
-      className={cx(baseContainerStyle, className)}
+      className={`${styles.Container} ${className}`}
       style={style}
       data-testid="hover-video-player-container"
       ref={containerRef}
@@ -299,7 +278,7 @@ function HoverVideoPlayer({
         <FadeTransition
           isVisible={hoverPlayerState <= HOVER_PLAYER_STATE.loading}
           duration={overlayFadeTransitionDuration}
-          className={cx(baseOverlayContainerStyle, overlayWrapperClassName)}
+          className={`${styles.PausedOverlayContainer} ${overlayWrapperClassName}`}
         >
           {pausedOverlay}
         </FadeTransition>
@@ -309,10 +288,7 @@ function HoverVideoPlayer({
           isVisible={hoverPlayerState === HOVER_PLAYER_STATE.loading}
           duration={overlayFadeTransitionDuration}
           shouldMountOnEnter
-          className={cx(
-            baseOverlayContainerStyle,
-            loadingStateOverlayWrapperClassName
-          )}
+          className={`${styles.PausedOverlayContainer} ${loadingStateOverlayWrapperClassName}`}
         >
           {loadingStateOverlay}
         </FadeTransition>
@@ -324,7 +300,7 @@ function HoverVideoPlayer({
         playsInline
         preload={videoPreload}
         ref={videoRef}
-        className={cx(baseVideoStyle, videoClassName)}
+        className={`${styles.Video} ${videoClassName}`}
         onPlaying={() => {
           if (hoverPlayerState >= HOVER_PLAYER_STATE.loading) {
             // If the player was showing a loading state, transition into the playing state

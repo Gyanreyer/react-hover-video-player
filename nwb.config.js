@@ -4,4 +4,11 @@ module.exports = {
     esModules: true,
     umd: false,
   },
+  webpack: {
+    rules: {
+      'sass-css': {
+        modules: true,
+      },
+    },
+  },
 };

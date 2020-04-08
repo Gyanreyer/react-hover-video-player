@@ -1,8 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { css } from 'emotion';
 
 import HoverVideoPlayer, { LoadingSpinnerOverlay } from '../../src';
+
+import styles from './styles.scss';
 
 const galleryVideoSources = [
   [
@@ -11,7 +12,8 @@ const galleryVideoSources = [
       type: 'video/webm',
     },
     {
-      src: 'video/react-hover-video-player-sample-video.mp4',
+      src:
+        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
       type: 'video/mp4',
     },
   ],
@@ -34,25 +36,15 @@ const GalleryVideo = ({ videoSrc }) => {
       <HoverVideoPlayer
         isFocused={isFocused}
         pausedOverlay={
-          <div
-            className={css`
-              color: white;
-              background-color: red;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              width: 100%;
-              height: 100%;
-            `}
-          >
+          <div className={styles.PausedOverlay}>
             Check out these butterflies
           </div>
         }
         loadingStateOverlay={<LoadingSpinnerOverlay />}
         videoSrc={videoSrc}
-        className={css`
-          max-width: 400px;
-        `}
+        style={{
+          maxWidth: 400,
+        }}
       />
     </a>
   );
@@ -61,23 +53,11 @@ const GalleryVideo = ({ videoSrc }) => {
 const Demo = () => (
   <div id="top">
     <h1>Example Video Gallery</h1>
-    <div
-      className={css`
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: 16px;
-
-        @media (max-width: 1024px) {
-          grid-template-columns: 1fr 1fr;
-        }
-
-        @media (max-width: 320px) {
-          grid-template-columns: 1fr;
-        }
-      `}
-    >
+    <div className={styles.GalleryGrid}>
       {galleryVideoSources.map((videoSrc) => (
-        <GalleryVideo videoSrc={videoSrc} />
+        <React.Fragment key={videoSrc.src || videoSrc}>
+          <GalleryVideo videoSrc={videoSrc} />
+        </React.Fragment>
       ))}
     </div>
   </div>
