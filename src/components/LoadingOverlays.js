@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from '../styles/LoadingOverlays.scss';
+import styles from '../styles/LoadingOverlays.css';
 
 /**
  * @component LoadingSpinnerOverlay

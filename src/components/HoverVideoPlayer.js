@@ -1,7 +1,7 @@
 import React from 'react';
 
 import FadeTransition from './FadeTransition';
-import styles from '../styles/HoverVideoPlayer.scss';
+import styles from '../styles/HoverVideoPlayer.css';
 
 // Enumerates states that the hover player can be in
 const HOVER_PLAYER_STATE = {

@@ -11,7 +11,7 @@
     "umd"
   ],
   "scripts": {
-    "build": "nwb build-react-component",
+    "build": "nwb build-react-component --no-demo",
     "clean": "nwb clean-module && nwb clean-demo",
     "start": "nwb serve-react-demo",
     "test": "jest",
@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "react": "^16.8.0",
-    "react-dom": "^16.13.0",
     "react-transition-group": "^4.3.0"
   },
   "peerDependencies": {
@@ -44,10 +43,9 @@
     "eslint-plugin-testing-library": "^3.0.2",
     "jest": "^25.2.7",
     "jest-css-modules": "^2.1.0",
-    "lint-staged": "^10.1.2",
     "nwb": "0.24.x",
-    "nwb-sass": "^0.10.0",
     "prettier": "^2.0.2",
+    "react-dom": "^16.13.1",
     "semantic-release": "^17.0.4",
     "travis-deploy-once": "^5.0.11"
   },

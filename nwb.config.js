@@ -6,7 +6,7 @@ module.exports = {
   },
   webpack: {
     rules: {
-      'sass-css': {
+      css: {
         modules: true,
       },
     },

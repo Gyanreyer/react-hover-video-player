@@ -3,62 +3,40 @@ import { render } from 'react-dom';
 
 import HoverVideoPlayer, { LoadingSpinnerOverlay } from '../../src';
 
-import styles from './styles.scss';
-
-const galleryVideoSources = [
-  [
-    {
-      src: 'video/react-hover-video-player-sample-video.webm',
-      type: 'video/webm',
-    },
-    {
-      src:
-        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      type: 'video/mp4',
-    },
-  ],
-  'video/react-hover-video-player-sample-video.mp4',
-  {
-    src: 'video/react-hover-video-player-sample-video.webm',
-    type: 'video/webm',
-  },
-];
-
-const GalleryVideo = ({ videoSrc }) => {
-  const [isFocused, setIsFocused] = React.useState(false);
-
-  return (
-    <a
-      href="#top"
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-    >
-      <HoverVideoPlayer
-        isFocused={isFocused}
-        pausedOverlay={
-          <div className={styles.PausedOverlay}>
-            Check out these butterflies
-          </div>
-        }
-        loadingStateOverlay={<LoadingSpinnerOverlay />}
-        videoSrc={videoSrc}
-        style={{
-          maxWidth: 400,
-        }}
-      />
-    </a>
-  );
-};
+import styles from './styles.css';
 
 const Demo = () => (
   <div id="top">
     <h1>Example Video Gallery</h1>
     <div className={styles.GalleryGrid}>
-      {galleryVideoSources.map((videoSrc) => (
-        <React.Fragment key={videoSrc.src || videoSrc}>
-          <GalleryVideo videoSrc={videoSrc} />
-        </React.Fragment>
-      ))}
+      <HoverVideoPlayer
+        videoSrc="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        shouldRestartOnVideoStopped={false}
+        pausedOverlay={
+          <img
+            src="image/big_buck_bunny_thumbnail.png"
+            alt="Big Buck Bunny"
+            style={{ width: '100%' }}
+          />
+        }
+        loadingOverlay={<LoadingSpinnerOverlay />}
+        style={{
+          maxWidth: 400,
+        }}
+      />
+      <HoverVideoPlayer
+        videoSrc={[
+          {
+            src: 'video/react-hover-video-player-sample-video.webm',
+            type: 'video/webm',
+          },
+          'video/react-hover-video-player-sample-video.mp4',
+        ]}
+        loadingOverlay={<LoadingSpinnerOverlay />}
+        style={{
+          maxWidth: 400,
+        }}
+      />
     </div>
   </div>
 );
