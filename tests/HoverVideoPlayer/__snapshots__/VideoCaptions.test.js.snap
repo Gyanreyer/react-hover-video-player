@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Handles invalid videoCaptions prop values correctly correctly handles receiving a single invalid value for the videoCaptions prop 1`] = `
+<div>
+  <div
+    class="Container "
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="Video  "
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Handles invalid videoCaptions prop values correctly correctly handles receiving an invalid value in an array for the videoCaptions prop 1`] = `
+<div>
+  <div
+    class="Container "
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="Video  "
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        label="English"
+        src="/fake/captions-file-en.vtt"
+        srclang="en"
+      />
+      <track
+        kind="captions"
+        label="French"
+        src="/fake/captions-file-fr.vtt"
+        srclang="fr"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Handles valid videoCaptions prop values correctly correctly handles receiving a string for the videoCaptions prop 1`] = `
+<div>
+  <div
+    class="Container "
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="Video  "
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        src="/fake/captions-file.vtt"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Handles valid videoCaptions prop values correctly correctly handles receiving a valid object for the videoCaptions prop 1`] = `
+<div>
+  <div
+    class="Container "
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="Video  "
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        label="English"
+        src="/fake/captions-file-en.vtt"
+        srclang="en"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Handles valid videoCaptions prop values correctly correctly handles receiving an array of objects for the videoCaptions prop 1`] = `
+<div>
+  <div
+    class="Container "
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="Video  "
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        label="English"
+        src="/fake/captions-file-en.vtt"
+        srclang="en"
+      />
+      <track
+        kind="captions"
+        label="French"
+        src="/fake/captions-file-fr.vtt"
+        srclang="fr"
+      />
+      <track
+        kind="captions"
+        label="German"
+        src="/fake/captions-file-de.vtt"
+        srclang="de"
+      />
+    </video>
+  </div>
+</div>
+`;

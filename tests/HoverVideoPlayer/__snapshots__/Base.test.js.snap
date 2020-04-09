@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Handles video props correctly isVideoMuted prop correctly sets muted attribute on video 1`] = `
+<div>
+  <div
+    class="Container "
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="Video  "
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Handles video props correctly shouldShowVideoControls prop correctly sets controls attribute on video 1`] = `
+<div>
+  <div
+    class="Container "
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="Video  "
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Handles video props correctly shouldVideoLoop prop correctly sets loop attribute on video 1`] = `
+<div>
+  <div
+    class="Container "
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="Video  "
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;

@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Pause and loading overlays work correctly overlays are shown and hidden correctly as the video is started and stopped 1`] = `
+<div>
+  <div
+    class="Container "
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="PausedOverlayContainer  "
+      data-testid="paused-overlay-transition-wrapper"
+      style="opacity: 1; transition: opacity 500ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="Video ShouldExpandToFitOverlay "
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;

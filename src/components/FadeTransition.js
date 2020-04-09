@@ -7,6 +7,7 @@ const FadeTransition = ({
   className,
   children,
   shouldMountOnEnter,
+  testID,
 }) => (
   <Transition
     in={isVisible}
@@ -26,6 +27,7 @@ const FadeTransition = ({
           transition: `opacity ${duration}ms`,
         }}
         className={className}
+        data-testid={testID}
       >
         {children}
       </div>
