@@ -1,7 +1,8 @@
 # react-hover-video-player
 
-[![Travis][build-badge]][build]
-[![npm package][npm-badge]][npm]
+[![Build Status](https://travis-ci.org/Gyanreyer/react-hover-video-player.svg?branch=master)](https://travis-ci.org/Gyanreyer/react-hover-video-player)
+[![npm version](https://badge.fury.io/js/react-hover-video-player.svg)](https://badge.fury.io/js/react-hover-video-player)
+[![codecov](https://codecov.io/gh/Gyanreyer/react-hover-video-player/branch/master/graph/badge.svg)](https://codecov.io/gh/Gyanreyer/react-hover-video-player)
 
 React component which manages playing a video when the user hovers over it and pausing when they stop.
 
@@ -11,9 +12,3 @@ NOTE that this is still very much a work in progress. Things that remain to be d
 
 - Improve test coverage
 - Fill out documentation
-
-[build-badge]: https://img.shields.io/travis/user/repo/master.png?style=flat-square
-[build]: https://travis-ci.org/Gyanreyer/react-hover-video-player.svg?branch=master
-
-[npm-badge]: https://img.shields.io/npm/v/npm-package.png?style=flat-square
-[npm]: https://www.npmjs.org/package/react-hover-video-player
