@@ -479,23 +479,6 @@ describe('HoverVideoPlayer', () => {
       );
       expectVideoHasCorrectAttributes(videoElement, { loop: false });
     });
-
-    test('videoPreload prop correctly sets preload attribute on video', () => {
-      const { container, rerender } = render(
-        <HoverVideoPlayer videoSrc="fake/video-file.mp4" />
-      );
-
-      expect(container).toMatchSnapshot();
-
-      const videoElement = container.querySelector('video');
-      expectVideoHasCorrectAttributes(videoElement, { preload: 'metadata' });
-
-      // Re-render with an updated video preload value
-      rerender(
-        <HoverVideoPlayer videoSrc="fake/video-file.mp4" videoPreload="auto" />
-      );
-      expectVideoHasCorrectAttributes(videoElement, { preload: 'auto' });
-    });
   });
 
   describe('Goes through flow of starting and stopping the video correctly', () => {
@@ -607,7 +590,7 @@ describe('HoverVideoPlayer', () => {
       const { container, getByTestId, queryByTestId } = render(
         <HoverVideoPlayer
           videoSrc="fake/video-file.mp4"
-          loadingStateOverlay={<div data-testid="loading-state-overlay" />}
+          loadingOverlay={<div data-testid="loading-state-overlay" />}
           overlayFadeTransitionDuration={500}
         />
       );
