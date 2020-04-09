@@ -44,9 +44,11 @@ const HOVER_PLAYER_STATE = {
  *                                        When set to true, the video will begin playing and any events that would normally
  *                                        stop it will be ignored
  * @param {node}    [pausedOverlay] - Contents to render over the video while it's not playing
- * @param {node}    [loadingStateOverlay] - Contents to render over the video while it's loading
+ * @param {node}    [loadingOverlay] - Contents to render over the video while it's loading
  * @param {number}  [overlayFadeTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
  * @param {bool}    [shouldRestartOnVideoStopped=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
+ * @param {bool}    [shouldUseOverlayDimensions=true] - Whether the player should display using the pausedOverlay's dimensions rather than the video element's dimensions if an overlay is provided
+ *                                                        This helps prevent content height jumps when the video loads its dimensions
  * @param {func}    [onStartingVideo] - Optional callback for every time the user mouses over or focuses on the hover player and we attempt to start the video
  * @param {func}    [onStartedVideo] - Optional callback for when the video has been successfully started
  * @param {func}    [onStoppingVideo] - Optional callback for every time the user mouses out or blurs the hover player and we attempt to stop the video
@@ -54,13 +56,9 @@ const HOVER_PLAYER_STATE = {
  * @param {bool}    [isVideoMuted=true] - Whether the video player should be muted
  * @param {bool}    [shouldShowVideoControls=false] - Whether the video player should show the browser's controls
  * @param {bool}    [shouldVideoLoop=true] - Whether the video player should loop when it reaches the end
- * @param {string}  [videoPreload='metadata'] - What the video should preload. Possible values:
- *                                              - 'none': No part of the video will be preloaded before we try to play it
- *                                              - 'metadata' (default): Only the video's metadata will be preloaded, including information such as its length
- *                                              - 'auto': The entire video will be preloaded even if it may not be played
  * @param {string}  [className] - Optional className to apply custom styling to the container element
- * @param {string}  [overlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
- * @param {string}  [loadingStateOverlayWrapperClassName] - Optional className to apply custom styling to the loading state overlay contents' wrapper
+ * @param {string}  [pausedOverlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
+ * @param {string}  [loadingOverlayWrapperClassName] - Optional className to apply custom styling to the loading state overlay contents' wrapper
  * @param {string}  [videoClassName] - Optional className to apply custom styling to the video element
  * @param {object}  [style] - Style object to apply custom CSS styles to the hover player container
  */
@@ -69,9 +67,10 @@ function HoverVideoPlayer({
   videoCaptions,
   isFocused = false,
   pausedOverlay = null,
-  loadingStateOverlay = null,
+  loadingOverlay = null,
   overlayFadeTransitionDuration = 400,
   shouldRestartOnVideoStopped = true,
+  shouldUseOverlayDimensions = true,
   onStartingVideo = null,
   onStartedVideo = null,
   onStoppingVideo = null,
@@ -79,10 +78,9 @@ function HoverVideoPlayer({
   isVideoMuted = true,
   shouldShowVideoControls = false,
   shouldVideoLoop = true,
-  videoPreload = 'metadata',
   className = '',
-  overlayWrapperClassName = '',
-  loadingStateOverlayWrapperClassName = '',
+  pausedOverlayWrapperClassName = '',
+  loadingOverlayWrapperClassName = '',
   videoClassName = '',
   style = null,
 }) {
@@ -178,8 +176,15 @@ function HoverVideoPlayer({
     // If the video is already loading/playing, return early
     if (hoverPlayerState >= HOVER_PLAYER_STATE.loading) return;
 
-    // Mark that we are attempting to play the video and should show a loading state
-    setHoverPlayerState(HOVER_PLAYER_STATE.loading);
+    if (videoRef.current.readyState >= 3) {
+      // If the video's readyState indicates that it is already loaded enough to begin playing,
+      // skip the loading state
+      setHoverPlayerState(HOVER_PLAYER_STATE.playing);
+    } else {
+      // Otherwise if the video is not loaded enough to play yet, show a loading state until the
+      // `onPlaying` event is fired
+      setHoverPlayerState(HOVER_PLAYER_STATE.loading);
+    }
 
     if (videoRef.current.paused) {
       // If the video is not playing and has no play attempt in progress, start a play attempt
@@ -199,15 +204,15 @@ function HoverVideoPlayer({
     // If we have an onStoppingVideo callback, fire it to indicate the video is in the process of being stopped
     if (onStoppingVideo) onStoppingVideo();
 
-    // If we already had a timeout going to pause the video, cancel it so we can
-    // replace it with a new one
-    clearTimeout(pauseVideoTimeoutRef.current);
-
     // Return early if the video is already stopped
     if (hoverPlayerState <= HOVER_PLAYER_STATE.stopping) return;
 
     // Start fading the overlay back in to cover up the video before it's paused
     setHoverPlayerState(HOVER_PLAYER_STATE.stopping);
+
+    // If we already had a timeout going to pause the video, cancel it so we can
+    // replace it with a new one
+    clearTimeout(pauseVideoTimeoutRef.current);
 
     // Set a timeout with the duration of the overlay's fade transition so the video
     // won't stop until it's fully hidden
@@ -262,6 +267,9 @@ function HoverVideoPlayer({
     return () => window.removeEventListener('touchstart', onWindowTouchStart);
   }, [attemptStopVideo]);
 
+  const shouldVideoExpandToFitOverlayDimensions =
+    pausedOverlay && shouldUseOverlayDimensions;
+
   return (
     <div
       onMouseEnter={attemptStartVideo}
@@ -278,19 +286,21 @@ function HoverVideoPlayer({
         <FadeTransition
           isVisible={hoverPlayerState <= HOVER_PLAYER_STATE.loading}
           duration={overlayFadeTransitionDuration}
-          className={`${styles.PausedOverlayContainer} ${overlayWrapperClassName}`}
+          className={`${styles.PausedOverlayContainer} ${
+            !shouldUseOverlayDimensions ? styles.ShouldExpandToCoverVideo : ''
+          } ${pausedOverlayWrapperClassName}`}
         >
           {pausedOverlay}
         </FadeTransition>
       )}
-      {loadingStateOverlay && (
+      {loadingOverlay && (
         <FadeTransition
           isVisible={hoverPlayerState === HOVER_PLAYER_STATE.loading}
           duration={overlayFadeTransitionDuration}
           shouldMountOnEnter
-          className={`${styles.PausedOverlayContainer} ${loadingStateOverlayWrapperClassName}`}
+          className={`${styles.LoadingOverlayContainer} ${loadingOverlayWrapperClassName}`}
         >
-          {loadingStateOverlay}
+          {loadingOverlay}
         </FadeTransition>
       )}
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
@@ -298,9 +308,14 @@ function HoverVideoPlayer({
         controls={shouldShowVideoControls}
         loop={shouldVideoLoop}
         playsInline
-        preload={videoPreload}
+        // Only preload video data if we depend on having loaded its dimensions to display it
+        preload={shouldVideoExpandToFitOverlayDimensions ? 'none' : 'metadata'}
         ref={videoRef}
-        className={`${styles.Video} ${videoClassName}`}
+        className={`${styles.Video} ${
+          shouldVideoExpandToFitOverlayDimensions
+            ? styles.ShouldExpandToFitOverlay
+            : ''
+        } ${videoClassName}`}
         onPlaying={() => {
           if (hoverPlayerState >= HOVER_PLAYER_STATE.loading) {
             // If the player was showing a loading state, transition into the playing state
