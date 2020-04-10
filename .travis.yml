@@ -14,7 +14,7 @@ node_js:
   - 8
 
 before_install:
-  - npm install -g codecov.io coveralls
+  - npm install -g codecov.io coveralls gh-pages
 
 after_success:
   - cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js

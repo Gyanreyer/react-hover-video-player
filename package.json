@@ -18,7 +18,7 @@
     "test:watch": "jest --watch --no-cache",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once",
-    "deploy": "npm run semantic-release"
+    "deploy": "npm run semantic-release && gh-pages -d demo/dist"
   },
   "dependencies": {
     "emotion": "^10.0.27",
@@ -44,7 +44,6 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-testing-library": "^3.0.2",
-    "gh-pages": "^2.2.0",
     "jest": "^25.2.7",
     "jest-emotion": "^10.0.32",
     "prettier": "^2.0.2",
