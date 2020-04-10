@@ -15,9 +15,7 @@
     "start": "nwb serve-react-demo",
     "test": "jest --config=tests/jest.config.js",
     "test:watch": "npm run test -- --watch --no-cache",
-    "semantic-release": "semantic-release",
-    "travis-deploy-once": "travis-deploy-once",
-    "deploy": "npm run semantic-release && gh-pages -d demo/dist"
+    "deploy": "semantic-release && gh-pages -d demo/dist"
   },
   "dependencies": {
     "emotion": "^10.0.27",
@@ -45,11 +43,11 @@
     "eslint-plugin-testing-library": "^3.0.2",
     "jest": "^25.2.7",
     "jest-emotion": "^10.0.32",
+    "nwb": "^0.24.5",
     "prettier": "^2.0.2",
     "react": "^16.8.0",
     "react-dom": "^16.13.1",
     "regenerator-runtime": "^0.13.5",
-    "semantic-release": "^17.0.4",
     "travis-deploy-once": "^5.0.11"
   },
   "author": "",
