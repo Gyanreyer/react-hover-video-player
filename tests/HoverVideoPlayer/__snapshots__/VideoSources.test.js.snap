@@ -1,13 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Handles invalid videoSrc prop values correctly correctly handles not receiving a videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -17,13 +27,23 @@ exports[`Handles invalid videoSrc prop values correctly correctly handles not re
 `;
 
 exports[`Handles invalid videoSrc prop values correctly correctly handles receiving a single invalid value for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -33,13 +53,23 @@ exports[`Handles invalid videoSrc prop values correctly correctly handles receiv
 `;
 
 exports[`Handles invalid videoSrc prop values correctly correctly handles receiving an invalid value in an array for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -57,13 +87,23 @@ exports[`Handles invalid videoSrc prop values correctly correctly handles receiv
 `;
 
 exports[`Handles valid videoSrc prop values correctly correctly handles receiving a string for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -77,13 +117,23 @@ exports[`Handles valid videoSrc prop values correctly correctly handles receivin
 `;
 
 exports[`Handles valid videoSrc prop values correctly correctly handles receiving a valid object for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -98,13 +148,23 @@ exports[`Handles valid videoSrc prop values correctly correctly handles receivin
 `;
 
 exports[`Handles valid videoSrc prop values correctly correctly handles receiving an array of objects for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -123,13 +183,23 @@ exports[`Handles valid videoSrc prop values correctly correctly handles receivin
 `;
 
 exports[`Handles valid videoSrc prop values correctly correctly handles receiving an array of strings for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -146,13 +216,23 @@ exports[`Handles valid videoSrc prop values correctly correctly handles receivin
 `;
 
 exports[`Handles valid videoSrc prop values correctly correctly handles receiving an array with a mix of strings and objects for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"

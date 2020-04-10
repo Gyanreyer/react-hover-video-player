@@ -1,13 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Handles desktop mouse events correctly mouseEnter event takes the video through its start flow correctly 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -21,13 +31,23 @@ exports[`Handles desktop mouse events correctly mouseEnter event takes the video
 `;
 
 exports[`Handles desktop mouse events correctly mouseLeave event takes the video through its stop flow correctly 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -41,13 +61,23 @@ exports[`Handles desktop mouse events correctly mouseLeave event takes the video
 `;
 
 exports[`Handles mobile touch events correctly touchStart event takes the video through its start flow correctly 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -61,13 +91,23 @@ exports[`Handles mobile touch events correctly touchStart event takes the video 
 `;
 
 exports[`Handles mobile touch events correctly touchStart events outside of the video takes it through its stop flow correctly 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -81,13 +121,23 @@ exports[`Handles mobile touch events correctly touchStart events outside of the 
 `;
 
 exports[`Start and stop attempts interact with each other correctly an attempt to start the video when it is already playing will be ignored 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -101,13 +151,23 @@ exports[`Start and stop attempts interact with each other correctly an attempt t
 `;
 
 exports[`Start and stop attempts interact with each other correctly an attempt to start the video will correctly interrupt any attempts to stop it 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -121,13 +181,23 @@ exports[`Start and stop attempts interact with each other correctly an attempt t
 `;
 
 exports[`Start and stop attempts interact with each other correctly an attempt to stop the video when it is already stopped will be ignored 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -141,13 +211,23 @@ exports[`Start and stop attempts interact with each other correctly an attempt t
 `;
 
 exports[`Start and stop attempts interact with each other correctly an attempt to stop the video will correctly reverse an active start attempt when it completes 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"

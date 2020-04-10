@@ -1,13 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Handles invalid videoCaptions prop values correctly correctly handles receiving a single invalid value for the videoCaptions prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -21,13 +31,23 @@ exports[`Handles invalid videoCaptions prop values correctly correctly handles r
 `;
 
 exports[`Handles invalid videoCaptions prop values correctly correctly handles receiving an invalid value in an array for the videoCaptions prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -53,13 +73,23 @@ exports[`Handles invalid videoCaptions prop values correctly correctly handles r
 `;
 
 exports[`Handles valid videoCaptions prop values correctly correctly handles receiving a string for the videoCaptions prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -77,13 +107,23 @@ exports[`Handles valid videoCaptions prop values correctly correctly handles rec
 `;
 
 exports[`Handles valid videoCaptions prop values correctly correctly handles receiving a valid object for the videoCaptions prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -103,13 +143,23 @@ exports[`Handles valid videoCaptions prop values correctly correctly handles rec
 `;
 
 exports[`Handles valid videoCaptions prop values correctly correctly handles receiving an array of objects for the videoCaptions prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"

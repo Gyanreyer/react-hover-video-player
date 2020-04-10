@@ -1,20 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Pause and loading overlays work correctly overlays are shown and hidden correctly as the video is started and stopped 1`] = `
+.emotion-2 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+}
+
+.emotion-1 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-2"
     data-testid="hover-video-player-container"
   >
     <div
-      class="PausedOverlayContainer  "
+      class="emotion-0"
       data-testid="paused-overlay-transition-wrapper"
       style="opacity: 1; transition: opacity 500ms;"
     >
       <div />
     </div>
     <video
-      class="Video ShouldExpandToFitOverlay "
+      class="emotion-1"
       loop=""
       playsinline=""
       preload="none"

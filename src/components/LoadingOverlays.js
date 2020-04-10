@@ -1,6 +1,34 @@
 import React from 'react';
+import { css, cx } from 'emotion';
 
-import styles from '../styles/LoadingOverlays.css';
+const animateStroke = css`
+  animation-name: spinner-stroke-animation;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+
+  @keyframes spinner-stroke-animation {
+    0%,
+    20% {
+      stroke-dashoffset: 54;
+      transform: rotate(0);
+    }
+
+    60%,
+    80% {
+      stroke-dashoffset: 14;
+      transform: rotate(45deg);
+    }
+
+    100% {
+      stroke-dashoffset: 54;
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+const darkenedBackground = css`
+  background-color: rgba(0, 0, 0, 0.7);
+`;
 
 /**
  * @component LoadingSpinnerOverlay
@@ -17,35 +45,67 @@ export const LoadingSpinnerOverlay = ({
   animationDuration = 1000,
   shouldAnimateStroke = true,
   shouldShowDarkenedBackground = true,
-}) => {
-  return (
-    <div
-      className={`${styles.Container} ${
-        shouldShowDarkenedBackground ? styles.HasDarkenedBackground : ''
-      }`}
+}) => (
+  <div
+    className={cx(
+      css`
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      `,
+      {
+        [darkenedBackground]: shouldShowDarkenedBackground,
+      }
+    )}
+  >
+    <svg
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+      className={css`
+        animation-name: spinner-rotate-animation;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+
+        @keyframes spinner-rotate-animation {
+          0% {
+            transform: rotate(45deg);
+          }
+          100% {
+            transform: rotate(405deg);
+          }
+        }
+      `}
+      style={{
+        animationDuration: `${animationDuration}ms`,
+      }}
+      width={spinnerDiameter}
+      height={spinnerDiameter}
     >
-      <svg
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        className={styles.Spinner}
+      <circle
+        cx={10}
+        cy={10}
+        r={9}
+        className={cx(
+          css`
+            fill: transparent;
+            stroke: white;
+            stroke-width: 1px;
+            stroke-dasharray: 57;
+            stroke-linecap: round;
+            transform-origin: 50% 50%;
+            stroke-dashoffset: 18;
+          `,
+          {
+            [animateStroke]: shouldAnimateStroke,
+          }
+        )}
         style={{
-          animationDuration: `${animationDuration}ms`,
+          animationDuration: `${animationDuration * 1.5}ms`,
         }}
-        width={spinnerDiameter}
-        height={spinnerDiameter}
-      >
-        <circle
-          cx={10}
-          cy={10}
-          r={9}
-          className={`${styles.SpinnerCircle} ${
-            shouldAnimateStroke ? styles.ShouldAnimateStroke : ''
-          }`}
-          style={{
-            animationDuration: `${animationDuration * 1.5}ms`,
-          }}
-        />
-      </svg>
-    </div>
-  );
-};
+      />
+    </svg>
+  </div>
+);

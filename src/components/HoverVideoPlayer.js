@@ -1,7 +1,7 @@
 import React from 'react';
+import { css, cx } from 'emotion';
 
 import FadeTransition from './FadeTransition';
-import styles from '../styles/HoverVideoPlayer.css';
 
 // Enumerates states that the hover player can be in
 const HOVER_PLAYER_STATE = {
@@ -10,6 +10,16 @@ const HOVER_PLAYER_STATE = {
   loading: 2,
   playing: 3,
 };
+
+const expandToCoverVideo = css`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+`;
 
 /**
  * @typedef   {object}  VideoSource
@@ -61,6 +71,8 @@ const HOVER_PLAYER_STATE = {
  * @param {string}  [loadingOverlayWrapperClassName] - Optional className to apply custom styling to the loading state overlay contents' wrapper
  * @param {string}  [videoClassName] - Optional className to apply custom styling to the video element
  * @param {object}  [style] - Style object to apply custom CSS styles to the hover player container
+ *
+ * @license MIT
  */
 function HoverVideoPlayer({
   videoSrc,
@@ -276,7 +288,12 @@ function HoverVideoPlayer({
       onMouseOut={attemptStopVideo}
       onBlur={attemptStopVideo}
       onTouchStart={attemptStartVideo}
-      className={`${styles.Container} ${className}`}
+      className={cx(
+        css`
+          position: relative;
+        `,
+        className
+      )}
       style={style}
       data-testid="hover-video-player-container"
       ref={containerRef}
@@ -285,9 +302,23 @@ function HoverVideoPlayer({
         <FadeTransition
           isVisible={hoverPlayerState <= HOVER_PLAYER_STATE.loading}
           duration={overlayFadeTransitionDuration}
-          className={`${styles.PausedOverlayContainer} ${
-            !shouldUseOverlayDimensions ? styles.ShouldExpandToCoverVideo : ''
-          } ${pausedOverlayWrapperClassName}`}
+          className={cx(
+            css`
+              position: relative;
+              display: block;
+              width: 100%;
+              z-index: 1;
+              pointer-events: none;
+
+              & > * {
+                display: block;
+              }
+            `,
+            {
+              [expandToCoverVideo]: !shouldVideoExpandToFitOverlayDimensions,
+            },
+            pausedOverlayWrapperClassName
+          )}
           testID="paused-overlay-transition-wrapper"
         >
           {pausedOverlay}
@@ -298,7 +329,14 @@ function HoverVideoPlayer({
           isVisible={hoverPlayerState === HOVER_PLAYER_STATE.loading}
           duration={overlayFadeTransitionDuration}
           shouldMountOnEnter
-          className={`${styles.LoadingOverlayContainer} ${loadingOverlayWrapperClassName}`}
+          className={cx(
+            css`
+              z-index: 2;
+              pointer-events: none;
+            `,
+            expandToCoverVideo,
+            loadingOverlayWrapperClassName
+          )}
           testID="loading-overlay-transition-wrapper"
         >
           {loadingOverlay}
@@ -312,11 +350,17 @@ function HoverVideoPlayer({
         // Only preload video data if we depend on having loaded its dimensions to display it
         preload={shouldVideoExpandToFitOverlayDimensions ? 'none' : 'metadata'}
         ref={videoRef}
-        className={`${styles.Video} ${
-          shouldVideoExpandToFitOverlayDimensions
-            ? styles.ShouldExpandToFitOverlay
-            : ''
-        } ${videoClassName}`}
+        className={cx(
+          css`
+            width: 100%;
+            display: block;
+            object-fit: cover;
+          `,
+          {
+            [expandToCoverVideo]: shouldVideoExpandToFitOverlayDimensions,
+          },
+          videoClassName
+        )}
         onPlaying={() => {
           if (hoverPlayerState >= HOVER_PLAYER_STATE.loading) {
             // If the player was showing a loading state, transition into the playing state

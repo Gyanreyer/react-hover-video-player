@@ -1,13 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Handles video props correctly isVideoMuted prop correctly sets muted attribute on video 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -21,13 +31,23 @@ exports[`Handles video props correctly isVideoMuted prop correctly sets muted at
 `;
 
 exports[`Handles video props correctly shouldShowVideoControls prop correctly sets controls attribute on video 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
@@ -41,13 +61,23 @@ exports[`Handles video props correctly shouldShowVideoControls prop correctly se
 `;
 
 exports[`Handles video props correctly shouldVideoLoop prop correctly sets loop attribute on video 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 <div>
   <div
-    class="Container "
+    class="emotion-1"
     data-testid="hover-video-player-container"
   >
     <video
-      class="Video  "
+      class="emotion-0"
       loop=""
       playsinline=""
       preload="metadata"
