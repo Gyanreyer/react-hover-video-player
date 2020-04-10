@@ -18,7 +18,7 @@
     "test:watch": "jest --watch --no-cache",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once",
-    "deploy": "gh-pages -d demo/dist && npm run semantic-release"
+    "deploy": "npm run semantic-release"
   },
   "dependencies": {
     "emotion": "^10.0.27",
