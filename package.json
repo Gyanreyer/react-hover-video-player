@@ -1,7 +1,7 @@
 {
   "name": "react-hover-video-player",
   "version": "0.0.0-development",
-  "description": "A React component which renders a thumbnail image and transitions to playing a video when the user hovers over it.",
+  "description": "React component which manages playing a video when the user hovers over it and pausing when they stop.",
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
@@ -52,8 +52,8 @@
     "semantic-release": "^17.0.4",
     "travis-deploy-once": "^5.0.11"
   },
-  "author": "",
-  "homepage": "",
+  "author": "Ryan Geyer",
+  "homepage": "https://react-hover-video-player.dev/",
   "license": "MIT",
   "repository": {
     "type": "git",
