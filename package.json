@@ -6,14 +6,15 @@
   "module": "es/index.js",
   "files": [
     "es",
-    "lib"
+    "lib",
+    "umd"
   ],
   "scripts": {
     "build": "nwb build-react-component",
     "clean": "nwb clean-module && nwb clean-demo",
     "start": "nwb serve-react-demo",
-    "test": "jest",
-    "test:watch": "jest --watch --no-cache",
+    "test": "jest --config=tests/jest.config.js",
+    "test:watch": "npm run test -- --watch --no-cache",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once",
     "deploy": "npm run semantic-release && gh-pages -d demo/dist"

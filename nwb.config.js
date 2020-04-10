@@ -3,6 +3,11 @@ module.exports = {
   npm: {
     esModules: true,
     cjs: true,
-    umd: false,
+    umd: {
+      global: 'HoverVideoPlayer',
+      externals: {
+        react: 'React',
+      },
+    },
   },
 };
