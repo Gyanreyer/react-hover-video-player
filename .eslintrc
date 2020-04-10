@@ -16,7 +16,8 @@
     "import/no-extraneous-dependencies": "off",
     "semi": "error",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "no-console": ["error", { "allow": ["warn", "error"] }]
   },
   "globals": {
     "window": true,
