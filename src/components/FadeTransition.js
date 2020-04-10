@@ -2,7 +2,7 @@ import React from 'react';
 import { Transition } from 'react-transition-group';
 
 const FadeTransition = ({
-  isVisible = false,
+  isVisible,
   duration,
   className,
   children,
