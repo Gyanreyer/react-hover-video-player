@@ -41,6 +41,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-testing-library": "^3.0.2",
+    "gh-pages": "^2.2.0",
     "jest": "^25.2.7",
     "jest-emotion": "^10.0.32",
     "nwb": "^0.24.5",
@@ -48,6 +49,7 @@
     "react": "^16.8.0",
     "react-dom": "^16.13.1",
     "regenerator-runtime": "^0.13.5",
+    "semantic-release": "^17.0.4",
     "travis-deploy-once": "^5.0.11"
   },
   "author": "",
