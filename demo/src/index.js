@@ -15,7 +15,10 @@ const Demo = () => (
     >
       <HoverVideoPlayer
         videoSrc="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        shouldRestartOnVideoStopped={false}
+        className={css`
+          max-width: 400px;
+          margin: auto 0;
+        `}
         pausedOverlay={
           <img
             src="image/big_buck_bunny_thumbnail.png"
@@ -24,9 +27,6 @@ const Demo = () => (
           />
         }
         loadingOverlay={<LoadingSpinnerOverlay />}
-        style={{
-          maxWidth: 400,
-        }}
       />
       <HoverVideoPlayer
         videoSrc={[
@@ -36,6 +36,7 @@ const Demo = () => (
           },
           'video/react-hover-video-player-sample-video.mp4',
         ]}
+        shouldRestartOnVideoStopped={false}
         loadingOverlay={<LoadingSpinnerOverlay />}
         style={{
           maxWidth: 400,
