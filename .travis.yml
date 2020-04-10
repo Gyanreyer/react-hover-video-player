@@ -11,7 +11,6 @@ notifications:
 
 node_js:
   - 10
-  - 8
 
 before_install:
   - npm install -g codecov.io coveralls gh-pages
