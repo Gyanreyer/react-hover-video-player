@@ -1,14 +1,18 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { css } from 'emotion';
 
 import HoverVideoPlayer, { LoadingSpinnerOverlay } from '../../src';
-
-import styles from './styles.css';
 
 const Demo = () => (
   <div id="top">
     <h1>Example Video Gallery</h1>
-    <div className={styles.GalleryGrid}>
+    <div
+      className={css`
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      `}
+    >
       <HoverVideoPlayer
         videoSrc="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
         shouldRestartOnVideoStopped={false}
