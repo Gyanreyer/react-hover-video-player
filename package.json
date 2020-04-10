@@ -5,9 +5,7 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
-    "es",
-    "lib",
-    "umd"
+    "es"
   ],
   "scripts": {
     "build": "nwb build-react-component",
@@ -22,8 +20,7 @@
     "react-transition-group": "^4.3.0"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^16.8.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.9.4",
@@ -49,8 +46,7 @@
     "react": "^16.8.0",
     "react-dom": "^16.13.1",
     "regenerator-runtime": "^0.13.5",
-    "semantic-release": "^17.0.4",
-    "travis-deploy-once": "^5.0.11"
+    "semantic-release": "^17.0.4"
   },
   "author": "Ryan Geyer",
   "homepage": "https://react-hover-video-player.dev/",
