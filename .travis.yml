@@ -1,16 +1,18 @@
-sudo: false
-
 language: node_js
+
+node_js:
+  - lts/*
+  - 10
+  - 8
 
 cache:
   directories:
     - ~/.npm
 
 notifications:
-  email: false
-
-node_js:
-  - 10
+  email:
+    on_success: never
+    on_failure: always
 
 before_install:
   - npm install -g codecov.io coveralls
@@ -18,8 +20,21 @@ before_install:
 after_success:
   - cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-  - npm run build
-  - npm run deploy
+
+jobs:
+  include:
+    # Define release stage which handles publishing to github page and npm
+    - stage: release
+      node_js: lts/*
+      script: npm run build
+      deploy:
+        - provider: pages
+          local_dir: demo/dist
+          edge: true
+          verbose: true
+        - provider: script
+          script: npx semantic-release
+          edge: true
 
 branches:
   only:

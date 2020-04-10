@@ -11,8 +11,7 @@
     "clean": "nwb clean-module && nwb clean-demo",
     "start": "nwb serve-react-demo",
     "test": "jest --config=tests/jest.config.js",
-    "test:watch": "npm run test -- --watch --no-cache",
-    "deploy": "semantic-release && gh-pages -d demo/dist"
+    "test:watch": "npm run test -- --watch --no-cache"
   },
   "dependencies": {
     "emotion": "^10.0.27",
@@ -38,15 +37,13 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-testing-library": "^3.0.2",
-    "gh-pages": "^2.2.0",
     "jest": "^25.2.7",
     "jest-emotion": "^10.0.32",
     "nwb": "^0.24.5",
     "prettier": "^2.0.2",
     "react": "^16.8.0",
     "react-dom": "^16.13.1",
-    "regenerator-runtime": "^0.13.5",
-    "semantic-release": "^17.0.4"
+    "regenerator-runtime": "^0.13.5"
   },
   "author": "Ryan Geyer",
   "homepage": "https://react-hover-video-player.dev/",
