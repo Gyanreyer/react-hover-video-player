@@ -5,4 +5,9 @@ module.exports = {
     cjs: false,
     umd: false,
   },
+  webpack: {
+    html: {
+      template: 'demo/src/index.html',
+    },
+  },
 };

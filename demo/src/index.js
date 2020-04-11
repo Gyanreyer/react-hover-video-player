@@ -5,7 +5,7 @@ import { css } from 'emotion';
 import HoverVideoPlayer, { LoadingSpinnerOverlay } from '../../src';
 
 const Demo = () => (
-  <div id="top">
+  <div>
     <h1>Example Video Gallery</h1>
     <div
       className={css`
@@ -47,4 +47,4 @@ const Demo = () => (
 );
 export default Demo;
 
-render(<Demo />, document.querySelector('#demo'));
+render(<Demo />, document.body);
