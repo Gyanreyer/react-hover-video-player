@@ -27,7 +27,6 @@ jobs:
     - stage: release
       node_js: lts/*
       script: npm run build
-      after_success: skip
       deploy:
         - provider: pages
           local_dir: demo/dist

@@ -1,9 +1,10 @@
 module.exports = {
+  rootDir: '../',
   collectCoverage: true,
-  coverageDirectory: 'coverage',
+  coverageDirectory: 'tests/coverage',
   verbose: true,
   transform: {
-    '^.+\\.js$': '<rootDir>/jest.transform.js',
+    '^.+\\.js$': '<rootDir>/tests/jest.transform.js',
   },
   testRegex: '(/__tests__/.*|\\.(test|spec))\\.jsx?$',
   moduleFileExtensions: ['js', 'json', 'jsx', 'node'],
@@ -16,5 +17,5 @@ module.exports = {
     },
   },
   snapshotSerializers: ['jest-emotion'],
-  setupFiles: ['<rootDir>/jest.init.js'],
+  setupFiles: ['<rootDir>/tests/jest.init.js'],
 };
