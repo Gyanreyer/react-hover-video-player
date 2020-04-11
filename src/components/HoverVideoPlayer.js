@@ -9,8 +9,8 @@ const noop = () => {};
 // Enumerates states that the hover player can be in
 const HOVER_PLAYER_STATE = {
   stopped: 0,
-  stopping: 1,
-  loading: 2,
+  attemptingToStop: 1,
+  attemptingToStart: 2,
   playing: 3,
 };
 
@@ -108,6 +108,7 @@ function HoverVideoPlayer({
   const containerRef = React.useRef();
   const videoRef = React.useRef();
   const pauseVideoTimeoutRef = React.useRef();
+  const isVideoLoadingRef = React.useRef(false);
 
   // Parse the `videoSrc` prop into an array of VideoSource objects to be used for the video player
   const parsedVideoSources = React.useMemo(() => {
@@ -187,24 +188,24 @@ function HoverVideoPlayer({
     // cancel any outstanding timeout that would pause the video
     clearTimeout(pauseVideoTimeoutRef.current);
 
-    // If the video is already loading/playing, return early
-    if (hoverPlayerState >= HOVER_PLAYER_STATE.loading) return;
-
-    // Fire onStartingVideo callback to indicate the video is attempting to start
-    onStartingVideo();
-
-    if (videoRef.current.readyState >= 3) {
-      // If the video's readyState indicates that it is already loaded enough to begin playing,
-      // skip the loading state
-      setHoverPlayerState(HOVER_PLAYER_STATE.playing);
-    } else {
-      // Otherwise if the video is not loaded enough to play yet, show a loading state until the
-      // `onPlaying` event is fired
-      setHoverPlayerState(HOVER_PLAYER_STATE.loading);
+    if (hoverPlayerState <= HOVER_PLAYER_STATE.attemptingToStop) {
+      // Update the player state to reflect that we are now either playing or attempting to play
+      setHoverPlayerState(
+        // If the video isn't loaded enough to immediately begin playback, mark that it's attempting to start
+        // so we can show a loading state
+        videoRef.current.readyState <= 2
+          ? HOVER_PLAYER_STATE.attemptingToStart
+          : HOVER_PLAYER_STATE.playing
+      );
     }
 
     if (videoRef.current.paused) {
-      // If the video is not playing and has no play attempt in progress, start a play attempt
+      isVideoLoadingRef.current = true;
+
+      // Fire onStartingVideo callback to indicate the video is attempting to start
+      onStartingVideo();
+
+      // Play the video
       videoRef.current.play();
     }
   }
@@ -216,16 +217,15 @@ function HoverVideoPlayer({
    */
   const attemptStopVideo = React.useCallback(() => {
     // If the isFocused override prop is active, ignore any other events attempting to stop the video
-    if (isFocused) return;
+    // Also return early if the video is already stopped
+    if (isFocused || hoverPlayerState <= HOVER_PLAYER_STATE.attemptingToStop)
+      return;
 
-    // Return early if the video is already stopped
-    if (hoverPlayerState <= HOVER_PLAYER_STATE.stopping) return;
+    // Mark that we're attempting to stop the video
+    setHoverPlayerState(HOVER_PLAYER_STATE.attemptingToStop);
 
-    // Fire onStoppingVideo callback to indicate the video is in the process of being stopped
+    // Fire onStoppingVideo callback
     onStoppingVideo();
-
-    // Start fading the overlay back in to cover up the video before it's paused
-    setHoverPlayerState(HOVER_PLAYER_STATE.stopping);
 
     // If we already had a timeout going to pause the video, cancel it so we can
     // replace it with a new one
@@ -234,16 +234,35 @@ function HoverVideoPlayer({
     // Set a timeout with the duration of the overlay's fade transition so the video
     // won't stop until it's fully hidden
     pauseVideoTimeoutRef.current = setTimeout(
-      () => videoRef.current.pause(),
+      () => {
+        // Mark that the video is now stopped
+        setHoverPlayerState(HOVER_PLAYER_STATE.stopped);
+
+        // Fire onStoppedVideo callback to indicate the video has been stopped
+        onStoppedVideo();
+
+        // Pause the video if it's not still in the middle of attempting to play so we don't interrupt it -
+        // since we're in the stopped state now, the video will pause itself as soon as it finishes loading
+        if (!isVideoLoadingRef.current) {
+          videoRef.current.pause();
+        }
+
+        if (shouldRestartOnVideoStopped) {
+          // If we should restart the video, reset its time to the beginning
+          videoRef.current.currentTime = 0;
+        }
+      },
       // If we don't have to wait for the overlay to fade back in, just set the timeout to 0 to invoke it ASAP
       pausedOverlay ? overlayFadeTransitionDuration : 0
     );
   }, [
     hoverPlayerState,
     isFocused,
+    onStoppedVideo,
     onStoppingVideo,
     overlayFadeTransitionDuration,
     pausedOverlay,
+    shouldRestartOnVideoStopped,
   ]);
 
   React.useEffect(() => {
@@ -305,7 +324,7 @@ function HoverVideoPlayer({
     >
       {pausedOverlay && (
         <FadeTransition
-          isVisible={hoverPlayerState <= HOVER_PLAYER_STATE.loading}
+          isVisible={hoverPlayerState <= HOVER_PLAYER_STATE.attemptingToStart}
           duration={overlayFadeTransitionDuration}
           className={cx(
             css`
@@ -331,7 +350,7 @@ function HoverVideoPlayer({
       )}
       {loadingOverlay && (
         <FadeTransition
-          isVisible={hoverPlayerState === HOVER_PLAYER_STATE.loading}
+          isVisible={hoverPlayerState === HOVER_PLAYER_STATE.attemptingToStart}
           duration={overlayFadeTransitionDuration}
           shouldMountOnEnter
           className={cx(
@@ -367,7 +386,9 @@ function HoverVideoPlayer({
           videoClassName
         )}
         onPlaying={() => {
-          if (hoverPlayerState >= HOVER_PLAYER_STATE.loading) {
+          isVideoLoadingRef.current = false;
+
+          if (hoverPlayerState >= HOVER_PLAYER_STATE.attemptingToStart) {
             // If the player was showing a loading state, transition into the playing state
             setHoverPlayerState(HOVER_PLAYER_STATE.playing);
 
@@ -377,21 +398,6 @@ function HoverVideoPlayer({
             // If our play attempt completed but the user has since moused away and is not looking
             // at the loading state, immediately pause the video until the user comes back
             videoRef.current.pause();
-          }
-        }}
-        onPause={() => {
-          // On the off chance that this event was fired but there is still an outstanding pause timeout, cancel it
-          clearTimeout(pauseVideoTimeoutRef.current);
-
-          // Transition into stopped state if we weren't there alread
-          setHoverPlayerState(HOVER_PLAYER_STATE.stopped);
-
-          // Fire onStoppedVideo callback to indicate the video has been stopped
-          onStoppedVideo();
-
-          if (shouldRestartOnVideoStopped) {
-            // If we should restart the video, reset its time to the beginning
-            videoRef.current.currentTime = 0;
           }
         }}
         onError={() => {

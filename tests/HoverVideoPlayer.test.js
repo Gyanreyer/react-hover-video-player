@@ -49,18 +49,26 @@ const addMockedFunctionsToVideoElement = (videoElement) => {
     .spyOn(videoElement, 'readyState', 'get')
     .mockReturnValue(1);
 
+  let isPlayAttemptInProgress = false;
+
   videoElement.play = jest.fn(() => {
     if (videoElement.paused) {
+      isPlayAttemptInProgress = true;
       videoElementPausedSpy.mockReturnValue(false);
     }
 
     return Promise.resolve().then(() => {
+      isPlayAttemptInProgress = false;
       videoElementReadyStateSpy.mockReturnValue(3);
       videoElement.currentTime = 10;
       fireEvent.playing(videoElement);
     });
   });
   videoElement.pause = jest.fn(() => {
+    if (isPlayAttemptInProgress) {
+      throw new Error('Interrupted play attempt');
+    }
+
     if (!videoElement.paused) {
       videoElementPausedSpy.mockReturnValue(true);
       fireEvent.pause(videoElement);
@@ -584,7 +592,7 @@ describe('Handles desktop mouse events correctly', () => {
     expect(videoElement.pause).not.toHaveBeenCalled();
 
     // Advance a sufficient amount of time for the pause timeout to have completed
-    jest.advanceTimersByTime(500);
+    act(() => jest.advanceTimersByTime(500));
 
     expect(onStoppedVideo).toHaveBeenCalled();
     expect(videoElement.pause).toHaveBeenCalled();
@@ -679,7 +687,7 @@ describe('Handles mobile touch events correctly', () => {
     expect(videoElement.pause).not.toHaveBeenCalled();
 
     // Advance a sufficient amount of time for the pause timeout to have completed
-    jest.advanceTimersByTime(500);
+    act(() => jest.advanceTimersByTime(500));
 
     expect(onStoppedVideo).toHaveBeenCalled();
     expect(videoElement.pause).toHaveBeenCalled();
@@ -741,22 +749,19 @@ describe('Follows video interaction flows correctly', () => {
     // Mouse back over to cancel the stop attempt and start a play attempt
     fireEvent.mouseEnter(playerContainer);
 
-    // A second start attempt should have begun
-    expect(onStartingVideo).toHaveBeenCalledTimes(2);
-    expect(onStartedVideo).toHaveBeenCalledTimes(1);
-
     await waitForVideoElementPlayPromise(videoElement);
 
-    // onStartedVideo should not need to be called again since we prevented it from stopping
+    // We shouldn't have needed to start a second start attempt since we prevented the stop attempt
+    expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(1);
 
-    jest.advanceTimersByTime(500);
+    act(() => jest.advanceTimersByTime(500));
 
     // onStoppedVideo should still not have been called because it was cancelled
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
   });
 
-  test('the video will be paused immediately if its play attempt completes while we are in a stopping state', async () => {
+  test('the video will be paused if its play attempt completes while we are in a stopping state', async () => {
     const onStartingVideo = jest.fn();
     const onStartedVideo = jest.fn();
     const onStoppingVideo = jest.fn();
@@ -807,13 +812,11 @@ describe('Follows video interaction flows correctly', () => {
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
-    jest.advanceTimersByTime(500);
+    act(() => jest.advanceTimersByTime(500));
 
     // onStoppedVideo should have been called after the promise resolved and the video's `onPlaying` event fired
     expect(onStoppedVideo).toHaveBeenCalledTimes(1);
     expect(videoElement.pause).toHaveBeenCalledTimes(1);
-
-    expect(videoElement.paused).toBe(true);
   });
 
   test('the video will be paused immediately if its play attempt completes while we are in a stopped state', async () => {
@@ -857,24 +860,20 @@ describe('Follows video interaction flows correctly', () => {
     expect(onStoppingVideo).toHaveBeenCalledTimes(1);
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
 
-    // Advance the timers by a sufficient amount of time for the stop attempt to complete
-    jest.advanceTimersByTime(500);
+    // Advance the timers by a sufficient amount of time for a stop attempt timeout to complete
+    act(() => jest.advanceTimersByTime(500));
 
+    // The video should have been moved into the stopped state but technically not been paused because we're waiting for the play promise to resolve
     expect(onStoppedVideo).toHaveBeenCalledTimes(1);
-    expect(videoElement.pause).toHaveBeenCalledTimes(1);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
     await waitForVideoElementPlayPromise(videoElement);
 
     // onStartedVideo shouldn't have been called because it was cancelled
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
-    // We should have called pause a second time
-    expect(videoElement.pause).toHaveBeenCalledTimes(2);
-
-    // We should not have called onStoppedVideo a second time since it was already stopped
-    expect(onStoppedVideo).toHaveBeenCalledTimes(1);
-
-    expect(videoElement.paused).toBe(true);
+    // We should have called pause after the play attempt completed
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
   });
 
   test('a start attempt to start the video when it is already playing will be ignored', async () => {
@@ -1026,7 +1025,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     expect(videoElement.currentTime).toBeGreaterThan(0);
 
     // Advance a sufficient amount of time for the stop attempt to complete
-    jest.advanceTimersByTime(500);
+    act(() => jest.advanceTimersByTime(500));
 
     // The video time should have been reset after the stop attempt completed
     expect(videoElement.currentTime).toBe(0);
@@ -1069,7 +1068,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     expect(videoElement.currentTime).toBeGreaterThan(0);
 
     // Advance a sufficient amount of time for the stop attempt to complete
-    jest.advanceTimersByTime(500);
+    act(() => jest.advanceTimersByTime(500));
 
     // The video time should not have been reset to 0
     expect(videoElement.currentTime).toBeGreaterThan(0);
@@ -1129,7 +1128,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     ).toBeInTheDocument();
 
     // Advance 500ms to the end of the loading overlay fade transition
-    jest.advanceTimersByTime(500);
+    act(() => jest.advanceTimersByTime(500));
 
     expect(
       queryByTestId('paused-overlay-transition-wrapper').style.opacity
@@ -1143,7 +1142,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     fireEvent.mouseLeave(playerContainer);
 
     // Advance 500ms to let the paused overlay fade back in
-    jest.advanceTimersByTime(500);
+    act(() => jest.advanceTimersByTime(500));
 
     // Since we're stopping, the paused overlay should be visible again
     expect(
@@ -1215,7 +1214,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
 
     // Advance timers by sufficient amount of time to complete the stop attempt
-    jest.advanceTimersByTime(500);
+    act(() => jest.advanceTimersByTime(500));
 
     expect(onStoppedVideo).toHaveBeenCalledTimes(1);
   });
@@ -1277,11 +1276,11 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     fireEvent.mouseLeave(playerContainer);
 
     // Advance time sufficiently for a stop attempt to have completed
-    jest.advanceTimersByTime(500);
+    act(() => jest.advanceTimersByTime(500));
 
     fireEvent.touchStart(document.body);
 
-    jest.advanceTimersByTime(500);
+    act(() => jest.advanceTimersByTime(500));
 
     // A stop attempt should not have happened since isFocused is true
     expect(onStoppingVideo).toHaveBeenCalledTimes(0);
@@ -1322,7 +1321,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     expect(onStoppingVideo).toHaveBeenCalledTimes(1);
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
 
-    jest.advanceTimersByTime(1);
+    act(() => jest.advanceTimersByTime(1));
 
     // The stop attempt should be completed now that the full fade duration is complete
     expect(onStoppedVideo).toHaveBeenCalledTimes(1);
@@ -1358,7 +1357,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     expect(onStoppingVideo).toHaveBeenCalledTimes(1);
 
     // Just update the timers - the stop attempt timeout should have a timeout of 0ms and will fire
-    jest.advanceTimersByTime(0);
+    act(() => jest.advanceTimersByTime(0));
 
     expect(onStoppedVideo).toHaveBeenCalledTimes(1);
   });
@@ -1368,4 +1367,5 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
  * TESTS THAT STILL NEED TO BE WRITTEN
  *
  * - shouldVideoExpandToFitOverlayDimensions
+ * - Add checks to make sure play and pause have been called
  */

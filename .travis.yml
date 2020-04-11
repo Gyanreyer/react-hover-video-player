@@ -34,7 +34,7 @@ jobs:
           project_name: react-hover-video-player
           edge: true
         - provider: script
-          script: npm run semantic-release
+          script: npx semantic-release
           edge: true
 
 branches:

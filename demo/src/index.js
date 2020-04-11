@@ -47,4 +47,4 @@ const Demo = () => (
 );
 export default Demo;
 
-render(<Demo />, document.body);
+render(<Demo />, document.getElementById('react-hover-video-player-demo'));
