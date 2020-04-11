@@ -11,7 +11,7 @@ cache:
 
 notifications:
   email:
-    on_success: never
+    on_success: change
     on_failure: always
 
 before_install:
@@ -25,6 +25,7 @@ jobs:
   include:
     # Define release stage which handles publishing to github page and npm
     - stage: release
+      if: branch = master
       node_js: lts/*
       script: npm run build
       deploy:
@@ -32,11 +33,11 @@ jobs:
           local_dir: demo/dist
           fqdn: react-hover-video-player.dev
           project_name: react-hover-video-player
-          edge: true
+          keep_history: true
+          allow_empty_commit: true
+          edge:
+            branch: master
         - provider: script
           script: npx semantic-release
-          edge: true
-
-branches:
-  only:
-    - master
+          edge:
+            branch: master
