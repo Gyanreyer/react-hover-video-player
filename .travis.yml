@@ -30,8 +30,9 @@ jobs:
       deploy:
         - provider: pages
           local_dir: demo/dist
+          fqdn: react-hover-video-player.dev
+          project_name: react-hover-video-player
           edge: true
-          verbose: true
         - provider: script
           script: npx semantic-release
           edge: true

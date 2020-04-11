@@ -350,6 +350,7 @@ function HoverVideoPlayer({
         // Only preload video data if we depend on having loaded its dimensions to display it
         preload={shouldVideoExpandToFitOverlayDimensions ? 'none' : 'metadata'}
         ref={videoRef}
+        disableremoteplayback
         className={cx(
           css`
             width: 100%;
