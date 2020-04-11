@@ -27,6 +27,7 @@ jobs:
     - stage: release
       node_js: lts/*
       script: npm run build
+      after_success: skip
       deploy:
         - provider: pages
           local_dir: demo/dist
@@ -34,7 +35,7 @@ jobs:
           project_name: react-hover-video-player
           edge: true
         - provider: script
-          script: npx semantic-release
+          script: npm run semantic-release
           edge: true
 
 branches:
