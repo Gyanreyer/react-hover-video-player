@@ -266,6 +266,11 @@ function HoverVideoPlayer({
   }, [isFocused]);
 
   React.useEffect(() => {
+    // Ensure casting controls aren't shown on the video
+    videoRef.current.disableRemotePlayback = true;
+  }, []);
+
+  React.useEffect(() => {
     const onWindowTouchStart = (event) => {
       if (!containerRef.current.contains(event.target)) {
         attemptStopVideo();
@@ -350,7 +355,6 @@ function HoverVideoPlayer({
         // Only preload video data if we depend on having loaded its dimensions to display it
         preload={shouldVideoExpandToFitOverlayDimensions ? 'none' : 'metadata'}
         ref={videoRef}
-        disableremoteplayback
         className={cx(
           css`
             width: 100%;
