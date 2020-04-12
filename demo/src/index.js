@@ -2,7 +2,10 @@ import React from 'react';
 import { render } from 'react-dom';
 import { css } from 'emotion';
 
-import HoverVideoPlayer, { LoadingSpinnerOverlay } from '../../src';
+import HoverVideoPlayer, {
+  LoadingSpinnerOverlay,
+  DotLoaderOverlay,
+} from '../../src';
 
 const Demo = () => (
   <div>
@@ -37,7 +40,7 @@ const Demo = () => (
           'video/react-hover-video-player-sample-video.mp4',
         ]}
         shouldRestartOnVideoStopped={false}
-        loadingOverlay={<LoadingSpinnerOverlay />}
+        loadingOverlay={<DotLoaderOverlay />}
         style={{
           maxWidth: 400,
         }}

@@ -18,8 +18,8 @@ before_install:
   - npm install -g codecov.io coveralls
 
 after_success:
-  - cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js
-  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+  - cat ./tests/coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js
+  - cat ./tests/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 
 jobs:
   include:

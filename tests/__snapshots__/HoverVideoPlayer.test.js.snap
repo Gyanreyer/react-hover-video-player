@@ -463,10 +463,6 @@ exports[`Prop combinations that change behavior/appearance work correctly Stop a
   pointer-events: none;
 }
 
-.emotion-0 > * {
-  display: block;
-}
-
 .emotion-1 {
   width: 100%;
   display: block;
@@ -577,10 +573,6 @@ exports[`Prop combinations that change behavior/appearance work correctly paused
   width: 100%;
   z-index: 1;
   pointer-events: none;
-}
-
-.emotion-0 > * {
-  display: block;
 }
 
 .emotion-1 {
@@ -727,10 +719,6 @@ exports[`Prop combinations that change behavior/appearance work correctly should
   height: 100%;
 }
 
-.emotion-0 > * {
-  display: block;
-}
-
 <div>
   <div
     class="emotion-2"
@@ -768,10 +756,6 @@ exports[`Prop combinations that change behavior/appearance work correctly should
   width: 100%;
   z-index: 1;
   pointer-events: none;
-}
-
-.emotion-0 > * {
-  display: block;
 }
 
 .emotion-1 {

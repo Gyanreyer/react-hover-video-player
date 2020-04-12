@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import { matchers } from 'jest-emotion';
 import '@testing-library/jest-dom/extend-expect';
 
-import { LoadingSpinnerOverlay } from '../src';
+import { LoadingSpinnerOverlay, DotLoaderOverlay } from '../src';
 
 // Extend expect with emotion styling tests
 expect.extend(matchers);
@@ -61,6 +61,91 @@ describe('LoadingSpinnerOverlay', () => {
     );
 
     rerender(<LoadingSpinnerOverlay shouldShowDarkenedBackground={false} />);
+
+    expect(container).toMatchSnapshot();
+
+    expect(overlayWrapperElement).not.toHaveStyleRule('background-color');
+  });
+
+  test('shouldShowSemiTransparentRing prop makes a second circle render', () => {
+    // shouldShowSemiTransparentRing is false by default
+    const { container, rerender } = render(<LoadingSpinnerOverlay />);
+
+    expect(container).toMatchSnapshot();
+    expect(container.querySelectorAll('circle')).toHaveLength(1);
+
+    rerender(<LoadingSpinnerOverlay shouldShowSemiTransparentRing />);
+
+    expect(container).toMatchSnapshot();
+    // A second circle should have been added
+    expect(container.querySelectorAll('circle')).toHaveLength(2);
+  });
+});
+
+describe('DotLoaderOverlay', () => {
+  test('animationType prop sets the correct dot animation', () => {
+    const { container, rerender } = render(
+      <DotLoaderOverlay animationType="grow" className="test-class" />
+    );
+
+    expect(container).toMatchSnapshot();
+
+    const overlayWrapperElement = container.querySelector('.test-class');
+
+    const loaderDots = overlayWrapperElement.querySelectorAll('div');
+
+    expect(loaderDots).toHaveLength(3);
+    expect(loaderDots[0]).toHaveStyleRule(
+      'animation-name',
+      'dot-grow-animation'
+    );
+
+    rerender(
+      <DotLoaderOverlay animationType="bounce" className="test-class" />
+    );
+
+    expect(container).toMatchSnapshot();
+
+    expect(loaderDots[0]).toHaveStyleRule(
+      'animation-name',
+      'dot-bounce-animation'
+    );
+  });
+
+  test('shouldShowDarkenedBackground prop adds darkened background to overlay correctly', () => {
+    // shouldShowDarkenedBackground is true by default
+    const { container, rerender } = render(<DotLoaderOverlay />);
+
+    expect(container).toMatchSnapshot();
+
+    const overlayWrapperElement = container.querySelector('div');
+
+    expect(overlayWrapperElement).toHaveStyleRule(
+      'background-color',
+      'rgba(0,0,0,0.7)'
+    );
+
+    rerender(<LoadingSpinnerOverlay shouldShowDarkenedBackground={false} />);
+
+    expect(container).toMatchSnapshot();
+
+    expect(overlayWrapperElement).not.toHaveStyleRule('background-color');
+  });
+
+  test('shouldShowDarkenedBackground prop adds darkened background to overlay correctly', () => {
+    // shouldShowDarkenedBackground is true by default
+    const { container, rerender } = render(<DotLoaderOverlay />);
+
+    expect(container).toMatchSnapshot();
+
+    const overlayWrapperElement = container.querySelector('div');
+
+    expect(overlayWrapperElement).toHaveStyleRule(
+      'background-color',
+      'rgba(0,0,0,0.7)'
+    );
+
+    rerender(<DotLoaderOverlay shouldShowDarkenedBackground={false} />);
 
     expect(container).toMatchSnapshot();
 
