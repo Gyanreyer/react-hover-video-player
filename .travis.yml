@@ -15,11 +15,11 @@ notifications:
     on_failure: always
 
 before_install:
-  - npm install -g codecov.io coveralls
+  - npm install -g codecov
 
-after_success:
-  - cat ./tests/coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js
-  - cat ./tests/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+script:
+  - npm test
+  - codecov
 
 jobs:
   include:
@@ -41,3 +41,7 @@ jobs:
           script: npx semantic-release
           edge:
             branch: master
+
+branches:
+  only:
+    master

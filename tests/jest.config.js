@@ -1,7 +1,7 @@
 module.exports = {
   rootDir: '../',
   collectCoverage: true,
-  coverageDirectory: 'tests/coverage',
+  coverageDirectory: './coverage',
   verbose: true,
   transform: {
     '^.+\\.js$': '<rootDir>/tests/jest.transform.js',
