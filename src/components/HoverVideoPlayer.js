@@ -300,6 +300,8 @@ function HoverVideoPlayer({
     return () => window.removeEventListener('touchstart', onWindowTouchStart);
   }, [attemptStopVideo]);
 
+  // The video should use the overlay's dimensions rather than the other around if
+  //  an overlay was provided and the shouldUseOverlayDimensions is true
   const shouldVideoExpandToFitOverlayDimensions =
     pausedOverlay && shouldUseOverlayDimensions;
 

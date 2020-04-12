@@ -1,8 +1,12 @@
 import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
+import { matchers } from 'jest-emotion';
 import '@testing-library/jest-dom/extend-expect';
 
 import HoverVideoPlayer from '../src';
+
+// Extend expect with emotion styling tests
+expect.extend(matchers);
 
 /**
  * Ensures the video element has all of the correct attributes set
@@ -1456,11 +1460,56 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     expect(onStoppedVideo).toHaveBeenCalledTimes(1);
     expect(videoElement.pause).toHaveBeenCalledTimes(1);
   });
-});
 
-/**
- * TESTS THAT STILL NEED TO BE WRITTEN
- *
- * - shouldVideoExpandToFitOverlayDimensions
- * - Add checks to make sure play and pause have been called
- */
+  test('shouldUseOverlayDimensions prop applies the correct styling when set to true alongside a paused overlay', () => {
+    // shouldUseOverlayDimensions is true by default
+    const { container, getByTestId } = render(
+      <HoverVideoPlayer
+        videoSrc="fake/video-file.mp4"
+        pausedOverlay={<div />}
+      />
+    );
+
+    expect(container).toMatchSnapshot();
+
+    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
+    const videoElement = container.querySelector('video');
+
+    expect(pausedOverlayWrapper).toHaveStyleRule('position', 'relative');
+    expect(videoElement).toHaveStyleRule('position', 'absolute');
+  });
+
+  test('shouldUseOverlayDimensions prop applies the correct styling when set to false alongside a paused overlay', () => {
+    const { container, getByTestId } = render(
+      <HoverVideoPlayer
+        videoSrc="fake/video-file.mp4"
+        pausedOverlay={<div />}
+        shouldUseOverlayDimensions={false}
+      />
+    );
+
+    expect(container).toMatchSnapshot();
+
+    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
+    const videoElement = container.querySelector('video');
+
+    expect(pausedOverlayWrapper).toHaveStyleRule('position', 'absolute');
+    // The video element shouldn't have a position style rule set
+    expect(videoElement).not.toHaveStyleRule('position', 'absolute');
+  });
+
+  test('video element gets styled correctly when no paused overlay is provided', () => {
+    const { container, queryByTestId } = render(
+      <HoverVideoPlayer videoSrc="fake/video-file.mp4" />
+    );
+
+    expect(container).toMatchSnapshot();
+
+    const pausedOverlayWrapper = queryByTestId('paused-overlay-wrapper');
+    const videoElement = container.querySelector('video');
+
+    expect(pausedOverlayWrapper).not.toBeInTheDocument();
+    // The video element shouldn't have a position style rule set
+    expect(videoElement).not.toHaveStyleRule('position', 'absolute');
+  });
+});
