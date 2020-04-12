@@ -1,6 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Follows video interaction flows correctly a start attempt to start the video when it is already playing will be ignored 1`] = `
+exports[`Follows video interaction flows correctly an attempt to start the video when a previous play attempt is still loading will show the loading state again 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Follows video interaction flows correctly an attempt to start the video when it is already playing will be ignored 1`] = `
 .emotion-1 {
   position: relative;
 }
@@ -899,7 +929,7 @@ exports[`Prop combinations that change behavior/appearance work correctly Stop a
   >
     <div
       class="emotion-0"
-      data-testid="paused-overlay-transition-wrapper"
+      data-testid="paused-overlay-wrapper"
       style="opacity: 1; transition: opacity 900ms;"
     >
       <div />
@@ -979,7 +1009,7 @@ exports[`Prop combinations that change behavior/appearance work correctly other 
 `;
 
 exports[`Prop combinations that change behavior/appearance work correctly pausedOverlay and loadingOverlay are shown and hidden correctly as the video is started and stopped 1`] = `
-.emotion-2 {
+.emotion-3 {
   position: relative;
 }
 
@@ -996,6 +1026,18 @@ exports[`Prop combinations that change behavior/appearance work correctly paused
 }
 
 .emotion-1 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-2 {
   width: 100%;
   display: block;
   object-fit: cover;
@@ -1010,18 +1052,25 @@ exports[`Prop combinations that change behavior/appearance work correctly paused
 
 <div>
   <div
-    class="emotion-2"
+    class="emotion-3"
     data-testid="hover-video-player-container"
   >
     <div
       class="emotion-0"
-      data-testid="paused-overlay-transition-wrapper"
+      data-testid="paused-overlay-wrapper"
       style="opacity: 1; transition: opacity 500ms;"
     >
       <div />
     </div>
-    <video
+    <div
       class="emotion-1"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 500ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-2"
       loop=""
       playsinline=""
       preload="none"

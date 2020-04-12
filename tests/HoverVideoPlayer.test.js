@@ -876,7 +876,7 @@ describe('Follows video interaction flows correctly', () => {
     expect(videoElement.pause).toHaveBeenCalledTimes(1);
   });
 
-  test('a start attempt to start the video when it is already playing will be ignored', async () => {
+  test('an attempt to start the video when it is already playing will be ignored', async () => {
     const onStartingVideo = jest.fn();
     const onStartedVideo = jest.fn();
 
@@ -914,6 +914,46 @@ describe('Follows video interaction flows correctly', () => {
 
     // We should not have run through the start attempt flow again
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
+    expect(onStartedVideo).toHaveBeenCalledTimes(1);
+  });
+
+  test('an attempt to start the video when a previous play attempt is still loading will show the loading state again', async () => {
+    const onStartingVideo = jest.fn();
+    const onStartedVideo = jest.fn();
+
+    const { container, getByTestId } = render(
+      <HoverVideoPlayer
+        videoSrc="fake/video-file.mp4"
+        onStartingVideo={onStartingVideo}
+        onStartedVideo={onStartedVideo}
+      />
+    );
+
+    expect(container).toMatchSnapshot();
+
+    const videoElement = container.querySelector('video');
+    expectVideoHasCorrectAttributes(videoElement);
+
+    addMockedFunctionsToVideoElement(videoElement);
+
+    const playerContainer = getByTestId('hover-video-player-container');
+
+    // Mouse over the container to start playing the video
+    fireEvent.mouseEnter(playerContainer);
+    expect(onStartingVideo).toHaveBeenCalledTimes(1);
+
+    // Stop the video while it's still loading in the background
+    fireEvent.mouseLeave(playerContainer);
+    act(() => jest.advanceTimersByTime(500));
+
+    fireEvent.mouseEnter(playerContainer);
+    expect(onStartingVideo).toHaveBeenCalledTimes(2);
+
+    // Wait until the play promise has resolved
+    await waitForVideoElementPlayPromise(videoElement);
+
+    // The start attempt should have succeeded
+    expect(onStartingVideo).toHaveBeenCalledTimes(2);
     expect(onStartedVideo).toHaveBeenCalledTimes(1);
   });
 

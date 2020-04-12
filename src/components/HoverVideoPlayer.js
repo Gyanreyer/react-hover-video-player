@@ -186,25 +186,25 @@ function HoverVideoPlayer({
     // cancel any outstanding timeout that would pause the video
     clearTimeout(pauseVideoTimeoutRef.current);
 
-    if (hoverPlayerState <= HOVER_PLAYER_STATE.attemptingToStop) {
-      // Update the player state to reflect that we are now either playing or attempting to play
-      setHoverPlayerState(
-        // If the video isn't loaded enough to immediately begin playback, mark that it's attempting to start
-        // so we can show a loading state
-        videoRef.current.readyState <= 2
-          ? HOVER_PLAYER_STATE.attemptingToStart
-          : HOVER_PLAYER_STATE.playing
-      );
-    }
+    // Return early if already playing or attempting to play
+    if (hoverPlayerState >= HOVER_PLAYER_STATE.attemptingToStart) return;
 
     if (videoRef.current.paused) {
-      isVideoLoadingRef.current = true;
-
       // Fire onStartingVideo callback to indicate the video is attempting to start
       onStartingVideo();
+      // Update the player state to reflect that we are now attempting to play
+      setHoverPlayerState(HOVER_PLAYER_STATE.attemptingToStart);
+      isVideoLoadingRef.current = true;
 
       // Play the video
       videoRef.current.play();
+    } else if (isVideoLoadingRef.current) {
+      // If the video is still loading, indicate that the video is attempting to start
+      onStartingVideo();
+      setHoverPlayerState(HOVER_PLAYER_STATE.attemptingToStart);
+    } else {
+      // If the video was already loaded and playing, just update the state to reflect that
+      setHoverPlayerState(HOVER_PLAYER_STATE.playing);
     }
   }
 
