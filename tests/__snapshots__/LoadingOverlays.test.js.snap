@@ -1,0 +1,344 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoadingSpinnerOverlay animationDuration prop sets duration on animations correctly 1`] = `
+.emotion-2 {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.emotion-1 {
+  -webkit-animation-name: spinner-rotate-animation;
+  animation-name: spinner-rotate-animation;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+.emotion-0 {
+  fill: transparent;
+  stroke: white;
+  stroke-width: 1px;
+  stroke-dasharray: 57;
+  stroke-linecap: round;
+  -webkit-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  stroke-dashoffset: 18;
+  -webkit-animation-name: spinner-stroke-animation;
+  animation-name: spinner-stroke-animation;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+<div>
+  <div
+    class="emotion-2"
+  >
+    <svg
+      class="emotion-1"
+      height="60"
+      style="animation-duration: 300ms;"
+      viewBox="0 0 20 20"
+      width="60"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        class="emotion-0"
+        cx="10"
+        cy="10"
+        r="9"
+        style="animation-duration: 450ms;"
+      />
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`LoadingSpinnerOverlay shouldAnimateStroke prop applies animation to circle element correctly 1`] = `
+.emotion-2 {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.emotion-1 {
+  -webkit-animation-name: spinner-rotate-animation;
+  animation-name: spinner-rotate-animation;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+.emotion-0 {
+  fill: transparent;
+  stroke: white;
+  stroke-width: 1px;
+  stroke-dasharray: 57;
+  stroke-linecap: round;
+  -webkit-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  stroke-dashoffset: 18;
+  -webkit-animation-name: spinner-stroke-animation;
+  animation-name: spinner-stroke-animation;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+<div>
+  <div
+    class="emotion-2"
+  >
+    <svg
+      class="emotion-1"
+      height="60"
+      style="animation-duration: 1000ms;"
+      viewBox="0 0 20 20"
+      width="60"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        class="emotion-0"
+        cx="10"
+        cy="10"
+        r="9"
+        style="animation-duration: 1500ms;"
+      />
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`LoadingSpinnerOverlay shouldAnimateStroke prop applies animation to circle element correctly 2`] = `
+.emotion-2 {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.emotion-1 {
+  -webkit-animation-name: spinner-rotate-animation;
+  animation-name: spinner-rotate-animation;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+.emotion-0 {
+  fill: transparent;
+  stroke: white;
+  stroke-width: 1px;
+  stroke-dasharray: 57;
+  stroke-linecap: round;
+  -webkit-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  stroke-dashoffset: 18;
+}
+
+<div>
+  <div
+    class="emotion-2"
+  >
+    <svg
+      class="emotion-1"
+      height="60"
+      style="animation-duration: 1000ms;"
+      viewBox="0 0 20 20"
+      width="60"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        class="emotion-0"
+        cx="10"
+        cy="10"
+        r="9"
+        style="animation-duration: 1500ms;"
+      />
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`LoadingSpinnerOverlay shouldShowDarkenedBackground prop adds darkened background to overlay correctly 1`] = `
+.emotion-2 {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.emotion-1 {
+  -webkit-animation-name: spinner-rotate-animation;
+  animation-name: spinner-rotate-animation;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+.emotion-0 {
+  fill: transparent;
+  stroke: white;
+  stroke-width: 1px;
+  stroke-dasharray: 57;
+  stroke-linecap: round;
+  -webkit-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  stroke-dashoffset: 18;
+  -webkit-animation-name: spinner-stroke-animation;
+  animation-name: spinner-stroke-animation;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+<div>
+  <div
+    class="emotion-2"
+  >
+    <svg
+      class="emotion-1"
+      height="60"
+      style="animation-duration: 1000ms;"
+      viewBox="0 0 20 20"
+      width="60"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        class="emotion-0"
+        cx="10"
+        cy="10"
+        r="9"
+        style="animation-duration: 1500ms;"
+      />
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`LoadingSpinnerOverlay shouldShowDarkenedBackground prop adds darkened background to overlay correctly 2`] = `
+.emotion-2 {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-1 {
+  -webkit-animation-name: spinner-rotate-animation;
+  animation-name: spinner-rotate-animation;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+.emotion-0 {
+  fill: transparent;
+  stroke: white;
+  stroke-width: 1px;
+  stroke-dasharray: 57;
+  stroke-linecap: round;
+  -webkit-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  stroke-dashoffset: 18;
+  -webkit-animation-name: spinner-stroke-animation;
+  animation-name: spinner-stroke-animation;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+<div>
+  <div
+    class="emotion-2"
+  >
+    <svg
+      class="emotion-1"
+      height="60"
+      style="animation-duration: 1000ms;"
+      viewBox="0 0 20 20"
+      width="60"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        class="emotion-0"
+        cx="10"
+        cy="10"
+        r="9"
+        style="animation-duration: 1500ms;"
+      />
+    </svg>
+  </div>
+</div>
+`;

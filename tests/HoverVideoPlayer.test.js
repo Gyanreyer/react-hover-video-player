@@ -1510,6 +1510,6 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
 
     expect(pausedOverlayWrapper).not.toBeInTheDocument();
     // The video element shouldn't have a position style rule set
-    expect(videoElement).not.toHaveStyleRule('position', 'absolute');
+    expect(videoElement).not.toHaveStyleRule('position');
   });
 });
