@@ -1075,7 +1075,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
   });
 
   test('pausedOverlay and loadingOverlay are shown and hidden correctly as the video is started and stopped', async () => {
-    const { container, getByTestId, queryByTestId } = render(
+    const { container, getByTestId } = render(
       <HoverVideoPlayer
         videoSrc="fake/video-file.mp4"
         pausedOverlay={<div />}
@@ -1093,50 +1093,30 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
 
     const playerContainer = getByTestId('hover-video-player-container');
 
+    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
+    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+
     // The paused overlay should be visible since we're in the initial idle paused state
-    expect(
-      queryByTestId('paused-overlay-transition-wrapper').style.opacity
-    ).toBe('1');
-    // The loading overlay should not be mounted while the player is idle
-    expect(
-      queryByTestId('loading-overlay-transition-wrapper')
-    ).not.toBeInTheDocument();
+    expect(pausedOverlayWrapper.style.opacity).toBe('1');
+    expect(pausedOverlayWrapper.style.transition).toBe('opacity 500ms');
+    // The loading overlay should be hidden
+    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(loadingOverlayWrapper.style.transition).toBe('opacity 500ms');
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
 
     // The paused overlay should still be visible under the loading overlay
-    expect(
-      queryByTestId('paused-overlay-transition-wrapper').style.opacity
-    ).toBe('1');
-    // We are in a loading state until the play promise is resolved so the loading overlay should now be mounted
-    expect(
-      queryByTestId('loading-overlay-transition-wrapper')
-    ).toBeInTheDocument();
+    expect(pausedOverlayWrapper.style.opacity).toBe('1');
+    // We are in a loading state until the play promise is resolved so the loading overlay should now be visible
+    expect(loadingOverlayWrapper.style.opacity).toBe('1');
 
     // Wait until the play promise has resolved
     await waitForVideoElementPlayPromise(videoElement);
 
-    // The paused overlay should be hidden now that we are playing
-    expect(
-      queryByTestId('paused-overlay-transition-wrapper').style.opacity
-    ).toBe('0');
-    // We have exited the loading state and the loading overlay should be hidden,
-    // but it will still be mounted as it fades out until 500ms have elapsed
-    expect(
-      queryByTestId('loading-overlay-transition-wrapper')
-    ).toBeInTheDocument();
-
-    // Advance 500ms to the end of the loading overlay fade transition
-    act(() => jest.advanceTimersByTime(500));
-
-    expect(
-      queryByTestId('paused-overlay-transition-wrapper').style.opacity
-    ).toBe('0');
-    // The loading overlay should now be unmounted
-    expect(
-      queryByTestId('loading-overlay-transition-wrapper')
-    ).not.toBeInTheDocument();
+    // Both overlays should be hidden now that we are playing
+    expect(pausedOverlayWrapper.style.opacity).toBe('0');
+    expect(loadingOverlayWrapper.style.opacity).toBe('0');
 
     // Fire a mouseLeave event to stop the video
     fireEvent.mouseLeave(playerContainer);
@@ -1145,13 +1125,9 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     act(() => jest.advanceTimersByTime(500));
 
     // Since we're stopping, the paused overlay should be visible again
-    expect(
-      queryByTestId('paused-overlay-transition-wrapper').style.opacity
-    ).toBe('1');
-    // The loading overlay should still be unmounted
-    expect(
-      queryByTestId('loading-overlay-transition-wrapper')
-    ).not.toBeInTheDocument();
+    expect(pausedOverlayWrapper.style.opacity).toBe('1');
+    // The loading overlay should still be hidden
+    expect(loadingOverlayWrapper.style.opacity).toBe('0');
   });
 
   test('isFocused prop starts and stops the video correctly', async () => {

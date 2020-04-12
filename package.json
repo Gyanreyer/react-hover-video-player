@@ -14,8 +14,7 @@
     "test:watch": "npm run test -- --watch --no-cache"
   },
   "dependencies": {
-    "emotion": "^10.0.27",
-    "react-transition-group": "^4.3.0"
+    "emotion": "^10.0.27"
   },
   "peerDependencies": {
     "react": "^16.8.0"
@@ -37,7 +36,6 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-testing-library": "^3.0.2",
-    "gh-pages": "^2.2.0",
     "jest": "^25.2.7",
     "jest-emotion": "^10.0.32",
     "nwb": "^0.24.5",

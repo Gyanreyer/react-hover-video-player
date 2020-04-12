@@ -1,8 +1,6 @@
 import React from 'react';
 import { css, cx } from 'emotion';
 
-import FadeTransition from './FadeTransition';
-
 // Noop function does nothing - used as default for optional callbacks
 const noop = () => {};
 
@@ -323,9 +321,12 @@ function HoverVideoPlayer({
       ref={containerRef}
     >
       {pausedOverlay && (
-        <FadeTransition
-          isVisible={hoverPlayerState <= HOVER_PLAYER_STATE.attemptingToStart}
-          duration={overlayFadeTransitionDuration}
+        <div
+          style={{
+            opacity:
+              hoverPlayerState <= HOVER_PLAYER_STATE.attemptingToStart ? 1 : 0,
+            transition: `opacity ${overlayFadeTransitionDuration}ms`,
+          }}
           className={cx(
             css`
               position: relative;
@@ -343,16 +344,18 @@ function HoverVideoPlayer({
             },
             pausedOverlayWrapperClassName
           )}
-          testID="paused-overlay-transition-wrapper"
+          data-testid="paused-overlay-wrapper"
         >
           {pausedOverlay}
-        </FadeTransition>
+        </div>
       )}
       {loadingOverlay && (
-        <FadeTransition
-          isVisible={hoverPlayerState === HOVER_PLAYER_STATE.attemptingToStart}
-          duration={overlayFadeTransitionDuration}
-          shouldMountOnEnter
+        <div
+          style={{
+            opacity:
+              hoverPlayerState === HOVER_PLAYER_STATE.attemptingToStart ? 1 : 0,
+            transition: `opacity ${overlayFadeTransitionDuration}ms`,
+          }}
           className={cx(
             css`
               z-index: 2;
@@ -361,10 +364,10 @@ function HoverVideoPlayer({
             expandToCoverVideo,
             loadingOverlayWrapperClassName
           )}
-          testID="loading-overlay-transition-wrapper"
+          data-testid="loading-overlay-wrapper"
         >
           {loadingOverlay}
-        </FadeTransition>
+        </div>
       )}
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
