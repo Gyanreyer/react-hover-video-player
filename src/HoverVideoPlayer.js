@@ -1,5 +1,6 @@
 import React from 'react';
 import { css, cx } from 'emotion';
+import { formatVideoSrc, formatVideoCaptions } from './utils';
 
 // Noop function does nothing - used as default for optional callbacks
 const noop = () => {};
@@ -12,7 +13,12 @@ const HOVER_PLAYER_STATE = {
   playing: 3,
 };
 
-const expandToCoverVideo = css`
+// Set up our emotion CSS classes
+const basePlayerContainerStyle = css`
+  position: relative;
+`;
+
+const expandToCoverPlayerStyle = css`
   position: absolute;
   top: 0;
   bottom: 0;
@@ -20,6 +26,25 @@ const expandToCoverVideo = css`
   right: 0;
   width: 100%;
   height: 100%;
+`;
+
+const basePausedOverlayStyle = css`
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+`;
+
+const baseLoadingOverlayStyle = css`
+  z-index: 2;
+  pointer-events: none;
+`;
+
+const baseVideoStyle = css`
+  width: 100%;
+  display: block;
+  object-fit: cover;
 `;
 
 /**
@@ -109,72 +134,14 @@ function HoverVideoPlayer({
   const isVideoLoadingRef = React.useRef(false);
 
   // Parse the `videoSrc` prop into an array of VideoSource objects to be used for the video player
-  const parsedVideoSources = React.useMemo(() => {
-    if (videoSrc == null) {
-      // A videoSrc value is required in order to make the video player work
-      console.error(
-        "Error: 'videoSrc' prop is required for HoverVideoPlayer component"
-      );
+  const parsedVideoSources = React.useMemo(() => formatVideoSrc(videoSrc), [
+    videoSrc,
+  ]);
 
-      return [];
-    }
-
-    return (
-      // Make sure we can treat the videoSrc value as an array
-      []
-        .concat(videoSrc)
-        // Parse our video source values into an array of VideoSource objects that can be used to render sources for the video
-        .reduce((sourceArray, source) => {
-          if (typeof source === 'string') {
-            // If the source is a string, it's an src URL so format it into a VideoSource object and add it to the array
-            sourceArray.push({ src: source });
-          } else if (source && source.src) {
-            // If the source is an object with an src, just add it to the array
-            sourceArray.push({ src: source.src, type: source.type });
-          } else {
-            // Log an error if one of the videoSrc values is invalid
-            console.error(
-              "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
-              source
-            );
-          }
-
-          return sourceArray;
-        }, [])
-    );
-  }, [videoSrc]);
-
-  const parsedVideoCaptions = React.useMemo(() => {
-    // If no captions were provided, return an empty array
-    if (videoCaptions == null) return [];
-
-    return (
-      // Make sure we can treat the videoSrc value as an array
-      []
-        .concat(videoCaptions)
-        // Parse our video captions values into an array of VideoCaptionsTrack
-        // objects that can be used to render caption tracks for the video
-        .reduce((captionsArray, captions) => {
-          if (typeof captions === 'string') {
-            captionsArray.push({ src: captions });
-          } else if (captions && captions.src) {
-            captionsArray.push({
-              src: captions.src,
-              srcLang: captions.srcLang,
-              label: captions.label,
-            });
-          } else {
-            // Log an error if one of the videoCaptions values is invalid
-            console.error(
-              "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
-              captions
-            );
-          }
-
-          return captionsArray;
-        }, [])
-    );
-  }, [videoCaptions]);
+  const parsedVideoCaptions = React.useMemo(
+    () => formatVideoCaptions(videoCaptions),
+    [videoCaptions]
+  );
 
   /**
    * @function  attemptStartVideo
@@ -300,7 +267,7 @@ function HoverVideoPlayer({
     return () => window.removeEventListener('touchstart', onWindowTouchStart);
   }, [attemptStopVideo]);
 
-  // The video should use the overlay's dimensions rather than the other around if
+  // The video should use the overlay's dimensions rather than the other way around if
   //  an overlay was provided and the shouldUseOverlayDimensions is true
   const shouldVideoExpandToFitOverlayDimensions =
     pausedOverlay && shouldUseOverlayDimensions;
@@ -312,12 +279,7 @@ function HoverVideoPlayer({
       onMouseOut={attemptStopVideo}
       onBlur={attemptStopVideo}
       onTouchStart={attemptStartVideo}
-      className={cx(
-        css`
-          position: relative;
-        `,
-        className
-      )}
+      className={cx(basePlayerContainerStyle, className)}
       style={style}
       data-testid="hover-video-player-container"
       ref={containerRef}
@@ -330,15 +292,9 @@ function HoverVideoPlayer({
             transition: `opacity ${overlayFadeTransitionDuration}ms`,
           }}
           className={cx(
-            css`
-              position: relative;
-              display: block;
-              width: 100%;
-              z-index: 1;
-              pointer-events: none;
-            `,
+            basePausedOverlayStyle,
             {
-              [expandToCoverVideo]: !shouldVideoExpandToFitOverlayDimensions,
+              [expandToCoverPlayerStyle]: !shouldVideoExpandToFitOverlayDimensions,
             },
             pausedOverlayWrapperClassName
           )}
@@ -355,11 +311,8 @@ function HoverVideoPlayer({
             transition: `opacity ${overlayFadeTransitionDuration}ms`,
           }}
           className={cx(
-            css`
-              z-index: 2;
-              pointer-events: none;
-            `,
-            expandToCoverVideo,
+            baseLoadingOverlayStyle,
+            expandToCoverPlayerStyle,
             loadingOverlayWrapperClassName
           )}
           data-testid="loading-overlay-wrapper"
@@ -376,13 +329,9 @@ function HoverVideoPlayer({
         preload={shouldVideoExpandToFitOverlayDimensions ? 'none' : 'metadata'}
         ref={videoRef}
         className={cx(
-          css`
-            width: 100%;
-            display: block;
-            object-fit: cover;
-          `,
+          baseVideoStyle,
           {
-            [expandToCoverVideo]: shouldVideoExpandToFitOverlayDimensions,
+            [expandToCoverPlayerStyle]: shouldVideoExpandToFitOverlayDimensions,
           },
           videoClassName
         )}

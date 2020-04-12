@@ -1,5 +1,3 @@
-import HoverVideoPlayer from './components/HoverVideoPlayer';
+import HoverVideoPlayer from './HoverVideoPlayer';
 
 export default HoverVideoPlayer;
-
-export { LoadingSpinnerOverlay, DotLoaderOverlay } from './components/LoadingOverlays';

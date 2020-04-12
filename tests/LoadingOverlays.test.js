@@ -3,7 +3,10 @@ import { render } from '@testing-library/react';
 import { matchers } from 'jest-emotion';
 import '@testing-library/jest-dom/extend-expect';
 
-import { LoadingSpinnerOverlay, DotLoaderOverlay } from '../src';
+import {
+  LoadingSpinnerOverlay,
+  DotLoaderOverlay,
+} from '../src/LoadingOverlays';
 
 // Extend expect with emotion styling tests
 expect.extend(matchers);

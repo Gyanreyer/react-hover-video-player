@@ -1,15 +1,25 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { css } from 'emotion';
+import { css, injectGlobal } from 'emotion';
 
-import HoverVideoPlayer, {
+import HoverVideoPlayer from '../../src';
+import {
   LoadingSpinnerOverlay,
   DotLoaderOverlay,
-} from '../../src';
+} from '../../src/LoadingOverlays';
+
+// eslint-disable-next-line no-unused-expressions
+injectGlobal`
+  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+  }
+`;
 
 const Demo = () => (
   <div>
-    <h1>Example Video Gallery</h1>
+    <h1>react-hover-video-player</h1>
     <div
       className={css`
         display: grid;
@@ -26,7 +36,7 @@ const Demo = () => (
           <img
             src="image/big_buck_bunny_thumbnail.png"
             alt="Big Buck Bunny"
-            style={{ width: '100%' }}
+            style={{ display: 'block', width: '100%' }}
           />
         }
         loadingOverlay={<LoadingSpinnerOverlay />}
