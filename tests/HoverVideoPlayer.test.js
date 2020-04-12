@@ -4,7 +4,12 @@ import '@testing-library/jest-dom/extend-expect';
 
 import HoverVideoPlayer from '../src';
 
-// Ensures the video element has all of the correct attributes set
+/**
+ * Ensures the video element has all of the correct attributes set
+ *
+ * @param {node}    videoElement
+ * @param {object}  expectedValues    Object with expected attribute values to test for
+ */
 const expectVideoHasCorrectAttributes = (
   videoElement,
   { muted = true, loop = true, controls = false, preload = 'metadata' } = {}
@@ -66,6 +71,8 @@ const addMockedFunctionsToVideoElement = (videoElement) => {
   });
   videoElement.pause = jest.fn(() => {
     if (isPlayAttemptInProgress) {
+      // Throw an error if pause() is called while an async play() promise
+      // has not been resolved yet
       throw new Error('Interrupted play attempt');
     }
 
@@ -143,370 +150,395 @@ describe('Handles video props correctly', () => {
   });
 });
 
-describe('Handles valid videoSrc prop values correctly', () => {
-  test('correctly handles receiving a string for the videoSrc prop', () => {
-    const { container } = render(
-      <HoverVideoPlayer videoSrc="/fake/video-file.mp4" />
-    );
+describe('videoSrc prop', () => {
+  describe('Handles valid videoSrc prop values correctly', () => {
+    test('correctly handles receiving a string for the videoSrc prop', () => {
+      const { container } = render(
+        <HoverVideoPlayer videoSrc="/fake/video-file.mp4" />
+      );
 
-    expect(container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
 
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
 
-    const videoSources = videoElement.querySelectorAll('source');
-    expect(videoSources).toHaveLength(1);
-    expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.mp4');
-    expect(videoSources[0]).not.toHaveAttribute('type');
+      const videoSources = videoElement.querySelectorAll('source');
+      expect(videoSources).toHaveLength(1);
+      expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.mp4');
+      expect(videoSources[0]).not.toHaveAttribute('type');
+    });
+
+    test('correctly handles receiving an array of strings for the videoSrc prop', () => {
+      const { container } = render(
+        <HoverVideoPlayer
+          videoSrc={['/fake/video-file.webm', '/fake/video-file.mp4']}
+        />
+      );
+
+      expect(container).toMatchSnapshot();
+
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
+
+      const videoSources = videoElement.querySelectorAll('source');
+      expect(videoSources).toHaveLength(2);
+      expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.webm');
+      expect(videoSources[0]).not.toHaveAttribute('type');
+      expect(videoSources[1]).toHaveAttribute('src', '/fake/video-file.mp4');
+      expect(videoSources[1]).not.toHaveAttribute('type');
+    });
+
+    test('correctly handles receiving a valid object for the videoSrc prop', () => {
+      const { container } = render(
+        <HoverVideoPlayer
+          videoSrc={{ src: '/fake/video-file.mp4', type: 'video/mp4' }}
+        />
+      );
+
+      expect(container).toMatchSnapshot();
+
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
+
+      const videoSources = videoElement.querySelectorAll('source');
+      expect(videoSources).toHaveLength(1);
+      expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.mp4');
+      expect(videoSources[0]).toHaveAttribute('type', 'video/mp4');
+    });
+
+    test('correctly handles receiving an array of objects for the videoSrc prop', () => {
+      const { container } = render(
+        <HoverVideoPlayer
+          videoSrc={[
+            { src: '/fake/video-file.webm', type: 'video/webm' },
+            { src: '/fake/video-file.mp4', type: 'video/mp4' },
+          ]}
+        />
+      );
+
+      expect(container).toMatchSnapshot();
+
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
+
+      const videoSources = videoElement.querySelectorAll('source');
+      expect(videoSources).toHaveLength(2);
+      expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.webm');
+      expect(videoSources[0]).toHaveAttribute('type', 'video/webm');
+      expect(videoSources[1]).toHaveAttribute('src', '/fake/video-file.mp4');
+      expect(videoSources[1]).toHaveAttribute('type', 'video/mp4');
+    });
+
+    test('correctly handles receiving an array with a mix of strings and objects for the videoSrc prop', () => {
+      const { container } = render(
+        <HoverVideoPlayer
+          videoSrc={[
+            '/fake/video-file.webm',
+            { src: '/fake/video-file.avi' },
+            { src: '/fake/video-file.mp4', type: 'video/mp4' },
+          ]}
+        />
+      );
+
+      expect(container).toMatchSnapshot();
+
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
+
+      const videoSources = videoElement.querySelectorAll('source');
+      expect(videoSources).toHaveLength(3);
+      expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.webm');
+      expect(videoSources[0]).not.toHaveAttribute('type');
+      expect(videoSources[1]).toHaveAttribute('src', '/fake/video-file.avi');
+      expect(videoSources[1]).not.toHaveAttribute('type');
+      expect(videoSources[2]).toHaveAttribute('src', '/fake/video-file.mp4');
+      expect(videoSources[2]).toHaveAttribute('type', 'video/mp4');
+    });
   });
 
-  test('correctly handles receiving an array of strings for the videoSrc prop', () => {
-    const { container } = render(
-      <HoverVideoPlayer
-        videoSrc={['/fake/video-file.webm', '/fake/video-file.mp4']}
-      />
-    );
+  describe('Handles invalid videoSrc prop values correctly', () => {
+    let originalConsoleError;
 
-    expect(container).toMatchSnapshot();
+    beforeEach(() => {
+      // Mock the console.error function so we can verify that an error was logged correctly
+      originalConsoleError = console.error;
+      console.error = jest.fn();
+    });
 
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
+    afterEach(() => {
+      console.error = originalConsoleError;
+    });
 
-    const videoSources = videoElement.querySelectorAll('source');
-    expect(videoSources).toHaveLength(2);
-    expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.webm');
-    expect(videoSources[0]).not.toHaveAttribute('type');
-    expect(videoSources[1]).toHaveAttribute('src', '/fake/video-file.mp4');
-    expect(videoSources[1]).not.toHaveAttribute('type');
-  });
+    test('correctly handles not receiving a videoSrc prop', () => {
+      const { container } = render(<HoverVideoPlayer />);
 
-  test('correctly handles receiving a valid object for the videoSrc prop', () => {
-    const { container } = render(
-      <HoverVideoPlayer
-        videoSrc={{ src: '/fake/video-file.mp4', type: 'video/mp4' }}
-      />
-    );
+      expect(container).toMatchSnapshot();
 
-    expect(container).toMatchSnapshot();
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
 
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
+      const videoSources = videoElement.querySelectorAll('source');
+      expect(videoSources).toHaveLength(0);
 
-    const videoSources = videoElement.querySelectorAll('source');
-    expect(videoSources).toHaveLength(1);
-    expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.mp4');
-    expect(videoSources[0]).toHaveAttribute('type', 'video/mp4');
-  });
+      // Should have logged an error warning that the 'videoSrc' prop is required
+      expect(console.error).toHaveBeenCalledTimes(1);
+      expect(console.error).toHaveBeenCalledWith(
+        "Error: 'videoSrc' prop is required for HoverVideoPlayer component"
+      );
+    });
 
-  test('correctly handles receiving an array of objects for the videoSrc prop', () => {
-    const { container } = render(
-      <HoverVideoPlayer
-        videoSrc={[
-          { src: '/fake/video-file.webm', type: 'video/webm' },
-          { src: '/fake/video-file.mp4', type: 'video/mp4' },
-        ]}
-      />
-    );
+    test('correctly handles receiving a single invalid value for the videoSrc prop', () => {
+      const { container } = render(<HoverVideoPlayer videoSrc={100} />);
 
-    expect(container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
 
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
 
-    const videoSources = videoElement.querySelectorAll('source');
-    expect(videoSources).toHaveLength(2);
-    expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.webm');
-    expect(videoSources[0]).toHaveAttribute('type', 'video/webm');
-    expect(videoSources[1]).toHaveAttribute('src', '/fake/video-file.mp4');
-    expect(videoSources[1]).toHaveAttribute('type', 'video/mp4');
-  });
+      const videoSources = videoElement.querySelectorAll('source');
+      expect(videoSources).toHaveLength(0);
 
-  test('correctly handles receiving an array with a mix of strings and objects for the videoSrc prop', () => {
-    const { container } = render(
-      <HoverVideoPlayer
-        videoSrc={[
-          '/fake/video-file.webm',
-          { src: '/fake/video-file.avi' },
-          { src: '/fake/video-file.mp4', type: 'video/mp4' },
-        ]}
-      />
-    );
+      // Should have logged an error warning that the 'videoSrc' prop is required
+      expect(console.error).toHaveBeenCalledTimes(1);
+      expect(console.error).toHaveBeenCalledWith(
+        "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
+        100
+      );
+    });
 
-    expect(container).toMatchSnapshot();
+    test('correctly handles receiving an invalid value in an array for the videoSrc prop', () => {
+      const { container } = render(
+        <HoverVideoPlayer
+          videoSrc={[
+            'valid-video-file.webm',
+            false,
+            { src: 'valid-video-file.mp4', type: 'video/mp4' },
+          ]}
+        />
+      );
 
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
+      expect(container).toMatchSnapshot();
 
-    const videoSources = videoElement.querySelectorAll('source');
-    expect(videoSources).toHaveLength(3);
-    expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.webm');
-    expect(videoSources[0]).not.toHaveAttribute('type');
-    expect(videoSources[1]).toHaveAttribute('src', '/fake/video-file.avi');
-    expect(videoSources[1]).not.toHaveAttribute('type');
-    expect(videoSources[2]).toHaveAttribute('src', '/fake/video-file.mp4');
-    expect(videoSources[2]).toHaveAttribute('type', 'video/mp4');
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
+
+      const videoSources = videoElement.querySelectorAll('source');
+      expect(videoSources).toHaveLength(2);
+      expect(videoSources[0]).toHaveAttribute('src', 'valid-video-file.webm');
+      expect(videoSources[0]).not.toHaveAttribute('type');
+      expect(videoSources[1]).toHaveAttribute('src', 'valid-video-file.mp4');
+      expect(videoSources[1]).toHaveAttribute('type', 'video/mp4');
+
+      // Should have logged an error warning that the 'videoSrc' prop is required
+      expect(console.error).toHaveBeenCalledTimes(1);
+      expect(console.error).toHaveBeenCalledWith(
+        "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
+        false
+      );
+    });
   });
 });
 
-describe('Handles invalid videoSrc prop values correctly', () => {
-  let originalConsoleError;
+describe('videoCaptions prop', () => {
+  describe('Handles valid videoCaptions prop values correctly', () => {
+    test('correctly handles receiving a string for the videoCaptions prop', () => {
+      const { container } = render(
+        <HoverVideoPlayer
+          videoSrc="/fake/video-file.mp4"
+          videoCaptions="/fake/captions-file.vtt"
+        />
+      );
 
-  beforeEach(() => {
-    // Mock the console.error function so we can verify that an error was logged correctly
-    originalConsoleError = console.error;
-    console.error = jest.fn();
-  });
+      expect(container).toMatchSnapshot();
 
-  afterEach(() => {
-    console.error = originalConsoleError;
-  });
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
 
-  test('correctly handles not receiving a videoSrc prop', () => {
-    const { container } = render(<HoverVideoPlayer />);
+      const videoTracks = videoElement.querySelectorAll('track');
+      expect(videoTracks).toHaveLength(1);
+      expect(videoTracks[0]).toHaveAttribute('kind', 'captions');
+      expect(videoTracks[0]).toHaveAttribute('src', '/fake/captions-file.vtt');
+    });
 
-    expect(container).toMatchSnapshot();
-
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
-
-    const videoSources = videoElement.querySelectorAll('source');
-    expect(videoSources).toHaveLength(0);
-
-    // Should have logged an error warning that the 'videoSrc' prop is required
-    expect(console.error).toHaveBeenCalledTimes(1);
-    expect(console.error).toHaveBeenCalledWith(
-      "Error: 'videoSrc' prop is required for HoverVideoPlayer component"
-    );
-  });
-
-  test('correctly handles receiving a single invalid value for the videoSrc prop', () => {
-    const { container } = render(<HoverVideoPlayer videoSrc={100} />);
-
-    expect(container).toMatchSnapshot();
-
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
-
-    const videoSources = videoElement.querySelectorAll('source');
-    expect(videoSources).toHaveLength(0);
-
-    // Should have logged an error warning that the 'videoSrc' prop is required
-    expect(console.error).toHaveBeenCalledTimes(1);
-    expect(console.error).toHaveBeenCalledWith(
-      "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
-      100
-    );
-  });
-
-  test('correctly handles receiving an invalid value in an array for the videoSrc prop', () => {
-    const { container } = render(
-      <HoverVideoPlayer
-        videoSrc={[
-          'valid-video-file.webm',
-          false,
-          { src: 'valid-video-file.mp4', type: 'video/mp4' },
-        ]}
-      />
-    );
-
-    expect(container).toMatchSnapshot();
-
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
-
-    const videoSources = videoElement.querySelectorAll('source');
-    expect(videoSources).toHaveLength(2);
-    expect(videoSources[0]).toHaveAttribute('src', 'valid-video-file.webm');
-    expect(videoSources[0]).not.toHaveAttribute('type');
-    expect(videoSources[1]).toHaveAttribute('src', 'valid-video-file.mp4');
-    expect(videoSources[1]).toHaveAttribute('type', 'video/mp4');
-
-    // Should have logged an error warning that the 'videoSrc' prop is required
-    expect(console.error).toHaveBeenCalledTimes(1);
-    expect(console.error).toHaveBeenCalledWith(
-      "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
-      false
-    );
-  });
-});
-
-describe('Handles valid videoCaptions prop values correctly', () => {
-  test('correctly handles receiving a string for the videoCaptions prop', () => {
-    const { container } = render(
-      <HoverVideoPlayer
-        videoSrc="/fake/video-file.mp4"
-        videoCaptions="/fake/captions-file.vtt"
-      />
-    );
-
-    expect(container).toMatchSnapshot();
-
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
-
-    const videoTracks = videoElement.querySelectorAll('track');
-    expect(videoTracks).toHaveLength(1);
-    expect(videoTracks[0]).toHaveAttribute('kind', 'captions');
-    expect(videoTracks[0]).toHaveAttribute('src', '/fake/captions-file.vtt');
-  });
-
-  test('correctly handles receiving a valid object for the videoCaptions prop', () => {
-    const { container } = render(
-      <HoverVideoPlayer
-        videoSrc="/fake/video-file.mp4"
-        videoCaptions={{
-          src: '/fake/captions-file-en.vtt',
-          srcLang: 'en',
-          label: 'English',
-        }}
-      />
-    );
-
-    expect(container).toMatchSnapshot();
-
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
-
-    const videoTracks = videoElement.querySelectorAll('track');
-    expect(videoTracks).toHaveLength(1);
-    expect(videoTracks[0]).toHaveAttribute('kind', 'captions');
-    expect(videoTracks[0]).toHaveAttribute('src', '/fake/captions-file-en.vtt');
-    expect(videoTracks[0]).toHaveAttribute('srclang', 'en');
-    expect(videoTracks[0]).toHaveAttribute('label', 'English');
-  });
-
-  test('correctly handles receiving an array of objects for the videoCaptions prop', () => {
-    const { container } = render(
-      <HoverVideoPlayer
-        videoSrc="/fake/video-file.mp4"
-        videoCaptions={[
-          {
+    test('correctly handles receiving a valid object for the videoCaptions prop', () => {
+      const { container } = render(
+        <HoverVideoPlayer
+          videoSrc="/fake/video-file.mp4"
+          videoCaptions={{
             src: '/fake/captions-file-en.vtt',
             srcLang: 'en',
             label: 'English',
-          },
-          {
-            src: '/fake/captions-file-fr.vtt',
-            srcLang: 'fr',
-            label: 'French',
-          },
-          {
-            src: '/fake/captions-file-de.vtt',
-            srcLang: 'de',
-            label: 'German',
-          },
-        ]}
-      />
-    );
+          }}
+        />
+      );
 
-    expect(container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
 
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
 
-    const videoTracks = videoElement.querySelectorAll('track');
-    expect(videoTracks).toHaveLength(3);
-    expect(videoTracks[0]).toHaveAttribute('kind', 'captions');
-    expect(videoTracks[0]).toHaveAttribute('src', '/fake/captions-file-en.vtt');
-    expect(videoTracks[0]).toHaveAttribute('srclang', 'en');
-    expect(videoTracks[0]).toHaveAttribute('label', 'English');
+      const videoTracks = videoElement.querySelectorAll('track');
+      expect(videoTracks).toHaveLength(1);
+      expect(videoTracks[0]).toHaveAttribute('kind', 'captions');
+      expect(videoTracks[0]).toHaveAttribute(
+        'src',
+        '/fake/captions-file-en.vtt'
+      );
+      expect(videoTracks[0]).toHaveAttribute('srclang', 'en');
+      expect(videoTracks[0]).toHaveAttribute('label', 'English');
+    });
 
-    expect(videoTracks[1]).toHaveAttribute('kind', 'captions');
-    expect(videoTracks[1]).toHaveAttribute('src', '/fake/captions-file-fr.vtt');
-    expect(videoTracks[1]).toHaveAttribute('srclang', 'fr');
-    expect(videoTracks[1]).toHaveAttribute('label', 'French');
+    test('correctly handles receiving an array of objects for the videoCaptions prop', () => {
+      const { container } = render(
+        <HoverVideoPlayer
+          videoSrc="/fake/video-file.mp4"
+          videoCaptions={[
+            {
+              src: '/fake/captions-file-en.vtt',
+              srcLang: 'en',
+              label: 'English',
+            },
+            {
+              src: '/fake/captions-file-fr.vtt',
+              srcLang: 'fr',
+              label: 'French',
+            },
+            {
+              src: '/fake/captions-file-de.vtt',
+              srcLang: 'de',
+              label: 'German',
+            },
+          ]}
+        />
+      );
 
-    expect(videoTracks[2]).toHaveAttribute('kind', 'captions');
-    expect(videoTracks[2]).toHaveAttribute('src', '/fake/captions-file-de.vtt');
-    expect(videoTracks[2]).toHaveAttribute('srclang', 'de');
-    expect(videoTracks[2]).toHaveAttribute('label', 'German');
+      expect(container).toMatchSnapshot();
+
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
+
+      const videoTracks = videoElement.querySelectorAll('track');
+      expect(videoTracks).toHaveLength(3);
+      expect(videoTracks[0]).toHaveAttribute('kind', 'captions');
+      expect(videoTracks[0]).toHaveAttribute(
+        'src',
+        '/fake/captions-file-en.vtt'
+      );
+      expect(videoTracks[0]).toHaveAttribute('srclang', 'en');
+      expect(videoTracks[0]).toHaveAttribute('label', 'English');
+
+      expect(videoTracks[1]).toHaveAttribute('kind', 'captions');
+      expect(videoTracks[1]).toHaveAttribute(
+        'src',
+        '/fake/captions-file-fr.vtt'
+      );
+      expect(videoTracks[1]).toHaveAttribute('srclang', 'fr');
+      expect(videoTracks[1]).toHaveAttribute('label', 'French');
+
+      expect(videoTracks[2]).toHaveAttribute('kind', 'captions');
+      expect(videoTracks[2]).toHaveAttribute(
+        'src',
+        '/fake/captions-file-de.vtt'
+      );
+      expect(videoTracks[2]).toHaveAttribute('srclang', 'de');
+      expect(videoTracks[2]).toHaveAttribute('label', 'German');
+    });
   });
-});
 
-describe('Handles invalid videoCaptions prop values correctly', () => {
-  let originalConsoleError;
+  describe('Handles invalid videoCaptions prop values correctly', () => {
+    let originalConsoleError;
 
-  beforeEach(() => {
-    // Mock the console.error function so we can verify that an error was logged correctly
-    originalConsoleError = console.error;
-    console.error = jest.fn();
-  });
+    beforeEach(() => {
+      // Mock the console.error function so we can verify that an error was logged correctly
+      originalConsoleError = console.error;
+      console.error = jest.fn();
+    });
 
-  afterEach(() => {
-    console.error = originalConsoleError;
-  });
+    afterEach(() => {
+      console.error = originalConsoleError;
+    });
 
-  test('correctly handles receiving a single invalid value for the videoCaptions prop', () => {
-    const { container } = render(
-      <HoverVideoPlayer videoSrc="fake/video-file.mp4" videoCaptions={false} />
-    );
+    test('correctly handles receiving a single invalid value for the videoCaptions prop', () => {
+      const { container } = render(
+        <HoverVideoPlayer
+          videoSrc="fake/video-file.mp4"
+          videoCaptions={false}
+        />
+      );
 
-    expect(container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
 
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
 
-    const videoTracks = videoElement.querySelectorAll('track');
-    expect(videoTracks).toHaveLength(0);
+      const videoTracks = videoElement.querySelectorAll('track');
+      expect(videoTracks).toHaveLength(0);
 
-    // Should have logged an error warning that the 'videoSrc' prop is required
-    expect(console.error).toHaveBeenCalledTimes(1);
-    expect(console.error).toHaveBeenCalledWith(
-      "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
-      false
-    );
-  });
+      // Should have logged an error warning that the 'videoSrc' prop is required
+      expect(console.error).toHaveBeenCalledTimes(1);
+      expect(console.error).toHaveBeenCalledWith(
+        "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
+        false
+      );
+    });
 
-  test('correctly handles receiving an invalid value in an array for the videoCaptions prop', () => {
-    const { container } = render(
-      <HoverVideoPlayer
-        videoSrc="fake/video-file.mp4"
-        videoCaptions={[
-          {
-            src: '/fake/captions-file-en.vtt',
-            srcLang: 'en',
-            label: 'English',
-          },
-          false,
-          100,
-          {
-            src: '/fake/captions-file-fr.vtt',
-            srcLang: 'fr',
-            label: 'French',
-          },
-        ]}
-      />
-    );
+    test('correctly handles receiving an invalid value in an array for the videoCaptions prop', () => {
+      const { container } = render(
+        <HoverVideoPlayer
+          videoSrc="fake/video-file.mp4"
+          videoCaptions={[
+            {
+              src: '/fake/captions-file-en.vtt',
+              srcLang: 'en',
+              label: 'English',
+            },
+            false,
+            100,
+            {
+              src: '/fake/captions-file-fr.vtt',
+              srcLang: 'fr',
+              label: 'French',
+            },
+          ]}
+        />
+      );
 
-    expect(container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
 
-    const videoElement = container.querySelector('video');
-    expectVideoHasCorrectAttributes(videoElement);
+      const videoElement = container.querySelector('video');
+      expectVideoHasCorrectAttributes(videoElement);
 
-    const videoTracks = videoElement.querySelectorAll('track');
-    expect(videoTracks).toHaveLength(2);
-    expect(videoTracks[0]).toHaveAttribute('kind', 'captions');
-    expect(videoTracks[0]).toHaveAttribute('src', '/fake/captions-file-en.vtt');
-    expect(videoTracks[0]).toHaveAttribute('srclang', 'en');
-    expect(videoTracks[0]).toHaveAttribute('label', 'English');
+      const videoTracks = videoElement.querySelectorAll('track');
+      expect(videoTracks).toHaveLength(2);
+      expect(videoTracks[0]).toHaveAttribute('kind', 'captions');
+      expect(videoTracks[0]).toHaveAttribute(
+        'src',
+        '/fake/captions-file-en.vtt'
+      );
+      expect(videoTracks[0]).toHaveAttribute('srclang', 'en');
+      expect(videoTracks[0]).toHaveAttribute('label', 'English');
 
-    expect(videoTracks[1]).toHaveAttribute('kind', 'captions');
-    expect(videoTracks[1]).toHaveAttribute('src', '/fake/captions-file-fr.vtt');
-    expect(videoTracks[1]).toHaveAttribute('srclang', 'fr');
-    expect(videoTracks[1]).toHaveAttribute('label', 'French');
+      expect(videoTracks[1]).toHaveAttribute('kind', 'captions');
+      expect(videoTracks[1]).toHaveAttribute(
+        'src',
+        '/fake/captions-file-fr.vtt'
+      );
+      expect(videoTracks[1]).toHaveAttribute('srclang', 'fr');
+      expect(videoTracks[1]).toHaveAttribute('label', 'French');
 
-    // Should have logged an error warning that the 'videoSrc' prop is required
-    expect(console.error).toHaveBeenCalledTimes(2);
-    expect(console.error).toHaveBeenNthCalledWith(
-      1,
-      "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
-      false
-    );
-    expect(console.error).toHaveBeenNthCalledWith(
-      2,
-      "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
-      100
-    );
+      // Should have logged an error warning that the 'videoSrc' prop is required
+      expect(console.error).toHaveBeenCalledTimes(2);
+      expect(console.error).toHaveBeenNthCalledWith(
+        1,
+        "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
+        false
+      );
+      expect(console.error).toHaveBeenNthCalledWith(
+        2,
+        "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
+        100
+      );
+    });
   });
 });
 
@@ -542,17 +574,17 @@ describe('Handles desktop mouse events correctly', () => {
     fireEvent.mouseEnter(getByTestId('hover-video-player-container'));
 
     // The onStartingVideo callback should have been called
-    expect(onStartingVideo).toHaveBeenCalled();
+    expect(onStartingVideo).toHaveBeenCalledTimes(1);
     // The video's play function should have been called
-    expect(videoElement.play).toHaveBeenCalled();
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
 
     // onStartedVideo shouldn't be called since the play promise is still pending
-    expect(onStartedVideo).not.toHaveBeenCalled();
+    expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
     await waitForVideoElementPlayPromise(videoElement);
 
-    expect(onStartedVideo).toHaveBeenCalled();
+    expect(onStartedVideo).toHaveBeenCalledTimes(1);
   });
 
   test('mouseLeave event takes the video through its stop flow correctly', async () => {
@@ -579,6 +611,9 @@ describe('Handles desktop mouse events correctly', () => {
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
 
+    // The play function should have been called
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
+
     // Wait until the play promise has resolved
     await waitForVideoElementPlayPromise(videoElement);
 
@@ -586,16 +621,16 @@ describe('Handles desktop mouse events correctly', () => {
     fireEvent.mouseLeave(playerContainer);
 
     // onStoppingVideo callback should have been called
-    expect(onStoppingVideo).toHaveBeenCalled();
+    expect(onStoppingVideo).toHaveBeenCalledTimes(1);
     // onStoppedVideo callback and video.pause should not be called until the timeout has completed
-    expect(onStoppedVideo).not.toHaveBeenCalled();
-    expect(videoElement.pause).not.toHaveBeenCalled();
+    expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
     // Advance a sufficient amount of time for the pause timeout to have completed
     act(() => jest.advanceTimersByTime(500));
 
-    expect(onStoppedVideo).toHaveBeenCalled();
-    expect(videoElement.pause).toHaveBeenCalled();
+    expect(onStoppedVideo).toHaveBeenCalledTimes(1);
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -631,17 +666,17 @@ describe('Handles mobile touch events correctly', () => {
     fireEvent.touchStart(getByTestId('hover-video-player-container'));
 
     // The onStartingVideo callback should have been called
-    expect(onStartingVideo).toHaveBeenCalled();
+    expect(onStartingVideo).toHaveBeenCalledTimes(1);
     // The video's play function should have been called
-    expect(videoElement.play).toHaveBeenCalled();
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
 
     // onStartedVideo shouldn't be called since the play promise is still pending
-    expect(onStartedVideo).not.toHaveBeenCalled();
+    expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
     await waitForVideoElementPlayPromise(videoElement);
 
-    expect(onStartedVideo).toHaveBeenCalled();
+    expect(onStartedVideo).toHaveBeenCalledTimes(1);
   });
 
   test('touchStart events outside of the video takes it through its stop flow correctly', async () => {
@@ -674,23 +709,23 @@ describe('Handles mobile touch events correctly', () => {
     // Touching an element inside of the player container should not start a stop attempt
     fireEvent.touchStart(videoElement);
 
-    expect(onStoppingVideo).not.toHaveBeenCalled();
-    expect(onStoppedVideo).not.toHaveBeenCalled();
+    expect(onStoppingVideo).toHaveBeenCalledTimes(0);
+    expect(onStoppedVideo).toHaveBeenCalledTimes(0);
 
     // Touching outside of the player container should start a stop attempt
     fireEvent.touchStart(document.body);
 
     // onStoppingVideo callback should have been called
-    expect(onStoppingVideo).toHaveBeenCalled();
+    expect(onStoppingVideo).toHaveBeenCalledTimes(1);
     // onStoppedVideo callback and video.pause should not be called until the timeout has completed
-    expect(onStoppedVideo).not.toHaveBeenCalled();
-    expect(videoElement.pause).not.toHaveBeenCalled();
+    expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
     // Advance a sufficient amount of time for the pause timeout to have completed
     act(() => jest.advanceTimersByTime(500));
 
-    expect(onStoppedVideo).toHaveBeenCalled();
-    expect(videoElement.pause).toHaveBeenCalled();
+    expect(onStoppedVideo).toHaveBeenCalledTimes(1);
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -731,6 +766,7 @@ describe('Follows video interaction flows correctly', () => {
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
 
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
@@ -745,9 +781,12 @@ describe('Follows video interaction flows correctly', () => {
     // At this point the video should have begun its stop attempt but not completed it
     expect(onStoppingVideo).toHaveBeenCalledTimes(1);
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
     // Mouse back over to cancel the stop attempt and start a play attempt
     fireEvent.mouseEnter(playerContainer);
+
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
 
     await waitForVideoElementPlayPromise(videoElement);
 
@@ -759,6 +798,7 @@ describe('Follows video interaction flows correctly', () => {
 
     // onStoppedVideo should still not have been called because it was cancelled
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
   });
 
   test('the video will be paused if its play attempt completes while we are in a stopping state', async () => {
@@ -786,14 +826,12 @@ describe('Follows video interaction flows correctly', () => {
 
     const playerContainer = getByTestId('hover-video-player-container');
 
-    expect(videoElement.paused).toBe(true);
-
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
 
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
-    expect(videoElement.paused).toBe(false);
 
     // Fire a mouseLeave event to kick off a stop attempt before the play promise has resolved
     fireEvent.mouseLeave(playerContainer);
@@ -801,6 +839,7 @@ describe('Follows video interaction flows correctly', () => {
     // At this point the video should have begun its stop attempt but not completed it
     expect(onStoppingVideo).toHaveBeenCalledTimes(1);
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
     await waitForVideoElementPlayPromise(videoElement);
@@ -844,14 +883,12 @@ describe('Follows video interaction flows correctly', () => {
 
     const playerContainer = getByTestId('hover-video-player-container');
 
-    expect(videoElement.paused).toBe(true);
-
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
 
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
-    expect(videoElement.paused).toBe(false);
 
     // Fire a mouseLeave event to kick off a stop attempt before the play promise has resolved
     fireEvent.mouseLeave(playerContainer);
@@ -859,6 +896,7 @@ describe('Follows video interaction flows correctly', () => {
     // At this point the video should have begun its stop attempt but not completed it
     expect(onStoppingVideo).toHaveBeenCalledTimes(1);
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
     // Advance the timers by a sufficient amount of time for a stop attempt timeout to complete
     act(() => jest.advanceTimersByTime(500));
@@ -900,10 +938,15 @@ describe('Follows video interaction flows correctly', () => {
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
 
+    // The play attempt should have started
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
+    expect(onStartingVideo).toHaveBeenCalledTimes(1);
+    expect(onStartedVideo).toHaveBeenCalledTimes(0);
+
     // Wait until the play promise has resolved
     await waitForVideoElementPlayPromise(videoElement);
 
-    // The start attempt should have succeededF
+    // The play attempt should have succeeded
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(1);
 
@@ -912,7 +955,8 @@ describe('Follows video interaction flows correctly', () => {
 
     await waitForVideoElementPlayPromise(videoElement);
 
-    // We should not have run through the start attempt flow again
+    // We should not have run through the play attempt flow again
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(1);
   });
@@ -940,19 +984,27 @@ describe('Follows video interaction flows correctly', () => {
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
 
     // Stop the video while it's still loading in the background
     fireEvent.mouseLeave(playerContainer);
     act(() => jest.advanceTimersByTime(500));
 
+    // The video shouldn't have been paused since the initial play attempt is still in progress
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
+
     fireEvent.mouseEnter(playerContainer);
+    // We shouldn't havec called play a second time but the onStartingVideo callback should've fired again
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(onStartingVideo).toHaveBeenCalledTimes(2);
+    expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
     await waitForVideoElementPlayPromise(videoElement);
 
     // The start attempt should have succeeded
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(onStartingVideo).toHaveBeenCalledTimes(2);
     expect(onStartedVideo).toHaveBeenCalledTimes(1);
   });
@@ -974,13 +1026,19 @@ describe('Follows video interaction flows correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
+    addMockedFunctionsToVideoElement(videoElement);
+
     const playerContainer = getByTestId('hover-video-player-container');
 
     // Mouse out of the container even though it was never started properly
     fireEvent.mouseLeave(playerContainer);
 
-    expect(onStoppingVideo).not.toHaveBeenCalled();
-    expect(onStoppedVideo).not.toHaveBeenCalled();
+    // Advance timers sufficiently so that a stop attempt could complete if it was incorrectly started
+    jest.advanceTimersByTime(500);
+
+    expect(onStoppingVideo).toHaveBeenCalledTimes(0);
+    expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
   });
 
   test('handles a video playback error correectly', async () => {
@@ -1013,9 +1071,10 @@ describe('Follows video interaction flows correctly', () => {
     fireEvent.mouseEnter(getByTestId('hover-video-player-container'));
 
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
 
-    // Reject the play promise to simulate an error occuring while attempting to play
-    await (() => playPromise);
+    // Wait for the play promise to resolve and throw an error
+    await act(() => playPromise);
 
     expect(onVideoPlaybackFailed).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
@@ -1194,6 +1253,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     addMockedFunctionsToVideoElement(videoElement);
 
     expect(onStartingVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.play).toHaveBeenCalledTimes(0);
 
     // Set isFocused to true to start playing the video
     rerender(
@@ -1207,6 +1267,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
       />
     );
 
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
@@ -1228,10 +1289,12 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
 
     expect(onStoppingVideo).toHaveBeenCalledTimes(1);
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
     // Advance timers by sufficient amount of time to complete the stop attempt
     act(() => jest.advanceTimersByTime(500));
 
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
     expect(onStoppedVideo).toHaveBeenCalledTimes(1);
   });
 
@@ -1272,6 +1335,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
       />
     );
 
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
@@ -1283,6 +1347,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
 
     // onStartingVideo shouldn't have been called since it's already playing from isFocused
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
 
     await waitForVideoElementPlayPromise(videoElement);
 
@@ -1301,6 +1366,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     // A stop attempt should not have happened since isFocused is true
     expect(onStoppingVideo).toHaveBeenCalledTimes(0);
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
   });
 
   test('Stop attempts take the amount of time set by overlayFadeTransitionDuration prop if a pausedOverlay is provided', async () => {
@@ -1327,20 +1393,30 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     const playerContainer = getByTestId('hover-video-player-container');
 
     fireEvent.mouseEnter(playerContainer);
+
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
+
     await waitForVideoElementPlayPromise(videoElement);
     fireEvent.mouseLeave(playerContainer);
-
-    // Advance timer just up to before the stop attempt timeout should complete
-    jest.advanceTimersByTime(899);
 
     // A stop attempt should be in progress but not completed yet
     expect(onStoppingVideo).toHaveBeenCalledTimes(1);
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
+
+    // Advance timer just up to before the stop attempt timeout should complete
+    jest.advanceTimersByTime(899);
+
+    // The stop attempt should still be in progress since we're just 1ms short of the transition duration
+    expect(onStoppingVideo).toHaveBeenCalledTimes(1);
+    expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
     act(() => jest.advanceTimersByTime(1));
 
     // The stop attempt should be completed now that the full fade duration is complete
     expect(onStoppedVideo).toHaveBeenCalledTimes(1);
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
   });
 
   test('Stop attempts stop immediately if a pausedOverlay is not provided', async () => {
@@ -1371,11 +1447,14 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
 
     // A stop attempt should be in progress but not completed yet
     expect(onStoppingVideo).toHaveBeenCalledTimes(1);
+    expect(onStoppedVideo).toHaveBeenCalledTimes(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
     // Just update the timers - the stop attempt timeout should have a timeout of 0ms and will fire
     act(() => jest.advanceTimersByTime(0));
 
     expect(onStoppedVideo).toHaveBeenCalledTimes(1);
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
   });
 });
 
