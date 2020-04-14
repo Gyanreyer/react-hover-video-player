@@ -817,6 +817,55 @@ exports[`Prop combinations that change behavior/appearance work correctly should
 </div>
 `;
 
+exports[`Prop combinations that change behavior/appearance work correctly the loading state overlay is not shown if the video plays before the loading state timeout completes 1`] = `
+.emotion-2 {
+  position: relative;
+}
+
+.emotion-1 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.emotion-0 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-2"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-1"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
 exports[`Prop combinations that change behavior/appearance work correctly video element gets styled correctly when no paused overlay is provided 1`] = `
 .emotion-1 {
   position: relative;

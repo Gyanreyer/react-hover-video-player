@@ -12,4 +12,3 @@ Also provides support for displaying custom overlays on top of the video while i
 NOTE that this is still very much a work in progress. Things that remain to be done:
 
 - Fill out documentation
-- Add option to set timeout before loading state starts showing

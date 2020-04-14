@@ -50,13 +50,12 @@ const expectVideoHasCorrectAttributes = (
  * @param {node} videoElement
  * @returns {Promise} Promise returned by videoElement.play() which we can await to simulate the action being async
  */
-const addMockedFunctionsToVideoElement = (videoElement) => {
+const addMockedFunctionsToVideoElement = (
+  videoElement = document.querySelector('video')
+) => {
   const videoElementPausedSpy = jest
     .spyOn(videoElement, 'paused', 'get')
     .mockReturnValue(true);
-  const videoElementReadyStateSpy = jest
-    .spyOn(videoElement, 'readyState', 'get')
-    .mockReturnValue(1);
 
   let isPlayAttemptInProgress = false;
 
@@ -68,7 +67,6 @@ const addMockedFunctionsToVideoElement = (videoElement) => {
 
     return Promise.resolve().then(() => {
       isPlayAttemptInProgress = false;
-      videoElementReadyStateSpy.mockReturnValue(3);
       videoElement.currentTime = 10;
       fireEvent.playing(videoElement);
     });
@@ -92,8 +90,11 @@ const addMockedFunctionsToVideoElement = (videoElement) => {
  *
  * @param {node} videoElement
  */
-const waitForVideoElementPlayPromise = async (videoElement) =>
-  act(() => videoElement.play.mock.results.slice(-1)[0].value);
+const waitForVideoElementPlayPromise = async (
+  videoElement = document.querySelector('video')
+) => {
+  return act(() => videoElement.play.mock.results.slice(-1)[0].value);
+};
 
 describe('Handles video props correctly', () => {
   test('isVideoMuted prop correctly sets muted attribute on video', () => {
@@ -572,7 +573,7 @@ describe('Handles desktop mouse events correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(getByTestId('hover-video-player-container'));
@@ -586,7 +587,7 @@ describe('Handles desktop mouse events correctly', () => {
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     expect(onStartedVideo).toHaveBeenCalledTimes(1);
   });
@@ -608,7 +609,7 @@ describe('Handles desktop mouse events correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -619,7 +620,7 @@ describe('Handles desktop mouse events correctly', () => {
     expect(videoElement.play).toHaveBeenCalledTimes(1);
 
     // Wait until the play promise has resolved
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     // Mouse out of the container to stop playing the video
     fireEvent.mouseLeave(playerContainer);
@@ -664,7 +665,7 @@ describe('Handles mobile touch events correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     // Mouse over the container to start playing the video
     fireEvent.touchStart(getByTestId('hover-video-player-container'));
@@ -678,7 +679,7 @@ describe('Handles mobile touch events correctly', () => {
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     expect(onStartedVideo).toHaveBeenCalledTimes(1);
   });
@@ -700,7 +701,7 @@ describe('Handles mobile touch events correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -708,7 +709,7 @@ describe('Handles mobile touch events correctly', () => {
     fireEvent.touchStart(playerContainer);
 
     // Wait until the play promise has resolved
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     // Touching an element inside of the player container should not start a stop attempt
     fireEvent.touchStart(videoElement);
@@ -763,7 +764,7 @@ describe('Follows video interaction flows correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -775,7 +776,7 @@ describe('Follows video interaction flows correctly', () => {
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     expect(onStartedVideo).toHaveBeenCalledTimes(1);
 
@@ -790,13 +791,10 @@ describe('Follows video interaction flows correctly', () => {
     // Mouse back over to cancel the stop attempt and start a play attempt
     fireEvent.mouseEnter(playerContainer);
 
+    // Play should not have been called a second time but the start callbacks should've been fired to indicate we're still playing
     expect(videoElement.play).toHaveBeenCalledTimes(1);
-
-    await waitForVideoElementPlayPromise(videoElement);
-
-    // We shouldn't have needed to start a second start attempt since we prevented the stop attempt
-    expect(onStartingVideo).toHaveBeenCalledTimes(1);
-    expect(onStartedVideo).toHaveBeenCalledTimes(1);
+    expect(onStartingVideo).toHaveBeenCalledTimes(2);
+    expect(onStartedVideo).toHaveBeenCalledTimes(2);
 
     act(() => jest.advanceTimersByTime(500));
 
@@ -826,7 +824,7 @@ describe('Follows video interaction flows correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -846,18 +844,20 @@ describe('Follows video interaction flows correctly', () => {
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     // onStartedVideo shouldn't have been called because it was cancelled
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
     // The stop attempt should not have completed yet because it's still in progress
     expect(onStoppedVideo).toHaveBeenCalledTimes(0);
-    expect(videoElement.pause).toHaveBeenCalledTimes(0);
+
+    // The video should have been paused
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
 
     act(() => jest.advanceTimersByTime(500));
 
-    // onStoppedVideo should have been called after the promise resolved and the video's `onPlaying` event fired
+    // The play attempt should have completed but not paused the video a second time
     expect(onStoppedVideo).toHaveBeenCalledTimes(1);
     expect(videoElement.pause).toHaveBeenCalledTimes(1);
   });
@@ -883,7 +883,7 @@ describe('Follows video interaction flows correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -910,7 +910,7 @@ describe('Follows video interaction flows correctly', () => {
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     // onStartedVideo shouldn't have been called because it was cancelled
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
@@ -935,7 +935,7 @@ describe('Follows video interaction flows correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -948,7 +948,7 @@ describe('Follows video interaction flows correctly', () => {
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     // The play attempt should have succeeded
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
@@ -957,7 +957,7 @@ describe('Follows video interaction flows correctly', () => {
     // A second mouseEnter event should effectively be ignored
     fireEvent.mouseEnter(playerContainer);
 
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     // We should not have run through the play attempt flow again
     expect(videoElement.play).toHaveBeenCalledTimes(1);
@@ -982,7 +982,7 @@ describe('Follows video interaction flows correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -1005,7 +1005,7 @@ describe('Follows video interaction flows correctly', () => {
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
     // Wait until the play promise has resolved
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     // The start attempt should have succeeded
     expect(videoElement.play).toHaveBeenCalledTimes(1);
@@ -1030,7 +1030,7 @@ describe('Follows video interaction flows correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -1046,6 +1046,10 @@ describe('Follows video interaction flows correctly', () => {
   });
 
   test('handles a video playback error correectly', async () => {
+    // Mock the console.error function so we can verify that an error was logged correctly
+    const originalConsoleError = console.error;
+    console.error = jest.fn();
+
     const onStartingVideo = jest.fn();
     const onStartedVideo = jest.fn();
     const onVideoPlaybackFailed = jest.fn();
@@ -1064,12 +1068,21 @@ describe('Follows video interaction flows correctly', () => {
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    // Make the mocked play function fire an error
-    const playPromise = new Promise(() => {
-      throw new Error('The video broke');
-    }).catch(() => fireEvent.error(videoElement));
+    // Make the mocked play function throw an error
+    videoElement.play = jest.fn(() => {
+      // This sucks but actually rejecting a promise will cause the test to fail so return an object
+      // that mimics the shape of a promise and executes the catch() callback
+      return {
+        catch: (callback) => {
+          callback('The video broke');
 
-    videoElement.play = jest.fn(() => playPromise);
+          return {
+            then: () => {},
+          };
+        },
+        then: () => {},
+      };
+    });
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(getByTestId('hover-video-player-container'));
@@ -1077,11 +1090,17 @@ describe('Follows video interaction flows correctly', () => {
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(videoElement.play).toHaveBeenCalledTimes(1);
 
-    // Wait for the play promise to resolve and throw an error
-    await act(() => playPromise);
-
     expect(onVideoPlaybackFailed).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
+
+    // The error should have been logged correctly
+    expect(console.error).toHaveBeenCalledWith(
+      'HoverVideoPlayer playback failed:',
+      'The video broke'
+    );
+
+    // Restore the console.error function
+    console.error = originalConsoleError;
   });
 });
 
@@ -1105,7 +1124,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -1117,7 +1136,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
 
     expect(videoElement.currentTime).toBe(0);
 
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     // The video's time should now be greater than 0 because it's playing
     expect(videoElement.currentTime).toBeGreaterThan(0);
@@ -1148,7 +1167,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -1160,7 +1179,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
 
     expect(videoElement.currentTime).toBe(0);
 
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     // The video's time should now be greater than 0 because it's playing
     expect(videoElement.currentTime).toBeGreaterThan(0);
@@ -1184,6 +1203,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
         pausedOverlay={<div />}
         loadingOverlay={<div />}
         overlayFadeTransitionDuration={500}
+        loadingStateTimeoutDuration={500}
       />
     );
 
@@ -1192,7 +1212,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement, { preload: 'none' });
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -1209,13 +1229,18 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
 
-    // The paused overlay should still be visible under the loading overlay
+    // The paused overlay should still be visible while we wait for the video to play
     expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    // We are in a loading state until the play promise is resolved so the loading overlay should now be visible
+    // The loading overlay should still be hidden until the loading state timeout has passed
+    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+
+    act(() => jest.advanceTimersByTime(500));
+
+    // The loading state timeout has now passed without the video playing so the loading overlay should be visible
     expect(loadingOverlayWrapper.style.opacity).toBe('1');
 
     // Wait until the play promise has resolved
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     // Both overlays should be hidden now that we are playing
     expect(pausedOverlayWrapper.style.opacity).toBe('0');
@@ -1229,6 +1254,53 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
 
     // Since we're stopping, the paused overlay should be visible again
     expect(pausedOverlayWrapper.style.opacity).toBe('1');
+    // The loading overlay should still be hidden
+    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+  });
+
+  test('the loading state overlay is not shown if the video plays before the loading state timeout completes', async () => {
+    const { container, getByTestId } = render(
+      <HoverVideoPlayer
+        videoSrc="fake/video-file.mp4"
+        loadingOverlay={<div />}
+        loadingStateTimeoutDuration={500}
+      />
+    );
+
+    expect(container).toMatchSnapshot();
+
+    const videoElement = container.querySelector('video');
+    expectVideoHasCorrectAttributes(videoElement);
+
+    addMockedFunctionsToVideoElement();
+
+    const playerContainer = getByTestId('hover-video-player-container');
+
+    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+
+    // The loading overlay should be hidden initially
+    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+
+    // Mouse over the container to start playing the video
+    fireEvent.mouseEnter(playerContainer);
+
+    // The loading overlay should be hidden until the loading state timeout has completed
+    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+
+    act(() => jest.advanceTimersByTime(499));
+
+    // We're 1 ms short of the loading state timeout so the loading overlay should still be hidden
+    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+
+    // Resolve the play promise
+    await waitForVideoElementPlayPromise();
+
+    // The loading overlay should stil be hidden
+    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+
+    // Advance the timer sufficiently to prove the loading state timeout was cancelled
+    act(() => jest.advanceTimersByTime(500));
+
     // The loading overlay should still be hidden
     expect(loadingOverlayWrapper.style.opacity).toBe('0');
   });
@@ -1254,7 +1326,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     expect(onStartingVideo).toHaveBeenCalledTimes(0);
     expect(videoElement.play).toHaveBeenCalledTimes(0);
@@ -1275,7 +1347,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     expect(onStartedVideo).toHaveBeenCalledTimes(1);
 
@@ -1323,7 +1395,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -1343,7 +1415,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(onStartedVideo).toHaveBeenCalledTimes(0);
 
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     expect(onStartedVideo).toHaveBeenCalledTimes(1);
 
@@ -1353,7 +1425,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     expect(onStartingVideo).toHaveBeenCalledTimes(1);
     expect(videoElement.play).toHaveBeenCalledTimes(1);
 
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
 
     // onStartedVideo shouldn't have been called since it's already playing from isFocused
     expect(onStartedVideo).toHaveBeenCalledTimes(1);
@@ -1392,7 +1464,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement, { preload: 'none' });
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
@@ -1400,7 +1472,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
 
     expect(videoElement.play).toHaveBeenCalledTimes(1);
 
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
     fireEvent.mouseLeave(playerContainer);
 
     // A stop attempt should be in progress but not completed yet
@@ -1441,12 +1513,12 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
     const videoElement = container.querySelector('video');
     expectVideoHasCorrectAttributes(videoElement);
 
-    addMockedFunctionsToVideoElement(videoElement);
+    addMockedFunctionsToVideoElement();
 
     const playerContainer = getByTestId('hover-video-player-container');
 
     fireEvent.mouseEnter(playerContainer);
-    await waitForVideoElementPlayPromise(videoElement);
+    await waitForVideoElementPlayPromise();
     fireEvent.mouseLeave(playerContainer);
 
     // A stop attempt should be in progress but not completed yet
