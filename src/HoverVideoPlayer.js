@@ -34,6 +34,12 @@ const basePausedOverlayStyle = css`
   width: 100%;
   z-index: 1;
   pointer-events: none;
+
+  /* By default the paused overlay should be set to fill its available width */
+  > * {
+    display: block;
+    width: 100%;
+  }
 `;
 
 const baseLoadingOverlayStyle = css`

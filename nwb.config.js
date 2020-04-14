@@ -10,4 +10,7 @@ module.exports = {
       template: 'demo/src/index.html',
     },
   },
+  babel: {
+    plugins: 'babel-plugin-jsx-remove-data-test-id',
+  },
 };
