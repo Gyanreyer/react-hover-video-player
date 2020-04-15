@@ -213,6 +213,15 @@ function HoverVideoPlayer({
       return;
     }
 
+    // Set a timeout to start showing a loading state if the video doesn't start playing
+    // after a given amount of time
+    clearTimeout(mutableStateRef.current.loadingTimeout);
+    mutableStateRef.current.loadingTimeout = setTimeout(() => {
+      // If the video is still loading when this timeout completes, transition the
+      // player to show a loading state
+      setHoverPlayerState(HOVER_PLAYER_STATE.loading);
+    }, loadingStateTimeoutDuration);
+
     if (mutableStateRef.current.videoState === VIDEO_STATE.paused) {
       const onPlaybackRejected = (error) => {
         // Cancel the loading state timeout if it is still active
@@ -250,7 +259,7 @@ function HoverVideoPlayer({
       const videoPlayPromise = videoRef.current.play();
 
       // Check that the return value from play() is in fact a Promise
-      if (videoPlayPromise.then) {
+      if (videoPlayPromise && videoPlayPromise.then) {
         // If we have a play promise, use that to update our state
         videoPlayPromise
           .catch(onPlaybackRejected)
@@ -258,26 +267,13 @@ function HoverVideoPlayer({
       } else {
         // If we don't have a play promise, we'll have to use traditional
         // event listeners to keep track of when the video playback succeeds/fails
-        videoRef.current.onPlaying = onPlaybackResolved;
-        videoRef.current.onError = onPlaybackRejected;
+        videoRef.current.onplaying = onPlaybackResolved;
+        videoRef.current.onerror = onPlaybackRejected;
       }
     }
 
     // If the video isn't playing, indicate that it's now in the process of attempting to play
     mutableStateRef.current.videoState = VIDEO_STATE.loadingPlayOnReady;
-
-    // Set a timeout to start showing a loading state if the video doesn't start playing
-    // after a given amount of time
-    clearTimeout(mutableStateRef.current.loadingTimeout);
-    mutableStateRef.current.loadingTimeout = setTimeout(() => {
-      // If the video is still loading when this timeout completes, transition the
-      // player to show a loading state
-      if (
-        mutableStateRef.current.videoState === VIDEO_STATE.loadingPlayOnReady
-      ) {
-        setHoverPlayerState(HOVER_PLAYER_STATE.loading);
-      }
-    }, loadingStateTimeoutDuration);
   }, [
     hoverPlayerState,
     loadingStateTimeoutDuration,
