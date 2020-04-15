@@ -1102,6 +1102,45 @@ describe('Follows video interaction flows correctly', () => {
     // Restore the console.error function
     console.error = originalConsoleError;
   });
+
+  test("handles start flow correctly for browsers that don't return a Promise from video.play()", async () => {
+    const onStartingVideo = jest.fn();
+    const onStartedVideo = jest.fn();
+
+    const { container, getByTestId } = render(
+      <HoverVideoPlayer
+        videoSrc="fake/video-file.mp4"
+        onStartingVideo={onStartingVideo}
+        onStartedVideo={onStartedVideo}
+      />
+    );
+
+    expect(container).toMatchSnapshot();
+
+    const videoElement = container.querySelector('video');
+    expectVideoHasCorrectAttributes(videoElement);
+
+    // Mock the play function for the video element to not return a promise
+    // but fire the video's onPlaying event after 100ms
+    videoElement.play = jest.fn(() => {
+      setTimeout(() => {
+        fireEvent.playing(videoElement);
+      }, 100);
+    });
+
+    const playerContainer = getByTestId('hover-video-player-container');
+
+    // Mouse over the container to start playing the video
+    fireEvent.mouseEnter(playerContainer);
+
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
+    expect(onStartingVideo).toHaveBeenCalledTimes(1);
+    expect(onStartedVideo).toHaveBeenCalledTimes(0);
+
+    jest.advanceTimersByTime(200);
+
+    expect(onStartedVideo).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('Prop combinations that change behavior/appearance work correctly', () => {
@@ -1151,6 +1190,7 @@ describe('Prop combinations that change behavior/appearance work correctly', () 
 
     // The video time should have been reset after the stop attempt completed
     expect(videoElement.currentTime).toBe(0);
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
   });
 
   test('shouldRestartOnVideoStopped prop does not restart the video when set to false', async () => {

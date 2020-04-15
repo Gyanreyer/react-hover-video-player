@@ -150,6 +150,36 @@ exports[`Follows video interaction flows correctly handles a video playback erro
 </div>
 `;
 
+exports[`Follows video interaction flows correctly handles start flow correctly for browsers that don't return a Promise from video.play() 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
 exports[`Follows video interaction flows correctly the video will be paused if its play attempt completes while we are in a stopping state 1`] = `
 .emotion-1 {
   position: relative;
