@@ -1,3 +1,33 @@
+// Enumerates states that the video can be in
+export const VIDEO_STATE = {
+  paused: 'paused',
+  loading: 'loading',
+  playing: 'playing',
+};
+
+/**
+ * @function getVideoState
+ *
+ * Takes a video element and returns its current playing state
+ *
+ * @param {node} videoElement
+ */
+export function getVideoState(videoElement) {
+  if (videoElement.paused || videoElement.ended) {
+    return VIDEO_STATE.paused;
+  }
+
+  // If the video isn't paused but its readyState indicates it isn't loaded enough
+  // to play yet, it is loading
+  if (videoElement.readyState < 3) {
+    return VIDEO_STATE.loading;
+  }
+
+  // If the video isn't paused and its ready state indicates it's loaded enough to play,
+  // assume it's playing
+  return VIDEO_STATE.playing;
+}
+
 /**
  * @function  attemptStopVideo
  *
