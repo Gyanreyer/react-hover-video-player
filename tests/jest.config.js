@@ -18,4 +18,5 @@ module.exports = {
   },
   snapshotSerializers: ['jest-emotion'],
   setupFiles: ['<rootDir>/tests/jest.init.js'],
+  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.js'],
 };
