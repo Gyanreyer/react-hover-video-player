@@ -134,10 +134,16 @@ export default function HoverVideoPlayer({
     mutablePlayAttemptState.current.isPlayAttemptInProgress = true;
 
     playVideo(videoElement)
+      .then(() => {
+        if (mutablePlayAttemptState.current.isPlayAttemptCancelled) {
+          // If the play attempt was cancelled, immediately pause the video
+          pauseVideo(videoElement, shouldRestartOnVideoStopped);
+        } else {
+          // If the play attempt wasn't cancelled, hide the overlays to reveal the video now that it's playing
+          setOverlayState(HOVER_PLAYER_STATE.playing);
+        }
+      })
       .catch((error) => {
-        mutablePlayAttemptState.current.isPlayAttemptInProgress = false;
-        clearTimeout(loadingStateTimeoutRef.current);
-
         console.error(
           `HoverVideoPlayer playback failed for src ${videoElement.currentSrc}: ${error}`
         );
@@ -145,18 +151,11 @@ export default function HoverVideoPlayer({
         // Revert to paused state
         pauseVideo(videoElement, shouldRestartOnVideoStopped);
       })
-      .then(() => {
+      .finally(() => {
+        // The play attempt is now complete
         mutablePlayAttemptState.current.isPlayAttemptInProgress = false;
+        mutablePlayAttemptState.current.isPlayAttemptCancelled = false;
         clearTimeout(loadingStateTimeoutRef.current);
-
-        if (mutablePlayAttemptState.current.isPlayAttemptCancelled) {
-          // If the play attempt was cancelled, immediately pause the video
-          mutablePlayAttemptState.current.isPlayAttemptCancelled = false;
-          pauseVideo(videoElement, shouldRestartOnVideoStopped);
-        } else {
-          // If the play attempt wasn't cancelled, hide the overlays to reveal the video now that it's playing
-          setOverlayState(HOVER_PLAYER_STATE.playing);
-        }
       });
   }, [
     loadingOverlay,
