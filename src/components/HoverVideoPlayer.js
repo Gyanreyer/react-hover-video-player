@@ -1,12 +1,13 @@
 import React from 'react';
 import { cx } from 'emotion';
 
+import { formatVideoSrc, formatVideoCaptions } from '../utils/assets';
 import {
   VIDEO_STATE,
   getVideoState,
-  formatVideoSrc,
-  formatVideoCaptions,
-} from './utils';
+  playVideo,
+  pauseVideo,
+} from '../utils/video';
 import styles from './styles';
 
 // Enumerates states that the hover player can be in
@@ -15,19 +16,6 @@ const HOVER_PLAYER_STATE = {
   loading: 'loading',
   playing: 'playing',
 };
-
-/**
- * @typedef   {object}  VideoSource
- * @property  {string}  src - The src URL string to use for a video player source
- * @property  {string}  type - The media type of the video, ie 'video/mp4'
- */
-
-/**
- * @typedef   {object}  VideoCaptionsTrack
- * @property  {string}  src - The src URL string for the captions track file
- * @property  {string}  srcLang - The language code for the language that these captions are in
- * @property  {string}  label - The title of the captions track
- */
 
 /**
  * @component HoverVideoPlayer
@@ -95,7 +83,6 @@ export default function HoverVideoPlayer({
   if (mutablePlayAttemptState.current === null) {
     // Set initial values for our play attempt state
     mutablePlayAttemptState.current = {
-      playPromise: Promise.resolve(),
       isPlayAttemptInProgress: false,
       isPlayAttemptCancelled: false,
     };
@@ -110,69 +97,6 @@ export default function HoverVideoPlayer({
   const loadingStateTimeoutRef = React.useRef();
 
   /**
-   * @function playVideo
-   *
-   * Starts an attempt to play the video element and returns a promise which will
-   * resolve when the video starts playing or reject if an error occurs
-   */
-  const playVideo = React.useCallback(() => {
-    // Indicate that we are now attempting to play the video
-    mutablePlayAttemptState.current.isPlayAttemptInProgress = true;
-
-    const videoElement = videoRef.current;
-
-    // Start playing the video and hang onto the play promise it returns
-    let playPromise = videoElement.play();
-
-    if (!playPromise || !playPromise.then) {
-      // If videoElement.play() didn't return a promise, we'll manually create one
-      // ourselves which mimics the same behavior
-      playPromise = new Promise((resolve, reject) => {
-        // Set up event listener to resolve the promise when the video player starts playing
-        const onVideoPlaybackStarted = () => {
-          resolve();
-          videoElement.removeEventListener('playing', onVideoPlaybackStarted);
-        };
-        videoElement.addEventListener('playing', onVideoPlaybackStarted);
-
-        // Set up event listener to reject the promise when the video player encounters an error
-        const onVideoPlaybackFailed = (event) => {
-          reject(event.error);
-          videoElement.removeEventListener('error', onVideoPlaybackFailed);
-        };
-        videoElement.addEventListener('error', onVideoPlaybackFailed);
-      });
-    }
-
-    // Keep a ref to the promise so we can use it later
-    mutablePlayAttemptState.current.playPromise = playPromise;
-    return playPromise;
-  }, []);
-
-  /**
-   * @function  pauseVideo
-   *
-   * Pauses the video if the play attempt is completed or cancels the play attempt so the video
-   * will be paused as soon as it finishes
-   */
-  const pauseVideo = React.useCallback(() => {
-    if (mutablePlayAttemptState.current.isPlayAttemptInProgress) {
-      // If we have a play attempt in progress, mark that the play attempt should be cancelled
-      // so that as soon as the play promise resolves, the video should be paused
-      mutablePlayAttemptState.current.isPlayAttemptCancelled = true;
-    } else {
-      // If we can safely pause, go for it!
-      const videoElement = videoRef.current;
-      videoElement.pause();
-
-      if (shouldRestartOnVideoStopped) {
-        // If we should restart the video, reset its time to the beginning
-        videoElement.currentTime = 0;
-      }
-    }
-  }, [shouldRestartOnVideoStopped]);
-
-  /**
    * @function  onHoverStart
    *
    * Starts the video when the user mouses hovers on the player
@@ -182,11 +106,13 @@ export default function HoverVideoPlayer({
     clearTimeout(pauseTimeoutRef.current);
     clearTimeout(loadingStateTimeoutRef.current);
 
+    const videoElement = videoRef.current;
+
     // Make sure our play attempt is no longer cancelled since the user is hovering on it again
     mutablePlayAttemptState.current.isPlayAttemptCancelled = false;
 
     // If the video is already playing, just make sure we keep the overlays hidden
-    if (getVideoState(videoRef.current) === VIDEO_STATE.playing) {
+    if (getVideoState(videoElement) === VIDEO_STATE.playing) {
       setOverlayState(HOVER_PLAYER_STATE.playing);
       return;
     }
@@ -204,17 +130,20 @@ export default function HoverVideoPlayer({
     // If a play attempt is already in progress, don't start a new one
     if (mutablePlayAttemptState.current.isPlayAttemptInProgress) return;
 
-    playVideo()
+    // We are now attempting to play the video
+    mutablePlayAttemptState.current.isPlayAttemptInProgress = true;
+
+    playVideo(videoElement)
       .catch((error) => {
         mutablePlayAttemptState.current.isPlayAttemptInProgress = false;
         clearTimeout(loadingStateTimeoutRef.current);
 
         console.error(
-          `HoverVideoPlayer playback failed for src ${videoRef.current.currentSrc}: ${error}`
+          `HoverVideoPlayer playback failed for src ${videoElement.currentSrc}: ${error}`
         );
 
         // Revert to paused state
-        pauseVideo();
+        pauseVideo(videoElement, shouldRestartOnVideoStopped);
       })
       .then(() => {
         mutablePlayAttemptState.current.isPlayAttemptInProgress = false;
@@ -223,13 +152,17 @@ export default function HoverVideoPlayer({
         if (mutablePlayAttemptState.current.isPlayAttemptCancelled) {
           // If the play attempt was cancelled, immediately pause the video
           mutablePlayAttemptState.current.isPlayAttemptCancelled = false;
-          pauseVideo();
+          pauseVideo(videoElement, shouldRestartOnVideoStopped);
         } else {
           // If the play attempt wasn't cancelled, hide the overlays to reveal the video now that it's playing
           setOverlayState(HOVER_PLAYER_STATE.playing);
         }
       });
-  }, [loadingOverlay, loadingStateTimeoutDuration, pauseVideo, playVideo]);
+  }, [
+    loadingOverlay,
+    loadingStateTimeoutDuration,
+    shouldRestartOnVideoStopped,
+  ]);
 
   /**
    * @function  onHoverEnd
@@ -241,10 +174,11 @@ export default function HoverVideoPlayer({
     clearTimeout(loadingStateTimeoutRef.current);
     clearTimeout(pauseTimeoutRef.current);
 
+    const videoElement = videoRef.current;
+
     // If the isFocused override prop is active, ignore any other events attempting to stop the video
     // Also don't do anything if the video is already paused
-    if (isFocused || getVideoState(videoRef.current) === VIDEO_STATE.paused)
-      return;
+    if (isFocused || getVideoState(videoElement) === VIDEO_STATE.paused) return;
 
     // Start fading the paused overlay back in
     setOverlayState(HOVER_PLAYER_STATE.paused);
@@ -252,11 +186,25 @@ export default function HoverVideoPlayer({
     // Set a timeout with a duration of the overlay's fade transition so the video
     // won't pause until it's fully hidden
     pauseTimeoutRef.current = setTimeout(
-      () => pauseVideo(),
+      () => {
+        if (mutablePlayAttemptState.current.isPlayAttemptInProgress) {
+          // If we have a play attempt in progress, mark that the play attempt should be cancelled
+          // so that as soon as the promise resolves, the video should be paused
+          mutablePlayAttemptState.current.isPlayAttemptCancelled = true;
+        } else {
+          // Otherwise, just go ahead and pause!
+          pauseVideo(videoElement, shouldRestartOnVideoStopped);
+        }
+      },
       // If we don't have to wait for the overlay to fade back in, just set the timeout to 0 to invoke it ASAP
       pausedOverlay ? overlayFadeTransitionDuration : 0
     );
-  }, [isFocused, overlayFadeTransitionDuration, pauseVideo, pausedOverlay]);
+  }, [
+    isFocused,
+    overlayFadeTransitionDuration,
+    pausedOverlay,
+    shouldRestartOnVideoStopped,
+  ]);
 
   /* ~~~~ EFFECTS ~~~~ */
   React.useEffect(() => {
