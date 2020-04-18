@@ -166,7 +166,7 @@ export default function HoverVideoPlayer({
   /**
    * @function  onHoverEnd
    *
-   * Stops the video and fades the paused overlay in when the stops hovering on the player
+   * Stops the video and fades the paused overlay in when the user stops hovering on the player
    */
   const onHoverEnd = React.useCallback(() => {
     // Clear any timeouts that may have been in progress

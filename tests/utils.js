@@ -5,7 +5,13 @@ import { render, fireEvent } from '@testing-library/react';
 import HoverVideoPlayer from '../src';
 
 /**
- * Takes the currently rendered video element and applies a bunch of mocks to it to simulate its normal functionality
+ * Takes a video element and applies a bunch of mocks to it to simulate its normal functionality
+ * since JSDOM won't do it for us
+ *
+ * @param {node}    videoElement  Video element top apply mocks top
+ * @param {object}  videoConfig - Object with config defining how the video should behave
+ * @param {bool}    [videoConfig.shouldPlaybackFail=false] - Whether video.play() should succeed or fail
+ * @param {bool}    [videoConfig.shouldPlayReturnPromise=true] - Whether video.play() should return a promise
  */
 function addMockedFunctionsToVideoElement(
   videoElement,
@@ -19,11 +25,10 @@ function addMockedFunctionsToVideoElement(
     .spyOn(videoElement, 'readyState', 'get')
     .mockReturnValue(videoElement.preload === 'none' ? 0 : 2);
 
-  const firstVideoSource = videoElement.querySelector('source');
-
-  jest
-    .spyOn(videoElement, 'currentSrc', 'get')
-    .mockReturnValue(firstVideoSource ? firstVideoSource.src : '');
+  jest.spyOn(videoElement, 'currentSrc', 'get').mockImplementation(() => {
+    const firstVideoSource = videoElement.querySelector('source');
+    return firstVideoSource ? firstVideoSource.src : '';
+  });
 
   let isPlayAttemptInProgress = false;
 
@@ -91,11 +96,10 @@ function addMockedFunctionsToVideoElement(
 }
 
 /**
+ * Renders a HoverVideoPlayer component with the given props and video behavior config
  *
  * @param {object}  props - Object with all props to apply to the HoverVideoPlayer component
  * @param {object}  videoConfig - Object with config defining how the video should behave
- * @param {bool}    videoConfig.shouldPlaybackFail - Whether video.play() should succeed or fail
- * @param {bool}    videoConfig.shouldPlayReturnPromise - Whether video.play() should return a promise
  */
 export function renderHoverVideoPlayer(props, videoConfig) {
   const renderResult = render(<HoverVideoPlayer {...props} />);

@@ -46,17 +46,31 @@ export function playVideo(videoElement) {
     // If videoElement.play() didn't return a promise, we'll manually create one
     // ourselves which mimics the same behavior
     playPromise = new Promise((resolve, reject) => {
+      // Declaring onVideoPlaybackFailed up here so we can refer to it and remove its event listener
+      // if the video successfully starts playing
+      let onVideoPlaybackFailed;
+
       // Set up event listener to resolve the promise when the video player starts playing
       const onVideoPlaybackStarted = () => {
-        resolve();
+        // Remove the event listeners we added as cleanup now that the play attempt has succeeded
         videoElement.removeEventListener('playing', onVideoPlaybackStarted);
+        videoElement.removeEventListener('error', onVideoPlaybackFailed);
+
+        // Resolve because we successfully started playing!
+        resolve();
       };
-      videoElement.addEventListener('playing', onVideoPlaybackStarted);
+      videoElement.addEventListener('playing', onVideoPlaybackStarted, {
+        once: true,
+      });
 
       // Set up event listener to reject the promise when the video player encounters an error
-      const onVideoPlaybackFailed = (event) => {
-        reject(event.error);
+      onVideoPlaybackFailed = (event) => {
+        // Remove the event listeners we added as cleanup now that the play attempt has failed
         videoElement.removeEventListener('error', onVideoPlaybackFailed);
+        videoElement.removeEventListener('playing', onVideoPlaybackStarted);
+
+        // Reject with the error that was thrown
+        reject(event.error);
       };
       videoElement.addEventListener('error', onVideoPlaybackFailed);
     });
