@@ -43,8 +43,8 @@ const HOVER_PLAYER_STATE = {
  * @param {bool}    [shouldRestartOnVideoStopped=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
  * @param {bool}    [shouldUseOverlayDimensions=true] - Whether the player should display using the pausedOverlay's dimensions rather than the video element's dimensions if an overlay is provided
  *                                                        This helps prevent content height jumps when the video loads its dimensions
- * @param {bool}    [isVideoMuted=true] - Whether the video player should be muted
- * @param {bool}    [shouldVideoLoop=true] - Whether the video player should loop when it reaches the end
+ * @param {bool}    [muted=true] - Whether the video player should be muted
+ * @param {bool}    [loop=true] - Whether the video player should loop when it reaches the end
  * @param {string}  [className] - Optional className to apply custom styling to the container element
  * @param {string}  [pausedOverlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
  * @param {string}  [loadingOverlayWrapperClassName] - Optional className to apply custom styling to the loading state overlay contents' wrapper
@@ -63,8 +63,8 @@ export default function HoverVideoPlayer({
   overlayFadeTransitionDuration = 400,
   shouldRestartOnVideoStopped = true,
   shouldUseOverlayDimensions = true,
-  isVideoMuted = true,
-  shouldVideoLoop = true,
+  muted = true,
+  loop = true,
   className = '',
   pausedOverlayWrapperClassName = '',
   loadingOverlayWrapperClassName = '',
@@ -145,7 +145,8 @@ export default function HoverVideoPlayer({
       })
       .catch((error) => {
         console.error(
-          `HoverVideoPlayer playback failed for src ${videoElement.currentSrc}: ${error}`
+          `HoverVideoPlayer playback failed for src ${videoElement.currentSrc}:`,
+          error
         );
 
         // Revert to paused state
@@ -236,8 +237,8 @@ export default function HoverVideoPlayer({
     // Manually setting the `muted` attribute on the video element via an effect in order
     // to avoid a know React issue with the `muted` prop not applying correctly on initial render
     // https://github.com/facebook/react/issues/10389
-    videoRef.current.muted = isVideoMuted;
-  }, [isVideoMuted]);
+    videoRef.current.muted = muted;
+  }, [muted]);
 
   React.useEffect(() => {
     // Ensure casting controls aren't shown on the video
@@ -320,7 +321,7 @@ export default function HoverVideoPlayer({
       )}
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
-        loop={shouldVideoLoop}
+        loop={loop}
         playsInline
         // Only preload video data if we depend on having loaded its dimensions to display it
         preload={shouldVideoExpandToFitOverlayDimensions ? 'none' : 'metadata'}
