@@ -2,6 +2,7 @@ module.exports = {
   rootDir: '../',
   collectCoverage: true,
   coverageDirectory: './coverage',
+  coveragePathIgnorePatterns: ['<rootDir>/tests/', '<rootDir>/node_modules/'],
   verbose: true,
   transform: {
     '^.+\\.js$': '<rootDir>/tests/jest.transform.js',
@@ -17,6 +18,6 @@ module.exports = {
     },
   },
   snapshotSerializers: ['jest-emotion'],
-  setupFiles: ['<rootDir>/tests/jest.init.js'],
+  setupFiles: ['core-js/stable', 'regenerator-runtime/runtime'],
   setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.js'],
 };
