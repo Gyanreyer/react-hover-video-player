@@ -7,7 +7,7 @@ import HoverVideoPlayer from '../../src';
 import {
   LoadingSpinnerOverlay,
   DotLoaderOverlay,
-} from '../../src/LoadingOverlays';
+} from '../../src/components/LoadingOverlays';
 import { codeEditorTheme, pausedOverlayDemoCode } from './liveEditorConstants';
 import { breakpoints } from './sharedStyles';
 

@@ -1,5 +1,11 @@
 /**
- * @function  attemptStopVideo
+ * @typedef   {object}  VideoSource
+ * @property  {string}  src - The src URL string to use for a video player source
+ * @property  {string}  type - The media type of the video, ie 'video/mp4'
+ */
+
+/**
+ * @function  formatVideoSrc
  *
  * Takes a videoSrc value and formats it as an array of VideoSource objects which can be used to render
  * <source> elements for the video
@@ -10,8 +16,10 @@
  *                                                                     - src: The src URL string to use for a video player source
  *                                                                     - type: The media type of the video source, ie 'video/mp4'
  *                                                                   - **Array**: if you would like to provide multiple sources, you can provide an array of URL strings and/or objects with the shape described above
+ *
+ * @returns {VideoSource[]} Array of formatted VideoSource objects which can be used to render <source> elements for the video
  */
-export const formatVideoSrc = (videoSrc) => {
+export function formatVideoSrc(videoSrc) {
   if (videoSrc == null) {
     // A videoSrc value is required in order to make the video player work
     console.error(
@@ -44,7 +52,14 @@ export const formatVideoSrc = (videoSrc) => {
         return sourceArray;
       }, [])
   );
-};
+}
+
+/**
+ * @typedef   {object}  VideoCaptionsTrack
+ * @property  {string}  src - The src URL string for the captions track file
+ * @property  {string}  srcLang - The language code for the language that these captions are in
+ * @property  {string}  label - The title of the captions track
+ */
 
 /**
  * @function formatVideoCaptions
@@ -59,8 +74,10 @@ export const formatVideoSrc = (videoSrc) => {
  *                                                                                       - srcLang: The language code for the language that these captions are in (ie, 'en', 'es', 'fr')
  *                                                                                       - label: The title of the captions track
  *                                                                                     - **Array**: if you would like to provide multiple caption tracks, you can provide an array of objects with the shape described above
+ *
+ * @returns {VideoCaptionsTrack[]}  Array of formatted VideoCaptionsTrack objects which can be used to render <track> elements for the video
  */
-export const formatVideoCaptions = (videoCaptions) => {
+export function formatVideoCaptions(videoCaptions) {
   // If no captions were provided, return an empty array
   if (videoCaptions == null) return [];
 
@@ -90,4 +107,4 @@ export const formatVideoCaptions = (videoCaptions) => {
         return captionsArray;
       }, [])
   );
-};
+}

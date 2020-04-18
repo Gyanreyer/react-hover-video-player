@@ -1,4 +1,4 @@
-import HoverVideoPlayer from './HoverVideoPlayer';
+import HoverVideoPlayer from './components/HoverVideoPlayer';
 
-export * from './LoadingOverlays';
+export * from './components/LoadingOverlays';
 export default HoverVideoPlayer;
