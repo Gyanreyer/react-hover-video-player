@@ -76,25 +76,24 @@ export default function HoverVideoPlayer({
     HOVER_PLAYER_STATE.paused
   );
 
-  // Keep a ref for all state variables related to attempting to play
-  // the video which need to be managed asynchronously
-  const mutablePlayAttemptState = React.useRef(null);
+  // Keep a ref for all state variables related to the video's state
+  // which need to be managed asynchronously as it attempts to play/pause
+  const mutableVideoState = React.useRef(null);
 
-  if (mutablePlayAttemptState.current === null) {
-    // Set initial values for our play attempt state
-    mutablePlayAttemptState.current = {
+  if (mutableVideoState.current === null) {
+    // Set initial values for our video state
+    mutableVideoState.current = {
       isPlayAttemptInProgress: false,
       isPlayAttemptCancelled: false,
+      // Keep refs for timeouts so we can keep track of and cancel them
+      pauseTimeout: null,
+      loadingStateTimeout: null,
     };
   }
 
   // Element refs
   const containerRef = React.useRef();
   const videoRef = React.useRef();
-
-  // Refs for timeouts so we can keep track of and cancel them
-  const pauseTimeoutRef = React.useRef();
-  const loadingStateTimeoutRef = React.useRef();
 
   /**
    * @function  onHoverStart
@@ -103,13 +102,13 @@ export default function HoverVideoPlayer({
    */
   const onHoverStart = React.useCallback(() => {
     // Clear any timeouts that may have been in progress
-    clearTimeout(pauseTimeoutRef.current);
-    clearTimeout(loadingStateTimeoutRef.current);
+    clearTimeout(mutableVideoState.current.pauseTimeout);
+    clearTimeout(mutableVideoState.current.loadingStateTimeout);
 
     const videoElement = videoRef.current;
 
     // Make sure our play attempt is no longer cancelled since the user is hovering on it again
-    mutablePlayAttemptState.current.isPlayAttemptCancelled = false;
+    mutableVideoState.current.isPlayAttemptCancelled = false;
 
     // If the video is already playing, just make sure we keep the overlays hidden
     if (getVideoState(videoElement) === VIDEO_STATE.playing) {
@@ -120,7 +119,7 @@ export default function HoverVideoPlayer({
     if (loadingOverlay) {
       // If we have a loading overlay, start a timeout to fade it in if it takes too long
       // for playback to start
-      loadingStateTimeoutRef.current = setTimeout(() => {
+      mutableVideoState.current.loadingStateTimeout = setTimeout(() => {
         // If the video is still loading when this timeout completes, transition the
         // player to show a loading state
         setOverlayState(HOVER_PLAYER_STATE.loading);
@@ -128,14 +127,14 @@ export default function HoverVideoPlayer({
     }
 
     // If a play attempt is already in progress, don't start a new one
-    if (mutablePlayAttemptState.current.isPlayAttemptInProgress) return;
+    if (mutableVideoState.current.isPlayAttemptInProgress) return;
 
     // We are now attempting to play the video
-    mutablePlayAttemptState.current.isPlayAttemptInProgress = true;
+    mutableVideoState.current.isPlayAttemptInProgress = true;
 
     playVideo(videoElement)
       .then(() => {
-        if (mutablePlayAttemptState.current.isPlayAttemptCancelled) {
+        if (mutableVideoState.current.isPlayAttemptCancelled) {
           // If the play attempt was cancelled, immediately pause the video
           pauseVideo(videoElement, shouldRestartOnVideoStopped);
         } else {
@@ -154,9 +153,9 @@ export default function HoverVideoPlayer({
       })
       .finally(() => {
         // The play attempt is now complete
-        mutablePlayAttemptState.current.isPlayAttemptInProgress = false;
-        mutablePlayAttemptState.current.isPlayAttemptCancelled = false;
-        clearTimeout(loadingStateTimeoutRef.current);
+        mutableVideoState.current.isPlayAttemptInProgress = false;
+        mutableVideoState.current.isPlayAttemptCancelled = false;
+        clearTimeout(mutableVideoState.current.loadingStateTimeout);
       });
   }, [
     loadingOverlay,
@@ -171,8 +170,8 @@ export default function HoverVideoPlayer({
    */
   const onHoverEnd = React.useCallback(() => {
     // Clear any timeouts that may have been in progress
-    clearTimeout(loadingStateTimeoutRef.current);
-    clearTimeout(pauseTimeoutRef.current);
+    clearTimeout(mutableVideoState.current.pauseTimeout);
+    clearTimeout(mutableVideoState.current.loadingStateTimeout);
 
     const videoElement = videoRef.current;
 
@@ -185,12 +184,12 @@ export default function HoverVideoPlayer({
 
     // Set a timeout with a duration of the overlay's fade transition so the video
     // won't pause until it's fully hidden
-    pauseTimeoutRef.current = setTimeout(
+    mutableVideoState.current.pauseTimeout = setTimeout(
       () => {
-        if (mutablePlayAttemptState.current.isPlayAttemptInProgress) {
+        if (mutableVideoState.current.isPlayAttemptInProgress) {
           // If we have a play attempt in progress, mark that the play attempt should be cancelled
           // so that as soon as the promise resolves, the video should be paused
-          mutablePlayAttemptState.current.isPlayAttemptCancelled = true;
+          mutableVideoState.current.isPlayAttemptCancelled = true;
         } else {
           // Otherwise, just go ahead and pause!
           pauseVideo(videoElement, shouldRestartOnVideoStopped);
@@ -246,10 +245,10 @@ export default function HoverVideoPlayer({
 
     return () => {
       // Clear any outstanding timeouts when the component unmounts to prevent memory leaks
-      clearTimeout(loadingStateTimeoutRef.current);
-      clearTimeout(pauseTimeoutRef.current);
+      clearTimeout(mutableVideoState.current.pauseTimeout);
+      clearTimeout(mutableVideoState.current.loadingStateTimeout);
       // If a play attempt is still in progress, cancel it so we don't update the state when it resolves
-      mutablePlayAttemptState.current.isPlayAttemptCancelled = true;
+      mutableVideoState.current.isPlayAttemptCancelled = true;
     };
   }, []);
   /* ~~~~ END EFFECTS ~~~~ */
