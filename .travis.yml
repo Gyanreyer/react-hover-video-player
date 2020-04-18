@@ -25,8 +25,8 @@ jobs:
   include:
     # Define release stage which handles publishing to github page and npm
     - stage: release
-      # Only run deploy on master branch
-      if: branch = master
+      # Only run deploy on pushes to master branch
+      if: branch = master AND type = push
       node_js: lts/*
       script: npm run build
       deploy:
