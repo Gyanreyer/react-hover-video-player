@@ -668,7 +668,7 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
 </div>
 `;
 
-exports[`Supports browsers that do not return a promise from video.play() handles playback errors correctly for browsers that don't return a Promise from video.play() 1`] = `
+exports[`Supports browsers that do not return a promise from video.play() handles playback errors correctly 1`] = `
 .emotion-1 {
   position: relative;
 }
@@ -698,7 +698,7 @@ exports[`Supports browsers that do not return a promise from video.play() handle
 </div>
 `;
 
-exports[`Supports browsers that do not return a promise from video.play() handles start flow correctly for browsers that don't return a Promise from video.play() 1`] = `
+exports[`Supports browsers that do not return a promise from video.play() handles start flow correctly 1`] = `
 .emotion-3 {
   position: relative;
 }
@@ -765,6 +765,36 @@ exports[`Supports browsers that do not return a promise from video.play() handle
       loop=""
       playsinline=""
       preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Supports browsers that do not return a promise from video.play() handles start flow correctly multiple times in a row 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
     >
       <source
         src="fake/video-file.mp4"

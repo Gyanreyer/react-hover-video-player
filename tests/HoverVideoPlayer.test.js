@@ -1255,7 +1255,7 @@ describe('Supports browsers that do not return a promise from video.play()', () 
     jest.useRealTimers();
   });
 
-  test("handles start flow correctly for browsers that don't return a Promise from video.play()", async () => {
+  test('handles start flow correctly', async () => {
     const { container, getByTestId } = renderHoverVideoPlayer(
       {
         videoSrc: 'fake/video-file.mp4',
@@ -1298,9 +1298,65 @@ describe('Supports browsers that do not return a promise from video.play()', () 
 
     // The video should now be playing
     expect(videoElement).toBePlaying();
+    expect(pausedOverlayWrapper.style.opacity).toBe('0');
+    expect(loadingOverlayWrapper.style.opacity).toBe('0');
   });
 
-  test("handles playback errors correctly for browsers that don't return a Promise from video.play()", async () => {
+  test('handles start flow correctly multiple times in a row', async () => {
+    const { container, getByTestId } = renderHoverVideoPlayer(
+      {
+        videoSrc: 'fake/video-file.mp4',
+      },
+      {
+        // video.play() should not return a promise to emulate the behavior of some older browsers
+        shouldPlayReturnPromise: false,
+      }
+    );
+
+    const videoElement = container.querySelector('video');
+    const playerContainer = getByTestId('hover-video-player-container');
+
+    expect(videoElement).toBePaused();
+
+    // Mouse over the container to start playing the video
+    fireEvent.mouseEnter(playerContainer);
+
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
+    expect(videoElement.play).toHaveLastReturnedWith(undefined);
+    expect(videoElement).toBeLoading();
+
+    await act(() => {
+      // Advance time sufficiently for the play timeout to complete
+      jest.advanceTimersByTime(400);
+      // Flush out our promise which should have been resolved
+      return new Promise(setImmediate);
+    });
+
+    // The video should now be playing
+    expect(videoElement).toBePlaying();
+
+    // Mouse out to pause the video
+    fireEvent.mouseLeave(playerContainer);
+
+    expect(videoElement).toBePaused();
+
+    // Mouse over the container to start playing the video
+    fireEvent.mouseEnter(playerContainer);
+
+    expect(videoElement.play).toHaveBeenCalledTimes(2);
+    expect(videoElement.play).toHaveLastReturnedWith(undefined);
+
+    await act(() => {
+      // Advance time sufficiently for the play timeout to complete
+      jest.advanceTimersByTime(400);
+      // Flush out our promise which should have been resolved
+      return new Promise(setImmediate);
+    });
+
+    expect(videoElement).toBePlaying();
+  });
+
+  test('handles playback errors correctly', async () => {
     const { container, getByTestId } = renderHoverVideoPlayer(
       {
         videoSrc: 'fake/video-file.mp4',
