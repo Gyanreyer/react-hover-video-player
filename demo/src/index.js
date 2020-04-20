@@ -99,7 +99,7 @@ const Demo = () => (
         </ul>
       </div>
       <HoverVideoPlayer
-        videoSrc="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        videoSrc="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
         pausedOverlay={<img src="image/big_buck_bunny_thumbnail.png" alt="" />}
         loadingOverlay={<LoadingSpinnerOverlay />}
         className={css`

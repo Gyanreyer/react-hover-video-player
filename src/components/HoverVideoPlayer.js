@@ -182,22 +182,22 @@ export default function HoverVideoPlayer({
     // Start fading the paused overlay back in
     setOverlayState(HOVER_PLAYER_STATE.paused);
 
-    // Set a timeout with a duration of the overlay's fade transition so the video
-    // won't pause until it's fully hidden
-    mutableVideoState.current.pauseTimeout = setTimeout(
-      () => {
-        if (mutableVideoState.current.isPlayAttemptInProgress) {
-          // If we have a play attempt in progress, mark that the play attempt should be cancelled
-          // so that as soon as the promise resolves, the video should be paused
-          mutableVideoState.current.isPlayAttemptCancelled = true;
-        } else {
-          // Otherwise, just go ahead and pause!
-          pauseVideo(videoElement, shouldRestartOnVideoStopped);
-        }
-      },
-      // If we don't have to wait for the overlay to fade back in, just set the timeout to 0 to invoke it ASAP
-      pausedOverlay ? overlayFadeTransitionDuration : 0
-    );
+    if (mutableVideoState.current.isPlayAttemptInProgress) {
+      // If we have a play attempt in progress, mark that the play attempt should be cancelled
+      // so that as soon as the promise resolves, the video should be paused
+      mutableVideoState.current.isPlayAttemptCancelled = true;
+    } else if (pausedOverlay) {
+      // If we have a paused overlay, set a timeout with a duration of the overlay's fade
+      // transition since we want to keep the video playing until the overlay has fully
+      // faded in and hidden it.
+      mutableVideoState.current.pauseTimeout = setTimeout(
+        () => pauseVideo(videoElement, shouldRestartOnVideoStopped),
+        overlayFadeTransitionDuration
+      );
+    } else {
+      // If a play attempt isn't in progress and there is no paused overlay, just pause
+      pauseVideo(videoElement, shouldRestartOnVideoStopped);
+    }
   }, [
     isFocused,
     overlayFadeTransitionDuration,

@@ -1,0 +1,1753 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Follows video interaction flows correctly an attempt to pause the video when it is already paused will be ignored 1`] = `
+.emotion-3 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-2 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-3"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <div
+      class="emotion-1"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-2"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Follows video interaction flows correctly an attempt to play the video when a previous play attempt is still loading will show the loading state again 1`] = `
+.emotion-3 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-2 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-3"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <div
+      class="emotion-1"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-2"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Follows video interaction flows correctly an attempt to play the video when it is already playing will be ignored 1`] = `
+.emotion-3 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-2 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-3"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <div
+      class="emotion-1"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-2"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Follows video interaction flows correctly an attempt to play the video will correctly interrupt any attempts to pause it 1`] = `
+.emotion-3 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-2 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-3"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <div
+      class="emotion-1"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-2"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Follows video interaction flows correctly handles a video playback error correectly 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Follows video interaction flows correctly the video will be paused immediately when its play attempt completes after we have already stopped 1`] = `
+.emotion-3 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-2 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-3"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <div
+      class="emotion-1"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-2"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Handles interaction events correctly mouseEnter and mouseLeave events take the video through its play and pause flows correctly 1`] = `
+.emotion-3 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-2 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-3"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <div
+      class="emotion-1"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-2"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Handles interaction events correctly touch events take the video through its play and pause flows correctly 1`] = `
+.emotion-3 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-2 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-3"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <div
+      class="emotion-1"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-2"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Prevents memory leaks when unmounted cleans everything up correctly if the video is unmounted during a pause attempt 1`] = `
+.emotion-2 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-2"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-1"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Prevents memory leaks when unmounted cleans everything up correctly if the video is unmounted during a play attempt 1`] = `
+.emotion-2 {
+  position: relative;
+}
+
+.emotion-1 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.emotion-0 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-2"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-1"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Supports browsers that do not return a promise from video.play() handles playback errors correctly for browsers that don't return a Promise from video.play() 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Supports browsers that do not return a promise from video.play() handles start flow correctly for browsers that don't return a Promise from video.play() 1`] = `
+.emotion-3 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-2 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-3"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <div
+      class="emotion-1"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-2"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Video props isVideoMuted prop correctly sets muted attribute on video 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Video props shouldVideoLoop prop correctly sets loop attribute on video 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`isFocused isFocused prop starts and stops the video correctly 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`isFocused other events which would normally stop the video are ignored if isFocused prop is true 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`overlayFadeTransitionDuration Stop attempts stop immediately if a pausedOverlay is not provided 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`overlayFadeTransitionDuration Stop attempts take the amount of time set by overlayFadeTransitionDuration prop if a pausedOverlay is provided 1`] = `
+.emotion-2 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-2"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 900ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-1"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`pausedOverlay and loadingOverlay pausedOverlay and loadingOverlay are shown and hidden correctly as the video is started and stopped 1`] = `
+.emotion-3 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-2 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-3"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 500ms;"
+    >
+      <div />
+    </div>
+    <div
+      class="emotion-1"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 500ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-2"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`pausedOverlay and loadingOverlay the loading state overlay is not shown if the video plays before the loading state timeout completes 1`] = `
+.emotion-2 {
+  position: relative;
+}
+
+.emotion-1 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.emotion-0 {
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-2"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="loading-overlay-wrapper"
+      style="opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-1"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`shouldRestartOnVideoStopped shouldRestartOnVideoStopped prop does not restart the video when set to false 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`shouldRestartOnVideoStopped shouldRestartOnVideoStopped prop restarts the video when set to true 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`shouldUseOverlayDimensions shouldUseOverlayDimensions prop applies the correct styling when set to false alongside a paused overlay 1`] = `
+.emotion-2 {
+  position: relative;
+}
+
+.emotion-1 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+<div>
+  <div
+    class="emotion-2"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-1"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`shouldUseOverlayDimensions shouldUseOverlayDimensions prop applies the correct styling when set to true alongside a paused overlay 1`] = `
+.emotion-2 {
+  position: relative;
+}
+
+.emotion-0 {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.emotion-0 > * {
+  display: block;
+  width: 100%;
+}
+
+.emotion-1 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+<div>
+  <div
+    class="emotion-2"
+    data-testid="hover-video-player-container"
+  >
+    <div
+      class="emotion-0"
+      data-testid="paused-overlay-wrapper"
+      style="opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class="emotion-1"
+      loop=""
+      playsinline=""
+      preload="none"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`shouldUseOverlayDimensions shouldUseOverlayDimensions should be ignored and applies the correct styling when no paused overlay is provided 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly correctly handles receiving a single invalid value for the videoCaptions prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly correctly handles receiving an invalid value in an array for the videoCaptions prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        label="English"
+        src="/fake/captions-file-en.vtt"
+        srclang="en"
+      />
+      <track
+        kind="captions"
+        label="French"
+        src="/fake/captions-file-fr.vtt"
+        srclang="fr"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`videoCaptions prop Handles valid videoCaptions prop values correctly correctly handles receiving a string for the videoCaptions prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        src="/fake/captions-file.vtt"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`videoCaptions prop Handles valid videoCaptions prop values correctly correctly handles receiving a valid object for the videoCaptions prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        label="English"
+        src="/fake/captions-file-en.vtt"
+        srclang="en"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`videoCaptions prop Handles valid videoCaptions prop values correctly correctly handles receiving an array of objects for the videoCaptions prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+      />
+      <track
+        kind="captions"
+        label="English"
+        src="/fake/captions-file-en.vtt"
+        srclang="en"
+      />
+      <track
+        kind="captions"
+        label="French"
+        src="/fake/captions-file-fr.vtt"
+        srclang="fr"
+      />
+      <track
+        kind="captions"
+        label="German"
+        src="/fake/captions-file-de.vtt"
+        srclang="de"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly handles not receiving a videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    />
+  </div>
+</div>
+`;
+
+exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly handles receiving a single invalid value for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    />
+  </div>
+</div>
+`;
+
+exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly handles receiving an invalid value in an array for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="valid-video-file.webm"
+      />
+      <source
+        src="valid-video-file.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly handles receiving a string for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly handles receiving a valid object for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly handles receiving an array of objects for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.webm"
+        type="video/webm"
+      />
+      <source
+        src="/fake/video-file.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly handles receiving an array of strings for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.webm"
+      />
+      <source
+        src="/fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly handles receiving an array with a mix of strings and objects for the videoSrc prop 1`] = `
+.emotion-1 {
+  position: relative;
+}
+
+.emotion-0 {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+<div>
+  <div
+    class="emotion-1"
+    data-testid="hover-video-player-container"
+  >
+    <video
+      class="emotion-0"
+      loop=""
+      playsinline=""
+      preload="metadata"
+    >
+      <source
+        src="/fake/video-file.webm"
+      />
+      <source
+        src="/fake/video-file.avi"
+      />
+      <source
+        src="/fake/video-file.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
