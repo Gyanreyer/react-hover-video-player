@@ -1,12 +1,3 @@
-export const pausedOverlayDemoCode = `<HoverVideoPlayer
-  videoSrc={[
-      { src: 'video/butterflies.webm', type: 'video/webm' },
-      { src: 'video/butterflies.mp4', type: 'video/mp4' },
-    ]}
-  loadingOverlay={<LoadingSpinnerOverlay />}
-  shouldRestartOnVideoStopped={false}
-/>`;
-
 export const codeEditorTheme = {
   plain: {
     color: '#9CDCFE',
