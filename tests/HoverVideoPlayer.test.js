@@ -721,8 +721,8 @@ describe('shouldUseOverlayDimensions', () => {
     const videoElement = container.querySelector('video');
 
     expect(videoElement).toHaveAttribute('preload', 'none');
-    expect(pausedOverlayWrapper).toHaveStyleRule('position', 'relative');
-    expect(videoElement).toHaveStyleRule('position', 'absolute');
+    expect(pausedOverlayWrapper.style.position).toBe('relative');
+    expect(videoElement.style.position).toBe('absolute');
   });
 
   test('shouldUseOverlayDimensions prop applies the correct styling when set to false alongside a paused overlay', () => {
@@ -736,9 +736,8 @@ describe('shouldUseOverlayDimensions', () => {
     const videoElement = container.querySelector('video');
 
     expect(videoElement).toHaveAttribute('preload', 'metadata');
-    expect(pausedOverlayWrapper).toHaveStyleRule('position', 'absolute');
-    // The video element shouldn't have a position style rule set
-    expect(videoElement).not.toHaveStyleRule('position', 'absolute');
+    expect(pausedOverlayWrapper.style.position).toBe('absolute');
+    expect(videoElement.style.position).toBe('static');
   });
 
   test('shouldUseOverlayDimensions should be ignored and applies the correct styling when no paused overlay is provided', () => {
@@ -752,8 +751,7 @@ describe('shouldUseOverlayDimensions', () => {
 
     expect(videoElement).toHaveAttribute('preload', 'metadata');
     expect(pausedOverlayWrapper).not.toBeInTheDocument();
-    // The video element shouldn't have a position style rule set
-    expect(videoElement).not.toHaveStyleRule('position');
+    expect(videoElement.style.position).toBe('static');
   });
 });
 
