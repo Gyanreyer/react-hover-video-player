@@ -1,14 +1,12 @@
 import React from 'react';
-import { cx } from 'emotion';
 
-import { formatVideoSrc, formatVideoCaptions } from '../utils/assets';
+import { formatVideoSrc, formatVideoCaptions } from './utils/assets';
 import {
   VIDEO_STATE,
   getVideoState,
   playVideo,
   pauseVideo,
-} from '../utils/video';
-import styles from './styles';
+} from './utils/video';
 
 // Enumerates states that the hover player can be in
 const HOVER_PLAYER_STATE = {
@@ -279,24 +277,33 @@ export default function HoverVideoPlayer({
       onMouseOut={onHoverEnd}
       onBlur={onHoverEnd}
       onTouchStart={onHoverStart}
-      className={cx(styles.basePlayerContainerStyle, className)}
-      style={style}
+      className={className}
+      style={{
+        position: 'relative',
+        ...style,
+      }}
       data-testid="hover-video-player-container"
       ref={containerRef}
     >
       {pausedOverlay && (
         <div
           style={{
+            position: shouldVideoExpandToFitOverlayDimensions
+              ? 'relative'
+              : 'absolute',
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1,
+            pointerEvents: 'none',
             opacity: overlayState !== HOVER_PLAYER_STATE.playing ? 1 : 0,
             transition: `opacity ${overlayFadeTransitionDuration}ms`,
           }}
-          className={cx(
-            styles.basePausedOverlayStyle,
-            {
-              [styles.expandToCoverPlayerStyle]: !shouldVideoExpandToFitOverlayDimensions,
-            },
-            pausedOverlayWrapperClassName
-          )}
+          className={pausedOverlayWrapperClassName}
           data-testid="paused-overlay-wrapper"
         >
           {pausedOverlay}
@@ -305,14 +312,19 @@ export default function HoverVideoPlayer({
       {loadingOverlay && (
         <div
           style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 2,
+            pointerEvents: 'none',
             opacity: overlayState === HOVER_PLAYER_STATE.loading ? 1 : 0,
             transition: `opacity ${overlayFadeTransitionDuration}ms`,
           }}
-          className={cx(
-            styles.baseLoadingOverlayStyle,
-            styles.expandToCoverPlayerStyle,
-            loadingOverlayWrapperClassName
-          )}
+          className={loadingOverlayWrapperClassName}
           data-testid="loading-overlay-wrapper"
         >
           {loadingOverlay}
@@ -325,13 +337,20 @@ export default function HoverVideoPlayer({
         // Only preload video data if we depend on having loaded its dimensions to display it
         preload={shouldVideoExpandToFitOverlayDimensions ? 'none' : 'metadata'}
         ref={videoRef}
-        className={cx(
-          styles.baseVideoStyle,
-          {
-            [styles.expandToCoverPlayerStyle]: shouldVideoExpandToFitOverlayDimensions,
-          },
-          videoClassName
-        )}
+        style={{
+          position: shouldVideoExpandToFitOverlayDimensions
+            ? 'absolute'
+            : 'relative',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          width: '100%',
+          height: '100%',
+          display: 'block',
+          objectFit: 'cover',
+        }}
+        className={videoClassName}
       >
         {parsedVideoSources.map(({ src, type }) => (
           <source key={src} src={src} type={type} />
