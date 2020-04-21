@@ -46,10 +46,8 @@ export function AboutSection() {
             Easily add a loading state overlay to show while the video is
             attempting to play
           </li>
-          <li>
-            Styled using <a href="https://emotion.sh/">emotion</a> CSS-in-JS
-            library
-          </li>
+          <li>No dependencies</li>
+          <li>Super simple</li>
         </ul>
       </div>
       <HoverVideoPlayer

@@ -20,22 +20,30 @@ export function Heading() {
           }
         `}
       >
-        <img
-          src="https://travis-ci.org/Gyanreyer/react-hover-video-player.svg?branch=master"
-          alt="build status"
-        />
-        <img
-          src="https://badge.fury.io/js/react-hover-video-player.svg"
-          alt="npm version"
-        />
-        <img
-          src="https://codecov.io/gh/Gyanreyer/react-hover-video-player/branch/master/graph/badge.svg"
-          alt="code coverage"
-        />
-        <img
-          src="https://img.shields.io/bundlephobia/minzip/react-hover-video-player?label=gzip%20size"
-          alt="gzip size"
-        />
+        <a href="https://www.npmjs.com/package/react-hover-video-player">
+          <img
+            src="https://badgen.net/npm/v/react-hover-video-player"
+            alt="npm version"
+          />
+        </a>
+        <a href="https://bundlephobia.com/result?p=react-hover-video-player">
+          <img
+            src="https://badgen.net/bundlephobia/minzip/react-hover-video-player"
+            alt="gzip size"
+          />
+        </a>
+        <a href="https://codecov.io/gh/Gyanreyer/react-hover-video-player">
+          <img
+            src="https://codecov.io/gh/Gyanreyer/react-hover-video-player/branch/master/graph/badge.svg"
+            alt="code coverage"
+          />
+        </a>
+        <a href="https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=master">
+          <img
+            src="https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=master"
+            alt="build status"
+          />
+        </a>
       </div>
     </header>
   );
