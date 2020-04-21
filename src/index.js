@@ -44,10 +44,13 @@ const HOVER_PLAYER_STATE = {
  * @param {bool}    [muted=true] - Whether the video player should be muted
  * @param {bool}    [loop=true] - Whether the video player should loop when it reaches the end
  * @param {string}  [className] - Optional className to apply custom styling to the container element
+ * @param {object}  [style] - Style object to apply custom inlined styles to the hover player container
  * @param {string}  [pausedOverlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
+ * @param {object}  [pausedOverlayWrapperStyle] - Style object to apply custom inlined styles to the paused overlay wrapper
  * @param {string}  [loadingOverlayWrapperClassName] - Optional className to apply custom styling to the loading state overlay contents' wrapper
+ * @param {object}  [loadingOverlayWrapperStyle] - Style object to apply custom inlined styles to the loading overlay wrapper
  * @param {string}  [videoClassName] - Optional className to apply custom styling to the video element
- * @param {object}  [style] - Style object to apply custom CSS styles to the hover player container
+ * @param {object}  [videoStyle] - Style object to apply custom inlined styles to the video element
  *
  * @license MIT
  */
@@ -64,10 +67,13 @@ export default function HoverVideoPlayer({
   muted = true,
   loop = true,
   className = '',
-  pausedOverlayWrapperClassName = '',
-  loadingOverlayWrapperClassName = '',
-  videoClassName = '',
   style = null,
+  pausedOverlayWrapperClassName = '',
+  pausedOverlayWrapperStyle = null,
+  loadingOverlayWrapperClassName = '',
+  loadingOverlayWrapperStyle = null,
+  videoClassName = '',
+  videoStyle = null,
 }) {
   // Keep track of state to determine how the paused and loading overlays should be displayed
   const [overlayState, setOverlayState] = React.useState(
@@ -302,6 +308,7 @@ export default function HoverVideoPlayer({
             pointerEvents: 'none',
             opacity: overlayState !== HOVER_PLAYER_STATE.playing ? 1 : 0,
             transition: `opacity ${overlayFadeTransitionDuration}ms`,
+            ...pausedOverlayWrapperStyle,
           }}
           className={pausedOverlayWrapperClassName}
           data-testid="paused-overlay-wrapper"
@@ -323,6 +330,7 @@ export default function HoverVideoPlayer({
             pointerEvents: 'none',
             opacity: overlayState === HOVER_PLAYER_STATE.loading ? 1 : 0,
             transition: `opacity ${overlayFadeTransitionDuration}ms`,
+            ...loadingOverlayWrapperStyle,
           }}
           className={loadingOverlayWrapperClassName}
           data-testid="loading-overlay-wrapper"
@@ -349,6 +357,7 @@ export default function HoverVideoPlayer({
           height: '100%',
           display: 'block',
           objectFit: 'cover',
+          ...videoStyle,
         }}
         className={videoClassName}
       >
