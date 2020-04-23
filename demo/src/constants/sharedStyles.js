@@ -63,12 +63,34 @@ injectGlobal`
 
   a {
     color: #ececec;
-    transition: color 100ms;
-    text-decoration: underline;
-    transition: opacity 0.2s;
+    text-decoration: none;
+  }
+
+  .underlined-link {
+    display: inline-block;
+    position: relative;
+    transition: opacity 0.1s;
+
+    :after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background-color: #ececec;
+      opacity: 0.8;
+      transition: width 0.1s ease-in-out;
+    }
 
     :hover, :focus {
       opacity: 0.9;
+
+      :after {
+        left: 0;
+        right: auto;
+        width: 100%;
+      }
     }
   }
 
@@ -89,12 +111,21 @@ injectGlobal`
   }
 
   figure {
-    margin: 16px 0 24px;
+    margin: 12px 0 24px;
   }
 
   figcaption {
     font-weight: normal;
     margin-bottom: 8px;
+  }
+
+  .required {
+    color: #ff6961;
+  }
+
+  .required-message {
+    color: #ff6961;
+    font-size: 14px;
   }
 `;
 

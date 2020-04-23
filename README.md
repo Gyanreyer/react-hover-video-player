@@ -10,11 +10,10 @@
 A React component that makes it dead easy to set up a video that plays on hover.
 
 ## Features 💡
-- Supports both mouse and touch screen interactions
+- Robust support for both mouse and touchscreen interactions
 - Easily add an overlay such as a thumbnail image to show while the video is paused
 - Easily add a loading state overlay to show while the video is attempting to play
 - No dependencies
-- Super simple
 
 
 ## Quick Start 🏃

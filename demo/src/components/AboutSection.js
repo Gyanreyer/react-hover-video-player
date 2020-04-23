@@ -37,7 +37,7 @@ export function AboutSection() {
             line-height: 24px;
           `}
         >
-          <li>Supports both mouse and touch screen interactions</li>
+          <li>Robust support for both mouse and touchscreen interactions</li>
           <li>
             Easily add an overlay such as a thumbnail image to show while the
             video is paused
