@@ -29,7 +29,7 @@ function MyComponent () {
     <HoverVideoPlayer
       videoSrc="path-to/your-video.mp4"
       pausedOverlay={<img src="thumbnail-image.jpg" alt="" />}
-      loadingOverlay={<div className="loading-spinner" />}
+      loadingOverlay={<div className="loading-spinner-overlay" />}
     />
   );
 }
