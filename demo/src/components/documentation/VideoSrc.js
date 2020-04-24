@@ -1,6 +1,7 @@
 import React from 'react';
 
 import LiveEditableCodeSection from '../LiveEditableCodeSection';
+import DocSectionHeading from './DocSectionHeading';
 
 const singleVideoSrcExampleCode = `<HoverVideoPlayer
   videoSrc="video/butterflies.mp4"
@@ -16,13 +17,9 @@ const multipleVideoSrcExampleCode = `<HoverVideoPlayer
 export default function VideoSrc() {
   return (
     <>
-      <h3 id="videoSrc">
-        <a href="#videoSrc" className="underlined-link">
-          videoSrc
-        </a>
-        <span className="required"> *</span>
-      </h3>
-
+      <DocSectionHeading id="videoSrc" isRequired>
+        videoSrc
+      </DocSectionHeading>
       <p>
         <em>videoSrc</em> accepts one or multiple values descibing the video
         source file(s) that should be used for the video player.
