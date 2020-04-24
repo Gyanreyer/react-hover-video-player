@@ -10,14 +10,14 @@ exports[`Follows video interaction flows correctly an attempt to pause the video
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -26,7 +26,7 @@ exports[`Follows video interaction flows correctly an attempt to pause the video
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -46,14 +46,14 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -62,7 +62,7 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -82,14 +82,14 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -98,7 +98,7 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -118,14 +118,14 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -134,7 +134,7 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -156,7 +156,7 @@ exports[`Follows video interaction flows correctly handles a video playback erro
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -176,14 +176,14 @@ exports[`Follows video interaction flows correctly the video will be paused imme
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -192,7 +192,7 @@ exports[`Follows video interaction flows correctly the video will be paused imme
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -212,14 +212,14 @@ exports[`Handles interaction events correctly mouseEnter and mouseLeave events t
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -228,7 +228,7 @@ exports[`Handles interaction events correctly mouseEnter and mouseLeave events t
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -248,14 +248,14 @@ exports[`Handles interaction events correctly touch events take the video throug
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -264,7 +264,7 @@ exports[`Handles interaction events correctly touch events take the video throug
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -284,7 +284,7 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -293,7 +293,7 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -313,7 +313,7 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -322,7 +322,7 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -344,7 +344,7 @@ exports[`Supports browsers that do not return a promise from video.play() handle
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -364,14 +364,14 @@ exports[`Supports browsers that do not return a promise from video.play() handle
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -380,7 +380,7 @@ exports[`Supports browsers that do not return a promise from video.play() handle
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -402,7 +402,7 @@ exports[`Supports browsers that do not return a promise from video.play() handle
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -424,7 +424,7 @@ exports[`Video props isVideoMuted prop correctly sets muted attribute on video 1
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -446,7 +446,7 @@ exports[`Video props shouldVideoLoop prop correctly sets loop attribute on video
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -468,7 +468,7 @@ exports[`isFocused isFocused prop starts and stops the video correctly 1`] = `
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -490,7 +490,7 @@ exports[`isFocused other events which would normally stop the video are ignored 
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -512,7 +512,7 @@ exports[`overlayFadeTransitionDuration Stop attempts stop immediately if a pause
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -532,7 +532,7 @@ exports[`overlayFadeTransitionDuration Stop attempts take the amount of time set
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 900ms;"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 900ms;"
     >
       <div />
     </div>
@@ -541,7 +541,7 @@ exports[`overlayFadeTransitionDuration Stop attempts take the amount of time set
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -561,14 +561,14 @@ exports[`pausedOverlay and loadingOverlay pausedOverlay and loadingOverlay are s
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 500ms;"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 500ms;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 500ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 500ms;"
     >
       <div />
     </div>
@@ -577,7 +577,7 @@ exports[`pausedOverlay and loadingOverlay pausedOverlay and loadingOverlay are s
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -597,7 +597,7 @@ exports[`pausedOverlay and loadingOverlay the loading state overlay is not shown
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -606,7 +606,7 @@ exports[`pausedOverlay and loadingOverlay the loading state overlay is not shown
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -628,7 +628,7 @@ exports[`shouldRestartOnVideoStopped shouldRestartOnVideoStopped prop does not r
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -650,7 +650,7 @@ exports[`shouldRestartOnVideoStopped shouldRestartOnVideoStopped prop restarts t
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -660,7 +660,7 @@ exports[`shouldRestartOnVideoStopped shouldRestartOnVideoStopped prop restarts t
 </div>
 `;
 
-exports[`shouldUseOverlayDimensions shouldUseOverlayDimensions prop applies the correct styling when set to false alongside a paused overlay 1`] = `
+exports[`sizingMode sizingMode "container" sets correct styling on the player 1`] = `
 <div>
   <div
     class=""
@@ -670,36 +670,7 @@ exports[`shouldUseOverlayDimensions shouldUseOverlayDimensions prop applies the 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
-    >
-      <div />
-    </div>
-    <video
-      class=""
-      loop=""
-      playsinline=""
-      preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
-  </div>
-</div>
-`;
-
-exports[`shouldUseOverlayDimensions shouldUseOverlayDimensions prop applies the correct styling when set to true alongside a paused overlay 1`] = `
-<div>
-  <div
-    class=""
-    data-testid="hover-video-player-container"
-    style="position: relative;"
-  >
-    <div
-      class=""
-      data-testid="paused-overlay-wrapper"
-      style="position: relative; display: block; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
     >
       <div />
     </div>
@@ -708,7 +679,7 @@ exports[`shouldUseOverlayDimensions shouldUseOverlayDimensions prop applies the 
       loop=""
       playsinline=""
       preload="none"
-      style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -718,7 +689,123 @@ exports[`shouldUseOverlayDimensions shouldUseOverlayDimensions prop applies the 
 </div>
 `;
 
-exports[`shouldUseOverlayDimensions shouldUseOverlayDimensions should be ignored and applies the correct styling when no paused overlay is provided 1`] = `
+exports[`sizingMode sizingMode "manual" sets correct styling on the player 1`] = `
+<div>
+  <div
+    class=""
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <div
+      class=""
+      data-testid="paused-overlay-wrapper"
+      style="z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class=""
+      loop=""
+      playsinline=""
+      preload="none"
+      style="object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`sizingMode sizingMode "overlay" sets correct styling on the player 1`] = `
+<div>
+  <div
+    class=""
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <div
+      class=""
+      data-testid="paused-overlay-wrapper"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class=""
+      loop=""
+      playsinline=""
+      preload="none"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`sizingMode sizingMode "video" sets correct styling on the player 1`] = `
+<div>
+  <div
+    class=""
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <div
+      class=""
+      data-testid="paused-overlay-wrapper"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class=""
+      loop=""
+      playsinline=""
+      preload="metadata"
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`sizingMode sizingMode defaults to "overlay" if not set and a pausedOVerlay is provided 1`] = `
+<div>
+  <div
+    class=""
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <div
+      class=""
+      data-testid="paused-overlay-wrapper"
+      style="position: relative; z-index: 1; pointer-events: none; opacity: 1; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class=""
+      loop=""
+      playsinline=""
+      preload="none"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`sizingMode sizingMode defaults to "video" if not set and no pausedOverlay is provided 1`] = `
 <div>
   <div
     class=""
@@ -730,7 +817,7 @@ exports[`shouldUseOverlayDimensions shouldUseOverlayDimensions should be ignored
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -752,7 +839,7 @@ exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly 
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -774,7 +861,7 @@ exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly 
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="fake/video-file.mp4"
@@ -808,7 +895,7 @@ exports[`videoCaptions prop Handles valid videoCaptions prop values correctly co
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="/fake/video-file.mp4"
@@ -834,7 +921,7 @@ exports[`videoCaptions prop Handles valid videoCaptions prop values correctly co
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="/fake/video-file.mp4"
@@ -862,7 +949,7 @@ exports[`videoCaptions prop Handles valid videoCaptions prop values correctly co
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="/fake/video-file.mp4"
@@ -902,7 +989,7 @@ exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly 
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     />
   </div>
 </div>
@@ -920,7 +1007,7 @@ exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly 
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     />
   </div>
 </div>
@@ -938,7 +1025,7 @@ exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly 
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="valid-video-file.webm"
@@ -964,7 +1051,7 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="/fake/video-file.mp4"
@@ -986,7 +1073,7 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="/fake/video-file.mp4"
@@ -1009,7 +1096,7 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="/fake/video-file.webm"
@@ -1036,7 +1123,7 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="/fake/video-file.webm"
@@ -1061,7 +1148,7 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
       loop=""
       playsinline=""
       preload="metadata"
-      style="position: static; top: 0px; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 100%; display: block; object-fit: cover;"
+      style="display: block; width: 100%; object-fit: cover;"
     >
       <source
         src="/fake/video-file.webm"

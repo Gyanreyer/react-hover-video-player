@@ -709,12 +709,12 @@ describe('overlayFadeTransitionDuration', () => {
   });
 });
 
-describe('shouldUseOverlayDimensions', () => {
-  test('shouldUseOverlayDimensions prop applies the correct styling when set to true alongside a paused overlay', () => {
+describe('sizingMode', () => {
+  test('sizingMode "overlay" sets correct styling on the player', () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
-      // shouldUseOverlayDimensions is true by default
+      sizingMode: 'overlay',
     });
 
     const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
@@ -725,33 +725,76 @@ describe('shouldUseOverlayDimensions', () => {
     expect(videoElement.style.position).toBe('absolute');
   });
 
-  test('shouldUseOverlayDimensions prop applies the correct styling when set to false alongside a paused overlay', () => {
+  test('sizingMode defaults to "overlay" if not set and a pausedOVerlay is provided', () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
-      shouldUseOverlayDimensions: false,
+    });
+
+    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
+    const videoElement = container.querySelector('video');
+
+    expect(videoElement).toHaveAttribute('preload', 'none');
+    expect(pausedOverlayWrapper.style.position).toBe('relative');
+    expect(videoElement.style.position).toBe('absolute');
+  });
+
+  test('sizingMode "video" sets correct styling on the player', () => {
+    const { container, getByTestId } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+      pausedOverlay: <div />,
+      sizingMode: 'video',
     });
 
     const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
     const videoElement = container.querySelector('video');
 
     expect(videoElement).toHaveAttribute('preload', 'metadata');
+    expect(videoElement.style.position).toBe('');
+    expect(videoElement.style.display).toBe('block');
     expect(pausedOverlayWrapper.style.position).toBe('absolute');
-    expect(videoElement.style.position).toBe('static');
   });
 
-  test('shouldUseOverlayDimensions should be ignored and applies the correct styling when no paused overlay is provided', () => {
-    const { container, queryByTestId } = renderHoverVideoPlayer({
+  test('sizingMode defaults to "video" if not set and no pausedOverlay is provided', () => {
+    const { container } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
-      shouldUseOverlayDimensions: true,
     });
 
-    const pausedOverlayWrapper = queryByTestId('paused-overlay-wrapper');
     const videoElement = container.querySelector('video');
 
     expect(videoElement).toHaveAttribute('preload', 'metadata');
-    expect(pausedOverlayWrapper).not.toBeInTheDocument();
-    expect(videoElement.style.position).toBe('static');
+    expect(videoElement.style.position).toBe('');
+    expect(videoElement.style.display).toBe('block');
+  });
+
+  test('sizingMode "container" sets correct styling on the player', () => {
+    const { container, getByTestId } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+      pausedOverlay: <div />,
+      sizingMode: 'container',
+    });
+
+    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
+    const videoElement = container.querySelector('video');
+
+    expect(videoElement).toHaveAttribute('preload', 'none');
+    expect(videoElement.style.position).toBe('absolute');
+    expect(pausedOverlayWrapper.style.position).toBe('absolute');
+  });
+
+  test('sizingMode "manual" sets correct styling on the player', () => {
+    const { container, getByTestId } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+      pausedOverlay: <div />,
+      sizingMode: 'manual',
+    });
+
+    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
+    const videoElement = container.querySelector('video');
+
+    expect(videoElement).toHaveAttribute('preload', 'none');
+    expect(videoElement.style.position).toBe('');
+    expect(pausedOverlayWrapper.style.position).toBe('');
   });
 });
 

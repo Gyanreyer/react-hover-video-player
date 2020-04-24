@@ -15,6 +15,52 @@ const HOVER_PLAYER_STATE = {
   playing: 'playing',
 };
 
+// Enumerates sizing modes which define how the player's contents should be sized relative to each other
+const SIZING_MODES = {
+  // Everything should be sized based on the paused overlay's dimensions - the video element will expand to fill that space
+  overlay: 'overlay',
+  // Everything should be sized based on the video element's dimensions - the overlays will expand to cover the video
+  video: 'video',
+  // Everything should be sized based on the player's outer container div - the overlays and video will all expand to cover
+  // the container
+  container: 'container',
+  // Manual mode does not apply any special styling and allows the developer to exercise full control
+  // over how everything should be sized - this means you will likely need to provide your own custom styling for
+  // both the paused overlay and the video element
+  manual: 'manual',
+};
+
+// CSS styles to make some contents in the player expand to fill the container
+const expandToFillContainerStyle = {
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+};
+
+// Styles to apply to the paused overlay wrapper and video element for different sizing modes
+const pausedOverlayWrapperSizingStyles = {
+  [SIZING_MODES.overlay]: {
+    position: 'relative',
+  },
+  [SIZING_MODES.video]: expandToFillContainerStyle,
+  [SIZING_MODES.container]: expandToFillContainerStyle,
+  [SIZING_MODES.manual]: null,
+};
+
+const videoSizingStyles = {
+  [SIZING_MODES.overlay]: expandToFillContainerStyle,
+  [SIZING_MODES.video]: {
+    display: 'block',
+    width: '100%',
+  },
+  [SIZING_MODES.container]: expandToFillContainerStyle,
+  [SIZING_MODES.manual]: null,
+};
+
 /**
  * @component HoverVideoPlayer
  *
@@ -39,8 +85,6 @@ const HOVER_PLAYER_STATE = {
  * @param {number}  [loadingStateTimeoutDuration=200] - Duration in ms to wait after attempting to start the video before showing the loading overlay
  * @param {number}  [overlayFadeTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
  * @param {bool}    [shouldRestartOnVideoStopped=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
- * @param {bool}    [shouldUseOverlayDimensions=true] - Whether the player should display using the pausedOverlay's dimensions rather than the video element's dimensions if an overlay is provided
- *                                                        This helps prevent content height jumps when the video loads its dimensions
  * @param {bool}    [muted=true] - Whether the video player should be muted
  * @param {bool}    [loop=true] - Whether the video player should loop when it reaches the end
  * @param {string}  [className] - Optional className to apply custom styling to the container element
@@ -51,6 +95,13 @@ const HOVER_PLAYER_STATE = {
  * @param {object}  [loadingOverlayWrapperStyle] - Style object to apply custom inlined styles to the loading overlay wrapper
  * @param {string}  [videoClassName] - Optional className to apply custom styling to the video element
  * @param {object}  [videoStyle] - Style object to apply custom inlined styles to the video element
+ * @param {string}  [sizingMode] - Describes sizing mode to use to determine how the player's contents should be styled. Accepts 4 possible values:
+ *                                 - **"overlay"**: Everything should be sized based on the paused overlay's dimensions - the video element will expand to fit inside those dimensions
+ *                                 - **"video"**: Everything should be sized based on the video element's dimensions - the overlays will expand to cover the video
+ *                                 - **"container"**: Everything should be sized based on the player's outer container div - the overlays and video will all expand to cover the container
+ *                                 - **"manual"**: Manual mode does not apply any special styling and allows the developer to exercise full control over how everything should be sized - this means you will likely need to provide your own custom styling for both the paused overlay and the video element
+ *
+ *                                 If no value is provided, sizingMode will default to "overlay" if a pausedOverlay was provided, or "video" otherwise
  *
  * @license MIT
  */
@@ -63,7 +114,6 @@ export default function HoverVideoPlayer({
   loadingStateTimeoutDuration = 200,
   overlayFadeTransitionDuration = 400,
   shouldRestartOnVideoStopped = true,
-  shouldUseOverlayDimensions = true,
   muted = true,
   loop = true,
   className = '',
@@ -74,6 +124,7 @@ export default function HoverVideoPlayer({
   loadingOverlayWrapperStyle = null,
   videoClassName = '',
   videoStyle = null,
+  sizingMode = pausedOverlay ? SIZING_MODES.overlay : SIZING_MODES.video,
 }) {
   // Keep track of state to determine how the paused and loading overlays should be displayed
   const [overlayState, setOverlayState] = React.useState(
@@ -271,11 +322,6 @@ export default function HoverVideoPlayer({
   );
   /* ~~~~ END VIDEO ASSET PARSING ~~~~ */
 
-  // The video should use the overlay's dimensions rather than the other way around if
-  //  an overlay was provided and the shouldUseOverlayDimensions is true
-  const shouldVideoExpandToFitOverlayDimensions =
-    pausedOverlay && shouldUseOverlayDimensions;
-
   return (
     <div
       onMouseEnter={onHoverStart}
@@ -294,16 +340,7 @@ export default function HoverVideoPlayer({
       {pausedOverlay && (
         <div
           style={{
-            position: shouldVideoExpandToFitOverlayDimensions
-              ? 'relative'
-              : 'absolute',
-            display: 'block',
-            width: '100%',
-            height: '100%',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
+            ...pausedOverlayWrapperSizingStyles[sizingMode],
             zIndex: 1,
             pointerEvents: 'none',
             opacity: overlayState !== HOVER_PLAYER_STATE.playing ? 1 : 0,
@@ -319,13 +356,7 @@ export default function HoverVideoPlayer({
       {loadingOverlay && (
         <div
           style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            width: '100%',
-            height: '100%',
+            ...expandToFillContainerStyle,
             zIndex: 2,
             pointerEvents: 'none',
             opacity: overlayState === HOVER_PLAYER_STATE.loading ? 1 : 0,
@@ -342,20 +373,15 @@ export default function HoverVideoPlayer({
       <video
         loop={loop}
         playsInline
-        // Only preload video data if we depend on having loaded its dimensions to display it
-        preload={shouldVideoExpandToFitOverlayDimensions ? 'none' : 'metadata'}
+        // Only preload video data if there's no overlay covering it or we depend on having loaded its dimensions to display it
+        preload={
+          !pausedOverlay || sizingMode === SIZING_MODES.video
+            ? 'metadata'
+            : 'none'
+        }
         ref={videoRef}
         style={{
-          position: shouldVideoExpandToFitOverlayDimensions
-            ? 'absolute'
-            : 'static',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          width: '100%',
-          height: '100%',
-          display: 'block',
+          ...videoSizingStyles[sizingMode],
           objectFit: 'cover',
           ...videoStyle,
         }}
