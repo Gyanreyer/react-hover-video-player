@@ -5,15 +5,16 @@
 [![code coverage](https://codecov.io/gh/Gyanreyer/react-hover-video-player/branch/master/graph/badge.svg)](https://codecov.io/gh/Gyanreyer/react-hover-video-player)
 [![build status](https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=master)](https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=master)
 
-# [Docs 📚](https://react-hover-video-player.dev/)
-
 A React component that makes it dead easy to set up a video that plays on hover.
+
+## 📚📚📚 [Read the docs at react-hover-video-player.dev](https://react-hover-video-player.dev/) 📚📚📚
 
 ## Features 💡
 - Robust support for both mouse and touchscreen interactions
 - Easily add an overlay such as a thumbnail image to show while the video is paused
 - Easily add a loading state overlay to show while the video is attempting to play
 - No dependencies
+- Simple and easy to customize
 
 
 ## Quick Start 🏃

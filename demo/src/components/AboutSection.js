@@ -47,7 +47,7 @@ export function AboutSection() {
             attempting to play
           </li>
           <li>No dependencies</li>
-          <li>Super simple</li>
+          <li>Simple and easy to customize</li>
         </ul>
       </div>
       <HoverVideoPlayer
