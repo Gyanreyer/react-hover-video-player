@@ -3,7 +3,7 @@ import { css } from 'emotion';
 
 import VideoSrc from './VideoSrc';
 import PausedOverlay from './PausedOverlay';
-import LoadingOverlay from './LoadingOverlay';
+// import LoadingOverlay from './LoadingOverlay';
 
 export default function ComponentAPI() {
   return (
@@ -19,7 +19,6 @@ export default function ComponentAPI() {
       <section
         className={css`
           margin-left: 10px;
-          max-width: 640px;
 
           p,
           figure {

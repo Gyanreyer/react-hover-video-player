@@ -3,27 +3,43 @@ import { css } from 'emotion';
 
 import HoverVideoPlayer from '../../../src';
 import LoadingSpinnerOverlay from './LoadingSpinnerOverlay';
-import { breakpoints } from '../constants/sharedStyles';
 
 export function AboutSection() {
   return (
     <section
       className={css`
-        display: flex;
         margin-bottom: 48px;
-
-        ${breakpoints.medium} {
-          flex-direction: column-reverse;
-        }
       `}
     >
+      <HoverVideoPlayer
+        videoSrc="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        pausedOverlay={
+          <img
+            src="image/big_buck_bunny_thumbnail.jpg"
+            alt=""
+            className={css`
+              display: block;
+              width: 100%;
+            `}
+          />
+        }
+        loadingOverlay={<LoadingSpinnerOverlay />}
+        className={css`
+          border-radius: 4px;
+          overflow: hidden;
+          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+
+          margin: 0 0 24px 0;
+        `}
+      />
       <div>
-        <h2>What it is</h2>
+        <h2 id="about">What it is</h2>
         <p>
           A React component that makes it dead easy to set up a video that plays
           on hover.
         </p>
         <h2
+          id="features"
           className={css`
             margin-top: 24px;
           `}
@@ -50,33 +66,6 @@ export function AboutSection() {
           <li>Simple and easy to customize</li>
         </ul>
       </div>
-      <HoverVideoPlayer
-        videoSrc="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        pausedOverlay={
-          <img
-            src="image/big_buck_bunny_thumbnail.png"
-            alt=""
-            className={css`
-              display: block;
-              width: 100%;
-            `}
-          />
-        }
-        loadingOverlay={<LoadingSpinnerOverlay />}
-        className={css`
-          flex: 1;
-          margin: 0 0 auto 72px;
-
-          border-radius: 4px;
-          overflow: hidden;
-          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-
-          ${breakpoints.medium} {
-            margin: 0 0 24px 0;
-            max-width: 720px;
-          }
-        `}
-      />
     </section>
   );
 }
