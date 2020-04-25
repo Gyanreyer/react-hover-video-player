@@ -7,7 +7,7 @@ const pausedOverlayExampleCode = `<HoverVideoPlayer
   videoSrc="video/butterflies.mp4"
   pausedOverlay={
     <img
-      src="image/big_buck_bunny_thumbnail.png"
+      src="image/butterflies_demo_thumbnail.jpg"
       alt=""
       style={{
         display: "block",
