@@ -7,7 +7,7 @@
 
 A React component that makes it dead easy to set up a video that plays on hover.
 
-## 📚📚📚 [Read the docs at react-hover-video-player.dev](https://react-hover-video-player.dev/) 📚📚📚
+## [Read the docs at react-hover-video-player.dev](https://react-hover-video-player.dev/) 📖
 
 ## Features 💡
 - Robust support for both mouse and touchscreen interactions
