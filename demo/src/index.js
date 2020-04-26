@@ -8,46 +8,47 @@ import { AboutSection } from './components/AboutSection';
 import DocumentationSection from './components/documentation';
 import NavigationMenu from './components/NavigationMenu';
 
-const Demo = () => (
-  <main
-    className={css`
-      margin: 0 auto;
-      max-width: 85%;
-
-      ${breakpoints.medium} {
-        max-width: 90%;
-      }
-    `}
-  >
-    <div
+export default function Demo() {
+  return (
+    <main
       className={css`
-        display: grid;
-        grid-template-columns: 1fr 4fr 1fr;
-        grid-column-gap: 48px;
+        margin: 0 auto;
+        max-width: 85%;
 
         ${breakpoints.medium} {
-          grid-template-columns: 1fr auto;
-        }
-
-        ${breakpoints.small} {
-          display: block;
+          max-width: 90%;
         }
       `}
     >
-      <Heading />
-      <NavigationMenu />
       <div
         className={css`
-          grid-row: 2 / 3;
+          display: grid;
+          grid-template-columns: 1fr 4fr 1fr;
+          grid-column-gap: 48px;
+
+          ${breakpoints.medium} {
+            grid-template-columns: 1fr auto;
+          }
+
+          ${breakpoints.small} {
+            display: block;
+          }
         `}
       >
-        <AboutSection />
-        <DocumentationSection />
+        <Heading />
+        <NavigationMenu />
+        <div
+          className={css`
+            grid-row: 2 / 3;
+          `}
+        >
+          <AboutSection />
+          <DocumentationSection />
+        </div>
+        <div />
       </div>
-      <div />
-    </div>
-  </main>
-);
-export default Demo;
+    </main>
+  );
+}
 
 render(<Demo />, document.getElementById('react-hover-video-player-demo'));
