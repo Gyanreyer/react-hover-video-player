@@ -1,7 +1,7 @@
 import React from 'react';
 
 import LiveEditableCodeSection from '../LiveEditableCodeSection';
-import DocSectionHeading from './DocSectionHeading';
+import SectionHeading from '../SectionHeading';
 
 const singleVideoSrcExampleCode = `<HoverVideoPlayer
   videoSrc="video/butterflies.mp4"
@@ -17,9 +17,9 @@ const multipleVideoSrcExampleCode = `<HoverVideoPlayer
 export default function VideoSrc() {
   return (
     <>
-      <DocSectionHeading id="videoSrc" isRequired>
-        videoSrc
-      </DocSectionHeading>
+      <SectionHeading id="videoSrc">
+        videoSrc<span className="required">*</span>
+      </SectionHeading>
       <p>
         <em>videoSrc</em> accepts one or multiple values descibing the video
         source file(s) that should be used for the video player.
@@ -35,11 +35,17 @@ export default function VideoSrc() {
       <figure>
         <figcaption>
           If you would like to use <em>multiple video sources</em>, you can
-          provide all of them in an array of objects which include each source
-          file&#39;s URL and{' '}
-          <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#Audio_and_video_types">
+          provide all of them in an array of objects with the property{' '}
+          <em>src</em> for the source file&#39;s URL and <em>type</em> for its{' '}
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#Audio_and_video_types"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="always-underlined"
+          >
             MIME type
           </a>
+          .
         </figcaption>
         <LiveEditableCodeSection code={multipleVideoSrcExampleCode} />
       </figure>

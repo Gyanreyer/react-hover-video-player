@@ -3,14 +3,11 @@ import { css } from 'emotion';
 
 import HoverVideoPlayer from '../../../src';
 import LoadingSpinnerOverlay from './LoadingSpinnerOverlay';
+import SectionHeading from './SectionHeading';
 
 export function AboutSection() {
   return (
-    <section
-      className={css`
-        margin-bottom: 36px;
-      `}
-    >
+    <section>
       <HoverVideoPlayer
         videoSrc="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
         pausedOverlay={
@@ -30,27 +27,24 @@ export function AboutSection() {
           box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 
           margin: 0 0 12px 0;
-          max-width: 720px;
+          max-width: 640px;
         `}
       />
       <div>
-        <h2 id="about">What it is</h2>
+        <SectionHeading id="about" isMajorSectionHeading>
+          What it is
+        </SectionHeading>
         <p>
           A React component that makes it dead easy to set up a video that plays
           on hover.
         </p>
-        <h2
-          id="features"
-          className={css`
-            margin-top: 12px;
-          `}
-        >
+        <SectionHeading id="features" isMajorSectionHeading>
           Features
-        </h2>
+        </SectionHeading>
         <ul
           className={css`
             padding-inline-start: 24px;
-            margin: 0;
+            margin: 0 0 12px;
             line-height: 24px;
           `}
         >

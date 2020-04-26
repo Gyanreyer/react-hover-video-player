@@ -66,9 +66,7 @@ injectGlobal`
   a {
     color: #ececec;
     text-decoration: none;
-  }
 
-  .underlined-link {
     display: inline-block;
     position: relative;
     transition: opacity 0.1s;
@@ -87,12 +85,18 @@ injectGlobal`
 
     :hover, :focus {
       opacity: 0.9;
+    }
 
+    :hover, :focus, &.always-underlined {
       :after {
         left: 0;
         right: auto;
         width: 100%;
       }
+    }
+
+    &.no-underline:after {
+      content: none;
     }
   }
 

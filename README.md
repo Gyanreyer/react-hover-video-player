@@ -3,7 +3,7 @@
 [![npm version](https://badgen.net/npm/v/react-hover-video-player)](https://www.npmjs.com/package/react-hover-video-player)
 [![minzipped size](https://badgen.net/bundlephobia/minzip/react-hover-video-player)](https://bundlephobia.com/result?p=react-hover-video-player)
 [![code coverage](https://codecov.io/gh/Gyanreyer/react-hover-video-player/branch/master/graph/badge.svg)](https://codecov.io/gh/Gyanreyer/react-hover-video-player)
-[![build status](https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=master)](https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=master)
+[![build status](https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=master)](https://travis-ci.com/github/Gyanreyer/react-hover-video-player)
 
 A React component that makes it dead easy to set up a video that plays on hover.
 

@@ -84,9 +84,7 @@ export default function NavigationMenu() {
               }
             `}
           >
-            <a href={`#${mainSection.id}`} className="underlined-link">
-              {mainSection.name}
-            </a>
+            <a href={`#${mainSection.id}`}>{mainSection.name}</a>
             {mainSection.subSections && (
               <ul
                 className={css`
@@ -107,9 +105,7 @@ export default function NavigationMenu() {
                       }
                     `}
                   >
-                    <a href={`#${subSection.id}`} className="underlined-link">
-                      {subSection.name}
-                    </a>
+                    <a href={`#${subSection.id}`}>{subSection.name}</a>
                   </li>
                 ))}
               </ul>

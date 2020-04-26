@@ -2,28 +2,30 @@ import React from 'react';
 import { css } from 'emotion';
 
 import CopyableCodeSnippet from '../CopyableCodeSnippet';
+import SectionHeading from '../SectionHeading';
 
 export default function GetStarted() {
   return (
     <>
-      <h2
+      <SectionHeading
         id="get-started"
+        isMajorSectionHeading
         className={css`
-          margin-bottom: 0;
+          margin: 0;
         `}
       >
         Get Started
-      </h2>
+      </SectionHeading>
       <section
         className={css`
-          margin-left: 12px;
+          margin: 0 0 24px 12px;
         `}
       >
-        <h3 id="install">Installation</h3>
+        <SectionHeading id="install">Installation</SectionHeading>
         <CopyableCodeSnippet copyText="npm install react-hover-video-player">
           npm install react-hover-video-player
         </CopyableCodeSnippet>
-        <h3 id="setup">Basic Setup</h3>
+        <SectionHeading id="setup">Basic Setup</SectionHeading>
         <CopyableCodeSnippet copyText="import HoverVideoPlayer from 'react-hover-video-player';">
           <span>
             <span style={{ color: '#569cd6' }}>import</span>{' '}

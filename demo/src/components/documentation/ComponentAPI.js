@@ -1,6 +1,7 @@
 import React from 'react';
 import { css } from 'emotion';
 
+import SectionHeading from '../SectionHeading';
 import VideoSrc from './VideoSrc';
 import PausedOverlay from './PausedOverlay';
 // import LoadingOverlay from './LoadingOverlay';
@@ -8,14 +9,15 @@ import PausedOverlay from './PausedOverlay';
 export default function ComponentAPI() {
   return (
     <>
-      <h2
-        className={css`
-          margin: 20px 0 0;
-        `}
+      <SectionHeading
         id="component-api"
+        isMajorSectionHeading
+        className={css`
+          margin: 0;
+        `}
       >
         Component API
-      </h2>
+      </SectionHeading>
       <section
         className={css`
           margin-left: 10px;
