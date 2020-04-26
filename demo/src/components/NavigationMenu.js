@@ -38,6 +38,18 @@ const navigationSections = [
         name: 'pausedOverlay',
         id: 'pausedOverlay',
       },
+      {
+        name: 'loadingOverlay',
+        id: 'loadingOverlay',
+      },
+      {
+        name: 'overlayFadeTransitionDuration',
+        id: 'overlayFadeTransitionDuration',
+      },
+      {
+        name: 'loadingStateTimeoutDuration',
+        id: 'loadingStateTimeoutDuration',
+      },
     ],
   },
 ];

@@ -22,8 +22,11 @@ export default function PausedOverlay() {
     <>
       <SectionHeading id="pausedOverlay">pausedOverlay</SectionHeading>
       <p>
-        <em>pausedOverlay</em> accepts a node which will be rendered on top of
-        the video while it is in a paused state.
+        <b>type:</b> <type>node</type> | <b>default:</b> <value>null</value>
+      </p>
+      <p>
+        <em>pausedOverlay</em> accepts a <type>node</type> which will be
+        rendered on top of the video while it is in a paused state.
       </p>
       <figure>
         <figcaption>
@@ -32,6 +35,20 @@ export default function PausedOverlay() {
         </figcaption>
         <LiveEditableCodeSection code={pausedOverlayExampleCode} />
       </figure>
+      <p>
+        The{' '}
+        <em>
+          <a
+            href="#overlayFadeTransitionDuration"
+            className="always-underlined"
+          >
+            overlayFadeTransitionDuration
+          </a>
+        </em>{' '}
+        prop allows you to set how long it should take for the overlay to fade
+        out when the video starts playing and fade back in when it stops
+        playing.
+      </p>
     </>
   );
 }

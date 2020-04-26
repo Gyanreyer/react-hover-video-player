@@ -74,7 +74,7 @@ injectGlobal`
     :after {
       content: '';
       position: absolute;
-      bottom: -1px;
+      bottom: 0;
       right: 0;
       width: 0;
       height: 2px;
@@ -116,6 +116,27 @@ injectGlobal`
     font-style: normal;
   }
 
+  em a {
+    color: #f2a365;
+  
+    :after {
+      background-color: #f2a365;
+    }
+  }
+
+  type {
+    color: #77dd77;
+  }
+
+  value {
+    color: #fdfd96;
+  }
+
+  required {
+    color: #ff6961;
+    font-weight: bold;
+  }
+
   figure {
     margin: 12px 0 24px;
   }
@@ -125,12 +146,20 @@ injectGlobal`
     margin-bottom: 8px;
   }
 
-  .required {
-    color: #ff6961;
+  /* CLASSES FOR DEMO COMPONENTS */
+  .demo-thumbnail-image {
+    display: block;
+    width: 100%;
   }
 
-  .required-message {
-    color: #ff6961;
-    font-size: 14px;
+  .demo-loading-overlay {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 24px;
+    background-color: green;
   }
 `;

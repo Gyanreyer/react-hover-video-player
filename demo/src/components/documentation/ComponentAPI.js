@@ -4,7 +4,9 @@ import { css } from 'emotion';
 import SectionHeading from '../SectionHeading';
 import VideoSrc from './VideoSrc';
 import PausedOverlay from './PausedOverlay';
-// import LoadingOverlay from './LoadingOverlay';
+import LoadingOverlay from './LoadingOverlay';
+import OverlayFadeTransitionDuration from './OverlayFadeTransitionDuration';
+import LoadingStateTimeoutDuration from './LoadingStateTimeoutDuration';
 
 export default function ComponentAPI() {
   return (
@@ -38,7 +40,9 @@ export default function ComponentAPI() {
       >
         <VideoSrc />
         <PausedOverlay />
-        {/* <LoadingOverlay /> */}
+        <LoadingOverlay />
+        <OverlayFadeTransitionDuration />
+        <LoadingStateTimeoutDuration />
       </section>
     </>
   );

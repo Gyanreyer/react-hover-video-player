@@ -17,26 +17,28 @@ const multipleVideoSrcExampleCode = `<HoverVideoPlayer
 export default function VideoSrc() {
   return (
     <>
-      <SectionHeading id="videoSrc">
-        videoSrc<span className="required">*</span>
-      </SectionHeading>
+      <SectionHeading id="videoSrc">videoSrc</SectionHeading>
+      <p>
+        <b>type:</b> <type>string</type> or <type>array of objects</type> |{' '}
+        <required>this prop is required</required>
+      </p>
       <p>
         <em>videoSrc</em> accepts one or multiple values descibing the video
         source file(s) that should be used for the video player.
       </p>
-      <p className="required-message">* this prop is required</p>
       <figure>
         <figcaption>
           If you only have <em>one video source</em>, you can simply provide the
-          URL path to the video file as a string
+          URL path to the video file as a <type>string</type>.
         </figcaption>
         <LiveEditableCodeSection code={singleVideoSrcExampleCode} />
       </figure>
       <figure>
         <figcaption>
           If you would like to use <em>multiple video sources</em>, you can
-          provide all of them in an array of objects with the property{' '}
-          <em>src</em> for the source file&#39;s URL and <em>type</em> for its{' '}
+          provide all of them in an <type>array of objects</type> with the
+          properties <em>src</em> for the source file&#39;s URL and{' '}
+          <em>type</em> for its{' '}
           <a
             href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#Audio_and_video_types"
             target="_blank"
