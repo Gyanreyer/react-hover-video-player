@@ -1,4 +1,4 @@
-import { injectGlobal, css } from 'emotion';
+import { injectGlobal } from 'emotion';
 
 export const breakpoints = {
   extraSmall: '@media only screen and (max-width: 375px)',
@@ -12,16 +12,16 @@ injectGlobal`
 
   body {
     font-family: 'Open Sans', sans-serif;
-    margin: 86px 0;
+    margin: 86px 0 92px;
     background-color: #30475e;
     color: #ececec;
 
     ${breakpoints.medium} {
-      margin: 64px 0;
+      margin-top: 64px;
     }
 
     ${breakpoints.small} {
-      margin: 32px 0;
+      margin-top: 32px;
     }
   }
 
@@ -40,7 +40,8 @@ injectGlobal`
 
   h2 {
     font-size: 36px;
-    margin: 0 0 12px;
+    margin: 0 0 8px;
+    padding-top: 12px;
 
     ${breakpoints.medium} {
       font-size: 24px;
@@ -50,6 +51,7 @@ injectGlobal`
   h3 {
     font-size: 24px;
     margin: 0 0 8px;
+    padding-top: 12px;
 
     ${breakpoints.medium} {
       font-size: 20px;
@@ -127,8 +129,4 @@ injectGlobal`
     color: #ff6961;
     font-size: 14px;
   }
-`;
-
-export const documentationHeading = css`
-  margin-top: 16px;
 `;

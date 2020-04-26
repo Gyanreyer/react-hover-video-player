@@ -8,7 +8,7 @@ export function AboutSection() {
   return (
     <section
       className={css`
-        margin-bottom: 48px;
+        margin-bottom: 36px;
       `}
     >
       <HoverVideoPlayer
@@ -29,7 +29,8 @@ export function AboutSection() {
           overflow: hidden;
           box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 
-          margin: 0 0 24px 0;
+          margin: 0 0 12px 0;
+          max-width: 720px;
         `}
       />
       <div>
@@ -41,7 +42,7 @@ export function AboutSection() {
         <h2
           id="features"
           className={css`
-            margin-top: 24px;
+            margin-top: 12px;
           `}
         >
           Features

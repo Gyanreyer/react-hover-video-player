@@ -5,7 +5,11 @@ import { breakpoints } from '../constants/sharedStyles';
 
 export function Heading() {
   return (
-    <header>
+    <header
+      className={css`
+        grid-column: 2 / 3;
+      `}
+    >
       <h1>React Hover Video Player</h1>
       <div
         className={css`

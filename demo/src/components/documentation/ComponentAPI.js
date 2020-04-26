@@ -10,7 +10,7 @@ export default function ComponentAPI() {
     <>
       <h2
         className={css`
-          margin-top: 32px;
+          margin: 20px 0 0;
         `}
         id="component-api"
       >
@@ -26,10 +26,10 @@ export default function ComponentAPI() {
           }
 
           h3 {
-            margin: 32px 0 8px;
+            margin: 20px 0 8px;
 
             :first-of-type {
-              margin-top: 16px;
+              margin-top: 0;
             }
           }
         `}
