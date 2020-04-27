@@ -49,14 +49,8 @@ export function AboutSection() {
           `}
         >
           <li>Robust support for both mouse and touchscreen interactions</li>
-          <li>
-            Easily add an overlay such as a thumbnail image to show while the
-            video is paused
-          </li>
-          <li>
-            Easily add a loading state overlay to show while the video is
-            attempting to play
-          </li>
+          <li>Easily add custom thumbnails and loading state overlays</li>
+          <li>Lightning fast</li>
           <li>No dependencies</li>
           <li>Simple and easy to customize</li>
         </ul>
