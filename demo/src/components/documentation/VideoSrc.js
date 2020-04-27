@@ -1,7 +1,8 @@
 import React from 'react';
 
 import LiveEditableCodeSection from '../LiveEditableCodeSection';
-import SectionHeading from '../SectionHeading';
+import PropSectionHeader from './shared/PropSectionHeader';
+import { Type } from './shared/Highlights';
 
 const singleVideoSrcExampleCode = `<HoverVideoPlayer
   videoSrc="video/butterflies.mp4"
@@ -17,11 +18,11 @@ const multipleVideoSrcExampleCode = `<HoverVideoPlayer
 export default function VideoSrc() {
   return (
     <>
-      <SectionHeading id="videoSrc">videoSrc</SectionHeading>
-      <p>
-        <b>type:</b> <type>string</type> or <type>array of objects</type> |{' '}
-        <required>this prop is required</required>
-      </p>
+      <PropSectionHeader
+        propName="videoSrc"
+        types={['string', 'array of objects']}
+        isRequired
+      />
       <p>
         <em>videoSrc</em> accepts one or multiple values descibing the video
         source file(s) that should be used for the video player.
@@ -29,14 +30,14 @@ export default function VideoSrc() {
       <figure>
         <figcaption>
           If you only have <em>one video source</em>, you can simply provide the
-          URL path to the video file as a <type>string</type>.
+          URL path to the video file as a <Type>string</Type>.
         </figcaption>
         <LiveEditableCodeSection code={singleVideoSrcExampleCode} />
       </figure>
       <figure>
         <figcaption>
           If you would like to use <em>multiple video sources</em>, you can
-          provide all of them in an <type>array of objects</type> with the
+          provide all of them in an <Type>array of objects</Type> with the
           properties <em>src</em> for the source file&#39;s URL and{' '}
           <em>type</em> for its{' '}
           <a

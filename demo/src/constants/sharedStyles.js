@@ -114,27 +114,14 @@ injectGlobal`
   em {
     color: #f2a365;
     font-style: normal;
-  }
 
-  em a {
+    a {
     color: #f2a365;
   
     :after {
       background-color: #f2a365;
     }
   }
-
-  type {
-    color: #77dd77;
-  }
-
-  value {
-    color: #fdfd96;
-  }
-
-  required {
-    color: #ff6961;
-    font-weight: bold;
   }
 
   figure {

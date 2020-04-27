@@ -1,7 +1,8 @@
 import React from 'react';
 
 import LiveEditableCodeSection from '../LiveEditableCodeSection';
-import SectionHeading from '../SectionHeading';
+import PropSectionHeader from './shared/PropSectionHeader';
+import { Type } from './shared/Highlights';
 
 const pausedOverlayExampleCode = `<HoverVideoPlayer
   videoSrc="video/butterflies.mp4"
@@ -20,12 +21,13 @@ const pausedOverlayExampleCode = `<HoverVideoPlayer
 export default function PausedOverlay() {
   return (
     <>
-      <SectionHeading id="pausedOverlay">pausedOverlay</SectionHeading>
+      <PropSectionHeader
+        propName="pausedOverlay"
+        types={['node']}
+        defaultValue="null"
+      />
       <p>
-        <b>type:</b> <type>node</type> | <b>default:</b> <value>null</value>
-      </p>
-      <p>
-        <em>pausedOverlay</em> accepts a <type>node</type> which will be
+        <em>pausedOverlay</em> accepts a <Type>node</Type> which will be
         rendered on top of the video while it is in a paused state.
       </p>
       <figure>

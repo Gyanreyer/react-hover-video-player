@@ -1,7 +1,8 @@
 import React from 'react';
 
 import LiveEditableCodeSection from '../LiveEditableCodeSection';
-import SectionHeading from '../SectionHeading';
+import PropSectionHeader from './shared/PropSectionHeader';
+import { Type } from './shared/Highlights';
 
 const overlayTransitionDurationDemoCode = `<HoverVideoPlayer
   videoSrc="video/butterflies.mp4"
@@ -22,14 +23,13 @@ const overlayTransitionDurationDemoCode = `<HoverVideoPlayer
 export default function OverlayFadeTransitionDuration() {
   return (
     <>
-      <SectionHeading id="overlayFadeTransitionDuration">
-        overlayFadeTransitionDuration
-      </SectionHeading>
+      <PropSectionHeader
+        propName="overlayFadeTransitionDuration"
+        types={['number']}
+        defaultValue={400}
+      />
       <p>
-        <b>type:</b> <type>number</type> | <b>default:</b> <value>400</value>
-      </p>
-      <p>
-        <em>overlayFadeTransitionDuration</em> accepts the <type>number</type>{' '}
+        <em>overlayFadeTransitionDuration</em> accepts the <Type>number</Type>{' '}
         of milliseconds that it should take for the pausedOverlay and
         loadingOverlay to fade in and out.
       </p>

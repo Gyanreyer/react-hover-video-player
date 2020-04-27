@@ -1,7 +1,8 @@
 import React from 'react';
 
 import LiveEditableCodeSection from '../LiveEditableCodeSection';
-import SectionHeading from '../SectionHeading';
+import PropSectionHeader from './shared/PropSectionHeader';
+import { Type } from './shared/Highlights';
 
 const loadingTimeoutDurationExampleCode = `<HoverVideoPlayer
   // For demonstration purposes, this videoSrc does not exist so
@@ -27,15 +28,14 @@ const loadingTimeoutDurationExampleCode = `<HoverVideoPlayer
 export default function LoadingStateTimeoutDuration() {
   return (
     <>
-      <SectionHeading id="loadingStateTimeoutDuration">
-        loadingStateTimeoutDuration
-      </SectionHeading>
-      <p>
-        <b>type:</b> <type>number</type> | <b>default:</b> <value>200</value>
-      </p>
+      <PropSectionHeader
+        propName="loadingStateTimeoutDuration"
+        types={['number']}
+        defaultValue={200}
+      />
       <figure>
         <figcaption>
-          <em>loadingStateTimeoutDuration</em> accepts the <type>number</type>{' '}
+          <em>loadingStateTimeoutDuration</em> accepts the <Type>number</Type>{' '}
           of milliseconds that the player should wait before showing a loading
           state if the video is not able to play immediately.{' '}
         </figcaption>
