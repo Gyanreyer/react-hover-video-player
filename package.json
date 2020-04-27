@@ -43,6 +43,7 @@
     "react": "^16.8.0",
     "react-dom": "^16.13.1",
     "react-live": "^2.2.2",
+    "react-router-dom": "^5.1.2",
     "regenerator-runtime": "^0.13.5",
     "semantic-release": "^17.0.4"
   },
