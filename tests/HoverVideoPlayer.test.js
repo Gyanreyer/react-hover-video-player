@@ -388,7 +388,7 @@ describe('shouldRestartOnVideoStopped', () => {
   test('shouldRestartOnVideoStopped prop restarts the video when set to true', async () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
-      // shouldRestartOnVideoStopped is true by default
+      shouldRestartOnVideoStopped: true,
     });
 
     const videoElement = container.querySelector('video');
@@ -422,7 +422,7 @@ describe('shouldRestartOnVideoStopped', () => {
   test('shouldRestartOnVideoStopped prop does not restart the video when set to false', async () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
-      shouldRestartOnVideoStopped: false,
+      // shouldRestartOnVideoStopped is false by default
     });
 
     const videoElement = container.querySelector('video');

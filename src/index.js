@@ -113,7 +113,7 @@ export default function HoverVideoPlayer({
   loadingOverlay = null,
   loadingStateTimeoutDuration = 200,
   overlayFadeTransitionDuration = 400,
-  shouldRestartOnVideoStopped = true,
+  shouldRestartOnVideoStopped = false,
   muted = true,
   loop = true,
   className = '',
