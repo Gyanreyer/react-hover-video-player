@@ -11,7 +11,9 @@ export default function PropSectionHeader({
 }) {
   return (
     <>
-      <SectionHeading id={propName}>{propName}</SectionHeading>
+      <SectionHeading id={propName} className="component-api-prop-section">
+        {propName}
+      </SectionHeading>
       <p>
         <b>type:</b>{' '}
         {types.map((type, index) => (

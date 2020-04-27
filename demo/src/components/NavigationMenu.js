@@ -26,35 +26,24 @@ const navigationSections = [
       },
     ],
   },
-  {
-    name: 'Component API',
-    id: 'component-api',
-    subSections: [
-      {
-        name: 'videoSrc',
-        id: 'videoSrc',
-      },
-      {
-        name: 'pausedOverlay',
-        id: 'pausedOverlay',
-      },
-      {
-        name: 'loadingOverlay',
-        id: 'loadingOverlay',
-      },
-      {
-        name: 'overlayFadeTransitionDuration',
-        id: 'overlayFadeTransitionDuration',
-      },
-      {
-        name: 'loadingStateTimeoutDuration',
-        id: 'loadingStateTimeoutDuration',
-      },
-    ],
-  },
 ];
 
 export default function NavigationMenu() {
+  const [propSections, setPropSections] = React.useState(null);
+
+  React.useEffect(() => {
+    const propSectionElements = Array.from(
+      document.querySelectorAll('.component-api-prop-section')
+    );
+
+    setPropSections(
+      propSectionElements.map(({ id }) => ({
+        name: id,
+        id,
+      }))
+    );
+  }, []);
+
   return (
     <aside
       className={css`
@@ -83,7 +72,14 @@ export default function NavigationMenu() {
           padding-left: 24px;
         `}
       >
-        {navigationSections.map((mainSection) => (
+        {[
+          ...navigationSections,
+          {
+            name: 'Component API',
+            id: 'component-api',
+            subSections: propSections,
+          },
+        ].map((mainSection) => (
           <li
             key={mainSection.id}
             className={css`
