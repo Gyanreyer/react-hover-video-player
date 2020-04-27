@@ -7,6 +7,7 @@ import CopyableCodeSnippet from '../CopyableCodeSnippet';
 import VideoSrc from './VideoSrc';
 import PausedOverlay from './PausedOverlay';
 import LoadingOverlay from './LoadingOverlay';
+import ShouldRestartOnVideoStopped from './ShouldRestartOnVideoStopped';
 import OverlayFadeTransitionDuration from './OverlayFadeTransitionDuration';
 import LoadingStateTimeoutDuration from './LoadingStateTimeoutDuration';
 
@@ -87,8 +88,26 @@ export default function DocumentationSection() {
         <VideoSrc />
         <PausedOverlay />
         <LoadingOverlay />
+        <ShouldRestartOnVideoStopped />
         <OverlayFadeTransitionDuration />
         <LoadingStateTimeoutDuration />
+        {/* REMAINING PROPS TO COVER:
+            - videoCaptions
+            - isFocused
+            - Video props
+              - muted
+              - loop
+            - Styling props
+              - sizingMode
+              - style
+              - className
+              - pausedOverlayWrapperClassName
+              - pausedOverlayWrapperStyle
+              - loadingOverlayWrapperClassName
+              - loadingOverlayWrapperStyle
+              - videoClassName
+              - videoStyle
+        */}
       </section>
     </>
   );
