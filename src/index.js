@@ -155,7 +155,7 @@ export default function HoverVideoPlayer({
    *
    * Starts the video when the user mouses hovers on the player
    */
-  const onHoverStart = React.useCallback(() => {
+  function onHoverStart() {
     // Clear any timeouts that may have been in progress
     clearTimeout(mutableVideoState.current.pauseTimeout);
     clearTimeout(mutableVideoState.current.loadingStateTimeout);
@@ -212,11 +212,7 @@ export default function HoverVideoPlayer({
         mutableVideoState.current.isPlayAttemptCancelled = false;
         clearTimeout(mutableVideoState.current.loadingStateTimeout);
       });
-  }, [
-    loadingOverlay,
-    loadingStateTimeoutDuration,
-    shouldRestartOnVideoStopped,
-  ]);
+  }
 
   /**
    * @function  onHoverEnd
@@ -275,11 +271,11 @@ export default function HoverVideoPlayer({
 
   React.useEffect(() => {
     // Event listener pauses the video when the user touches somewhere outside of the player
-    const onWindowTouchStart = (event) => {
+    function onWindowTouchStart(event) {
       if (!containerRef.current.contains(event.target)) {
         onHoverEnd();
       }
-    };
+    }
 
     window.addEventListener('touchstart', onWindowTouchStart);
 
@@ -310,16 +306,11 @@ export default function HoverVideoPlayer({
 
   /* ~~~~ PARSE VIDEO ASSETS ~~~~ */
   // Parse the `videoSrc` prop into an array of VideoSource objects to be used for the video player
-  const parsedVideoSources = React.useMemo(() => formatVideoSrc(videoSrc), [
-    videoSrc,
-  ]);
+  const parsedVideoSources = formatVideoSrc(videoSrc);
 
   // Parse the `videoCaptions` prop into an array of VideoCaptionsTrack objects to be used for
   // captions tracks for the video player
-  const parsedVideoCaptions = React.useMemo(
-    () => formatVideoCaptions(videoCaptions),
-    [videoCaptions]
-  );
+  const parsedVideoCaptions = formatVideoCaptions(videoCaptions);
   /* ~~~~ END VIDEO ASSET PARSING ~~~~ */
 
   return (
