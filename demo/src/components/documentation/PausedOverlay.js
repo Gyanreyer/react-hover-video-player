@@ -11,8 +11,8 @@ const pausedOverlayExampleCode = `<HoverVideoPlayer
       src="image/butterflies_demo_thumbnail.jpg"
       alt=""
       style={{
-        display: "block",
         width: "100%",
+        height: "100%",
       }}
     />
   }

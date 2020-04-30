@@ -5,9 +5,7 @@ import PropSectionHeader from './shared/PropSectionHeader';
 import { Type } from './shared/Highlights';
 
 const loadingOverlayExampleCode = `<HoverVideoPlayer
-  // For demonstration purposes, this videoSrc does not exist so
-  // the player should just get stuck in a loading state
-  videoSrc="nonexistent-video.mp4"
+  videoSrc="video/butterflies.mp4"
   pausedOverlay={
     <img
       src="image/butterflies_demo_thumbnail.jpg"

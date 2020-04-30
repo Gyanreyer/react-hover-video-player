@@ -135,8 +135,8 @@ injectGlobal`
 
   /* CLASSES FOR DEMO COMPONENTS */
   .demo-thumbnail-image {
-    display: block;
     width: 100%;
+    height: 100%;
   }
 
   .demo-loading-overlay {
