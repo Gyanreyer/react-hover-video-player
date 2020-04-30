@@ -5,12 +5,10 @@ import PropSectionHeader from './shared/PropSectionHeader';
 import { Type } from './shared/Highlights';
 
 const loadingTimeoutDurationExampleCode = `<HoverVideoPlayer
-  // For demonstration purposes, this videoSrc does not exist so
-  // the player should just get stuck in a loading state
-  videoSrc="nonexistent-video.mp4"
+  videoSrc="video/butterflies.mp4"
   // The player should show a loading state if the video is not able
-  // to start playing after 500ms
-  loadingStateTimeoutDuration={500}
+  // to start playing after 10ms
+  loadingStateTimeoutDuration={10}
   pausedOverlay={
     <img
       src="image/butterflies_demo_thumbnail.jpg"

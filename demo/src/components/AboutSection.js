@@ -15,8 +15,8 @@ export function AboutSection() {
             src="image/big_buck_bunny_thumbnail.jpg"
             alt=""
             className={css`
-              display: block;
               width: 100%;
+              height: 100%;
             `}
           />
         }
