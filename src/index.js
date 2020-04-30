@@ -124,7 +124,7 @@ export default function HoverVideoPlayer({
   loadingOverlayWrapperStyle = null,
   videoClassName = '',
   videoStyle = null,
-  sizingMode = pausedOverlay ? SIZING_MODES.overlay : SIZING_MODES.video,
+  sizingMode = SIZING_MODES.video,
 }) {
   // Keep track of state to determine how the paused and loading overlays should be displayed
   const [overlayState, setOverlayState] = React.useState(
