@@ -95,13 +95,13 @@ const videoSizingStyles = {
  * @param {object}  [loadingOverlayWrapperStyle] - Style object to apply custom inlined styles to the loading overlay wrapper
  * @param {string}  [videoClassName] - Optional className to apply custom styling to the video element
  * @param {object}  [videoStyle] - Style object to apply custom inlined styles to the video element
- * @param {string}  [sizingMode] - Describes sizing mode to use to determine how the player's contents should be styled. Accepts 4 possible values:
- *                                 - **"overlay"**: Everything should be sized based on the paused overlay's dimensions - the video element will expand to fit inside those dimensions
- *                                 - **"video"**: Everything should be sized based on the video element's dimensions - the overlays will expand to cover the video
- *                                 - **"container"**: Everything should be sized based on the player's outer container div - the overlays and video will all expand to cover the container
- *                                 - **"manual"**: Manual mode does not apply any special styling and allows the developer to exercise full control over how everything should be sized - this means you will likely need to provide your own custom styling for both the paused overlay and the video element
+ * @param {string}  [sizingMode='video'] - Describes sizing mode to use to determine how the player's contents should be styled. Accepts 4 possible values:
+ *                                         - **"video"**: Everything should be sized based on the video element's dimensions - the overlays will expand to cover the video
+ *                                         - **"overlay"**: Everything should be sized based on the paused overlay's dimensions - the video element will expand to fit inside those dimensions
+ *                                         - **"container"**: Everything should be sized based on the player's outer container div - the overlays and video will all expand to cover the container
+ *                                         - **"manual"**: Manual mode does not apply any special styling and allows the developer to exercise full control over how everything should be sized - this means you will likely need to provide your own custom styling for both the paused overlay and the video element
  *
- *                                 If no value is provided, sizingMode will default to "overlay" if a pausedOverlay was provided, or "video" otherwise
+ *                                         If no value is provided, sizingMode will default to "overlay" if a pausedOverlay was provided, or "video" otherwise
  *
  * @license MIT
  */
@@ -124,7 +124,7 @@ export default function HoverVideoPlayer({
   loadingOverlayWrapperStyle = null,
   videoClassName = '',
   videoStyle = null,
-  sizingMode = pausedOverlay ? SIZING_MODES.overlay : SIZING_MODES.video,
+  sizingMode = SIZING_MODES.video,
 }) {
   // Keep track of state to determine how the paused and loading overlays should be displayed
   const [overlayState, setOverlayState] = React.useState(
