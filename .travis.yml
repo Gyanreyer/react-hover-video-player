@@ -10,9 +10,7 @@ cache:
     - ~/.npm
 
 notifications:
-  email:
-    on_success: change
-    on_failure: always
+  email: false
 
 before_install:
   - npm install -g codecov
