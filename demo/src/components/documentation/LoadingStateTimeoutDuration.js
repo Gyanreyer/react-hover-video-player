@@ -35,7 +35,7 @@ export default function LoadingStateTimeoutDuration() {
         <figcaption>
           <em>loadingStateTimeoutDuration</em> accepts the <Type>number</Type>{' '}
           of milliseconds that the player should wait before showing a loading
-          state if the video is not able to play immediately.{' '}
+          state if the video is not able to play immediately.
         </figcaption>
         <LiveEditableCodeSection code={loadingTimeoutDurationExampleCode} />
       </figure>

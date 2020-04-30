@@ -8,6 +8,7 @@ import VideoSrc from './VideoSrc';
 import PausedOverlay from './PausedOverlay';
 import LoadingOverlay from './LoadingOverlay';
 import ShouldRestartOnVideoStopped from './ShouldRestartOnVideoStopped';
+import IsFocused from './IsFocused';
 import OverlayFadeTransitionDuration from './OverlayFadeTransitionDuration';
 import LoadingStateTimeoutDuration from './LoadingStateTimeoutDuration';
 
@@ -89,11 +90,11 @@ export default function DocumentationSection() {
         <PausedOverlay />
         <LoadingOverlay />
         <ShouldRestartOnVideoStopped />
+        <IsFocused />
         <OverlayFadeTransitionDuration />
         <LoadingStateTimeoutDuration />
         {/* REMAINING PROPS TO COVER:
             - videoCaptions
-            - isFocused
             - Video props
               - muted
               - loop
