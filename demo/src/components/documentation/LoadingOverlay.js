@@ -1,4 +1,5 @@
 import React from 'react';
+import { css } from 'emotion';
 
 import LiveEditableCodeSection from '../LiveEditableCodeSection';
 import PropSectionHeader from './shared/PropSectionHeader';
@@ -39,6 +40,32 @@ export default function LoadingOverlay() {
           not be able to play the video right away.
         </figcaption>
         <LiveEditableCodeSection code={loadingOverlayExampleCode} />
+      </figure>
+      <figure>
+        <figcaption>
+          Since it can be hard to demonstrate loading states if you already have
+          the video cached or have a fast connection, here is an example of a{' '}
+          <em>loadingOverlay</em> in action on a device with a slow internet
+          connection. You can check out the{' '}
+          <a
+            href="https://github.com/Gyanreyer/react-hover-video-player/blob/master/demo/src/components/LoadingSpinnerOverlay.js"
+            className="always-underlined"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            styling implementation used for this loading spinner overlay here.
+          </a>
+        </figcaption>
+        <video
+          src="video/loading_overlay_demo.mp4"
+          muted
+          autoPlay
+          loop
+          className={css`
+            width: 100%;
+            max-width: 640px;
+          `}
+        />
       </figure>
       <p>
         The{' '}
