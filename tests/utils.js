@@ -26,6 +26,8 @@ function addMockedFunctionsToVideoElement(
     .mockReturnValue(videoElement.preload === 'none' ? 0 : 2);
 
   jest.spyOn(videoElement, 'currentSrc', 'get').mockImplementation(() => {
+    if (videoElement.src) return videoElement.src;
+
     const firstVideoSource = videoElement.querySelector('source');
     return firstVideoSource ? firstVideoSource.src : '';
   });

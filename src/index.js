@@ -362,6 +362,13 @@ export default function HoverVideoPlayer({
       )}
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
+        src={
+          // If there's only one video source, directly set it on the video; otherwise we'll
+          // map all of the sources to source elements which the browser can pick from based on what formats it supports
+          parsedVideoSources.length === 1
+            ? parsedVideoSources[0].src
+            : undefined
+        }
         loop={loop}
         playsInline
         // Only preload video data if there's no overlay covering it or we depend on having loaded its dimensions to display it
@@ -378,9 +385,11 @@ export default function HoverVideoPlayer({
         }}
         className={videoClassName}
       >
-        {parsedVideoSources.map(({ src, type }) => (
-          <source key={src} src={src} type={type} />
-        ))}
+        {/* If there's more than one video source, render a source tag for each one */}
+        {parsedVideoSources.length > 1 &&
+          parsedVideoSources.map(({ src, type }) => (
+            <source key={src} src={src} type={type} />
+          ))}
         {parsedVideoCaptions.map(({ src, srcLang, label }) => (
           <track
             key={src}

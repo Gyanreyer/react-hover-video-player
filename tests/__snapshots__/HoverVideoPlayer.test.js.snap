@@ -26,12 +26,9 @@ exports[`Follows video interaction flows correctly an attempt to pause the video
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -62,12 +59,9 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -98,12 +92,9 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -134,12 +125,9 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -156,12 +144,9 @@ exports[`Follows video interaction flows correctly handles a video playback erro
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -192,12 +177,9 @@ exports[`Follows video interaction flows correctly the video will be paused imme
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -228,12 +210,9 @@ exports[`Handles interaction events correctly mouseEnter and mouseLeave events t
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -264,12 +243,9 @@ exports[`Handles interaction events correctly touch events take the video throug
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -293,12 +269,9 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -322,12 +295,9 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -344,12 +314,9 @@ exports[`Supports browsers that do not return a promise from video.play() handle
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -380,12 +347,9 @@ exports[`Supports browsers that do not return a promise from video.play() handle
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -402,12 +366,9 @@ exports[`Supports browsers that do not return a promise from video.play() handle
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -424,12 +385,9 @@ exports[`Video props isVideoMuted prop correctly sets muted attribute on video 1
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -446,12 +404,9 @@ exports[`Video props shouldVideoLoop prop correctly sets loop attribute on video
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -468,12 +423,9 @@ exports[`isFocused isFocused prop starts and stops the video correctly 1`] = `
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -490,12 +442,9 @@ exports[`isFocused other events which would normally stop the video are ignored 
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -512,12 +461,9 @@ exports[`overlayFadeTransitionDuration Stop attempts stop immediately if a pause
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -541,12 +487,9 @@ exports[`overlayFadeTransitionDuration Stop attempts take the amount of time set
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -577,12 +520,9 @@ exports[`pausedOverlay and loadingOverlay pausedOverlay and loadingOverlay are s
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -606,12 +546,9 @@ exports[`pausedOverlay and loadingOverlay the loading state overlay is not shown
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -628,12 +565,9 @@ exports[`shouldRestartOnVideoStopped shouldRestartOnVideoStopped prop does not r
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -650,12 +584,9 @@ exports[`shouldRestartOnVideoStopped shouldRestartOnVideoStopped prop restarts t
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -679,12 +610,9 @@ exports[`sizingMode sizingMode "container" sets correct styling on the player 1`
       loop=""
       playsinline=""
       preload="none"
+      src="fake/video-file.mp4"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -708,12 +636,9 @@ exports[`sizingMode sizingMode "manual" sets correct styling on the player 1`] =
       loop=""
       playsinline=""
       preload="none"
+      src="fake/video-file.mp4"
       style="object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -737,12 +662,9 @@ exports[`sizingMode sizingMode "overlay" sets correct styling on the player 1`] 
       loop=""
       playsinline=""
       preload="none"
+      src="fake/video-file.mp4"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -766,12 +688,9 @@ exports[`sizingMode sizingMode "video" sets correct styling on the player 1`] = 
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -788,12 +707,9 @@ exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly 
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -810,11 +726,9 @@ exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly 
       loop=""
       playsinline=""
       preload="metadata"
+      src="fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
     >
-      <source
-        src="fake/video-file.mp4"
-      />
       <track
         kind="captions"
         label="English"
@@ -844,11 +758,9 @@ exports[`videoCaptions prop Handles valid videoCaptions prop values correctly co
       loop=""
       playsinline=""
       preload="metadata"
+      src="/fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
     >
-      <source
-        src="/fake/video-file.mp4"
-      />
       <track
         kind="captions"
         src="/fake/captions-file.vtt"
@@ -870,11 +782,9 @@ exports[`videoCaptions prop Handles valid videoCaptions prop values correctly co
       loop=""
       playsinline=""
       preload="metadata"
+      src="/fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
     >
-      <source
-        src="/fake/video-file.mp4"
-      />
       <track
         kind="captions"
         label="English"
@@ -898,11 +808,9 @@ exports[`videoCaptions prop Handles valid videoCaptions prop values correctly co
       loop=""
       playsinline=""
       preload="metadata"
+      src="/fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
     >
-      <source
-        src="/fake/video-file.mp4"
-      />
       <track
         kind="captions"
         label="English"
@@ -1000,12 +908,9 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
       loop=""
       playsinline=""
       preload="metadata"
+      src="/fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="/fake/video-file.mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;
@@ -1022,13 +927,9 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
       loop=""
       playsinline=""
       preload="metadata"
+      src="/fake/video-file.mp4"
       style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="/fake/video-file.mp4"
-        type="video/mp4"
-      />
-    </video>
+    />
   </div>
 </div>
 `;

@@ -11,11 +11,13 @@ describe('videoSrc prop', () => {
       });
 
       const videoElement = container.querySelector('video');
-
+      // Since we only have one source, it should be directly set on the video's src attribute
+      expect(videoElement.src).toBe(
+        `${window.location.origin}/fake/video-file.mp4`
+      );
+      // The video element should not have source children
       const videoSources = videoElement.querySelectorAll('source');
-      expect(videoSources).toHaveLength(1);
-      expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.mp4');
-      expect(videoSources[0]).not.toHaveAttribute('type');
+      expect(videoSources).toHaveLength(0);
     });
 
     test('correctly handles receiving an array of strings for the videoSrc prop', () => {
@@ -39,11 +41,14 @@ describe('videoSrc prop', () => {
       });
 
       const videoElement = container.querySelector('video');
+      // Since we only have one source, it should be directly set on the video's src attribute
+      expect(videoElement.src).toBe(
+        `${window.location.origin}/fake/video-file.mp4`
+      );
 
+      // The video element should not have source children
       const videoSources = videoElement.querySelectorAll('source');
-      expect(videoSources).toHaveLength(1);
-      expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.mp4');
-      expect(videoSources[0]).toHaveAttribute('type', 'video/mp4');
+      expect(videoSources).toHaveLength(0);
     });
 
     test('correctly handles receiving an array of objects for the videoSrc prop', () => {
@@ -725,7 +730,7 @@ describe('sizingMode', () => {
     expect(videoElement.style.display).toBe('block');
     expect(pausedOverlayWrapper.style.position).toBe('absolute');
   });
-  
+
   test('sizingMode "overlay" sets correct styling on the player', () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
