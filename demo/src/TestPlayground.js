@@ -112,29 +112,47 @@ export default function TestPlayground() {
         `}
       >
         {testVideos.map(({ videoSrc, thumbnailImageSrc }) => (
-          <Profiler
-            id={`original_${videoSrc}`}
-            key={`original_${videoSrc}`}
-            onRender={onProfilerRender}
+          <div
+            className={css`
+              max-width: 480px;
+              padding-top: 75%;
+              position: relative;
+              border-radius: 4px;
+              background-color: grey;
+            `}
           >
-            <HoverVideoPlayer
-              videoSrc={videoSrc}
-              pausedOverlay={
-                <img
-                  src={thumbnailImageSrc}
-                  alt=""
-                  className={css`
-                    display: block;
-                    width: 100%;
-                  `}
-                />
-              }
-              loadingOverlay={<LoadingSpinnerOverlay />}
-              className={css`
-                max-width: 480px;
-              `}
-            />
-          </Profiler>
+            <Profiler
+              id={`original_${videoSrc}`}
+              key={`original_${videoSrc}`}
+              onRender={onProfilerRender}
+            >
+              <HoverVideoPlayer
+                videoSrc={videoSrc}
+                pausedOverlay={
+                  <img
+                    src={thumbnailImageSrc}
+                    alt=""
+                    className={css`
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                    `}
+                  />
+                }
+                loadingOverlay={<LoadingSpinnerOverlay />}
+                className={css`
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                `}
+              />
+            </Profiler>
+          </div>
         ))}
       </div>
     </main>
