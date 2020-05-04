@@ -89,6 +89,10 @@ const videoSizingStyles = {
  * @param {bool}    [loop=true] - Whether the video player should loop when it reaches the end
  * @param {string}  [className] - Optional className to apply custom styling to the container element
  * @param {object}  [style] - Style object to apply custom inlined styles to the hover player container
+ * @param {string}  [contentWrapperClassName] - Optional className to apply custom styling to the inner element wrapping the player's contents
+ *                                                This inner element is kept distinct so that the player contents can be separated from the event target zone
+ *                                                which will play/pause the video when interacted with
+ * @param {object}  [contentWrapperStyle] - Style object to apply custom inlined styles to the inner element wrapping the player's contents
  * @param {string}  [pausedOverlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
  * @param {object}  [pausedOverlayWrapperStyle] - Style object to apply custom inlined styles to the paused overlay wrapper
  * @param {string}  [loadingOverlayWrapperClassName] - Optional className to apply custom styling to the loading state overlay contents' wrapper
@@ -118,6 +122,8 @@ export default function HoverVideoPlayer({
   loop = true,
   className = '',
   style = null,
+  contentWrapperClassName = '',
+  contentWrapperStyle = null,
   pausedOverlayWrapperClassName = '',
   pausedOverlayWrapperStyle = null,
   loadingOverlayWrapperClassName = '',
@@ -316,90 +322,91 @@ export default function HoverVideoPlayer({
   return (
     <div
       onMouseEnter={onHoverStart}
-      onFocus={onHoverStart}
-      onMouseOut={onHoverEnd}
-      onBlur={onHoverEnd}
+      onMouseLeave={onHoverEnd}
       onTouchStart={onHoverStart}
-      className={className}
-      style={{
-        position: 'relative',
-        ...style,
-      }}
       data-testid="hover-video-player-container"
       ref={containerRef}
+      className={className}
+      style={style}
     >
-      {pausedOverlay && (
-        <div
-          style={{
-            ...pausedOverlayWrapperSizingStyles[sizingMode],
-            zIndex: 1,
-            pointerEvents: 'none',
-            opacity: overlayState !== HOVER_PLAYER_STATE.playing ? 1 : 0,
-            transition: `opacity ${overlayFadeTransitionDuration}ms`,
-            ...pausedOverlayWrapperStyle,
-          }}
-          className={pausedOverlayWrapperClassName}
-          data-testid="paused-overlay-wrapper"
-        >
-          {pausedOverlay}
-        </div>
-      )}
-      {loadingOverlay && (
-        <div
-          style={{
-            ...expandToFillContainerStyle,
-            zIndex: 2,
-            pointerEvents: 'none',
-            opacity: overlayState === HOVER_PLAYER_STATE.loading ? 1 : 0,
-            transition: `opacity ${overlayFadeTransitionDuration}ms`,
-            ...loadingOverlayWrapperStyle,
-          }}
-          className={loadingOverlayWrapperClassName}
-          data-testid="loading-overlay-wrapper"
-        >
-          {loadingOverlay}
-        </div>
-      )}
-      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      <video
-        src={
-          // If there's only one video source, directly set it on the video; otherwise we'll
-          // map all of the sources to source elements which the browser can pick from based on what formats it supports
-          parsedVideoSources.length === 1
-            ? parsedVideoSources[0].src
-            : undefined
-        }
-        loop={loop}
-        playsInline
-        // Only preload video data if there's no overlay covering it or we depend on having loaded its dimensions to display it
-        preload={
-          !pausedOverlay || sizingMode === SIZING_MODES.video
-            ? 'metadata'
-            : 'none'
-        }
-        ref={videoRef}
+      <div
         style={{
-          ...videoSizingStyles[sizingMode],
-          objectFit: 'cover',
-          ...videoStyle,
+          position: 'relative',
+          ...contentWrapperStyle,
         }}
-        className={videoClassName}
+        className={contentWrapperClassName}
       >
-        {/* If there's more than one video source, render a source tag for each one */}
-        {parsedVideoSources.length > 1 &&
-          parsedVideoSources.map(({ src, type }) => (
-            <source key={src} src={src} type={type} />
+        {pausedOverlay && (
+          <div
+            style={{
+              ...pausedOverlayWrapperSizingStyles[sizingMode],
+              zIndex: 1,
+              opacity: overlayState !== HOVER_PLAYER_STATE.playing ? 1 : 0,
+              transition: `opacity ${overlayFadeTransitionDuration}ms`,
+              ...pausedOverlayWrapperStyle,
+            }}
+            className={pausedOverlayWrapperClassName}
+            data-testid="paused-overlay-wrapper"
+          >
+            {pausedOverlay}
+          </div>
+        )}
+        {loadingOverlay && (
+          <div
+            style={{
+              ...expandToFillContainerStyle,
+              zIndex: 2,
+              opacity: overlayState === HOVER_PLAYER_STATE.loading ? 1 : 0,
+              transition: `opacity ${overlayFadeTransitionDuration}ms`,
+              ...loadingOverlayWrapperStyle,
+            }}
+            className={loadingOverlayWrapperClassName}
+            data-testid="loading-overlay-wrapper"
+          >
+            {loadingOverlay}
+          </div>
+        )}
+        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+        <video
+          src={
+            // If there's only one video source, directly set it on the video; otherwise we'll
+            // map all of the sources to source elements which the browser can pick from based on what formats it supports
+            parsedVideoSources.length === 1
+              ? parsedVideoSources[0].src
+              : undefined
+          }
+          loop={loop}
+          playsInline
+          // Only preload video data if there's no overlay covering it or we depend on having loaded its dimensions to display it
+          preload={
+            !pausedOverlay || sizingMode === SIZING_MODES.video
+              ? 'metadata'
+              : 'none'
+          }
+          ref={videoRef}
+          style={{
+            ...videoSizingStyles[sizingMode],
+            objectFit: 'cover',
+            ...videoStyle,
+          }}
+          className={videoClassName}
+        >
+          {/* If there's more than one video source, render a source tag for each one */}
+          {parsedVideoSources.length > 1 &&
+            parsedVideoSources.map(({ src, type }) => (
+              <source key={src} src={src} type={type} />
+            ))}
+          {parsedVideoCaptions.map(({ src, srcLang, label }) => (
+            <track
+              key={src}
+              kind="captions"
+              src={src}
+              srcLang={srcLang}
+              label={label}
+            />
           ))}
-        {parsedVideoCaptions.map(({ src, srcLang, label }) => (
-          <track
-            key={src}
-            kind="captions"
-            src={src}
-            srcLang={srcLang}
-            label={label}
-          />
-        ))}
-      </video>
+        </video>
+      </div>
     </div>
   );
 }
