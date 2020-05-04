@@ -1,7 +1,7 @@
 export const codeEditorTheme = {
   plain: {
     color: '#9CDCFE',
-    backgroundColor: '#1E1E1E',
+    backgroundColor: '#0E0E0E',
   },
   styles: [
     {

@@ -13,7 +13,7 @@ injectGlobal`
   body {
     font-family: 'Open Sans', sans-serif;
     margin: 86px 0 92px;
-    background-color: #30475e;
+    background-color: #1c1c1c;
     color: #ececec;
 
     ${breakpoints.medium} {
@@ -104,7 +104,7 @@ injectGlobal`
     font-family: monospace;
     font-size: 14px;
     color: #d4d4d4;
-    background-color: #1E1E1E;
+    background-color: #0E0E0E;
     padding: 10px 16px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);

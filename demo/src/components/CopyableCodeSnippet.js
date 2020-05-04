@@ -54,7 +54,7 @@ export default function CopyableCodeSnippet({ copyText, className, children }) {
 
           &:hover,
           &:focus {
-            background-color: #22232a;
+            background-color: #11121a;
 
             .copy-icon {
               width: 20px;
