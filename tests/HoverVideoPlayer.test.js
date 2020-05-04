@@ -389,11 +389,11 @@ describe('Video props', () => {
   });
 });
 
-describe('shouldRestartOnVideoStopped', () => {
-  test('shouldRestartOnVideoStopped prop restarts the video when set to true', async () => {
+describe('restartOnPaused', () => {
+  test('restartOnPaused prop restarts the video when set to true', async () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
-      shouldRestartOnVideoStopped: true,
+      restartOnPaused: true,
     });
 
     const videoElement = container.querySelector('video');
@@ -424,10 +424,10 @@ describe('shouldRestartOnVideoStopped', () => {
     expect(videoElement).toBePaused();
   });
 
-  test('shouldRestartOnVideoStopped prop does not restart the video when set to false', async () => {
+  test('restartOnPaused prop does not restart the video when set to false', async () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
-      // shouldRestartOnVideoStopped is false by default
+      // restartOnPaused is false by default
     });
 
     const videoElement = container.querySelector('video');
@@ -473,8 +473,8 @@ describe('pausedOverlay and loadingOverlay', () => {
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       loadingOverlay: <div />,
-      overlayFadeTransitionDuration: 500,
-      loadingStateTimeoutDuration: 500,
+      overlayTransitionDuration: 500,
+      loadingStateTimeout: 500,
     });
 
     const videoElement = container.querySelector('video');
@@ -533,7 +533,7 @@ describe('pausedOverlay and loadingOverlay', () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       loadingOverlay: <div />,
-      loadingStateTimeoutDuration: 500,
+      loadingStateTimeout: 500,
     });
 
     const videoElement = container.querySelector('video');
@@ -568,11 +568,11 @@ describe('pausedOverlay and loadingOverlay', () => {
   });
 });
 
-describe('isFocused', () => {
-  test('isFocused prop starts and stops the video correctly', async () => {
+describe('focused', () => {
+  test('focused prop starts and stops the video correctly', async () => {
     const { container, rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
-      // isFocused is false by default
+      // focused is false by default
     });
 
     const videoElement = container.querySelector('video');
@@ -580,8 +580,8 @@ describe('isFocused', () => {
     expect(videoElement.play).toHaveBeenCalledTimes(0);
     expect(videoElement).toBePaused();
 
-    // Set isFocused to true to start playing the video
-    rerenderWithProps({ videoSrc: 'fake/video-file.mp4', isFocused: true });
+    // Set focused to true to start playing the video
+    rerenderWithProps({ videoSrc: 'fake/video-file.mp4', focused: true });
 
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBeLoading();
@@ -590,14 +590,14 @@ describe('isFocused', () => {
 
     expect(videoElement).toBePlaying();
 
-    // Set isFocused back to false to stop playing
-    rerenderWithProps({ videoSrc: 'fake/video-file.mp4', isFocused: false });
+    // Set focused back to false to stop playing
+    rerenderWithProps({ videoSrc: 'fake/video-file.mp4', focused: false });
 
     expect(videoElement.pause).toHaveBeenCalledTimes(1);
     expect(videoElement).toBePaused();
   });
 
-  test('other events which would normally stop the video are ignored if isFocused prop is true', async () => {
+  test('other events which would normally stop the video are ignored if focused prop is true', async () => {
     const {
       container,
       getByTestId,
@@ -609,8 +609,8 @@ describe('isFocused', () => {
 
     expect(videoElement).toBePaused();
 
-    // Re-render with isFocused set to true to start playing
-    rerenderWithProps({ videoSrc: 'fake/video-file.mp4', isFocused: true });
+    // Re-render with focused set to true to start playing
+    rerenderWithProps({ videoSrc: 'fake/video-file.mp4', focused: true });
 
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBeLoading();
@@ -641,7 +641,7 @@ describe('isFocused', () => {
   });
 });
 
-describe('overlayFadeTransitionDuration', () => {
+describe('overlayTransitionDuration', () => {
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -650,11 +650,11 @@ describe('overlayFadeTransitionDuration', () => {
     jest.useRealTimers();
   });
 
-  test('Stop attempts take the amount of time set by overlayFadeTransitionDuration prop if a pausedOverlay is provided', async () => {
+  test('Stop attempts take the amount of time set by overlayTransitionDuration prop if a pausedOverlay is provided', async () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
-      overlayFadeTransitionDuration: 900,
+      overlayTransitionDuration: 900,
     });
 
     const videoElement = container.querySelector('video');
@@ -694,7 +694,7 @@ describe('overlayFadeTransitionDuration', () => {
   test('Stop attempts stop immediately if a pausedOverlay is not provided', async () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
-      overlayFadeTransitionDuration: 900,
+      overlayTransitionDuration: 900,
     });
 
     const playerContainer = getByTestId('hover-video-player-container');

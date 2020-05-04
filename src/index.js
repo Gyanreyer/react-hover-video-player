@@ -77,14 +77,13 @@ const videoSizingStyles = {
  *                                                                                       - srcLang: The language code for the language that these captions are in (ie, 'en', 'es', 'fr')
  *                                                                                       - label: The title of the captions track
  *                                                                                     - **Array**: if you would like to provide multiple caption tracks, you can provide an array of objects with the shape described above
- * @param {bool}    [isFocused=false] - Offers a prop interface for forcing the video to start/stop without DOM events
- *                                        When set to true, the video will begin playing and any events that would normally
- *                                        stop it will be ignored
+ * @param {bool}    [focused=false] - Offers a prop interface for forcing the video to start/stop without DOM events
+ *                                      When set to true, the video will begin playing and any events that would normally stop it will be ignored
  * @param {node}    [pausedOverlay] - Contents to render over the video while it's not playing
  * @param {node}    [loadingOverlay] - Contents to render over the video while it's loading
- * @param {number}  [loadingStateTimeoutDuration=200] - Duration in ms to wait after attempting to start the video before showing the loading overlay
- * @param {number}  [overlayFadeTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
- * @param {bool}    [shouldRestartOnVideoStopped=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
+ * @param {number}  [loadingStateTimeout=200] - Duration in ms to wait after attempting to start the video before showing the loading overlay
+ * @param {number}  [overlayTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
+ * @param {bool}    [restartOnPaused=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
  * @param {bool}    [muted=true] - Whether the video player should be muted
  * @param {bool}    [loop=true] - Whether the video player should loop when it reaches the end
  * @param {string}  [className] - Optional className to apply custom styling to the container element
@@ -112,12 +111,12 @@ const videoSizingStyles = {
 export default function HoverVideoPlayer({
   videoSrc,
   videoCaptions,
-  isFocused = false,
+  focused = false,
   pausedOverlay = null,
   loadingOverlay = null,
-  loadingStateTimeoutDuration = 200,
-  overlayFadeTransitionDuration = 400,
-  shouldRestartOnVideoStopped = false,
+  loadingStateTimeout = 200,
+  overlayTransitionDuration = 400,
+  restartOnPaused = false,
   muted = true,
   loop = true,
   className = '',
@@ -184,7 +183,7 @@ export default function HoverVideoPlayer({
         // If the video is still loading when this timeout completes, transition the
         // player to show a loading state
         setOverlayState(HOVER_PLAYER_STATE.loading);
-      }, loadingStateTimeoutDuration);
+      }, loadingStateTimeout);
     }
 
     // If a play attempt is already in progress, don't start a new one
@@ -197,7 +196,7 @@ export default function HoverVideoPlayer({
       .then(() => {
         if (mutableVideoState.current.isPlayAttemptCancelled) {
           // If the play attempt was cancelled, immediately pause the video
-          pauseVideo(videoElement, shouldRestartOnVideoStopped);
+          pauseVideo(videoElement, restartOnPaused);
         } else {
           // If the play attempt wasn't cancelled, hide the overlays to reveal the video now that it's playing
           setOverlayState(HOVER_PLAYER_STATE.playing);
@@ -210,7 +209,7 @@ export default function HoverVideoPlayer({
         );
 
         // Revert to paused state
-        pauseVideo(videoElement, shouldRestartOnVideoStopped);
+        pauseVideo(videoElement, restartOnPaused);
       })
       .finally(() => {
         // The play attempt is now complete
@@ -232,9 +231,9 @@ export default function HoverVideoPlayer({
 
     const videoElement = videoRef.current;
 
-    // If the isFocused override prop is active, ignore any other events attempting to stop the video
+    // If the focused override prop is active, ignore any other events attempting to stop the video
     // Also don't do anything if the video is already paused
-    if (isFocused || getVideoState(videoElement) === VIDEO_STATE.paused) return;
+    if (focused || getVideoState(videoElement) === VIDEO_STATE.paused) return;
 
     // Start fading the paused overlay back in
     setOverlayState(HOVER_PLAYER_STATE.paused);
@@ -248,32 +247,27 @@ export default function HoverVideoPlayer({
       // transition since we want to keep the video playing until the overlay has fully
       // faded in and hidden it.
       mutableVideoState.current.pauseTimeout = setTimeout(
-        () => pauseVideo(videoElement, shouldRestartOnVideoStopped),
-        overlayFadeTransitionDuration
+        () => pauseVideo(videoElement, restartOnPaused),
+        overlayTransitionDuration
       );
     } else {
       // If a play attempt isn't in progress and there is no paused overlay, just pause
-      pauseVideo(videoElement, shouldRestartOnVideoStopped);
+      pauseVideo(videoElement, restartOnPaused);
     }
-  }, [
-    isFocused,
-    overlayFadeTransitionDuration,
-    pausedOverlay,
-    shouldRestartOnVideoStopped,
-  ]);
+  }, [focused, overlayTransitionDuration, pausedOverlay, restartOnPaused]);
 
   /* ~~~~ EFFECTS ~~~~ */
   React.useEffect(() => {
-    // Use effect to start/stop the video when isFocused override prop changes
-    if (isFocused) {
+    // Use effect to start/stop the video when focused override prop changes
+    if (focused) {
       onHoverStart();
     } else {
       onHoverEnd();
     }
 
-    // We really only want to fire this effect when the isFocused prop changes
+    // We really only want to fire this effect when the focused prop changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused]);
+  }, [focused]);
 
   React.useEffect(() => {
     // Event listener pauses the video when the user touches somewhere outside of the player
@@ -342,7 +336,7 @@ export default function HoverVideoPlayer({
               ...pausedOverlayWrapperSizingStyles[sizingMode],
               zIndex: 1,
               opacity: overlayState !== HOVER_PLAYER_STATE.playing ? 1 : 0,
-              transition: `opacity ${overlayFadeTransitionDuration}ms`,
+              transition: `opacity ${overlayTransitionDuration}ms`,
               ...pausedOverlayWrapperStyle,
             }}
             className={pausedOverlayWrapperClassName}
@@ -357,7 +351,7 @@ export default function HoverVideoPlayer({
               ...expandToFillContainerStyle,
               zIndex: 2,
               opacity: overlayState === HOVER_PLAYER_STATE.loading ? 1 : 0,
-              transition: `opacity ${overlayFadeTransitionDuration}ms`,
+              transition: `opacity ${overlayTransitionDuration}ms`,
               ...loadingOverlayWrapperStyle,
             }}
             className={loadingOverlayWrapperClassName}
