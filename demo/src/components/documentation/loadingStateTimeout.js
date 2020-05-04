@@ -8,7 +8,7 @@ const loadingTimeoutDurationExampleCode = `<HoverVideoPlayer
   videoSrc="video/butterflies.mp4"
   // The player should show a loading state if the video is not able
   // to start playing after 10ms
-  loadingStateTimeoutDuration={10}
+  loadingStateTimeout={10}
   pausedOverlay={
     <img
       src="image/butterflies_demo_thumbnail.jpg"
@@ -23,18 +23,18 @@ const loadingTimeoutDurationExampleCode = `<HoverVideoPlayer
   }
 />`;
 
-export default function LoadingStateTimeoutDuration() {
+export default function LoadingStateTimeout() {
   return (
     <>
       <PropSectionHeader
-        propName="loadingStateTimeoutDuration"
+        propName="loadingStateTimeout"
         types={['number']}
         defaultValue={200}
       />
       <figure>
         <figcaption>
-          <em>loadingStateTimeoutDuration</em> accepts the <Type>number</Type>{' '}
-          of milliseconds that the player should wait before showing a loading
+          <em>loadingStateTimeout</em> accepts the <Type>number</Type> of
+          milliseconds that the player should wait before showing a loading
           state if the video is not able to play immediately.
         </figcaption>
         <LiveEditableCodeSection code={loadingTimeoutDurationExampleCode} />

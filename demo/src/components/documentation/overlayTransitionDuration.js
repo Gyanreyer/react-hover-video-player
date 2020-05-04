@@ -7,7 +7,7 @@ import { Type } from './shared/Highlights';
 const overlayTransitionDurationDemoCode = `<HoverVideoPlayer
   videoSrc="video/butterflies.mp4"
   // The overlay should take a full second to fade in and out
-  overlayFadeTransitionDuration={1000}
+  overlayTransitionDuration={1000}
   pausedOverlay={
     <img
       src="image/butterflies_demo_thumbnail.jpg"
@@ -20,16 +20,16 @@ const overlayTransitionDurationDemoCode = `<HoverVideoPlayer
   }
 />`;
 
-export default function OverlayFadeTransitionDuration() {
+export default function OverlayTransitionDuration() {
   return (
     <>
       <PropSectionHeader
-        propName="overlayFadeTransitionDuration"
+        propName="overlayTransitionDuration"
         types={['number']}
         defaultValue={400}
       />
       <p>
-        <em>overlayFadeTransitionDuration</em> accepts the <Type>number</Type>{' '}
+        <em>overlayTransitionDuration</em> accepts the <Type>number</Type>{' '}
         of milliseconds that it should take for the pausedOverlay and
         loadingOverlay to fade in and out.
       </p>
@@ -44,7 +44,7 @@ export default function OverlayFadeTransitionDuration() {
       <p>
         <em>
           <b>Note:</b> if no overlays are provided, the
-          overlayFadeTransitionDuration will be ignored.
+          overlayTransitionDuration will be ignored.
         </em>
       </p>
       <p>

@@ -6,22 +6,22 @@ import { Type } from './shared/Highlights';
 
 const shouldRestartExampleCode = `<HoverVideoPlayer
   videoSrc="video/butterflies.mp4"
-  shouldRestartOnVideoStopped
+  restartOnPaused
 />`;
 
-export default function ShouldRestartOnVideoStopped() {
+export default function RestartOnPaused() {
   return (
     <>
       <PropSectionHeader
-        propName="shouldRestartOnVideoStopped"
+        propName="restartOnPaused"
         types={['boolean']}
         defaultValue="false"
       />
       <figure>
         <figcaption>
-          <em>shouldRestartOnVideoStopped</em> accepts a <Type>boolean</Type>{' '}
-          value which will toggle whether the video should reset to the start
-          every time it pauses after the user stops hovering.
+          <em>restartOnPaused</em> accepts a <Type>boolean</Type> value which
+          will toggle whether the video should reset to the start every time it
+          pauses after the user stops hovering.
         </figcaption>
         <LiveEditableCodeSection code={shouldRestartExampleCode} />
       </figure>

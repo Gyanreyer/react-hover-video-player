@@ -41,10 +41,10 @@ export default function PausedOverlay() {
         The{' '}
         <em>
           <a
-            href="#overlayFadeTransitionDuration"
+            href="#overlayTransitionDuration"
             className="always-underlined"
           >
-            overlayFadeTransitionDuration
+            overlayTransitionDuration
           </a>
         </em>{' '}
         prop allows you to set how long it should take for the overlay to fade

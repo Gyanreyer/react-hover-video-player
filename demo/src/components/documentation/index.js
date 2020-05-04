@@ -4,13 +4,13 @@ import { css } from 'emotion';
 import SectionHeading from '../SectionHeading';
 import CopyableCodeSnippet from '../CopyableCodeSnippet';
 // Component API sections
-import VideoSrc from './VideoSrc';
-import PausedOverlay from './PausedOverlay';
-import LoadingOverlay from './LoadingOverlay';
-import ShouldRestartOnVideoStopped from './ShouldRestartOnVideoStopped';
-import IsFocused from './IsFocused';
-import OverlayFadeTransitionDuration from './OverlayFadeTransitionDuration';
-import LoadingStateTimeoutDuration from './LoadingStateTimeoutDuration';
+import VideoSrc from './videoSrc';
+import PausedOverlay from './pausedOverlay';
+import LoadingOverlay from './loadingOverlay';
+import RestartOnPaused from './restartOnPaused';
+import Focused from './focused';
+import OverlayTransitionDuration from './overlayTransitionDuration';
+import LoadingStateTimeout from './loadingStateTimeout';
 
 export default function DocumentationSection() {
   return (
@@ -89,10 +89,10 @@ export default function DocumentationSection() {
         <VideoSrc />
         <PausedOverlay />
         <LoadingOverlay />
-        <ShouldRestartOnVideoStopped />
-        <IsFocused />
-        <OverlayFadeTransitionDuration />
-        <LoadingStateTimeoutDuration />
+        <RestartOnPaused />
+        <Focused />
+        <OverlayTransitionDuration />
+        <LoadingStateTimeout />
         {/* REMAINING PROPS TO COVER:
             - videoCaptions
             - Video props

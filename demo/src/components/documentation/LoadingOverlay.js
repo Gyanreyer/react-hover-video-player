@@ -70,8 +70,8 @@ export default function LoadingOverlay() {
       <p>
         The{' '}
         <em>
-          <a href="#loadingStateTimeoutDuration" className="always-underlined">
-            loadingStateTimeoutDuration
+          <a href="#loadingStateTimeout" className="always-underlined">
+            loadingStateTimeout
           </a>
         </em>{' '}
         prop allows you to set how long the player should wait before showing a
