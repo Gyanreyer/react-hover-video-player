@@ -290,8 +290,9 @@ export default function HoverVideoPlayer({
   }, [muted]);
 
   React.useEffect(() => {
-    // Ensure casting controls aren't shown on the video
+    // Ensure casting and PiP controls aren't shown on the video
     videoRef.current.disableRemotePlayback = true;
+    videoRef.current.disablePictureInPicture = true;
 
     return () => {
       // Clear any outstanding timeouts when the component unmounts to prevent memory leaks
