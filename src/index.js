@@ -86,6 +86,10 @@ const videoSizingStyles = {
  * @param {bool}    [restartOnPaused=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
  * @param {bool}    [muted=true] - Whether the video player should be muted
  * @param {bool}    [loop=true] - Whether the video player should loop when it reaches the end
+ * @param {string}  [preload='metadata'] - Sets how much information the video element should preload before being played. Accepts one of the following values:
+ *                                          - **"none"**: Nothing should be preloaded before the video is played
+ *                                          - **"metadata"**: Only the video's metadata (ie length, dimensions) should be preloaded
+ *                                          - **"auto"**: The whole video file should be preloaded even if it won't be played
  * @param {string}  [className] - Optional className to apply custom styling to the container element
  * @param {object}  [style] - Style object to apply custom inlined styles to the hover player container
  * @param {string}  [pausedOverlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
@@ -115,6 +119,7 @@ export default function HoverVideoPlayer({
   restartOnPaused = false,
   muted = true,
   loop = true,
+  preload = 'metadata',
   className = '',
   style = null,
   pausedOverlayWrapperClassName = '',
@@ -361,12 +366,7 @@ export default function HoverVideoPlayer({
         }
         loop={loop}
         playsInline
-        // Only preload video data if there's no overlay covering it or we depend on having loaded its dimensions to display it
-        preload={
-          !pausedOverlay || sizingMode === SIZING_MODES.video
-            ? 'metadata'
-            : 'none'
-        }
+        preload={preload}
         ref={videoRef}
         style={{
           ...videoSizingStyles[sizingMode],
