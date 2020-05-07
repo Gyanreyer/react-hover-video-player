@@ -4,6 +4,14 @@ import { render, fireEvent } from '@testing-library/react';
 
 import HoverVideoPlayer from '../src';
 
+const READY_STATES = {
+  HAVE_NOTHING: 0,
+  HAVE_METADATA: 1,
+  HAVE_CURRENT_DATA: 2,
+  HAVE_FUTURE_DATA: 3,
+  HAVE_ENOUGH_DATA: 4,
+};
+
 /**
  * Takes a video element and applies a bunch of mocks to it to simulate its normal functionality
  * since JSDOM won't do it for us
@@ -23,18 +31,41 @@ function addMockedFunctionsToVideoElement(
 
   const videoElementReadyStateSpy = jest
     .spyOn(videoElement, 'readyState', 'get')
-    .mockReturnValue(videoElement.preload === 'none' ? 0 : 2);
+    .mockReturnValue(READY_STATES.HAVE_NOTHING);
 
-  jest.spyOn(videoElement, 'currentSrc', 'get').mockImplementation(() => {
-    if (videoElement.src) return videoElement.src;
-
-    const firstVideoSource = videoElement.querySelector('source');
-    return firstVideoSource ? firstVideoSource.src : '';
-  });
+  const videoElementCurrentSrcSpy = jest
+    .spyOn(videoElement, 'currentSrc', 'get')
+    .mockReturnValue('');
 
   let isPlayAttemptInProgress = false;
 
+  videoElement.load = jest.fn(() => {
+    const videoSources = videoElement.getElementsByTagName('source');
+    if (videoSources.length > 0) {
+      // Just assume we're using the first source
+      videoElementCurrentSrcSpy.mockReturnValue(videoSources[0].src);
+    } else {
+      // If we don't have any sources, the currentSrc should be ''
+      videoElementCurrentSrcSpy.mockReturnValue('');
+      // If we don't have a source, set the video time to 0
+      videoElement.currentTime = 0;
+      // The ready state shoudl be
+      videoElementReadyStateSpy.mockReturnValue(READY_STATES.HAVE_NOTHING);
+    }
+  });
+
+  // Attempt an initial load if the video should preload
+  if (videoElement.preload === 'metadata') {
+    videoElement.load();
+    videoElementReadyStateSpy.mockReturnValue(READY_STATES.HAVE_METADATA);
+  } else if (videoElement.preload === 'auto') {
+    videoElement.load();
+    videoElementReadyStateSpy.mockReturnValue(READY_STATES.HAVE_FUTURE_DATA);
+  }
+
   videoElement.play = jest.fn(() => {
+    videoElement.load();
+
     const wasPausedWhenTriedToPlay = videoElement.paused;
 
     if (wasPausedWhenTriedToPlay) {
@@ -54,8 +85,9 @@ function addMockedFunctionsToVideoElement(
 
       return Promise.resolve().then(() => {
         isPlayAttemptInProgress = false;
-        videoElement.currentTime = 10;
-        videoElementReadyStateSpy.mockReturnValue(3);
+        videoElementReadyStateSpy.mockReturnValue(
+          READY_STATES.HAVE_FUTURE_DATA
+        );
 
         if (wasPausedWhenTriedToPlay) {
           fireEvent.playing(videoElement);
@@ -74,8 +106,9 @@ function addMockedFunctionsToVideoElement(
           new ErrorEvent('error', { error: 'the onError event was fired' })
         );
       } else {
-        videoElement.currentTime = 10;
-        videoElementReadyStateSpy.mockReturnValue(3);
+        videoElementReadyStateSpy.mockReturnValue(
+          READY_STATES.HAVE_FUTURE_DATA
+        );
         // Fire the video's onPlaying event to mark that loading is complete
         fireEvent.playing(videoElement);
       }
@@ -130,4 +163,30 @@ export function renderHoverVideoPlayer(props, videoConfig) {
  */
 export function getPlayPromise(videoElement, playCallIndex) {
   return videoElement.play.mock.results[playCallIndex].value;
+}
+
+const originalConsoleError = console.error;
+
+/**
+ * Mocks console.error so we can either easily check what was logged in tests where errors
+ * are expected or ensure that it was not called for any tests where it was not expected
+ *
+ * @param {bool}  shouldExpectErrors - Whether we should expect the tests to log errors
+ */
+export function mockConsoleError(shouldExpectErrors) {
+  beforeEach(() => {
+    // Mock the console.error function so we can verify that an error was logged correctly
+    console.error = jest.fn();
+  });
+
+  afterEach(() => {
+    // Ensure console.error was or wasn't called as expected
+    if (shouldExpectErrors) {
+      expect(console.error).toHaveBeenCalled();
+    } else {
+      expect(console.error).not.toHaveBeenCalled();
+    }
+
+    console.error = originalConsoleError;
+  });
 }

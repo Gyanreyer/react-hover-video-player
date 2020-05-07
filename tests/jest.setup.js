@@ -1,7 +1,7 @@
 // Extend jest expect with additional functionality for testing-library and emotion before we run the tests
 import '@testing-library/jest-dom/extend-expect';
 
-import { getVideoState, VIDEO_STATE } from '../src/utils/video';
+import { getVideoState, VIDEO_STATE } from '../src';
 
 // Extend expect with some custom checks for the video's state
 expect.extend({
