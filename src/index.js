@@ -1,12 +1,6 @@
 import React from 'react';
 
-import { formatVideoSrc, formatVideoCaptions } from './utils/assets';
-import {
-  VIDEO_STATE,
-  getVideoState,
-  playVideo,
-  pauseVideo,
-} from './utils/video';
+import { formatVideoSrc, formatVideoCaptions } from './utils';
 
 // Enumerates states that the hover player can be in
 const HOVER_PLAYER_STATE = {
@@ -29,6 +23,36 @@ const SIZING_MODES = {
   // both the paused overlay and the video element
   manual: 'manual',
 };
+
+// Enumerates states that the video can be in
+export const VIDEO_STATE = {
+  paused: 'paused',
+  loading: 'loading',
+  playing: 'playing',
+};
+
+/**
+ * @function getVideoState
+ *
+ * Takes a video element and returns its current playing state
+ *
+ * @param {node} videoElement
+ */
+export function getVideoState(videoElement) {
+  if (videoElement.paused || videoElement.ended) {
+    return VIDEO_STATE.paused;
+  }
+
+  // If the video isn't paused but its readyState indicates it isn't loaded enough
+  // to play yet, it is loading
+  if (videoElement.readyState < 3) {
+    return VIDEO_STATE.loading;
+  }
+
+  // If the video isn't paused and its ready state indicates it's loaded enough to play,
+  // assume it's playing
+  return VIDEO_STATE.playing;
+}
 
 // CSS styles to make some contents in the player expand to fill the container
 const expandToFillContainerStyle = {
@@ -83,9 +107,17 @@ const videoSizingStyles = {
  * @param {node}    [loadingOverlay] - Contents to render over the video while it's loading
  * @param {number}  [loadingStateTimeout=200] - Duration in ms to wait after attempting to start the video before showing the loading overlay
  * @param {number}  [overlayTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
- * @param {bool}    [restartOnPaused=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
+ * @param {bool}    [restartOnPaused=false] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
+ * @param {bool}    [unloadVideoOnPaused=false] - Whether we should unload the video's sources when it is not playing in order to free up memory and bandwidth
+ *                                                  This can be useful in scenarios where you may have a large number of relatively large video files on a single page;
+ *                                                  particularly due to a known bug in Google Chrome, if too many videos are loading in the background at the same time,
+ *                                                  it starts to gum up the works so that nothing loads properly and performance can degrade significantly.
  * @param {bool}    [muted=true] - Whether the video player should be muted
  * @param {bool}    [loop=true] - Whether the video player should loop when it reaches the end
+ * @param {string}  [preload='metadata'] - Sets how much information the video element should preload before being played. Accepts one of the following values:
+ *                                          - **"none"**: Nothing should be preloaded before the video is played
+ *                                          - **"metadata"**: Only the video's metadata (ie length, dimensions) should be preloaded
+ *                                          - **"auto"**: The whole video file should be preloaded even if it won't be played
  * @param {string}  [className] - Optional className to apply custom styling to the container element
  * @param {object}  [style] - Style object to apply custom inlined styles to the hover player container
  * @param {string}  [pausedOverlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
@@ -113,8 +145,10 @@ export default function HoverVideoPlayer({
   loadingStateTimeout = 200,
   overlayTransitionDuration = 400,
   restartOnPaused = false,
+  unloadVideoOnPaused = false,
   muted = true,
   loop = true,
+  preload = 'metadata',
   className = '',
   style = null,
   pausedOverlayWrapperClassName = '',
@@ -129,6 +163,16 @@ export default function HoverVideoPlayer({
   const [overlayState, setOverlayState] = React.useState(
     HOVER_PLAYER_STATE.paused
   );
+  // Keep track of whether the video is unloaded, meaning its sources should be removed from
+  // the DOM and unloaded for optimization purposes
+  // This is only relevant if `unloadVideoOnPaused` is set to true
+  const [isVideoUnloaded, setIsVideoUnloaded] = React.useState(
+    unloadVideoOnPaused
+  );
+
+  // Keep refs to previous state values for comparison in effect hooks
+  const previousIsVideoUnloadedRef = React.useRef(isVideoUnloaded);
+  const previousFocusedRef = React.useRef(false);
 
   // Keep a ref for all state variables related to the video's state
   // which need to be managed asynchronously as it attempts to play/pause
@@ -139,22 +183,52 @@ export default function HoverVideoPlayer({
     mutableVideoState.current = {
       isPlayAttemptInProgress: false,
       isPlayAttemptCancelled: false,
+      isPlayerUnmounted: false,
       // Keep refs for timeouts so we can keep track of and cancel them
       pauseTimeout: null,
       loadingStateTimeout: null,
+      // Keep track of the video time that we should start from when the video is played again
+      // This is particularly useful so we can restore our previous place in the video even if
+      // we are unloading it every time it gets paused
+      videoTimeToRestore: 0,
     };
   }
 
   // Element refs
-  const containerRef = React.useRef();
-  const videoRef = React.useRef();
+  const containerRef = React.useRef(null);
+  const videoRef = React.useRef(null);
 
   /**
-   * @function  onHoverStart
+   * @function  pauseVideo
    *
-   * Starts the video when the user mouses hovers on the player
+   * Pauses the video and unloads it if necessary
    */
-  function onHoverStart() {
+  const pauseVideo = React.useCallback(() => {
+    const videoElement = videoRef.current;
+
+    videoElement.pause();
+
+    if (restartOnPaused) {
+      // If we should restart the video, reset its time to the beginning next time we play
+      videoElement.currentTime = 0;
+    }
+
+    // Hang onto the time that the video is currently at so we can restore it when we try to play
+    // again even if the video was unloaded
+    mutableVideoState.current.videoTimeToRestore = videoElement.currentTime;
+
+    if (unloadVideoOnPaused) {
+      // If necessary, unload the video now that it's paused
+      setIsVideoUnloaded(true);
+    }
+  }, [restartOnPaused, unloadVideoOnPaused]);
+
+  /**
+   * @function playVideo
+   *
+   * Attempts to play the video if it is not already playing
+   */
+  const playVideo = React.useCallback(() => {
     // Clear any timeouts that may have been in progress
     clearTimeout(mutableVideoState.current.pauseTimeout);
     clearTimeout(mutableVideoState.current.loadingStateTimeout);
@@ -186,11 +260,52 @@ export default function HoverVideoPlayer({
     // We are now attempting to play the video
     mutableVideoState.current.isPlayAttemptInProgress = true;
 
-    playVideo(videoElement)
+    // Ensure we're at the correct video time to start playing from
+    videoElement.currentTime = mutableVideoState.current.videoTimeToRestore;
+
+    // Start playing the video and hang onto the play promise it returns
+    let playPromise = videoElement.play();
+
+    if (!playPromise || !playPromise.then) {
+      // If videoElement.play() didn't return a promise, we'll manually create one
+      // ourselves which mimics the same behavior
+      playPromise = new Promise((resolve, reject) => {
+        // Declaring onVideoPlaybackFailed up here so we can refer to it and remove its event listener
+        // if the video successfully starts playing
+        let onVideoPlaybackFailed;
+
+        // Set up event listener to resolve the promise when the video player starts playing
+        const onVideoPlaybackStarted = () => {
+          // Remove the event listeners we added as cleanup now that the play attempt has succeeded
+          videoElement.removeEventListener('playing', onVideoPlaybackStarted);
+          videoElement.removeEventListener('error', onVideoPlaybackFailed);
+
+          // Resolve because we successfully started playing!
+          resolve();
+        };
+        videoElement.addEventListener('playing', onVideoPlaybackStarted);
+
+        // Set up event listener to reject the promise when the video player encounters an error
+        onVideoPlaybackFailed = (event) => {
+          // Remove the event listeners we added as cleanup now that the play attempt has failed
+          videoElement.removeEventListener('error', onVideoPlaybackFailed);
+          videoElement.removeEventListener('playing', onVideoPlaybackStarted);
+
+          // Reject with the error that was thrown
+          reject(event.error);
+        };
+        videoElement.addEventListener('error', onVideoPlaybackFailed);
+      });
+    }
+
+    playPromise
       .then(() => {
+        // If the player was unmounted before the play promise could resolve, don't do anything
+        if (mutableVideoState.current.isPlayerUnmounted) return;
+
         if (mutableVideoState.current.isPlayAttemptCancelled) {
           // If the play attempt was cancelled, immediately pause the video
-          pauseVideo(videoElement, restartOnPaused);
+          pauseVideo();
         } else {
           // If the play attempt wasn't cancelled, hide the overlays to reveal the video now that it's playing
           setOverlayState(HOVER_PLAYER_STATE.playing);
@@ -203,7 +318,7 @@ export default function HoverVideoPlayer({
         );
 
         // Revert to paused state
-        pauseVideo(videoElement, restartOnPaused);
+        pauseVideo();
       })
       .finally(() => {
         // The play attempt is now complete
@@ -211,7 +326,22 @@ export default function HoverVideoPlayer({
         mutableVideoState.current.isPlayAttemptCancelled = false;
         clearTimeout(mutableVideoState.current.loadingStateTimeout);
       });
-  }
+  }, [loadingOverlay, loadingStateTimeout, pauseVideo]);
+
+  /**
+   * @function  onHoverStart
+   *
+   * Starts the video when the user mouses hovers on the player
+   */
+  const onHoverStart = React.useCallback(() => {
+    if (isVideoUnloaded) {
+      // If the video is currently unloaded, we need to make sure we update our state
+      // to restore the video's sources before we attempt to play it
+      setIsVideoUnloaded(false);
+    } else {
+      playVideo();
+    }
+  }, [isVideoUnloaded, playVideo]);
 
   /**
    * @function  onHoverEnd
@@ -241,17 +371,20 @@ export default function HoverVideoPlayer({
       // transition since we want to keep the video playing until the overlay has fully
       // faded in and hidden it.
       mutableVideoState.current.pauseTimeout = setTimeout(
-        () => pauseVideo(videoElement, restartOnPaused),
+        () => pauseVideo(),
         overlayTransitionDuration
       );
     } else {
       // If a play attempt isn't in progress and there is no paused overlay, just pause
-      pauseVideo(videoElement, restartOnPaused);
+      pauseVideo();
     }
-  }, [focused, overlayTransitionDuration, pausedOverlay, restartOnPaused]);
+  }, [focused, overlayTransitionDuration, pauseVideo, pausedOverlay]);
 
   /* ~~~~ EFFECTS ~~~~ */
   React.useEffect(() => {
+    // If the focused prop hasn't changed, don't do anything
+    if (previousFocusedRef.current === focused) return;
+
     // Use effect to start/stop the video when focused override prop changes
     if (focused) {
       onHoverStart();
@@ -259,9 +392,8 @@ export default function HoverVideoPlayer({
       onHoverEnd();
     }
 
-    // We really only want to fire this effect when the focused prop changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focused]);
+    previousFocusedRef.current = focused;
+  }, [focused, onHoverEnd, onHoverStart]);
 
   React.useEffect(() => {
     // Event listener pauses the video when the user touches somewhere outside of the player
@@ -285,27 +417,52 @@ export default function HoverVideoPlayer({
   }, [muted]);
 
   React.useEffect(() => {
-    // Ensure casting controls aren't shown on the video
-    videoRef.current.disableRemotePlayback = true;
+    // Don't do anything if the video's unloaded state hasn't changed
+    if (previousIsVideoUnloadedRef.current === isVideoUnloaded) return;
+
+    // Since the video's sources have changed, perform a manual load to update
+    // or unload the video's current source
+    videoRef.current.load();
+
+    if (!isVideoUnloaded) {
+      // If the video was just changed from being unloaded, that means we're trying to play,
+      // so let's kick off a play attempt now that the video's sources are restored
+      playVideo();
+    }
+
+    previousIsVideoUnloadedRef.current = isVideoUnloaded;
+  }, [isVideoUnloaded, onHoverStart, playVideo]);
+
+  React.useEffect(() => {
+    const videoElement = videoRef.current;
+    // Ensure casting and PiP controls aren't shown on the video
+    videoElement.disableRemotePlayback = true;
+    videoElement.disablePictureInPicture = true;
 
     return () => {
       // Clear any outstanding timeouts when the component unmounts to prevent memory leaks
       clearTimeout(mutableVideoState.current.pauseTimeout);
       clearTimeout(mutableVideoState.current.loadingStateTimeout);
-      // If a play attempt is still in progress, cancel it so we don't update the state when it resolves
-      mutableVideoState.current.isPlayAttemptCancelled = true;
+
+      // Mark that the player is unmounted so that we won't try to update the component state
+      // if the play promise resolves afterward
+      mutableVideoState.current.isPlayerUnmounted = true;
+
+      // Clean up the sources for the video to avoid potential memory leaks
+      // It's debatable how necessary this really is but playing it safe never hurts
+      const videoSourceElements = videoElement.getElementsByTagName('source');
+      for (
+        let i = 0, videoSourceCount = videoSourceElements.length;
+        i < videoSourceCount;
+        i += 1
+      ) {
+        videoSourceElements[i].src = '';
+        videoSourceElements[i].removeAttribute('src');
+      }
+      videoElement.load();
     };
   }, []);
   /* ~~~~ END EFFECTS ~~~~ */
-
-  /* ~~~~ PARSE VIDEO ASSETS ~~~~ */
-  // Parse the `videoSrc` prop into an array of VideoSource objects to be used for the video player
-  const parsedVideoSources = formatVideoSrc(videoSrc);
-
-  // Parse the `videoCaptions` prop into an array of VideoCaptionsTrack objects to be used for
-  // captions tracks for the video player
-  const parsedVideoCaptions = formatVideoCaptions(videoCaptions);
-  /* ~~~~ END VIDEO ASSET PARSING ~~~~ */
 
   return (
     <div
@@ -352,21 +509,9 @@ export default function HoverVideoPlayer({
       )}
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
-        src={
-          // If there's only one video source, directly set it on the video; otherwise we'll
-          // map all of the sources to source elements which the browser can pick from based on what formats it supports
-          parsedVideoSources.length === 1
-            ? parsedVideoSources[0].src
-            : undefined
-        }
         loop={loop}
         playsInline
-        // Only preload video data if there's no overlay covering it or we depend on having loaded its dimensions to display it
-        preload={
-          !pausedOverlay || sizingMode === SIZING_MODES.video
-            ? 'metadata'
-            : 'none'
-        }
+        preload={preload}
         ref={videoRef}
         style={{
           ...videoSizingStyles[sizingMode],
@@ -375,12 +520,15 @@ export default function HoverVideoPlayer({
         }}
         className={videoClassName}
       >
-        {/* If there's more than one video source, render a source tag for each one */}
-        {parsedVideoSources.length > 1 &&
-          parsedVideoSources.map(({ src, type }) => (
+        {!isVideoUnloaded &&
+          // If the video is not unloaded, parse the `videoSrc` prop into an array of objects and render them
+          // as sources for the video
+          formatVideoSrc(videoSrc).map(({ src, type }) => (
             <source key={src} src={src} type={type} />
           ))}
-        {parsedVideoCaptions.map(({ src, srcLang, label }) => (
+        {/*  Parse the `videoCaptions` prop into an array of VideoCaptionsTrack objects and render them
+              as caption tracks for the video */}
+        {formatVideoCaptions(videoCaptions).map(({ src, srcLang, label }) => (
           <track
             key={src}
             kind="captions"

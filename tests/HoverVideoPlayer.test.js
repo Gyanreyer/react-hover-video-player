@@ -1,23 +1,28 @@
 import React from 'react';
 import { fireEvent, act } from '@testing-library/react';
 
-import { renderHoverVideoPlayer, getPlayPromise } from './utils';
+import {
+  renderHoverVideoPlayer,
+  getPlayPromise,
+  mockConsoleError,
+} from './utils';
 
 describe('videoSrc prop', () => {
   describe('Handles valid videoSrc prop values correctly', () => {
+    mockConsoleError();
+
     test('correctly handles receiving a string for the videoSrc prop', () => {
       const { container } = renderHoverVideoPlayer({
         videoSrc: '/fake/video-file.mp4',
       });
 
       const videoElement = container.querySelector('video');
-      // Since we only have one source, it should be directly set on the video's src attribute
-      expect(videoElement.src).toBe(
-        `${window.location.origin}/fake/video-file.mp4`
-      );
-      // The video element should not have source children
+
+      // Ensure we have one source that has been set up correctly
       const videoSources = videoElement.querySelectorAll('source');
-      expect(videoSources).toHaveLength(0);
+      expect(videoSources).toHaveLength(1);
+      expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.mp4');
+      expect(videoSources[0]).not.toHaveAttribute('type');
     });
 
     test('correctly handles receiving an array of strings for the videoSrc prop', () => {
@@ -41,14 +46,12 @@ describe('videoSrc prop', () => {
       });
 
       const videoElement = container.querySelector('video');
-      // Since we only have one source, it should be directly set on the video's src attribute
-      expect(videoElement.src).toBe(
-        `${window.location.origin}/fake/video-file.mp4`
-      );
 
-      // The video element should not have source children
+      // Ensure we have one source that has been set up correctly
       const videoSources = videoElement.querySelectorAll('source');
-      expect(videoSources).toHaveLength(0);
+      expect(videoSources).toHaveLength(1);
+      expect(videoSources[0]).toHaveAttribute('src', '/fake/video-file.mp4');
+      expect(videoSources[0]).toHaveAttribute('type', 'video/mp4');
     });
 
     test('correctly handles receiving an array of objects for the videoSrc prop', () => {
@@ -92,17 +95,7 @@ describe('videoSrc prop', () => {
   });
 
   describe('Handles invalid videoSrc prop values correctly', () => {
-    let originalConsoleError;
-
-    beforeEach(() => {
-      // Mock the console.error function so we can verify that an error was logged correctly
-      originalConsoleError = console.error;
-      console.error = jest.fn();
-    });
-
-    afterEach(() => {
-      console.error = originalConsoleError;
-    });
+    mockConsoleError(true);
 
     test('correctly handles not receiving a videoSrc prop', () => {
       const { container } = renderHoverVideoPlayer({});
@@ -167,6 +160,7 @@ describe('videoSrc prop', () => {
 
 describe('videoCaptions prop', () => {
   describe('Handles valid videoCaptions prop values correctly', () => {
+    mockConsoleError();
     test('correctly handles receiving a string for the videoCaptions prop', () => {
       const { container } = renderHoverVideoPlayer({
         videoSrc: '/fake/video-file.mp4',
@@ -257,17 +251,7 @@ describe('videoCaptions prop', () => {
   });
 
   describe('Handles invalid videoCaptions prop values correctly', () => {
-    let originalConsoleError;
-
-    beforeEach(() => {
-      // Mock the console.error function so we can verify that an error was logged correctly
-      originalConsoleError = console.error;
-      console.error = jest.fn();
-    });
-
-    afterEach(() => {
-      console.error = originalConsoleError;
-    });
+    mockConsoleError(true);
 
     test('correctly handles receiving a single invalid value for the videoCaptions prop', () => {
       const { container } = renderHoverVideoPlayer({
@@ -344,14 +328,16 @@ describe('videoCaptions prop', () => {
 });
 
 describe('Video props', () => {
-  test('isVideoMuted prop correctly sets muted attribute on video', () => {
+  mockConsoleError();
+
+  test('muted prop correctly sets muted attribute on video', () => {
     const { container, rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
+      // muted is true by default
     });
 
     const videoElement = container.querySelector('video');
 
-    // muted should be true by default
     expect(videoElement.muted).toBe(true);
 
     // Re-render with the video unmuted
@@ -363,14 +349,14 @@ describe('Video props', () => {
     expect(videoElement.muted).toBe(true);
   });
 
-  test('shouldVideoLoop prop correctly sets loop attribute on video', () => {
+  test('loop prop correctly sets loop attribute on video', () => {
     const { container, rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
+      // loop is true by default
     });
 
     const videoElement = container.querySelector('video');
 
-    // Loop should be true by default
     expect(videoElement).toHaveAttribute('loop');
 
     // Re-render with looping disabled on the video
@@ -387,9 +373,29 @@ describe('Video props', () => {
     });
     expect(videoElement).toHaveAttribute('loop');
   });
+
+  test('preload', () => {
+    const { container, rerenderWithProps } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+      // preload is 'metadata' by default
+    });
+
+    const videoElement = container.querySelector('video');
+
+    expect(videoElement).toHaveAttribute('preload', 'metadata');
+
+    // Re-render with preload set to 'none'
+    rerenderWithProps({
+      videoSrc: 'fake/video-file.mp4',
+      preload: 'none',
+    });
+    expect(videoElement).toHaveAttribute('preload', 'none');
+  });
 });
 
 describe('restartOnPaused', () => {
+  mockConsoleError();
+
   test('restartOnPaused prop restarts the video when set to true', async () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
@@ -411,14 +417,15 @@ describe('restartOnPaused', () => {
 
     await act(() => getPlayPromise(videoElement, 0));
 
-    // The video's time should now be greater than 0 because it's playing
-    expect(videoElement.currentTime).toBeGreaterThan(0);
     expect(videoElement).toBePlaying();
+
+    // Simulate the video having been playing for 5 seconds
+    videoElement.currentTime = 5;
 
     // Stop the video
     fireEvent.mouseLeave(playerContainer);
 
-    // The video time should have been paused and reset
+    // The video time should have been paused and reset to 0
     expect(videoElement.currentTime).toBe(0);
     expect(videoElement.pause).toHaveBeenCalledTimes(1);
     expect(videoElement).toBePaused();
@@ -446,20 +453,85 @@ describe('restartOnPaused', () => {
     // Wait for the promise returned by play() to resolve
     await act(() => getPlayPromise(videoElement, 0));
 
-    // The video's time should now be greater than 0 because it's playing
-    expect(videoElement.currentTime).toBeGreaterThan(0);
     expect(videoElement).toBePlaying();
+
+    // Simulate the video having been playing for 5 seconds
+    videoElement.currentTime = 5;
 
     // Stop the video
     fireEvent.mouseLeave(playerContainer);
 
     // The video time should not have been reset to 0
-    expect(videoElement.currentTime).toBeGreaterThan(0);
+    expect(videoElement.currentTime).toBe(5);
     expect(videoElement).toBePaused();
   });
 });
 
+describe('unloadVideoOnPaused', () => {
+  mockConsoleError();
+
+  test("unloadVideoOnPaused prop unloads the video's sources while it is paused when set to true", async () => {
+    const { container, getByTestId } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+      unloadVideoOnPaused: true,
+    });
+
+    const videoElement = container.querySelector('video');
+    const playerContainer = getByTestId('hover-video-player-container');
+
+    // The video's initial time should be 0
+    expect(videoElement.currentTime).toBe(0);
+    expect(videoElement).toBePaused();
+    expect(videoElement.currentSrc).toBe('');
+
+    // The video should not have any sources
+    expect(videoElement.querySelectorAll('source')).toHaveLength(0);
+
+    // Quickly start the video
+    fireEvent.mouseEnter(playerContainer);
+
+    expect(videoElement.currentTime).toBe(0);
+    expect(videoElement).toBeLoading();
+    expect(videoElement.querySelectorAll('source')).toHaveLength(1);
+    expect(videoElement.currentSrc).toBe(
+      `${window.location.origin}/fake/video-file.mp4`
+    );
+
+    await act(() => getPlayPromise(videoElement, 0));
+
+    expect(videoElement).toBePlaying();
+
+    // simulate the video having played for 5s
+    videoElement.currentTime = 5;
+
+    // Stop the video
+    fireEvent.mouseLeave(playerContainer);
+
+    // The video should have been paused
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
+    expect(videoElement).toBePaused();
+
+    // The video's source should have been removed
+    expect(videoElement.currentSrc).toBe('');
+    expect(videoElement.querySelectorAll('source')).toHaveLength(0);
+
+    // The video time should have been reset to 0 because the source was removed
+    expect(videoElement.currentTime).toBe(0);
+
+    // Start playing the video again
+    fireEvent.mouseEnter(playerContainer);
+
+    await act(() => getPlayPromise(videoElement, 0));
+
+    // The video time should have been correctly restored to what it was before it was paused
+    expect(videoElement.currentTime).toBe(5);
+    expect(videoElement).toBePlaying();
+  });
+});
+
 describe('pausedOverlay and loadingOverlay', () => {
+  mockConsoleError();
+
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -569,6 +641,8 @@ describe('pausedOverlay and loadingOverlay', () => {
 });
 
 describe('focused', () => {
+  mockConsoleError();
+
   test('focused prop starts and stops the video correctly', async () => {
     const { container, rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
@@ -642,6 +716,8 @@ describe('focused', () => {
 });
 
 describe('overlayTransitionDuration', () => {
+  mockConsoleError();
+
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -715,6 +791,8 @@ describe('overlayTransitionDuration', () => {
 });
 
 describe('sizingMode', () => {
+  mockConsoleError();
+
   test('sizingMode "video" sets correct styling on the player', () => {
     const { container, getByTestId } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
@@ -725,7 +803,6 @@ describe('sizingMode', () => {
     const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
     const videoElement = container.querySelector('video');
 
-    expect(videoElement).toHaveAttribute('preload', 'metadata');
     expect(videoElement.style.position).toBe('');
     expect(videoElement.style.display).toBe('block');
     expect(pausedOverlayWrapper.style.position).toBe('absolute');
@@ -741,7 +818,6 @@ describe('sizingMode', () => {
     const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
     const videoElement = container.querySelector('video');
 
-    expect(videoElement).toHaveAttribute('preload', 'none');
     expect(pausedOverlayWrapper.style.position).toBe('relative');
     expect(videoElement.style.position).toBe('absolute');
   });
@@ -756,7 +832,6 @@ describe('sizingMode', () => {
     const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
     const videoElement = container.querySelector('video');
 
-    expect(videoElement).toHaveAttribute('preload', 'none');
     expect(videoElement.style.position).toBe('absolute');
     expect(pausedOverlayWrapper.style.position).toBe('absolute');
   });
@@ -771,13 +846,14 @@ describe('sizingMode', () => {
     const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
     const videoElement = container.querySelector('video');
 
-    expect(videoElement).toHaveAttribute('preload', 'none');
     expect(videoElement.style.position).toBe('');
     expect(pausedOverlayWrapper.style.position).toBe('');
   });
 });
 
 describe('Handles interaction events correctly', () => {
+  mockConsoleError();
+
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -913,6 +989,8 @@ describe('Handles interaction events correctly', () => {
 });
 
 describe('Follows video interaction flows correctly', () => {
+  mockConsoleError();
+
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -1138,56 +1216,11 @@ describe('Follows video interaction flows correctly', () => {
     expect(pausedOverlayWrapper.style.opacity).toBe('1');
     expect(loadingOverlayWrapper.style.opacity).toBe('0');
   });
-
-  test('handles a video playback error correectly', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer(
-      {
-        videoSrc: 'fake/video-file.mp4',
-      },
-      {
-        // The promise returned by video.play() should reject
-        shouldPlaybackFail: true,
-      }
-    );
-
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
-
-    // Mock the console.error function so we can verify that an error was logged correctly
-    const originalConsoleError = console.error;
-    console.error = jest.fn();
-
-    // Mouse over the container to start playing the video
-    fireEvent.mouseEnter(playerContainer);
-
-    expect(videoElement.play).toHaveBeenCalledTimes(1);
-    expect(videoElement).toBeLoading();
-
-    let errorMessage = null;
-    try {
-      await act(() => getPlayPromise(videoElement, 0));
-    } catch (error) {
-      errorMessage = error;
-    }
-    // The promise should've rejected
-    expect(errorMessage).toBe('The video broke');
-
-    // The video should have been paused after the play attempt failed
-    expect(videoElement.pause).toHaveBeenCalledTimes(1);
-    expect(videoElement).toBePaused();
-
-    // The error should have been logged correctly
-    expect(console.error).toHaveBeenCalledWith(
-      `HoverVideoPlayer playback failed for src ${videoElement.currentSrc}:`,
-      'The video broke'
-    );
-
-    // Restore the console.error function
-    console.error = originalConsoleError;
-  });
 });
 
 describe('Prevents memory leaks when unmounted', () => {
+  mockConsoleError();
+
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -1267,6 +1300,8 @@ describe('Prevents memory leaks when unmounted', () => {
 });
 
 describe('Supports browsers that do not return a promise from video.play()', () => {
+  mockConsoleError();
+
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -1375,8 +1410,60 @@ describe('Supports browsers that do not return a promise from video.play()', () 
 
     expect(videoElement).toBePlaying();
   });
+});
 
-  test('handles playback errors correctly', async () => {
+describe('Video playback errors', () => {
+  mockConsoleError(true);
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  test('handles a video playback error correectly', async () => {
+    const { container, getByTestId } = renderHoverVideoPlayer(
+      {
+        videoSrc: 'fake/video-file.mp4',
+      },
+      {
+        // The promise returned by video.play() should reject
+        shouldPlaybackFail: true,
+      }
+    );
+
+    const videoElement = container.querySelector('video');
+    const playerContainer = getByTestId('hover-video-player-container');
+
+    // Mouse over the container to start playing the video
+    fireEvent.mouseEnter(playerContainer);
+
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
+    expect(videoElement).toBeLoading();
+
+    let errorMessage = null;
+    try {
+      await act(() => getPlayPromise(videoElement, 0));
+    } catch (error) {
+      errorMessage = error;
+    }
+    // The promise should've rejected
+    expect(errorMessage).toBe('The video broke');
+
+    // The video should have been paused after the play attempt failed
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
+    expect(videoElement).toBePaused();
+
+    // The error should have been logged correctly
+    expect(console.error).toHaveBeenCalledWith(
+      `HoverVideoPlayer playback failed for src ${videoElement.currentSrc}:`,
+      'The video broke'
+    );
+  });
+
+  test('handles playback errors correctly for browsers that do not support promises', async () => {
     const { container, getByTestId } = renderHoverVideoPlayer(
       {
         videoSrc: 'fake/video-file.mp4',
@@ -1390,10 +1477,6 @@ describe('Supports browsers that do not return a promise from video.play()', () 
 
     const videoElement = container.querySelector('video');
     const playerContainer = getByTestId('hover-video-player-container');
-
-    // Mock the console.error function so we can verify that an error was logged correctly
-    const originalConsoleError = console.error;
-    console.error = jest.fn();
 
     expect(videoElement).toBePaused();
 
@@ -1416,7 +1499,5 @@ describe('Supports browsers that do not return a promise from video.play()', () 
       `HoverVideoPlayer playback failed for src ${videoElement.currentSrc}:`,
       'the onError event was fired'
     );
-
-    console.error = originalConsoleError;
   });
 });
