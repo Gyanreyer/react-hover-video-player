@@ -107,7 +107,11 @@ const videoSizingStyles = {
  * @param {node}    [loadingOverlay] - Contents to render over the video while it's loading
  * @param {number}  [loadingStateTimeout=200] - Duration in ms to wait after attempting to start the video before showing the loading overlay
  * @param {number}  [overlayTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
- * @param {bool}    [restartOnPaused=true] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
+ * @param {bool}    [restartOnPaused=false] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
+ * @param {bool}    [unloadVideoOnPaused=false] - Whether we should unload the video's sources when it is not playing in order to free up memory and bandwidth
+ *                                                  This can be useful in scenarios where you may have a large number of relatively large video files on a single page;
+ *                                                  particularly due to a known bug in Google Chrome, if too many videos are loading in the background at the same time,
+ *                                                  it starts to gum up the works so that nothing loads properly and performance can degrade significantly.
  * @param {bool}    [muted=true] - Whether the video player should be muted
  * @param {bool}    [loop=true] - Whether the video player should loop when it reaches the end
  * @param {string}  [preload='metadata'] - Sets how much information the video element should preload before being played. Accepts one of the following values:
@@ -422,7 +426,7 @@ export default function HoverVideoPlayer({
 
     if (!isVideoUnloaded) {
       // If the video was just changed from being unloaded, that means we're trying to play,
-      // so perform another hover start attempt now that the video's sources are restored
+      // so let's kick off a play attempt now that the video's sources are restored
       playVideo();
     }
 
@@ -445,7 +449,7 @@ export default function HoverVideoPlayer({
       mutableVideoState.current.isPlayerUnmounted = true;
 
       // Clean up the sources for the video to avoid potential memory leaks
-      // It's arguable how necessary this really is but playing it safe never hurts
+      // It's debatable how necessary this really is but playing it safe never hurts
       const videoSourceElements = videoElement.getElementsByTagName('source');
       for (
         let i = 0, videoSourceCount = videoSourceElements.length;
@@ -517,12 +521,13 @@ export default function HoverVideoPlayer({
         className={videoClassName}
       >
         {!isVideoUnloaded &&
-          // If the video is unloaded, parse the videoSrc prop into an array of objects and render them
+          // If the video is not unloaded, parse the `videoSrc` prop into an array of objects and render them
           // as sources for the video
           formatVideoSrc(videoSrc).map(({ src, type }) => (
             <source key={src} src={src} type={type} />
           ))}
-        {/*  Parse the `videoCaptions` prop into an array of VideoCaptionsTrack objects and render them as caption Track elements */}
+        {/*  Parse the `videoCaptions` prop into an array of VideoCaptionsTrack objects and render them
+              as caption tracks for the video */}
         {formatVideoCaptions(videoCaptions).map(({ src, srcLang, label }) => (
           <track
             key={src}
