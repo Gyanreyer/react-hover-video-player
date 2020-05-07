@@ -179,6 +179,7 @@ export default function HoverVideoPlayer({
     mutableVideoState.current = {
       isPlayAttemptInProgress: false,
       isPlayAttemptCancelled: false,
+      isPlayerUnmounted: false,
       // Keep refs for timeouts so we can keep track of and cancel them
       pauseTimeout: null,
       loadingStateTimeout: null,
@@ -295,6 +296,9 @@ export default function HoverVideoPlayer({
 
     playPromise
       .then(() => {
+        // If the player was unmounted before the play promise could resolve, don't do anything
+        if (mutableVideoState.current.isPlayerUnmounted) return;
+
         if (mutableVideoState.current.isPlayAttemptCancelled) {
           // If the play attempt was cancelled, immediately pause the video
           pauseVideo();
@@ -435,8 +439,10 @@ export default function HoverVideoPlayer({
       // Clear any outstanding timeouts when the component unmounts to prevent memory leaks
       clearTimeout(mutableVideoState.current.pauseTimeout);
       clearTimeout(mutableVideoState.current.loadingStateTimeout);
-      // If a play attempt is still in progress, cancel it so we don't update the state when it resolves
-      mutableVideoState.current.isPlayAttemptCancelled = true;
+
+      // Mark that the player is unmounted so that we won't try to update the component state
+      // if the play promise resolves afterward
+      mutableVideoState.current.isPlayerUnmounted = true;
 
       // Clean up the sources for the video to avoid potential memory leaks
       // It's arguable how necessary this really is but playing it safe never hurts
