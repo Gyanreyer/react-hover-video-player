@@ -94,13 +94,13 @@ const videoSizingStyles = {
  *                                                                     - src: The src URL string to use for a video player source
  *                                                                     - type: The media type of the video source, ie 'video/mp4'
  *                                                                   - **Array**: if you would like to provide multiple sources, you can provide an array of URL strings and/or objects with the shape described above
- * @param {!(string|string[]|VideoCaptionsTrack|VideoCaptionsTrack[])} videoCaptions - Captions track(s) to use for the video player for accessibility. Accepts 3 different formats:
- *                                                                                     - **String**: the URL string to use as the captions track's src
- *                                                                                     - **Object**: an object with attributes:
- *                                                                                       - src: The src URL string for the captions track file
- *                                                                                       - srcLang: The language code for the language that these captions are in (ie, 'en', 'es', 'fr')
- *                                                                                       - label: The title of the captions track
- *                                                                                     - **Array**: if you would like to provide multiple caption tracks, you can provide an array of objects with the shape described above
+ * @param {!(string|string[]|VideoCaptionsTrack|VideoCaptionsTrack[])} [videoCaptions] - Captions track(s) to use for the video player for accessibility. Accepts 3 different formats:
+ *                                                                                      - **String**: the URL string to use as the captions track's src
+ *                                                                                      - **Object**: an object with attributes:
+ *                                                                                        - src: The src URL string for the captions track file
+ *                                                                                        - srcLang: The language code for the language that these captions are in (ie, 'en', 'es', 'fr')
+ *                                                                                        - label: The title of the captions track
+ *                                                                                      - **Array**: if you would like to provide multiple caption tracks, you can provide an array of objects with the shape described above
  * @param {bool}    [focused=false] - Offers a prop interface for forcing the video to start/stop without DOM events
  *                                      When set to true, the video will begin playing and any events that would normally stop it will be ignored
  * @param {bool}    [disableDefaultEventHandling] - Whether the video player's default mouse and touch event handling should be disabled in favor of a fully custom solution using the `focused` prop
@@ -137,7 +137,7 @@ const videoSizingStyles = {
  */
 export default function HoverVideoPlayer({
   videoSrc,
-  videoCaptions,
+  videoCaptions = null,
   focused = false,
   disableDefaultEventHandling = false,
   pausedOverlay = null,
