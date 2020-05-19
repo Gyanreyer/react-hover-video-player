@@ -77,7 +77,7 @@ In practice this looks like:
 >
 ```
 
-If you have multiple [video sources](#videosrc), make sure you order your `videoSrc` array by ascending file size so that the smallest video file is first; browsers will always simply pick the first source in the list that they support.
+If you have multiple video sources, make sure you order your `videoSrc` array by ascending file size so that the smallest video file is first; browsers will always simply pick the first source in the list that they support.
 
 ### pausedOverlay
 
