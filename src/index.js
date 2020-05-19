@@ -94,15 +94,16 @@ const videoSizingStyles = {
  *                                                                     - src: The src URL string to use for a video player source
  *                                                                     - type: The media type of the video source, ie 'video/mp4'
  *                                                                   - **Array**: if you would like to provide multiple sources, you can provide an array of URL strings and/or objects with the shape described above
- * @param {!(string|string[]|VideoCaptionsTrack|VideoCaptionsTrack[])} videoCaptions - Captions track(s) to use for the video player for accessibility. Accepts 3 different formats:
- *                                                                                     - **String**: the URL string to use as the captions track's src
- *                                                                                     - **Object**: an object with attributes:
- *                                                                                       - src: The src URL string for the captions track file
- *                                                                                       - srcLang: The language code for the language that these captions are in (ie, 'en', 'es', 'fr')
- *                                                                                       - label: The title of the captions track
- *                                                                                     - **Array**: if you would like to provide multiple caption tracks, you can provide an array of objects with the shape described above
+ * @param {!(string|string[]|VideoCaptionsTrack|VideoCaptionsTrack[])} [videoCaptions] - Captions track(s) to use for the video player for accessibility. Accepts 3 different formats:
+ *                                                                                      - **String**: the URL string to use as the captions track's src
+ *                                                                                      - **Object**: an object with attributes:
+ *                                                                                        - src: The src URL string for the captions track file
+ *                                                                                        - srcLang: The language code for the language that these captions are in (ie, 'en', 'es', 'fr')
+ *                                                                                        - label: The title of the captions track
+ *                                                                                      - **Array**: if you would like to provide multiple caption tracks, you can provide an array of objects with the shape described above
  * @param {bool}    [focused=false] - Offers a prop interface for forcing the video to start/stop without DOM events
  *                                      When set to true, the video will begin playing and any events that would normally stop it will be ignored
+ * @param {bool}    [disableDefaultEventHandling] - Whether the video player's default mouse and touch event handling should be disabled in favor of a fully custom solution using the `focused` prop
  * @param {node}    [pausedOverlay] - Contents to render over the video while it's not playing
  * @param {node}    [loadingOverlay] - Contents to render over the video while it's loading
  * @param {number}  [loadingStateTimeout=200] - Duration in ms to wait after attempting to start the video before showing the loading overlay
@@ -114,10 +115,10 @@ const videoSizingStyles = {
  *                                                  it starts to gum up the works so that nothing loads properly and performance can degrade significantly.
  * @param {bool}    [muted=true] - Whether the video player should be muted
  * @param {bool}    [loop=true] - Whether the video player should loop when it reaches the end
- * @param {string}  [preload='metadata'] - Sets how much information the video element should preload before being played. Accepts one of the following values:
- *                                          - **"none"**: Nothing should be preloaded before the video is played
- *                                          - **"metadata"**: Only the video's metadata (ie length, dimensions) should be preloaded
- *                                          - **"auto"**: The whole video file should be preloaded even if it won't be played
+ * @param {string}  [preload] - Sets how much information the video element should preload before being played. Accepts one of the following values:
+ *                              - **"none"**: Nothing should be preloaded before the video is played
+ *                              - **"metadata"**: Only the video's metadata (ie length, dimensions) should be preloaded
+ *                              - **"auto"**: The whole video file should be preloaded even if it won't be played
  * @param {string}  [className] - Optional className to apply custom styling to the container element
  * @param {object}  [style] - Style object to apply custom inlined styles to the hover player container
  * @param {string}  [pausedOverlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
@@ -132,14 +133,13 @@ const videoSizingStyles = {
  *                                         - **"container"**: Everything should be sized based on the player's outer container div - the overlays and video will all expand to cover the container
  *                                         - **"manual"**: Manual mode does not apply any special styling and allows the developer to exercise full control over how everything should be sized - this means you will likely need to provide your own custom styling for both the paused overlay and the video element
  *
- *                                         If no value is provided, sizingMode will default to "overlay" if a pausedOverlay was provided, or "video" otherwise
- *
  * @license MIT
  */
 export default function HoverVideoPlayer({
   videoSrc,
-  videoCaptions,
+  videoCaptions = null,
   focused = false,
+  disableDefaultEventHandling = false,
   pausedOverlay = null,
   loadingOverlay = null,
   loadingStateTimeout = 200,
@@ -148,7 +148,7 @@ export default function HoverVideoPlayer({
   unloadVideoOnPaused = false,
   muted = true,
   loop = true,
-  preload = 'metadata',
+  preload = null,
   className = '',
   style = null,
   pausedOverlayWrapperClassName = '',
@@ -396,6 +396,9 @@ export default function HoverVideoPlayer({
   }, [focused, onHoverEnd, onHoverStart]);
 
   React.useEffect(() => {
+    // If default event handling is disabled, we shouldn't check for touch events outside of the player
+    if (disableDefaultEventHandling) return undefined;
+
     // Event listener pauses the video when the user touches somewhere outside of the player
     function onWindowTouchStart(event) {
       if (!containerRef.current.contains(event.target)) {
@@ -407,7 +410,7 @@ export default function HoverVideoPlayer({
 
     // Remove the event listener on cleanup
     return () => window.removeEventListener('touchstart', onWindowTouchStart);
-  }, [onHoverEnd]);
+  }, [disableDefaultEventHandling, onHoverEnd]);
 
   React.useEffect(() => {
     // Manually setting the `muted` attribute on the video element via an effect in order
@@ -466,9 +469,9 @@ export default function HoverVideoPlayer({
 
   return (
     <div
-      onMouseEnter={onHoverStart}
-      onMouseLeave={onHoverEnd}
-      onTouchStart={onHoverStart}
+      onMouseEnter={disableDefaultEventHandling ? null : onHoverStart}
+      onMouseLeave={disableDefaultEventHandling ? null : onHoverEnd}
+      onTouchStart={disableDefaultEventHandling ? null : onHoverStart}
       data-testid="hover-video-player-container"
       ref={containerRef}
       className={className}
