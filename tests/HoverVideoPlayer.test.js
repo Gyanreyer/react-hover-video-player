@@ -377,19 +377,18 @@ describe('Video props', () => {
   test('preload', () => {
     const { container, rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
-      // preload is 'metadata' by default
     });
 
     const videoElement = container.querySelector('video');
 
-    expect(videoElement).toHaveAttribute('preload', 'metadata');
+    expect(videoElement).not.toHaveAttribute('preload');
 
-    // Re-render with preload set to 'none'
+    // Re-render with preload set to 'metadata'
     rerenderWithProps({
       videoSrc: 'fake/video-file.mp4',
-      preload: 'none',
+      preload: 'metadata',
     });
-    expect(videoElement).toHaveAttribute('preload', 'none');
+    expect(videoElement).toHaveAttribute('preload', 'metadata');
   });
 });
 
@@ -708,6 +707,54 @@ describe('focused', () => {
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
     expect(videoElement).toBePlaying();
 
+    fireEvent.touchStart(document.body);
+
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
+    expect(videoElement).toBePlaying();
+  });
+});
+
+describe('disableDefaultEventHandling', () => {
+  mockConsoleError();
+
+  test('disableDefaultEventHandling prop disables all default event handling', async () => {
+    const {
+      container,
+      getByTestId,
+      rerenderWithProps,
+    } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+      disableDefaultEventHandling: true,
+    });
+
+    const playerContainer = getByTestId('hover-video-player-container');
+    const videoElement = container.querySelector('video');
+
+    expect(videoElement.play).toHaveBeenCalledTimes(0);
+    expect(videoElement).toBePaused();
+
+    fireEvent.mouseEnter(playerContainer);
+    fireEvent.touchStart(playerContainer);
+
+    // Mouse and touch events should not have done anything
+    expect(videoElement.play).toHaveBeenCalledTimes(0);
+    expect(videoElement).toBePaused();
+
+    // Set focused to true to start playing the video
+    rerenderWithProps({
+      videoSrc: 'fake/video-file.mp4',
+      disableDefaultEventHandling: true,
+      focused: true,
+    });
+
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
+    expect(videoElement).toBeLoading();
+
+    await act(() => getPlayPromise(videoElement, 0));
+
+    expect(videoElement).toBePlaying();
+
+    fireEvent.mouseLeave(playerContainer);
     fireEvent.touchStart(document.body);
 
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
