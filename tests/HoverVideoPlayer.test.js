@@ -161,19 +161,6 @@ describe('videoSrc prop', () => {
 describe('videoCaptions prop', () => {
   describe('Handles valid videoCaptions prop values correctly', () => {
     mockConsoleError();
-    test('correctly handles receiving a string for the videoCaptions prop', () => {
-      const { container } = renderHoverVideoPlayer({
-        videoSrc: '/fake/video-file.mp4',
-        videoCaptions: '/fake/captions-file.vtt',
-      });
-
-      const videoElement = container.querySelector('video');
-
-      const videoTracks = videoElement.querySelectorAll('track');
-      expect(videoTracks).toHaveLength(1);
-      expect(videoTracks[0]).toHaveAttribute('kind', 'captions');
-      expect(videoTracks[0]).toHaveAttribute('src', '/fake/captions-file.vtt');
-    });
 
     test('correctly handles receiving a valid object for the videoCaptions prop', () => {
       const { container } = renderHoverVideoPlayer({
@@ -281,7 +268,7 @@ describe('videoCaptions prop', () => {
             srcLang: 'en',
             label: 'English',
           },
-          false,
+          'bad-captions-file.vtt',
           100,
           {
             src: '/fake/captions-file-fr.vtt',
@@ -316,7 +303,7 @@ describe('videoCaptions prop', () => {
       expect(console.error).toHaveBeenNthCalledWith(
         1,
         "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
-        false
+        'bad-captions-file.vtt'
       );
       expect(console.error).toHaveBeenNthCalledWith(
         2,

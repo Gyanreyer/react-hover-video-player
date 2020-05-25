@@ -862,31 +862,6 @@ exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly 
 </div>
 `;
 
-exports[`videoCaptions prop Handles valid videoCaptions prop values correctly correctly handles receiving a string for the videoCaptions prop 1`] = `
-<div>
-  <div
-    class=""
-    data-testid="hover-video-player-container"
-    style="position: relative;"
-  >
-    <video
-      class=""
-      loop=""
-      playsinline=""
-      style="display: block; width: 100%; object-fit: cover;"
-    >
-      <source
-        src="/fake/video-file.mp4"
-      />
-      <track
-        kind="captions"
-        src="/fake/captions-file.vtt"
-      />
-    </video>
-  </div>
-</div>
-`;
-
 exports[`videoCaptions prop Handles valid videoCaptions prop values correctly correctly handles receiving a valid object for the videoCaptions prop 1`] = `
 <div>
   <div
