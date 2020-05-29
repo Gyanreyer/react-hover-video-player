@@ -78,11 +78,11 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
-    },
-    "husky": {
-      "hooks": {
-        "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-      }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "npx commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "release": {
@@ -91,10 +91,17 @@
         "path": "@semantic-release/commit-analyzer",
         "preset": "angular",
         "releaseRules": [
-          {"type": "docs", "scope":"README", "release": "patch"}
+          {
+            "type": "docs",
+            "scope": "README",
+            "release": "patch"
+          }
         ],
         "parserOpts": {
-          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES"]
+          "noteKeywords": [
+            "BREAKING CHANGE",
+            "BREAKING CHANGES"
+          ]
         }
       },
       "@semantic-release/changelog",
@@ -102,12 +109,12 @@
       {
         "path": "@semantic-release/git",
         "assets": [
-         "package.json",
-         "package-lock.json",
-         "CHANGELOG.md"
-       ],
-       "message": "chore(release): ${nextRelease.version} [skip ci]nn${nextRelease.notes}"
-     }
-   ]
+          "package.json",
+          "package-lock.json",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]nn${nextRelease.notes}"
+      }
+    ]
   }
 }

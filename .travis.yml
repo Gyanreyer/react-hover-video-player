@@ -14,8 +14,10 @@ notifications:
 
 before_install:
   - npm install -g codecov
+  - npm install -g @commitlint/travis-cli
 
 script:
+  - commitlint-travis
   - npm test
   - codecov
 
