@@ -97,9 +97,8 @@
     }
   },
   "release": {
-    "prepare": [
-      {
-        "path": "@semantic-release/commit-analyzer",
+    "plugins": [
+      ["@semantic-release/commit-analyzer", {
         "preset": "angular",
         "releaseRules": [
           {
@@ -114,18 +113,17 @@
             "BREAKING CHANGES"
           ]
         }
-      },
+      }],
       "@semantic-release/changelog",
       "@semantic-release/npm",
-      {
-        "path": "@semantic-release/git",
+      ["@semantic-release/git", {
         "assets": [
           "package.json",
           "package-lock.json",
           "CHANGELOG.md"
         ],
         "message": "chore(release): ${nextRelease.version} [skip ci]nn${nextRelease.notes}"
-      }
+      }]
     ]
   }
 }
