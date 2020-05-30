@@ -10,7 +10,8 @@
   "scripts": {
     "build": "nwb build-react-component",
     "clean": "nwb clean-module && nwb clean-demo",
-    "start": "nwb serve-react-demo",
+    "start": "nwb serve-react-demo --webpack.html.template=demo/src/templates/dev-playground.html",
+    "start:demo": "nwb serve-react-demo",
     "test": "jest --config=tests/jest.config.js",
     "test:watch": "npm run test -- --watch --no-cache",
     "commit": "npx git-cz"
@@ -53,8 +54,11 @@
     "react": "^16.8.0",
     "react-dom": "^16.13.1",
     "react-live": "^2.2.2",
+    "react-markdown": "^4.3.1",
+    "react-syntax-highlighter": "^12.2.1",
     "regenerator-runtime": "^0.13.5",
-    "semantic-release": "^17.0.4"
+    "semantic-release": "^17.0.7",
+    "use-http": "^1.0.12"
   },
   "author": "Ryan Geyer",
   "homepage": "https://react-hover-video-player.dev",

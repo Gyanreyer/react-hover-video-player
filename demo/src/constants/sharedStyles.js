@@ -40,8 +40,7 @@ injectGlobal`
 
   h2 {
     font-size: 36px;
-    margin: 0 0 8px;
-    padding-top: 12px;
+    margin: 24px 0 12px;
 
     ${breakpoints.medium} {
       font-size: 24px;
@@ -50,8 +49,7 @@ injectGlobal`
 
   h3 {
     font-size: 24px;
-    margin: 0 0 8px;
-    padding-top: 12px;
+    margin: 12px 0 8px;
 
     ${breakpoints.medium} {
       font-size: 20px;
@@ -71,7 +69,9 @@ injectGlobal`
     position: relative;
     transition: opacity 0.1s;
 
-    :after {
+    /* All links to another section on the page should have an underline
+        which is hidden and transitions in when hovered over */
+    &[href^="#"]:after {
       content: '';
       position: absolute;
       bottom: 0;
@@ -87,66 +87,20 @@ injectGlobal`
       opacity: 0.9;
     }
 
-    :hover, :focus, &.always-underlined {
+    /* A link's underline should transition in when the user hovers or focuses on it */
+    :hover, :focus,
+    /* Links inside a paragraph should always have an underline */
+    p > & {
       :after {
         left: 0;
-        right: auto;
-        width: 100%;
+        right: auto !important;
+        width: 100% !important;
       }
     }
-
-    &.no-underline:after {
-      content: none;
-    }
   }
 
-  code {
-    font-family: monospace;
-    font-size: 14px;
-    color: #d4d4d4;
-    background-color: #0E0E0E;
-    padding: 10px 16px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    display: inline-block;
-  }
-
-  em {
-    color: #f2a365;
-    font-style: normal;
-
-    a {
-    color: #f2a365;
-  
-    :after {
-      background-color: #f2a365;
-    }
-  }
-  }
-
-  figure {
-    margin: 12px 0 24px;
-  }
-
-  figcaption {
-    font-weight: normal;
-    margin-bottom: 8px;
-  }
-
-  /* CLASSES FOR DEMO COMPONENTS */
-  .demo-thumbnail-image {
-    width: 100%;
-    height: 100%;
-  }
-
-  .demo-loading-overlay {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 24px;
-    background-color: green;
+  ul {
+    margin: 0;
+    padding-left: 32px;
   }
 `;
