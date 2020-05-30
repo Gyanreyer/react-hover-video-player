@@ -523,6 +523,7 @@ export default function HoverVideoPlayer({
           ...videoStyle,
         }}
         className={videoClassName}
+        data-testid="video-element"
       >
         {!isVideoUnloaded &&
           // If the video is not unloaded, parse the `videoSrc` prop into an array of objects and render them

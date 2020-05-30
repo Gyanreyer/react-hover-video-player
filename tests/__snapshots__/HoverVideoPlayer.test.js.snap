@@ -23,6 +23,7 @@ exports[`Follows video interaction flows correctly an attempt to pause the video
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -58,6 +59,7 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -93,6 +95,7 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -128,6 +131,7 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -163,6 +167,7 @@ exports[`Follows video interaction flows correctly the video will be paused imme
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -198,6 +203,7 @@ exports[`Handles interaction events correctly mouseEnter and mouseLeave events t
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -233,6 +239,7 @@ exports[`Handles interaction events correctly touch events take the video throug
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -261,6 +268,7 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -289,6 +297,7 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -324,6 +333,7 @@ exports[`Supports browsers that do not return a promise from video.play() handle
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -345,6 +355,7 @@ exports[`Supports browsers that do not return a promise from video.play() handle
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -366,6 +377,7 @@ exports[`Video playback errors handles a video playback error correectly 1`] = `
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -387,6 +399,7 @@ exports[`Video playback errors handles playback errors correctly for browsers th
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -408,6 +421,7 @@ exports[`Video props loop prop correctly sets loop attribute on video 1`] = `
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -429,6 +443,7 @@ exports[`Video props muted prop correctly sets muted attribute on video 1`] = `
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -450,6 +465,7 @@ exports[`Video props preload 1`] = `
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -471,6 +487,7 @@ exports[`disableDefaultEventHandling disableDefaultEventHandling prop disables a
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -492,6 +509,7 @@ exports[`focused focused prop starts and stops the video correctly 1`] = `
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -513,6 +531,7 @@ exports[`focused other events which would normally stop the video are ignored if
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -534,6 +553,7 @@ exports[`overlayTransitionDuration Stop attempts stop immediately if a pausedOve
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -562,6 +582,7 @@ exports[`overlayTransitionDuration Stop attempts take the amount of time set by 
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -597,6 +618,7 @@ exports[`pausedOverlay and loadingOverlay pausedOverlay and loadingOverlay are s
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -625,6 +647,7 @@ exports[`pausedOverlay and loadingOverlay the loading state overlay is not shown
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -646,6 +669,7 @@ exports[`restartOnPaused restartOnPaused prop does not restart the video when se
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -667,6 +691,7 @@ exports[`restartOnPaused restartOnPaused prop restarts the video when set to tru
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -695,6 +720,7 @@ exports[`sizingMode sizingMode "container" sets correct styling on the player 1`
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
@@ -723,6 +749,7 @@ exports[`sizingMode sizingMode "manual" sets correct styling on the player 1`] =
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="object-fit: cover;"
@@ -751,6 +778,7 @@ exports[`sizingMode sizingMode "overlay" sets correct styling on the player 1`] 
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; object-fit: cover;"
@@ -779,6 +807,7 @@ exports[`sizingMode sizingMode "video" sets correct styling on the player 1`] = 
     </div>
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -800,6 +829,7 @@ exports[`unloadVideoOnPaused unloadVideoOnPaused prop unloads the video's source
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -817,6 +847,7 @@ exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly 
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -838,6 +869,7 @@ exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly 
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -871,6 +903,7 @@ exports[`videoCaptions prop Handles valid videoCaptions prop values correctly co
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -898,6 +931,7 @@ exports[`videoCaptions prop Handles valid videoCaptions prop values correctly co
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -937,6 +971,7 @@ exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly 
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -954,6 +989,7 @@ exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly 
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -971,6 +1007,7 @@ exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly 
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -996,6 +1033,7 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -1017,6 +1055,7 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -1039,6 +1078,7 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -1065,6 +1105,7 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
@@ -1089,6 +1130,7 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
   >
     <video
       class=""
+      data-testid="video-element"
       loop=""
       playsinline=""
       style="display: block; width: 100%; object-fit: cover;"
