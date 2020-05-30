@@ -1,6 +1,6 @@
 {
   "name": "react-hover-video-player",
-  "version": "0.0.0",
+  "version": "6.5.0",
   "description": "React component which manages playing a video when the user hovers over it and pausing when they stop.",
   "main": "es/index.js",
   "files": [
@@ -98,32 +98,38 @@
   },
   "release": {
     "plugins": [
-      ["@semantic-release/commit-analyzer", {
-        "preset": "angular",
-        "releaseRules": [
-          {
-            "type": "docs",
-            "scope": "readme",
-            "release": "patch"
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "angular",
+          "releaseRules": [
+            {
+              "type": "docs",
+              "scope": "readme",
+              "release": "patch"
+            }
+          ],
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES"
+            ]
           }
-        ],
-        "parserOpts": {
-          "noteKeywords": [
-            "BREAKING CHANGE",
-            "BREAKING CHANGES"
-          ]
         }
-      }],
+      ],
       "@semantic-release/changelog",
       "@semantic-release/npm",
-      ["@semantic-release/git", {
-        "assets": [
-          "package.json",
-          "package-lock.json",
-          "CHANGELOG.md"
-        ],
-        "message": "chore(release): ${nextRelease.version} [skip ci]nn${nextRelease.notes}"
-      }]
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json",
+            "package-lock.json",
+            "CHANGELOG.md"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]nn${nextRelease.notes}"
+        }
+      ]
     ]
   }
 }
