@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, act } from '@testing-library/react';
+import { fireEvent, act, screen } from '@testing-library/react';
 
 import {
   renderHoverVideoPlayer,
@@ -12,11 +12,11 @@ describe('videoSrc prop', () => {
     mockConsoleError();
 
     test('correctly handles receiving a string for the videoSrc prop', () => {
-      const { container } = renderHoverVideoPlayer({
+      renderHoverVideoPlayer({
         videoSrc: '/fake/video-file.mp4',
       });
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       // Ensure we have one source that has been set up correctly
       const videoSources = videoElement.querySelectorAll('source');
@@ -26,11 +26,11 @@ describe('videoSrc prop', () => {
     });
 
     test('correctly handles receiving an array of strings for the videoSrc prop', () => {
-      const { container } = renderHoverVideoPlayer({
+      renderHoverVideoPlayer({
         videoSrc: ['/fake/video-file.webm', '/fake/video-file.mp4'],
       });
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       const videoSources = videoElement.querySelectorAll('source');
       expect(videoSources).toHaveLength(2);
@@ -41,11 +41,11 @@ describe('videoSrc prop', () => {
     });
 
     test('correctly handles receiving a valid object for the videoSrc prop', () => {
-      const { container } = renderHoverVideoPlayer({
+      renderHoverVideoPlayer({
         videoSrc: { src: '/fake/video-file.mp4', type: 'video/mp4' },
       });
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       // Ensure we have one source that has been set up correctly
       const videoSources = videoElement.querySelectorAll('source');
@@ -55,14 +55,14 @@ describe('videoSrc prop', () => {
     });
 
     test('correctly handles receiving an array of objects for the videoSrc prop', () => {
-      const { container } = renderHoverVideoPlayer({
+      renderHoverVideoPlayer({
         videoSrc: [
           { src: '/fake/video-file.webm', type: 'video/webm' },
           { src: '/fake/video-file.mp4', type: 'video/mp4' },
         ],
       });
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       const videoSources = videoElement.querySelectorAll('source');
       expect(videoSources).toHaveLength(2);
@@ -73,7 +73,7 @@ describe('videoSrc prop', () => {
     });
 
     test('correctly handles receiving an array with a mix of strings and objects for the videoSrc prop', () => {
-      const { container } = renderHoverVideoPlayer({
+      renderHoverVideoPlayer({
         videoSrc: [
           '/fake/video-file.webm',
           { src: '/fake/video-file.avi' },
@@ -81,7 +81,7 @@ describe('videoSrc prop', () => {
         ],
       });
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       const videoSources = videoElement.querySelectorAll('source');
       expect(videoSources).toHaveLength(3);
@@ -98,9 +98,9 @@ describe('videoSrc prop', () => {
     mockConsoleError(true);
 
     test('correctly handles not receiving a videoSrc prop', () => {
-      const { container } = renderHoverVideoPlayer({});
+      renderHoverVideoPlayer({});
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       const videoSources = videoElement.querySelectorAll('source');
       expect(videoSources).toHaveLength(0);
@@ -113,11 +113,11 @@ describe('videoSrc prop', () => {
     });
 
     test('correctly handles receiving a single invalid value for the videoSrc prop', () => {
-      const { container } = renderHoverVideoPlayer({
+      renderHoverVideoPlayer({
         videoSrc: 100,
       });
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       const videoSources = videoElement.querySelectorAll('source');
       expect(videoSources).toHaveLength(0);
@@ -131,7 +131,7 @@ describe('videoSrc prop', () => {
     });
 
     test('correctly handles receiving an invalid value in an array for the videoSrc prop', () => {
-      const { container } = renderHoverVideoPlayer({
+      renderHoverVideoPlayer({
         videoSrc: [
           'valid-video-file.webm',
           false,
@@ -139,7 +139,7 @@ describe('videoSrc prop', () => {
         ],
       });
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       const videoSources = videoElement.querySelectorAll('source');
       expect(videoSources).toHaveLength(2);
@@ -161,22 +161,9 @@ describe('videoSrc prop', () => {
 describe('videoCaptions prop', () => {
   describe('Handles valid videoCaptions prop values correctly', () => {
     mockConsoleError();
-    test('correctly handles receiving a string for the videoCaptions prop', () => {
-      const { container } = renderHoverVideoPlayer({
-        videoSrc: '/fake/video-file.mp4',
-        videoCaptions: '/fake/captions-file.vtt',
-      });
-
-      const videoElement = container.querySelector('video');
-
-      const videoTracks = videoElement.querySelectorAll('track');
-      expect(videoTracks).toHaveLength(1);
-      expect(videoTracks[0]).toHaveAttribute('kind', 'captions');
-      expect(videoTracks[0]).toHaveAttribute('src', '/fake/captions-file.vtt');
-    });
 
     test('correctly handles receiving a valid object for the videoCaptions prop', () => {
-      const { container } = renderHoverVideoPlayer({
+      renderHoverVideoPlayer({
         videoSrc: '/fake/video-file.mp4',
         videoCaptions: {
           src: '/fake/captions-file-en.vtt',
@@ -185,7 +172,7 @@ describe('videoCaptions prop', () => {
         },
       });
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       const videoTracks = videoElement.querySelectorAll('track');
       expect(videoTracks).toHaveLength(1);
@@ -199,7 +186,7 @@ describe('videoCaptions prop', () => {
     });
 
     test('correctly handles receiving an array of objects for the videoCaptions prop', () => {
-      const { container } = renderHoverVideoPlayer({
+      renderHoverVideoPlayer({
         videoSrc: '/fake/video-file.mp4',
         videoCaptions: [
           {
@@ -220,7 +207,7 @@ describe('videoCaptions prop', () => {
         ],
       });
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       const videoTracks = videoElement.querySelectorAll('track');
       expect(videoTracks).toHaveLength(3);
@@ -254,12 +241,12 @@ describe('videoCaptions prop', () => {
     mockConsoleError(true);
 
     test('correctly handles receiving a single invalid value for the videoCaptions prop', () => {
-      const { container } = renderHoverVideoPlayer({
+      renderHoverVideoPlayer({
         videoSrc: 'fake/video-file.mp4',
         videoCaptions: false,
       });
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       const videoTracks = videoElement.querySelectorAll('track');
       expect(videoTracks).toHaveLength(0);
@@ -273,7 +260,7 @@ describe('videoCaptions prop', () => {
     });
 
     test('correctly handles receiving an invalid value in an array for the videoCaptions prop', () => {
-      const { container } = renderHoverVideoPlayer({
+      renderHoverVideoPlayer({
         videoSrc: 'fake/video-file.mp4',
         videoCaptions: [
           {
@@ -281,7 +268,7 @@ describe('videoCaptions prop', () => {
             srcLang: 'en',
             label: 'English',
           },
-          false,
+          'bad-captions-file.vtt',
           100,
           {
             src: '/fake/captions-file-fr.vtt',
@@ -291,7 +278,7 @@ describe('videoCaptions prop', () => {
         ],
       });
 
-      const videoElement = container.querySelector('video');
+      const videoElement = screen.getByTestId('video-element');
 
       const videoTracks = videoElement.querySelectorAll('track');
       expect(videoTracks).toHaveLength(2);
@@ -316,7 +303,7 @@ describe('videoCaptions prop', () => {
       expect(console.error).toHaveBeenNthCalledWith(
         1,
         "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
-        false
+        'bad-captions-file.vtt'
       );
       expect(console.error).toHaveBeenNthCalledWith(
         2,
@@ -331,12 +318,12 @@ describe('Video props', () => {
   mockConsoleError();
 
   test('muted prop correctly sets muted attribute on video', () => {
-    const { container, rerenderWithProps } = renderHoverVideoPlayer({
+    const { rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       // muted is true by default
     });
 
-    const videoElement = container.querySelector('video');
+    const videoElement = screen.getByTestId('video-element');
 
     expect(videoElement.muted).toBe(true);
 
@@ -350,12 +337,12 @@ describe('Video props', () => {
   });
 
   test('loop prop correctly sets loop attribute on video', () => {
-    const { container, rerenderWithProps } = renderHoverVideoPlayer({
+    const { rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       // loop is true by default
     });
 
-    const videoElement = container.querySelector('video');
+    const videoElement = screen.getByTestId('video-element');
 
     expect(videoElement).toHaveAttribute('loop');
 
@@ -375,11 +362,11 @@ describe('Video props', () => {
   });
 
   test('preload', () => {
-    const { container, rerenderWithProps } = renderHoverVideoPlayer({
+    const { rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
     });
 
-    const videoElement = container.querySelector('video');
+    const videoElement = screen.getByTestId('video-element');
 
     expect(videoElement).not.toHaveAttribute('preload');
 
@@ -396,13 +383,13 @@ describe('restartOnPaused', () => {
   mockConsoleError();
 
   test('restartOnPaused prop restarts the video when set to true', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       restartOnPaused: true,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
 
     // The video's initial time should be 0
     expect(videoElement.currentTime).toBe(0);
@@ -431,13 +418,13 @@ describe('restartOnPaused', () => {
   });
 
   test('restartOnPaused prop does not restart the video when set to false', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       // restartOnPaused is false by default
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
 
     // The video's initial time should be 0
     expect(videoElement.currentTime).toBe(0);
@@ -470,13 +457,13 @@ describe('unloadVideoOnPaused', () => {
   mockConsoleError();
 
   test("unloadVideoOnPaused prop unloads the video's sources while it is paused when set to true", async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       unloadVideoOnPaused: true,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
 
     // The video's initial time should be 0
     expect(videoElement.currentTime).toBe(0);
@@ -540,7 +527,7 @@ describe('pausedOverlay and loadingOverlay', () => {
   });
 
   test('pausedOverlay and loadingOverlay are shown and hidden correctly as the video is started and stopped', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       loadingOverlay: <div />,
@@ -548,11 +535,10 @@ describe('pausedOverlay and loadingOverlay', () => {
       loadingStateTimeout: 500,
     });
 
-    const videoElement = container.querySelector('video');
-
-    const playerContainer = getByTestId('hover-video-player-container');
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     // The paused overlay should be visible since we're in the initial idle paused state
     expect(pausedOverlayWrapper.style.opacity).toBe('1');
@@ -601,15 +587,15 @@ describe('pausedOverlay and loadingOverlay', () => {
   });
 
   test('the loading state overlay is not shown if the video plays before the loading state timeout completes', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       loadingOverlay: <div />,
       loadingStateTimeout: 500,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
-    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     // The loading overlay should be hidden initially
     expect(loadingOverlayWrapper.style.opacity).toBe('0');
@@ -643,12 +629,12 @@ describe('focused', () => {
   mockConsoleError();
 
   test('focused prop starts and stops the video correctly', async () => {
-    const { container, rerenderWithProps } = renderHoverVideoPlayer({
+    const { rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       // focused is false by default
     });
 
-    const videoElement = container.querySelector('video');
+    const videoElement = screen.getByTestId('video-element');
 
     expect(videoElement.play).toHaveBeenCalledTimes(0);
     expect(videoElement).toBePaused();
@@ -671,14 +657,12 @@ describe('focused', () => {
   });
 
   test('other events which would normally stop the video are ignored if focused prop is true', async () => {
-    const {
-      container,
-      getByTestId,
-      rerenderWithProps,
-    } = renderHoverVideoPlayer({ videoSrc: 'fake/video-file.mp4' });
+    const { rerenderWithProps } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+    });
 
-    const playerContainer = getByTestId('hover-video-player-container');
-    const videoElement = container.querySelector('video');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
 
     expect(videoElement).toBePaused();
 
@@ -718,17 +702,13 @@ describe('disableDefaultEventHandling', () => {
   mockConsoleError();
 
   test('disableDefaultEventHandling prop disables all default event handling', async () => {
-    const {
-      container,
-      getByTestId,
-      rerenderWithProps,
-    } = renderHoverVideoPlayer({
+    const { rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       disableDefaultEventHandling: true,
     });
 
-    const playerContainer = getByTestId('hover-video-player-container');
-    const videoElement = container.querySelector('video');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
 
     expect(videoElement.play).toHaveBeenCalledTimes(0);
     expect(videoElement).toBePaused();
@@ -774,15 +754,14 @@ describe('overlayTransitionDuration', () => {
   });
 
   test('Stop attempts take the amount of time set by overlayTransitionDuration prop if a pausedOverlay is provided', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       overlayTransitionDuration: 900,
     });
 
-    const videoElement = container.querySelector('video');
-
-    const playerContainer = getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
 
     expect(videoElement).toBePaused();
 
@@ -815,13 +794,13 @@ describe('overlayTransitionDuration', () => {
   });
 
   test('Stop attempts stop immediately if a pausedOverlay is not provided', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       overlayTransitionDuration: 900,
     });
 
-    const playerContainer = getByTestId('hover-video-player-container');
-    const videoElement = container.querySelector('video');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
 
     expect(videoElement).toBePaused();
     fireEvent.mouseEnter(playerContainer);
@@ -841,14 +820,14 @@ describe('sizingMode', () => {
   mockConsoleError();
 
   test('sizingMode "video" sets correct styling on the player', () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       // sizingMode is 'video' by default
     });
 
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const videoElement = container.querySelector('video');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
 
     expect(videoElement.style.position).toBe('');
     expect(videoElement.style.display).toBe('block');
@@ -856,42 +835,42 @@ describe('sizingMode', () => {
   });
 
   test('sizingMode "overlay" sets correct styling on the player', () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       sizingMode: 'overlay',
     });
 
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const videoElement = container.querySelector('video');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
 
     expect(pausedOverlayWrapper.style.position).toBe('relative');
     expect(videoElement.style.position).toBe('absolute');
   });
 
   test('sizingMode "container" sets correct styling on the player', () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       sizingMode: 'container',
     });
 
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const videoElement = container.querySelector('video');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
 
     expect(videoElement.style.position).toBe('absolute');
     expect(pausedOverlayWrapper.style.position).toBe('absolute');
   });
 
   test('sizingMode "manual" sets correct styling on the player', () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       sizingMode: 'manual',
     });
 
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const videoElement = container.querySelector('video');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
 
     expect(videoElement.style.position).toBe('');
     expect(pausedOverlayWrapper.style.position).toBe('');
@@ -910,16 +889,16 @@ describe('Handles interaction events correctly', () => {
   });
 
   test('mouseEnter and mouseLeave events take the video through its play and pause flows correctly', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       loadingOverlay: <div />,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     // The video should initially be paused
     expect(videoElement.play).toHaveBeenCalledTimes(0);
@@ -968,16 +947,16 @@ describe('Handles interaction events correctly', () => {
   });
 
   test('touch events take the video through its play and pause flows correctly', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       loadingOverlay: <div />,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     // The video should initially be paused
     expect(videoElement.play).toHaveBeenCalledTimes(0);
@@ -1047,16 +1026,16 @@ describe('Follows video interaction flows correctly', () => {
   });
 
   test('an attempt to play the video will correctly interrupt any attempts to pause it', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       loadingOverlay: <div />,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
@@ -1100,16 +1079,16 @@ describe('Follows video interaction flows correctly', () => {
   });
 
   test('the video will be paused immediately when its play attempt completes after we have already stopped', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       loadingOverlay: <div />,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
@@ -1144,16 +1123,16 @@ describe('Follows video interaction flows correctly', () => {
   });
 
   test('an attempt to play the video when it is already playing will be ignored', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       loadingOverlay: <div />,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
@@ -1186,16 +1165,16 @@ describe('Follows video interaction flows correctly', () => {
   });
 
   test('an attempt to play the video when a previous play attempt is still loading will show the loading state again', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       loadingOverlay: <div />,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
@@ -1241,16 +1220,16 @@ describe('Follows video interaction flows correctly', () => {
   });
 
   test('an attempt to pause the video when it is already paused will be ignored', () => {
-    const { container, getByTestId } = renderHoverVideoPlayer({
+    renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
       loadingOverlay: <div />,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     // Mouse out of the container even though it was never started properly
     fireEvent.mouseLeave(playerContainer);
@@ -1277,13 +1256,13 @@ describe('Prevents memory leaks when unmounted', () => {
   });
 
   test('cleans everything up correctly if the video is unmounted during a play attempt', async () => {
-    const { container, getByTestId, unmount } = renderHoverVideoPlayer({
+    const { unmount } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       loadingOverlay: <div />,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
 
     // Spy on console.error so we can fail if any errors are logged
     const consoleErrorSpy = jest.spyOn(console, 'error');
@@ -1310,13 +1289,13 @@ describe('Prevents memory leaks when unmounted', () => {
   });
 
   test('cleans everything up correctly if the video is unmounted during a pause attempt', async () => {
-    const { container, getByTestId, unmount } = renderHoverVideoPlayer({
+    const { unmount } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
       pausedOverlay: <div />,
     });
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
 
     // Spy on console.error so we can fail if any errors are logged
     const consoleErrorSpy = jest.spyOn(console, 'error');
@@ -1358,7 +1337,7 @@ describe('Supports browsers that do not return a promise from video.play()', () 
   });
 
   test('handles start flow correctly', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer(
+    renderHoverVideoPlayer(
       {
         videoSrc: 'fake/video-file.mp4',
         pausedOverlay: <div />,
@@ -1370,10 +1349,10 @@ describe('Supports browsers that do not return a promise from video.play()', () 
       }
     );
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
-    const pausedOverlayWrapper = getByTestId('paused-overlay-wrapper');
-    const loadingOverlayWrapper = getByTestId('loading-overlay-wrapper');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     expect(videoElement).toBePaused();
     expect(pausedOverlayWrapper.style.opacity).toBe('1');
@@ -1405,7 +1384,7 @@ describe('Supports browsers that do not return a promise from video.play()', () 
   });
 
   test('handles start flow correctly multiple times in a row', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer(
+    renderHoverVideoPlayer(
       {
         videoSrc: 'fake/video-file.mp4',
       },
@@ -1415,8 +1394,8 @@ describe('Supports browsers that do not return a promise from video.play()', () 
       }
     );
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
 
     expect(videoElement).toBePaused();
 
@@ -1471,7 +1450,7 @@ describe('Video playback errors', () => {
   });
 
   test('handles a video playback error correectly', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer(
+    renderHoverVideoPlayer(
       {
         videoSrc: 'fake/video-file.mp4',
       },
@@ -1481,8 +1460,8 @@ describe('Video playback errors', () => {
       }
     );
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
@@ -1511,7 +1490,7 @@ describe('Video playback errors', () => {
   });
 
   test('handles playback errors correctly for browsers that do not support promises', async () => {
-    const { container, getByTestId } = renderHoverVideoPlayer(
+    renderHoverVideoPlayer(
       {
         videoSrc: 'fake/video-file.mp4',
       },
@@ -1522,8 +1501,8 @@ describe('Video playback errors', () => {
       }
     );
 
-    const videoElement = container.querySelector('video');
-    const playerContainer = getByTestId('hover-video-player-container');
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
 
     expect(videoElement).toBePaused();
 

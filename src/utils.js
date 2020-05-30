@@ -59,6 +59,7 @@ export function formatVideoSrc(videoSrc) {
  * @property  {string}  src - The src URL string for the captions track file
  * @property  {string}  srcLang - The language code for the language that these captions are in
  * @property  {string}  label - The title of the captions track
+ * @property  {bool}    default - Whether this track should be used by default if the user's preferences don't match an available srcLang
  */
 
 /**
@@ -73,6 +74,7 @@ export function formatVideoSrc(videoSrc) {
  *                                                                                       - src: The src URL string for the captions track file
  *                                                                                       - srcLang: The language code for the language that these captions are in (ie, 'en', 'es', 'fr')
  *                                                                                       - label: The title of the captions track
+ *                                                                                       - default: Whether this track should be used by default if the user's preferences don't match an available srcLang
  *                                                                                     - **Array**: if you would like to provide multiple caption tracks, you can provide an array of objects with the shape described above
  *
  * @returns {VideoCaptionsTrack[]}  Array of formatted VideoCaptionsTrack objects which can be used to render <track> elements for the video
@@ -88,13 +90,12 @@ export function formatVideoCaptions(videoCaptions) {
       // Parse our video captions values into an array of VideoCaptionsTrack
       // objects that can be used to render caption tracks for the video
       .reduce((captionsArray, captions) => {
-        if (typeof captions === 'string') {
-          captionsArray.push({ src: captions });
-        } else if (captions && captions.src) {
+        if (captions && captions.src) {
           captionsArray.push({
             src: captions.src,
             srcLang: captions.srcLang,
             label: captions.label,
+            default: Boolean(captions.default),
           });
         } else {
           // Log an error if one of the videoCaptions values is invalid

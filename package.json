@@ -10,9 +10,11 @@
   "scripts": {
     "build": "nwb build-react-component",
     "clean": "nwb clean-module && nwb clean-demo",
-    "start": "nwb serve-react-demo",
+    "start": "nwb serve-react-demo --webpack.html.template=demo/src/templates/dev-playground.html",
+    "start:demo": "nwb serve-react-demo",
     "test": "jest --config=tests/jest.config.js",
-    "test:watch": "npm run test -- --watch --no-cache"
+    "test:watch": "npm run test -- --watch --no-cache",
+    "commit": "npx git-cz"
   },
   "dependencies": {},
   "peerDependencies": {
@@ -21,13 +23,18 @@
   "devDependencies": {
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
     "@testing-library/jest-dom": "^5.3.0",
     "@testing-library/react": "^10.0.2",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.2.6",
     "babel-plugin-jsx-remove-data-test-id": "^2.1.3",
-    "clipboard-polyfill": "^2.8.6",
+    "commitizen": "^4.1.2",
     "core-js": "^3.6.5",
+    "cz-conventional-changelog": "^3.2.0",
     "emotion": "^10.0.27",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
@@ -38,14 +45,18 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-testing-library": "^3.0.2",
+    "husky": "^4.2.5",
     "jest": "^25.2.7",
-    "nwb": "^0.24.5",
+    "lint-staged": "^10.2.6",
+    "nwb": "^0.25.2",
     "prettier": "^2.0.2",
     "react": "^16.8.0",
     "react-dom": "^16.13.1",
-    "react-live": "^2.2.2",
+    "react-markdown": "^4.3.1",
+    "react-syntax-highlighter": "^12.2.1",
     "regenerator-runtime": "^0.13.5",
-    "semantic-release": "^17.0.4"
+    "semantic-release": "^17.0.7",
+    "use-http": "^1.0.12"
   },
   "author": "Ryan Geyer",
   "homepage": "https://react-hover-video-player.dev",
@@ -66,5 +77,55 @@
     "loading",
     "video",
     "player"
-  ]
+  ],
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint",
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "release": {
+    "prepare": [
+      {
+        "path": "@semantic-release/commit-analyzer",
+        "preset": "angular",
+        "releaseRules": [
+          {
+            "type": "docs",
+            "scope": "readme",
+            "release": "patch"
+          }
+        ],
+        "parserOpts": {
+          "noteKeywords": [
+            "BREAKING CHANGE",
+            "BREAKING CHANGES"
+          ]
+        }
+      },
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      {
+        "path": "@semantic-release/git",
+        "assets": [
+          "package.json",
+          "package-lock.json",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]nn${nextRelease.notes}"
+      }
+    ]
+  }
 }

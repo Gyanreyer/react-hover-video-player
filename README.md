@@ -1,29 +1,35 @@
 # React Hover Video Player
 
-A React component that makes it dead easy to set up a video that plays on hover.
-
 [![npm version](https://badgen.net/npm/v/react-hover-video-player)](https://www.npmjs.com/package/react-hover-video-player)
 [![minzipped size](https://badgen.net/bundlephobia/minzip/react-hover-video-player)](https://bundlephobia.com/result?p=react-hover-video-player)
 [![code coverage](https://codecov.io/gh/Gyanreyer/react-hover-video-player/branch/master/graph/badge.svg)](https://codecov.io/gh/Gyanreyer/react-hover-video-player)
 [![build status](https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=master)](https://travis-ci.com/github/Gyanreyer/react-hover-video-player)
 
+![demo](./demo/public/image/hover_preview_demo.gif)
+
+## What it is
+
+A React component that makes it super easy to set up a video that will play on hover.
+
 ## Features
 
-- Robust support for both mouse and touchscreen interactions
+- Support for both mouse and touchscreen interactions
 - Easily add custom thumbnails and loading states
 - Lightning fast
 - No dependencies
-- Simple and easy to customize
+- Easy to customize
 
 ## Get Started
 
 ### Installation
 
-`npm install react-hover-video-player`
+```bash
+npm install react-hover-video-player
+```
 
 ### Basic Usage
 
-```javascript
+```jsx
 import HoverVideoPlayer from 'react-hover-video-player';
 
 function MyComponent () {
@@ -41,7 +47,7 @@ function MyComponent () {
 }
 ```
 
-## Component Props
+## Sources
 
 ### videoSrc
 
@@ -51,7 +57,7 @@ function MyComponent () {
 
 If you only have **one video source**, you can simply provide a single string for the URL path to the video file like so:
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc="path/video-file.mp4"
 />
@@ -61,23 +67,70 @@ If you have **multiple video sources**, you can provide all of them in an array 
 
 ```javascript
 {
-  src: 'path/video-file.mp4', // The URL path string for this source
-  type: 'video/mp4', // The MIME type of this source
+  // The URL path string for this source
+  src: 'path/video-file.mp4',
+  // The MIME type of this source
+  type: 'video/mp4',
 }
 ```
 
 In practice this looks like:
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc={[
     { src: 'video.webm', type: 'video/webm' },
     { src: 'video.mp4', type: 'video/mp4' },
   ]}
->
+/>
 ```
 
 If you have multiple video sources, make sure you order your `videoSrc` array by ascending file size so that the smallest video file is first; browsers will always simply pick the first source in the list that they support.
+
+### videoCaptions
+
+**Type**: `object` or `array` of objects | **Default**: `null`
+
+`videoCaptions` accepts one or multiple objects descibing the caption track sources to use if you wish to add closed captions to the video for accessibility.
+
+A caption track object should follow the shape:
+
+```javascript
+{
+  // The URL string for the captions track file
+  src: 'path-to/captions-track.vtt',
+  // The code for the language that the captions are in
+  srcLang: 'en',
+  // The title of the captions track
+  label: 'English',
+  // OPTIONAL: whether this track should be used by default if
+  // the user's preferences don't match an available srcLang
+  default: true,
+}
+```
+
+In practice this looks like:
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  videoCaptions={[
+    {
+      src: 'captions/english.vtt',
+      srcLang: 'en',
+      label: 'English',
+      default: true,
+    },
+    {
+      src: 'captions/french.vtt',
+      srcLang: 'fr',
+      label: 'French',
+    },
+  ]}
+/>
+```
+
+## Overlays
 
 ### pausedOverlay
 
@@ -87,7 +140,7 @@ This optional prop accepts any renderable content that you would like to be disp
 
 A common use case for this would be displaying a thumbnail image over the video while it is paused.
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
   // We should display an image over the video while it is paused
@@ -115,7 +168,7 @@ The [overlayTransitionDuration](#overlaytransitionduration) prop allows you to s
 
 This allows you to provide a better user experience for users with slower internet connections, particularly if you are using larger video assets.
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
   // We should display a custom element on top of
@@ -138,7 +191,7 @@ This overlay will only be displayed if it takes more than a certain amount of ti
 
 After the user stops hovering on the player, the video will continue playing until the overlay has fully faded back in to provide the most seamless user experience possible.
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
   pausedOverlay={<div>Paused!</div>}
@@ -154,7 +207,7 @@ After the user stops hovering on the player, the video will continue playing unt
 
 `loadingStateTimeout` accepts the number of milliseconds that the player should wait before showing a loading state if the video is not able to play immediately.
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
   loadingOverlay={
@@ -168,18 +221,7 @@ After the user stops hovering on the player, the video will continue playing unt
 />
 ```
 
-### restartOnPaused
-
-**Type**: `boolean` | **Default**: `false`
-
-`restartOnPaused` accepts a boolean value which will toggle whether the video should be reset to the start every time it is paused. `restartOnPaused` is false by default so it will retain the current place in the video.
-
-```javascript
-<HoverVideoPlayer
-  videoSrc="video.mp4"
-  restartOnPaused // The video should restart when it is paused
-/>
-```
+## Custom Event Handling
 
 ### focused
 
@@ -187,7 +229,7 @@ After the user stops hovering on the player, the video will continue playing unt
 
 `focused` accepts a boolean value which, if true, will force the video player to play regardless of any other user interactions it receives. This can be useful for scenarios where you may wish to implement custom behavior outside of standard mouse/touch interactions with the video player.
 
-```javascript
+```jsx
 const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
 ...
@@ -206,7 +248,7 @@ const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 </a>
 ```
 
-If you wish to set up a a fully custom implementation that overrides the hover player's default mouse and touch event handling, you can use the [disableDefaultEventHandling](#disabledefaultdventhandling) prop.
+If you wish to set up a a fully custom implementation that overrides the hover player's default mouse and touch event handling, you can use the [disableDefaultEventHandling](#disabledefaulteventhandling) prop.
 
 ### disableDefaultEventHandling
 
@@ -214,7 +256,7 @@ If you wish to set up a a fully custom implementation that overrides the hover p
 
 `disableDefaultEventHandling` accepts a boolean value which, if true, will disable the player's default built-in event handling where `onMouseEnter` and `onTouchStart` events play the video and `onMouseLeave` events and `touchStart` events outside of the player pause the video. This can be useful if you want to build a fully custom implementation of the player's behavior using the [focused](#focused) prop.
 
-```javascript
+```jsx
 const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
 ...
@@ -232,52 +274,20 @@ const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 </div>
 ```
 
-### videoCaptions
+## Video Behavior
 
-**Type**: `string` or `array` of objects | **Default**: `null`
+### restartOnPaused
 
-`videoCaptions` accepts one or multiple values descibing the sources to use for caption tracks on the video for accessibility.
+**Type**: `boolean` | **Default**: `false`
 
-If you only have **one caption track file**, you can simply provide a single string for the URL path to the captions file like so:
+`restartOnPaused` accepts a boolean value which will toggle whether the video should be reset to the start every time it is paused after the user stops hovering. `restartOnPaused` is false by default so it will retain the current place in the video.
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
-  videoCaptions="captions/primary-captions.vtt"
+  restartOnPaused // The video should restart when it is paused
 />
 ```
-
-If you have **multiple caption tracks**, you can provide all of them in an array of objects with the shape:
-
-```javascript
-{
-  src: 'path-to/captions-track.vtt', // The URL string for the captions track file
-  srcLang: 'en', // The code for the language that the captions are in
-  label: 'English', // The title of the captions track
-}
-```
-
-In practice this looks like:
-
-```javascript
-<HoverVideoPlayer
-  videoSrc="video.mp4"
-  videoCaptions={[
-    {
-      src: 'captions/english.vtt',
-      srcLang: 'en',
-      label: 'English',
-    },
-    {
-      src: 'captions/french.vtt',
-      srcLang: 'fr',
-      label: 'French',
-    },
-  ]}
->
-```
-
-## Video Props
 
 ### muted
 
@@ -285,12 +295,12 @@ In practice this looks like:
 
 `muted` accepts a boolean value which toggles whether or not the video should be muted.
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
   // The video should play sound
   muted={false}
->
+/>
 ```
 
 ### loop
@@ -299,21 +309,21 @@ In practice this looks like:
 
 `loop` accepts a boolean value which toggles whether or not the video should loop when it reaches the end.
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
   // The video should not loop when it reaches the end
   loop={false}
->
+/>
 ```
 
-## Custom Styling Props
+## Custom Styling
 
 ### Applying classNames and styles
 
 The base styling for this component's contents are set using inline styling. You can customize or override this styling using various props that accept classNames and style objects.
 
-```javascript
+```jsx
 <HoverVideoPlayer
   /* ~~~ OUTER CONTAINER DIV ~~~ */
   // Applies a custom class to the outer container div wrapping the player
@@ -344,7 +354,7 @@ The base styling for this component's contents are set using inline styling. You
   videoClassName="player-video"
   // Applies inline styles to the video element
   videoStyle={{
-    padding: 24
+    padding: 24,
   }}
 />
 ```
@@ -362,7 +372,7 @@ The `sizingMode` prop can be used to apply one of four available styling presets
 - `"container"`: All of the video's contents should expand to fill the component's outer container div.
 - `"manual"`: Removes all preset sizing-related styling if you wish to use your own fully custom styling implementation.
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
   style={{
@@ -376,7 +386,7 @@ The `sizingMode` prop can be used to apply one of four available styling presets
 />
 ```
 
-## Optimization Props
+## Optimization
 
 ### preload
 
@@ -391,7 +401,7 @@ The `preload` prop maps directly to the [HTML Video element's preload attribute]
   - Note that this means that the video's dimensions will not be loaded until the video is played. This can potentially cause a content jump when the video starts loading if you are using the `"video"` [sizing mode](#sizing-mode-presets).
   - Additionally, nothing will be displayed for the video element until it starts playing, so you should make sure you provide [paused overlay](#pausedoverlay) contents to hide the video element.
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
   // We should only preload the video's metadata
@@ -409,7 +419,7 @@ Note that this will also keep the video's metadata unloaded when it is not playi
 
 Additionally, nothing will be displayed for the video element when it is unloaded, so it is highly recommended that you provide [paused overlay](#pausedoverlay) contents to hide the video when it is paused.
 
-```javascript
+```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
   // Fully unload the video when it isn't playing
