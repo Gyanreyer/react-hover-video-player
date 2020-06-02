@@ -5,95 +5,63 @@ import { css } from 'emotion';
 
 import HoverVideoPlayer from '../../src';
 import LoadingSpinnerOverlay from './components/LoadingSpinnerOverlay';
+import testVideos from './constants/testVideos';
 
-// Public test videos courtesy of https://gist.github.com/jsturgis/3b19447b304616f18657
-const testVideos = [
-  {
-    videoSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    thumbnailImageSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg',
-  },
-  {
-    videoSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-    thumbnailImageSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg',
-  },
-  {
-    videoSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-    thumbnailImageSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg',
-  },
-  {
-    videoSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-    thumbnailImageSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg',
-  },
-  {
-    videoSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-    thumbnailImageSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg',
-  },
-  {
-    videoSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-    thumbnailImageSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg',
-  },
-  {
-    videoSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-    thumbnailImageSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg',
-  },
-  {
-    videoSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-    thumbnailImageSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerMeltdowns.jpg',
-  },
-];
+function TestPlayer({ videoSrc, thumbnailImageSrc }) {
+  const renderTiming = React.useRef();
+  if (!renderTiming.current) {
+    renderTiming.current = {
+      averageRenderTime: 0,
+      renderCount: 0,
+    };
+  }
 
-const averageRenderTimes = {
-  original: {
-    mount: {
-      total: 0,
-      average: 0,
+  // Logs out helpful render timing info for performance measurements
+  const onProfilerRender = React.useCallback(
+    (
+      id, // the "id" prop of the Profiler tree that has just committed
+      phase, // either "mount" (if the tree just mounted) or "update" (if it re-rendered)
+      actualDuration // time spent rendering the committed update
+    ) => {
+      if (phase === 'mount') {
+        console.log(`${videoSrc} | MOUNT: ${actualDuration}ms`);
+      } else {
+        renderTiming.current.renderCount += 1;
+        renderTiming.current.averageRenderTime +=
+          (actualDuration - renderTiming.current.averageRenderTime) /
+          renderTiming.current.renderCount;
+        console.log(
+          `${videoSrc} | UPDATE: ${actualDuration}ms | New average: ${renderTiming.current.averageRenderTime}ms`
+        );
+      }
     },
-    update: {
-      total: 0,
-      average: 0,
-    },
-  },
-  test: {
-    mount: {
-      total: 0,
-      average: 0,
-    },
-    update: {
-      total: 0,
-      average: 0,
-    },
-  },
-};
+    [videoSrc]
+  );
 
-function onProfilerRender(
-  id, // the "id" prop of the Profiler tree that has just committed
-  phase, // either "mount" (if the tree just mounted) or "update" (if it re-rendered)
-  actualDuration // time spent rendering the committed update
-) {
-  const componentVersion = id.split('_')[0];
-  averageRenderTimes[componentVersion][phase].total += 1;
-  averageRenderTimes[componentVersion][phase].average +=
-    (actualDuration - averageRenderTimes[componentVersion][phase].average) /
-    averageRenderTimes[componentVersion][phase].total;
-
-  console.log(
-    `${componentVersion} | ${phase} | time: ${actualDuration}ms | new average: ${averageRenderTimes[componentVersion][phase].average}ms`
+  return (
+    <Profiler id={videoSrc} onRender={onProfilerRender}>
+      {/* TEST COMPONENT HERE */}
+      <HoverVideoPlayer
+        videoSrc={videoSrc}
+        pausedOverlay={
+          <img
+            src={thumbnailImageSrc}
+            alt=""
+            className={css`
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            `}
+          />
+        }
+        loadingOverlay={<LoadingSpinnerOverlay />}
+        className={css`
+          padding-top: 75%;
+        `}
+        sizingMode="container"
+        unloadVideoOnPaused
+      />
+    </Profiler>
   );
 }
 
@@ -114,39 +82,11 @@ export default function DevPlayground() {
         `}
       >
         {testVideos.map(({ videoSrc, thumbnailImageSrc }) => (
-          <div
-            className={css`
-              border-radius: 4px;
-              background-color: grey;
-            `}
-          >
-            <Profiler
-              id={`original_${videoSrc}`}
-              key={`original_${videoSrc}`}
-              onRender={onProfilerRender}
-            >
-              <HoverVideoPlayer
-                videoSrc={videoSrc}
-                pausedOverlay={
-                  <img
-                    src={thumbnailImageSrc}
-                    alt=""
-                    className={css`
-                      width: 100%;
-                      height: 100%;
-                      object-fit: cover;
-                    `}
-                  />
-                }
-                loadingOverlay={<LoadingSpinnerOverlay />}
-                className={css`
-                  padding-top: 75%;
-                `}
-                sizingMode="container"
-                unloadVideoOnPaused
-              />
-            </Profiler>
-          </div>
+          <TestPlayer
+            key={videoSrc}
+            videoSrc={videoSrc}
+            thumbnailImageSrc={thumbnailImageSrc}
+          />
         ))}
       </div>
     </main>
