@@ -21,7 +21,7 @@ const READY_STATES = {
  * @param {bool}    [videoConfig.shouldPlaybackFail=false] - Whether video.play() should succeed or fail
  * @param {bool}    [videoConfig.shouldPlayReturnPromise=true] - Whether video.play() should return a promise
  */
-function addMockedFunctionsToVideoElement(
+export function addMockedFunctionsToVideoElement(
   videoElement,
   { shouldPlaybackFail = false, shouldPlayReturnPromise = true } = {}
 ) {
