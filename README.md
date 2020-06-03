@@ -142,7 +142,7 @@ In practice this looks like:
 
 **Type**: `node` | **Default**: `null`
 
-This optional prop accepts any renderable content that you would like to be displayed over the video while it is in a paused state. When the video starts playing, this content will be faded out.
+This optional prop accepts any renderable content that you would like to be displayed over the video while it is in a paused or loading state. When the video starts playing, this content will be faded out.
 
 A common use case for this would be displaying a thumbnail image over the video while it is paused.
 
@@ -170,9 +170,11 @@ The [overlayTransitionDuration](#overlaytransitionduration) prop allows you to s
 
 **Type**: `node` | **Default**: `null`
 
-`loadingOverlay` is an optional prop that accepts any renderable content that you would like to be displayed over the video if it takes too long to start after the user attempts to play the video.
+`loadingOverlay` is an optional prop that accepts any renderable content that you would like to be displayed over the video if it takes too long to start after the user attempts to play it.
 
 This allows you to provide a better user experience for users with slower internet connections, particularly if you are using larger video assets.
+
+Note that the [pausedOverlay](#pausedoverlay) will still be rendered while the video is in a loading state, so this overlay will simply be displayed on top of that one.
 
 ```jsx
 <HoverVideoPlayer
