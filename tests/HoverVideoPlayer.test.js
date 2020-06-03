@@ -1,11 +1,13 @@
 import React from 'react';
-import { fireEvent, act, screen } from '@testing-library/react';
+import { fireEvent, act, screen, render } from '@testing-library/react';
 
 import {
   renderHoverVideoPlayer,
   getPlayPromise,
   mockConsoleError,
+  addMockedFunctionsToVideoElement,
 } from './utils';
+import HoverVideoPlayer from '../src';
 
 describe('videoSrc prop', () => {
   describe('Handles valid videoSrc prop values correctly', () => {
@@ -739,6 +741,108 @@ describe('disableDefaultEventHandling', () => {
 
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
     expect(videoElement).toBePlaying();
+  });
+});
+
+describe('hoverTargetRef', () => {
+  mockConsoleError();
+
+  test('hoverTargetRef works correctly for a functional component', async () => {
+    function PlayerWithCustomHoverTargetFunctionalComponent() {
+      const hoverTargetRef = React.useRef();
+
+      return (
+        <div>
+          <a href="#test" ref={hoverTargetRef} data-testid="test-hover-target">
+            Hovering on me will start the video!
+          </a>
+          <HoverVideoPlayer
+            videoSrc="fake-video.mp4"
+            hoverTargetRef={hoverTargetRef}
+          />
+        </div>
+      );
+    }
+
+    render(<PlayerWithCustomHoverTargetFunctionalComponent />);
+
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const customHoverTarget = screen.getByTestId('test-hover-target');
+
+    const videoElement = screen.getByTestId('video-element');
+    // Hook up mocked video element behavior so we can test it easier
+    addMockedFunctionsToVideoElement(videoElement);
+
+    fireEvent.mouseEnter(playerContainer);
+    fireEvent.touchStart(playerContainer);
+    // Interactions should be ignored on player's container since a custom hover target is set
+    expect(videoElement.play).toHaveBeenCalledTimes(0);
+    expect(videoElement).toBePaused();
+
+    // Interactions with the custom hover target should start and stop the video
+    fireEvent.focus(customHoverTarget);
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
+    expect(videoElement).toBeLoading();
+
+    await act(() => getPlayPromise(videoElement, 0));
+
+    fireEvent.blur(customHoverTarget);
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
+    expect(videoElement).toBePaused();
+  });
+
+  test('hoverTargetRef works correctly for a class component', async () => {
+    class PlayerWithCustomHoverTargetClassComponent extends React.Component {
+      constructor(props) {
+        super(props);
+
+        this.hoverTarget = React.createRef();
+      }
+
+      render() {
+        return (
+          <div>
+            <a
+              href="#test"
+              ref={this.hoverTarget}
+              data-testid="test-hover-target"
+            >
+              Hovering on me will start the video!
+            </a>
+            <HoverVideoPlayer
+              videoSrc="fake-video.mp4"
+              hoverTargetRef={this.hoverTarget}
+            />
+          </div>
+        );
+      }
+    }
+
+    render(<PlayerWithCustomHoverTargetClassComponent />);
+
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const customHoverTarget = screen.getByTestId('test-hover-target');
+
+    const videoElement = screen.getByTestId('video-element');
+    // Hook up mocked video element behavior so we can test it easier
+    addMockedFunctionsToVideoElement(videoElement);
+
+    fireEvent.mouseEnter(playerContainer);
+    fireEvent.touchStart(playerContainer);
+    // Interactions should be ignored on player's container since a custom hover target is set
+    expect(videoElement.play).toHaveBeenCalledTimes(0);
+    expect(videoElement).toBePaused();
+
+    // Interactions with the custom hover target should start and stop the video
+    fireEvent.focus(customHoverTarget);
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
+    expect(videoElement).toBeLoading();
+
+    await act(() => getPlayPromise(videoElement, 0));
+
+    fireEvent.blur(customHoverTarget);
+    expect(videoElement.pause).toHaveBeenCalledTimes(1);
+    expect(videoElement).toBePaused();
   });
 });
 

@@ -105,6 +105,8 @@ const videoSizingStyles = {
  * @param {bool}    [focused=false] - Offers a prop interface for forcing the video to start/stop without DOM events
  *                                      When set to true, the video will begin playing and any events that would normally stop it will be ignored
  * @param {bool}    [disableDefaultEventHandling] - Whether the video player's default mouse and touch event handling should be disabled in favor of a fully custom solution using the `focused` prop
+ * @param {node}    [hoverTargetRef] - Ref to a custom element that should be used as the target for hover events to start/stop the video
+ *                                      By default will just use the container div wrapping the player
  * @param {node}    [pausedOverlay] - Contents to render over the video while it's not playing
  * @param {node}    [loadingOverlay] - Contents to render over the video while it's loading
  * @param {number}  [loadingStateTimeout=200] - Duration in ms to wait after attempting to start the video before showing the loading overlay
@@ -141,6 +143,7 @@ export default function HoverVideoPlayer({
   videoCaptions = null,
   focused = false,
   disableDefaultEventHandling = false,
+  hoverTargetRef = null,
   pausedOverlay = null,
   loadingOverlay = null,
   loadingStateTimeout = 200,
@@ -400,18 +403,44 @@ export default function HoverVideoPlayer({
     // If default event handling is disabled, we shouldn't check for touch events outside of the player
     if (disableDefaultEventHandling) return undefined;
 
+    const hoverTargetElement =
+      // If a ref to a custom hover target was provided, we'll use that as our target element
+      hoverTargetRef
+        ? hoverTargetRef.current
+        : // If no custom target was provided, default to the player's container div
+          containerRef.current;
+
+    // Add all relevant event listeners to the target element to make
+    // it start and stop correctly
+    hoverTargetElement.addEventListener('mouseenter', onHoverStart);
+    hoverTargetElement.addEventListener('mouseleave', onHoverEnd);
+
+    hoverTargetElement.addEventListener('focus', onHoverStart);
+    hoverTargetElement.addEventListener('blur', onHoverEnd);
+
+    hoverTargetElement.addEventListener('touchstart', onHoverStart);
+
     // Event listener pauses the video when the user touches somewhere outside of the player
     function onWindowTouchStart(event) {
-      if (!containerRef.current.contains(event.target)) {
+      if (!hoverTargetElement.contains(event.target)) {
         onHoverEnd();
       }
     }
 
     window.addEventListener('touchstart', onWindowTouchStart);
 
-    // Remove the event listener on cleanup
-    return () => window.removeEventListener('touchstart', onWindowTouchStart);
-  }, [disableDefaultEventHandling, onHoverEnd]);
+    // Remove all event listeners on cleanup
+    return () => {
+      hoverTargetElement.removeEventListener('mouseenter', onHoverStart);
+      hoverTargetElement.removeEventListener('mouseleave', onHoverEnd);
+
+      hoverTargetElement.removeEventListener('focus', onHoverStart);
+      hoverTargetElement.removeEventListener('blur', onHoverEnd);
+
+      hoverTargetElement.removeEventListener('touchstart', onHoverStart);
+      window.removeEventListener('touchstart', onWindowTouchStart);
+    };
+  }, [disableDefaultEventHandling, hoverTargetRef, onHoverEnd, onHoverStart]);
 
   React.useEffect(() => {
     // Manually setting the `muted` attribute on the video element via an effect in order
@@ -470,9 +499,6 @@ export default function HoverVideoPlayer({
 
   return (
     <div
-      onMouseEnter={disableDefaultEventHandling ? null : onHoverStart}
-      onMouseLeave={disableDefaultEventHandling ? null : onHoverEnd}
-      onTouchStart={disableDefaultEventHandling ? null : onHoverStart}
       data-testid="hover-video-player-container"
       ref={containerRef}
       className={className}

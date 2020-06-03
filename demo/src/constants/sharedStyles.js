@@ -12,6 +12,8 @@ injectGlobal`
 
   body {
     font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    line-height: 1.4;
     margin: 86px 0 92px;
     background-color: #1c1c1c;
     color: #ececec;
@@ -57,8 +59,11 @@ injectGlobal`
   }
 
   p {
-    font-size: 16px;
     margin: 0 0 8px;
+  }
+
+  pre {
+    font-size: 14px;
   }
 
   a {

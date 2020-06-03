@@ -12,7 +12,7 @@ export function InlineCode({ children }) {
   return (
     <code
       className={css`
-        padding: 4px;
+        padding: 1px 4px;
         color: #cccccc;
         background-color: #2d2d2d;
         border-radius: 4px;

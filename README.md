@@ -9,7 +9,7 @@
 
 ## What it is
 
-A React component that makes it super easy to set up a video that will play on hover.
+A React component that makes it super easy to set up a video that will play when the user hovers over it. This is particularly useful for setting up a thumbnail that will play a video preview on hover.
 
 ## Features
 
@@ -18,6 +18,12 @@ A React component that makes it super easy to set up a video that will play on h
 - Lightning fast
 - No dependencies
 - Easy to customize
+
+## How It Works
+
+This component will render a video element which will start playing when an `onMouseEnter`, `onTouchStart`, or `onFocus` event is fired on the [hover target](#hovertargetref) and will accordingly be paused when an `onMouseLeave` or `onBlur` event is fired on the target, or an `onTouchStart` event is fired outside of the target. This default behavior can be [disabled, overridden, and customized](#custom-event-handling) as needed.
+
+Everything is written with extra care to cleanly handle the video element's state as it asynchronously loads and plays.
 
 ## Get Started
 
@@ -136,7 +142,7 @@ In practice this looks like:
 
 **Type**: `node` | **Default**: `null`
 
-This optional prop accepts any renderable content that you would like to be displayed over the video while it is in a paused state. When the video starts playing, this content will be faded out.
+This optional prop accepts any renderable content that you would like to be displayed over the video while it is in a paused or loading state. When the video starts playing, this content will be faded out.
 
 A common use case for this would be displaying a thumbnail image over the video while it is paused.
 
@@ -164,9 +170,11 @@ The [overlayTransitionDuration](#overlaytransitionduration) prop allows you to s
 
 **Type**: `node` | **Default**: `null`
 
-`loadingOverlay` is an optional prop that accepts any renderable content that you would like to be displayed over the video if it takes too long to start after the user attempts to play the video.
+`loadingOverlay` is an optional prop that accepts any renderable content that you would like to be displayed over the video if it takes too long to start after the user attempts to play it.
 
 This allows you to provide a better user experience for users with slower internet connections, particularly if you are using larger video assets.
+
+Note that the [pausedOverlay](#pausedoverlay) will still be rendered while the video is in a loading state, so this overlay will simply be displayed on top of that one.
 
 ```jsx
 <HoverVideoPlayer
@@ -223,6 +231,28 @@ After the user stops hovering on the player, the video will continue playing unt
 
 ## Custom Event Handling
 
+### hoverTargetRef
+
+**Type**: `RefObject` | **Default**: `null`
+
+`hoverTargetRef` accepts a React ref to the element that you would like to apply the component's [default event handling](#how-it-works) to. If no ref is provided, it will use the component's container `<div>` as the hover target. This prop is useful if you would like a simple way to make the video play when the user hovers over a larger surrounding area.
+
+```jsx
+const wrapperLinkRef = useRef();
+
+...
+
+<a href="/other-page" ref={wrapperLinkRef}>
+  <HoverVideoPlayer
+    videoSrc="video.mp4"
+    // We want the video to play when the wrapping link element is hovered or focused
+    hoverTargetRef={wrapperLinkRef}
+  />
+</a>
+```
+
+Note that this is only intended to work with refs created by React's `useRef` or `createRef` functions; custom callback refs will not work.
+
 ### focused
 
 **Type**: `boolean` | **Default**: `false`
@@ -234,18 +264,16 @@ const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
 ...
 
-<a
-  href="#"
-  // The video should play while its container has focus and pause when that
-  // focus is blurred
-  onFocus={()=>setIsVideoPlaying(true)}
-  onBlur={()=>setIsVideoPlaying(false)}
+<button 
+  // Clicking this button should toggle whether the video is playing
+  onClick={()=>setIsVideoPlaying(!isVideoPlaying)}
 >
-  <HoverVideoPlayer
-    videoSrc="video.mp4"
-    focused={isVideoPlaying}
-  />
-</a>
+  Click me to make the video play
+</button>
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  focused={isVideoPlaying}
+/>
 ```
 
 If you wish to set up a a fully custom implementation that overrides the hover player's default mouse and touch event handling, you can use the [disableDefaultEventHandling](#disabledefaulteventhandling) prop.
