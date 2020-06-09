@@ -1,6 +1,6 @@
 {
   "name": "react-hover-video-player",
-  "version": "6.6.0",
+  "version": "6.6.1",
   "description": "React component which manages playing a video when the user hovers over it and pausing when they stop.",
   "main": "es/index.js",
   "files": [
