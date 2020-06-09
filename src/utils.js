@@ -20,38 +20,42 @@
  * @returns {VideoSource[]} Array of formatted VideoSource objects which can be used to render <source> elements for the video
  */
 export function formatVideoSrc(videoSrc) {
+  const formattedVideoSources = [];
+
   if (videoSrc == null) {
     // A videoSrc value is required in order to make the video player work
     console.error(
       "Error: 'videoSrc' prop is required for HoverVideoPlayer component"
     );
+  } else {
+    // Make sure we can treat the videoSrc value as an array
+    const rawVideoSources = Array.isArray(videoSrc) ? videoSrc : [videoSrc];
 
-    return [];
+    // Parse our video source values into an array of VideoSource objects that can be used to render sources for the video
+    for (
+      let i = 0, numSources = rawVideoSources.length;
+      i < numSources;
+      i += 1
+    ) {
+      const source = rawVideoSources[i];
+
+      if (typeof source === 'string') {
+        // If the source is a string, it's an src URL so format it into a VideoSource object and add it to the array
+        formattedVideoSources.push({ src: source });
+      } else if (source && source.src) {
+        // If the source is an object with an src, just add it to the array
+        formattedVideoSources.push({ src: source.src, type: source.type });
+      } else {
+        // Log an error if one of the videoSrc values is invalid
+        console.error(
+          "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
+          source
+        );
+      }
+    }
   }
 
-  return (
-    // Make sure we can treat the videoSrc value as an array
-    []
-      .concat(videoSrc)
-      // Parse our video source values into an array of VideoSource objects that can be used to render sources for the video
-      .reduce((sourceArray, source) => {
-        if (typeof source === 'string') {
-          // If the source is a string, it's an src URL so format it into a VideoSource object and add it to the array
-          sourceArray.push({ src: source });
-        } else if (source && source.src) {
-          // If the source is an object with an src, just add it to the array
-          sourceArray.push({ src: source.src, type: source.type });
-        } else {
-          // Log an error if one of the videoSrc values is invalid
-          console.error(
-            "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
-            source
-          );
-        }
-
-        return sourceArray;
-      }, [])
-  );
+  return formattedVideoSources;
 }
 
 /**
@@ -80,32 +84,40 @@ export function formatVideoSrc(videoSrc) {
  * @returns {VideoCaptionsTrack[]}  Array of formatted VideoCaptionsTrack objects which can be used to render <track> elements for the video
  */
 export function formatVideoCaptions(videoCaptions) {
-  // If no captions were provided, return an empty array
-  if (videoCaptions == null) return [];
+  const formattedVideoCaptions = [];
 
-  return (
-    // Make sure we can treat the videoSrc value as an array
-    []
-      .concat(videoCaptions)
-      // Parse our video captions values into an array of VideoCaptionsTrack
-      // objects that can be used to render caption tracks for the video
-      .reduce((captionsArray, captions) => {
-        if (captions && captions.src) {
-          captionsArray.push({
-            src: captions.src,
-            srcLang: captions.srcLang,
-            label: captions.label,
-            default: Boolean(captions.default),
-          });
-        } else {
-          // Log an error if one of the videoCaptions values is invalid
-          console.error(
-            "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
-            captions
-          );
-        }
+  // If captions were provided, format them for use for the video
+  if (videoCaptions != null) {
+    // Make sure we can treat the videoCaptions value as an array
+    const rawVideoCaptions = Array.isArray(videoCaptions)
+      ? videoCaptions
+      : [videoCaptions];
 
-        return captionsArray;
-      }, [])
-  );
+    // Parse our raw video captions values into an array of formatted VideoCaptionsTrack
+    // objects that can be used to render caption tracks for the video
+    for (
+      let i = 0, numCaptions = rawVideoCaptions.length;
+      i < numCaptions;
+      i += 1
+    ) {
+      const captions = rawVideoCaptions[i];
+
+      if (captions && captions.src) {
+        formattedVideoCaptions.push({
+          src: captions.src,
+          srcLang: captions.srcLang,
+          label: captions.label,
+          default: Boolean(captions.default),
+        });
+      } else {
+        // Log an error if one of the videoCaptions values is invalid
+        console.error(
+          "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
+          captions
+        );
+      }
+    }
+  }
+
+  return formattedVideoCaptions;
 }
