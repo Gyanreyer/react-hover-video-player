@@ -2,7 +2,11 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 
-import HoverVideoPlayer from '../src';
+// This is being mapped in the jest config files so we can alternate between
+// running tests off of the development version (../src) of the component or
+// the built production version (../es)
+// eslint-disable-next-line import/no-unresolved
+import HoverVideoPlayer from 'react-hover-video-player';
 
 const READY_STATES = {
   HAVE_NOTHING: 0,

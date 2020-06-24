@@ -12,7 +12,8 @@
     "clean": "nwb clean-module && nwb clean-demo",
     "start": "nwb serve-react-demo --webpack.html.template=demo/src/templates/dev-playground.html",
     "start:demo": "nwb serve-react-demo",
-    "test": "jest --config=tests/jest.config.js",
+    "test": "jest --config=tests/jest.dev.config.js",
+    "test:release": "npm run build -- --no-demo && jest --config=tests/jest.prod.config.js",
     "test:watch": "npm run test -- --watch --no-cache",
     "commit": "npx git-cz"
   },
@@ -33,7 +34,6 @@
     "@testing-library/react": "^10.0.2",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.2.6",
-    "babel-plugin-jsx-remove-data-test-id": "^2.1.3",
     "commitizen": "^4.1.2",
     "core-js": "^3.6.5",
     "cz-conventional-changelog": "^3.2.0",

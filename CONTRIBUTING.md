@@ -15,9 +15,11 @@
 
 Tests are written using [jest](https://github.com/facebook/jest) and [react-testing-library](https://github.com/testing-library/react-testing-library).
 
-- `npm run test` will run all tests once
+- `npm run test` will run all tests once.
 
 - `npm run test:watch` will continually re-run tests as you make changes.
+
+- `npm run test:release` will perform a webpack build (`npm run build`) and then run all tests on the resulting release-ready version of the component for smoke testing purposes. Note that this is much slower and does not perform coverage testing, so you will almost always want to stick with `npm run test`.
 
  **100% code coverage for tests is required**. If you make a change, you must add a test accordingly.
 

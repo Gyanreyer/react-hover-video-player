@@ -1,13 +1,18 @@
 import React from 'react';
 import { fireEvent, act, screen, render } from '@testing-library/react';
 
+// This is being mapped in the jest config files so we can alternate between
+// running tests off of the development version (../src) of the component or
+// the built production version (../es)
+// eslint-disable-next-line import/no-unresolved
+import HoverVideoPlayer from 'react-hover-video-player';
+
 import {
   renderHoverVideoPlayer,
   getPlayPromise,
   mockConsoleError,
   addMockedFunctionsToVideoElement,
 } from './utils';
-import HoverVideoPlayer from '../src';
 
 describe('videoSrc prop', () => {
   describe('Handles valid videoSrc prop values correctly', () => {
