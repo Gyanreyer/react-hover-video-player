@@ -15,8 +15,4 @@ module.exports = {
       patterns: [{ from: './README.md' }],
     },
   },
-  babel: {
-    // Plugin strips data-testid attribute from elements in build since they're only needed for tests
-    plugins: 'babel-plugin-jsx-remove-data-test-id',
-  },
 };
