@@ -32,8 +32,8 @@ There are some handy utils available to help make writing tests easier:
     - `shouldPlaybackFail` (Boolean): Whether we should simulate an error occuring while attempting to play the video. This is false by default.
     - `shouldPlayReturnPromise` (Boolean): Whether video.play() should return a Promise or not. This is true by default but setting it to false can be useful for simulating the behavior of older browsers where the play function does not return a Promise.
 
-  **Returns**: 
-  
+  **Returns**:
+
   An object with the following properties:
   - `rerenderWithProps` (Function): Takes an object for new props to re-render the component with.
   - [All properties returned by react-testing-library's render function](https://testing-library.com/docs/react-testing-library/api#render-result)
@@ -45,17 +45,17 @@ There are some handy utils available to help make writing tests easier:
   ```
 
   You will almost always need to use `act` since resolving the promise will asynchronously perform an operation that will update the component's state.
-  
+
   **Arguments**:
-  
+
   - `videoElement` (Node): The video element whose play promise we want to retrieve.
   - `playCallIndex` (Number): The index of the play call you would like to retrieve. This is useful if video.play() is called multiple times in your test.
 
-  **Returns**: 
-  
+  **Returns**:
+
   The `Promise` returned by the given call to video.play().
 
-- `mockConsoleError`: Mocks console.error for a group of tests and ensures that error were only logged when they were expected to.
+- `mockConsoleError`: Mocks console.error for a group of tests and ensures that errors were only logged when they were expected to be.
 
   **Arguments**
 
@@ -85,4 +85,4 @@ In order to work best with semantic-release, commit messages must follow the [An
 
 This formatting is enforced using [Husky](https://github.com/typicode/husky) and [Commitlint](https://github.com/conventional-changelog/commitlint).
 
-To make things easy, it is very highly recommended that you make your commits using [Commitizen](https://github.com/commitizen/cz-cli), a CLI tool which will provide an interactive experience for walking you through writing your commit message. All you have to do is stage your changes and then run `npm run commit` and it'll guide you from there.
+To make things easy, you can write your commit messages using [Commitizen](https://github.com/commitizen/cz-cli), a CLI tool which will provide an interactive experience for walking you through writing your commit message. All you have to do is stage your changes and run `npm run commit` and it'll guide you from there. There is also a git commit hook set up through Husky which will run Commitizen if you would prefer to type `git commit` instead.
