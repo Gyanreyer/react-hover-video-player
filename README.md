@@ -7,17 +7,48 @@
 
 ![demo](./demo/public/image/hover_preview_demo.gif)
 
-## What it is
+## Table of Contents
+
+1. **[What It Is](#what-it-is)**
+1. **[Features](#features)**
+1. **[How It Works](#how-it-works)**
+1. **[Get Started](#get-started)**
+    - [Installation](#installation)
+    - [Basic Usage](#basic-usage)
+1. **[Sources](#sources)**
+    - [videoSrc](#videosrc)
+    - [videoCaptions](#videocaptions)
+1. **[Overlays](#overlays)**
+    - [pausedOverlay](#pausedoverlay)
+    - [loadingOverlay](#loadingoverlay)
+    - [overlayTransitionDuration](#overlaytransitionduration)
+    - [loadingStateTimeout](#loadingstatetimeout)
+1. **[Custom Event Handling](#custom-event-handling)**
+    - [hoverTargetRef](#hovertargetref)
+    - [focused](#focused)
+    - [disableDefaultEventHandling](#disabledefaulteventhandling)
+1. **[Video Behavior](#video-behavior)**
+    - [restartOnPaused](#restartonpaused)
+    - [muted](#muted)
+    - [loop](#loop)
+1. **[Custom Styling](#custom-styling)**
+    - [Applying classNames and styles](#applying-classnames-and-styles)
+    - [sizingMode](#sizingmode)
+1. **[Optimization](#optimization)**
+    - [preload](#preload)
+    - [unloadVideoOnPaused](#unloadvideoonpaused)
+
+## What It Is
 
 A React component that makes it super easy to set up a video that will play when the user hovers over it. This is particularly useful for setting up a thumbnail that will play a video preview on hover.
 
 ## Features
 
-- Support for both mouse and touchscreen interactions
+- Out-of-the-box support for both mouse and touchscreen interactions
 - Easily add custom thumbnails and loading states
-- Lightning fast
+- Clean, error-free handling of async video playback
+- Lightweight and fast
 - No dependencies
-- Easy to customize
 
 ## How It Works
 
