@@ -88,7 +88,7 @@ function MyComponent () {
 
 ### videoSrc
 
-**Type**: `string` or `array` of objects | **This prop is required**
+**Type**: `string` or `array` of strings and/or objects | **This prop is required**
 
 `videoSrc` accepts one or multiple values descibing the video source file(s) that should be used for the video player.
 
@@ -100,7 +100,7 @@ If you only have **one video source**, you can simply provide a single string fo
 />
 ```
 
-If you have **multiple video sources**, you can provide all of them in an array of objects with the shape:
+If you have **multiple video sources**, you can provide all of them in an array of strings or objects with the shape:
 
 ```javascript
 {
