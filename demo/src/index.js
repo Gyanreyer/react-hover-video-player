@@ -6,7 +6,7 @@ import useFetch, { Provider } from 'use-http';
 
 import Heading from './components/MarkdownHeading';
 import { InlineCode, CodeBlock } from './components/MarkdownCodeSnippet';
-import NavigationLinkList from './components/NavigationLinkList';
+import TableOfContentsSideBar from './components/TableOfContentsSideBar';
 import LoadingSpinnerOverlay from './components/LoadingSpinnerOverlay';
 import HoverVideoPlayer from '../../src';
 import { breakpoints } from './constants/sharedStyles';
@@ -50,9 +50,35 @@ const markdownRenderers = {
   },
 };
 
+/**
+ * Extracts the "Table of Contents" section from the README markdown
+ * so it can be rendered separately in the sidebar
+ *
+ * @param {string} rawMarkdown
+ */
+function extractTableOfContentsFromMarkdown(rawMarkdown) {
+  // Convert markdown to lower-case so we can safely make comparisons without worrying about casing
+  const lowerCaseRawMarkdown = rawMarkdown.toLowerCase();
+
+  const tableOfContentsStartIndex = lowerCaseRawMarkdown.indexOf(
+    '## table of contents'
+  );
+  const tableOfContentsEndIndex = lowerCaseRawMarkdown.indexOf('## what it is');
+
+  return {
+    tableOfContentsMarkdown: rawMarkdown.substr(
+      tableOfContentsStartIndex,
+      tableOfContentsEndIndex - tableOfContentsStartIndex
+    ),
+    mainContentMarkdown:
+      rawMarkdown.substr(0, tableOfContentsStartIndex) +
+      rawMarkdown.substr(tableOfContentsEndIndex),
+  };
+}
+
 function MarkdownContents() {
   // Fetch the README file's contents so we can display it
-  const { data: markdown } = useFetch(
+  const { data: rawMarkdown } = useFetch(
     '/README.md',
     {
       // We're going to use suspense so we can show a placeholder loading spinner
@@ -62,14 +88,36 @@ function MarkdownContents() {
     []
   );
 
-  return markdown ? (
-    <>
-      <NavigationLinkList markdown={markdown} />
-      <div>
-        <ReactMarkdown source={markdown} renderers={markdownRenderers} />
-      </div>
-    </>
-  ) : null;
+  React.useEffect(() => {
+    // When the markdown has been loaded, if the url has a hash in it make sure we scroll
+    // the corresponding section into view
+    if (rawMarkdown && window.location.hash) {
+      const scrollTargetElement = document.querySelector(window.location.hash);
+
+      if (scrollTargetElement) scrollTargetElement.scrollIntoView();
+    }
+  }, [rawMarkdown]);
+
+  if (rawMarkdown) {
+    const {
+      tableOfContentsMarkdown,
+      mainContentMarkdown,
+    } = extractTableOfContentsFromMarkdown(rawMarkdown);
+
+    return (
+      <>
+        <TableOfContentsSideBar markdown={tableOfContentsMarkdown} />
+        <div>
+          <ReactMarkdown
+            source={mainContentMarkdown}
+            renderers={markdownRenderers}
+          />
+        </div>
+      </>
+    );
+  }
+
+  return null;
 }
 
 export default function Demo() {

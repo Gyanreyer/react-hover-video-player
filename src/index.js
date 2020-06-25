@@ -1,89 +1,14 @@
 import React from 'react';
 
-import { formatVideoSrc, formatVideoCaptions } from './utils';
-
-// Enumerates states that the hover player can be in
-const HOVER_PLAYER_STATE = {
-  paused: 'paused',
-  loading: 'loading',
-  playing: 'playing',
-};
-
-// Enumerates sizing modes which define how the player's contents should be sized relative to each other
-const SIZING_MODES = {
-  // Everything should be sized based on the paused overlay's dimensions - the video element will expand to fill that space
-  overlay: 'overlay',
-  // Everything should be sized based on the video element's dimensions - the overlays will expand to cover the video
-  video: 'video',
-  // Everything should be sized based on the player's outer container div - the overlays and video will all expand to cover
-  // the container
-  container: 'container',
-  // Manual mode does not apply any special styling and allows the developer to exercise full control
-  // over how everything should be sized - this means you will likely need to provide your own custom styling for
-  // both the paused overlay and the video element
-  manual: 'manual',
-};
-
-// Enumerates states that the video can be in
-export const VIDEO_STATE = {
-  paused: 'paused',
-  loading: 'loading',
-  playing: 'playing',
-};
-
-/**
- * @function getVideoState
- *
- * Takes a video element and returns its current playing state
- *
- * @param {node} videoElement
- */
-export function getVideoState(videoElement) {
-  if (videoElement.paused || videoElement.ended) {
-    return VIDEO_STATE.paused;
-  }
-
-  // If the video isn't paused but its readyState indicates it isn't loaded enough
-  // to play yet, it is loading
-  if (videoElement.readyState < 3) {
-    return VIDEO_STATE.loading;
-  }
-
-  // If the video isn't paused and its ready state indicates it's loaded enough to play,
-  // assume it's playing
-  return VIDEO_STATE.playing;
-}
-
-// CSS styles to make some contents in the player expand to fill the container
-const expandToFillContainerStyle = {
-  position: 'absolute',
-  width: '100%',
-  height: '100%',
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0,
-};
-
-// Styles to apply to the paused overlay wrapper and video element for different sizing modes
-const pausedOverlayWrapperSizingStyles = {
-  [SIZING_MODES.overlay]: {
-    position: 'relative',
-  },
-  [SIZING_MODES.video]: expandToFillContainerStyle,
-  [SIZING_MODES.container]: expandToFillContainerStyle,
-  [SIZING_MODES.manual]: null,
-};
-
-const videoSizingStyles = {
-  [SIZING_MODES.overlay]: expandToFillContainerStyle,
-  [SIZING_MODES.video]: {
-    display: 'block',
-    width: '100%',
-  },
-  [SIZING_MODES.container]: expandToFillContainerStyle,
-  [SIZING_MODES.manual]: null,
-};
+import { getVideoState, formatVideoSrc, formatVideoCaptions } from './utils';
+import {
+  VIDEO_STATE,
+  HOVER_PLAYER_STATE,
+  SIZING_MODES,
+  expandToFillContainerStyle,
+  pausedOverlayWrapperSizingStyles,
+  videoSizingStyles,
+} from './constants';
 
 /**
  * @component HoverVideoPlayer
@@ -94,8 +19,7 @@ const videoSizingStyles = {
  *                                                                     - src: The src URL string to use for a video player source
  *                                                                     - type: The media type of the video source, ie 'video/mp4'
  *                                                                   - **Array**: if you would like to provide multiple sources, you can provide an array of URL strings and/or objects with the shape described above
- * @param {!(string|string[]|VideoCaptionsTrack|VideoCaptionsTrack[])} [videoCaptions] - Captions track(s) to use for the video player for accessibility. Accepts 3 different formats:
- *                                                                                      - **String**: the URL string to use as the captions track's src
+ * @param {!(VideoCaptionsTrack|VideoCaptionsTrack[])} [videoCaptions] - Captions track(s) to use for the video player for accessibility. Accepts 2 formats:
  *                                                                                      - **Object**: an object with attributes:
  *                                                                                        - src: The src URL string for the captions track file
  *                                                                                        - srcLang: The language code for the language that these captions are in (ie, 'en', 'es', 'fr')
