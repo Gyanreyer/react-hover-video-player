@@ -35,7 +35,7 @@ export function getVideoState(videoElement) {
  * Takes a videoSrc value and formats it as an array of VideoSource objects which can be used to render
  * <source> elements for the video
  *
- * @param {!(string|string[]|VideoSource|VideoSource[])}  videoSrc - Source(s) to use for the video player. Accepts 3 different formats:
+ * @param {(string|string[]|VideoSource|VideoSource[])}  videoSrc - Source(s) to use for the video player. Accepts 3 different formats:
  *                                                                   - **String**: the URL string to use as the video player's src
  *                                                                   - **Object**: an object with attributes:
  *                                                                     - src: The src URL string to use for a video player source
@@ -88,7 +88,7 @@ export function formatVideoSrc(videoSrc) {
  * @property  {string}  src - The src URL string for the captions track file
  * @property  {string}  srcLang - The language code for the language that these captions are in
  * @property  {string}  label - The title of the captions track
- * @property  {bool}    default - Whether this track should be used by default if the user's preferences don't match an available srcLang
+ * @property  {boolean} default - Whether this track should be used by default if the user's preferences don't match an available srcLang
  */
 
 /**
@@ -97,7 +97,7 @@ export function formatVideoSrc(videoSrc) {
  * Takes a videoCaptions value and formats it as an array of VideoCaptionsTrack objects which can be used to render
  * <track> elements for the video
  *
- * @param {!(string|string[]|VideoCaptionsTrack|VideoCaptionsTrack[])} videoCaptions - Captions track(s) to use for the video player for accessibility. Accepts 3 different formats:
+ * @param {(string|string[]|VideoCaptionsTrack|VideoCaptionsTrack[])} videoCaptions - Captions track(s) to use for the video player for accessibility. Accepts 3 different formats:
  *                                                                                     - **String**: the URL string to use as the captions track's src
  *                                                                                     - **Object**: an object with attributes:
  *                                                                                       - src: The src URL string for the captions track file

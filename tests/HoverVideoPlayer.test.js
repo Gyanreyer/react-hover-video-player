@@ -1353,15 +1353,19 @@ describe('Follows video interaction flows correctly', () => {
   });
 });
 
-describe('Prevents memory leaks when unmounted', () => {
-  mockConsoleError();
+const originalConsoleError = console.error;
 
+describe('Prevents memory leaks when unmounted', () => {
   beforeEach(() => {
     jest.useFakeTimers();
+    // Mock the console.error function so we can verify that an error was logged correctly
+    console.error = jest.fn();
   });
 
   afterEach(() => {
     jest.useRealTimers();
+
+    console.error = originalConsoleError;
   });
 
   test('cleans everything up correctly if the video is unmounted during a play attempt', async () => {
@@ -1372,9 +1376,6 @@ describe('Prevents memory leaks when unmounted', () => {
 
     const videoElement = screen.getByTestId('video-element');
     const playerContainer = screen.getByTestId('hover-video-player-container');
-
-    // Spy on console.error so we can fail if any errors are logged
-    const consoleErrorSpy = jest.spyOn(console, 'error');
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
@@ -1394,7 +1395,56 @@ describe('Prevents memory leaks when unmounted', () => {
     await getPlayPromise(videoElement, 0);
 
     // No errors should have been logged
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
+    expect(console.error).toHaveBeenCalledTimes(0);
+  });
+
+  test('cleans everything up correctly if the video is unmounted during a failed play attempt', async () => {
+    const { unmount } = renderHoverVideoPlayer(
+      {
+        videoSrc: 'fake/video-file.mp4',
+        loadingOverlay: <div />,
+      },
+      {
+        shouldPlaybackFail: true,
+      }
+    );
+
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+
+    console.error = jest.fn();
+
+    // Mouse over the container to start playing the video
+    fireEvent.mouseEnter(playerContainer);
+
+    expect(videoElement.play).toHaveBeenCalledTimes(1);
+    expect(videoElement).toBeLoading();
+
+    // Unmount while the play promise is unresolved and the loading timeout is still in progress
+    unmount();
+
+    expect(videoElement).not.toBeInTheDocument();
+
+    // Run any existing timers to prove that the loading timeout was cancelled
+    jest.runAllTimers();
+
+    let errorMessage = null;
+    try {
+      await act(() => getPlayPromise(videoElement, 0));
+    } catch (error) {
+      errorMessage = error;
+    }
+    // The promise should've rejected
+    expect(errorMessage).toBe('The video broke');
+
+    // Only one error should have been logged
+    expect(console.error).toHaveBeenCalledTimes(1);
+    expect(console.error).toHaveBeenCalledWith(
+      `HoverVideoPlayer playback failed for src ${videoElement.currentSrc}:`,
+      'The video broke'
+    );
+    // The video should not have been paused because it is unmounted
+    expect(videoElement.pause).toHaveBeenCalledTimes(0);
   });
 
   test('cleans everything up correctly if the video is unmounted during a pause attempt', async () => {
@@ -1405,9 +1455,6 @@ describe('Prevents memory leaks when unmounted', () => {
 
     const videoElement = screen.getByTestId('video-element');
     const playerContainer = screen.getByTestId('hover-video-player-container');
-
-    // Spy on console.error so we can fail if any errors are logged
-    const consoleErrorSpy = jest.spyOn(console, 'error');
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
@@ -1428,7 +1475,7 @@ describe('Prevents memory leaks when unmounted', () => {
     jest.runAllTimers();
 
     // No errors should have been logged
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
+    expect(console.error).toHaveBeenCalledTimes(0);
     // The pause attempt should not have run
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
   });

@@ -44,6 +44,12 @@ export function addMockedFunctionsToVideoElement(
   let isPlayAttemptInProgress = false;
 
   videoElement.load = jest.fn(() => {
+    if (isPlayAttemptInProgress) {
+      // Throw an error if load() is called while an async play() promise
+      // has not been resolved yet
+      throw new Error('Interrupted play attempt');
+    }
+
     const videoSources = videoElement.getElementsByTagName('source');
     if (videoSources.length > 0) {
       // Just assume we're using the first source
