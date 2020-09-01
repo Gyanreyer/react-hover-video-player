@@ -245,8 +245,10 @@ export default function HoverVideoPlayer({
           error
         );
 
-        // Revert to paused state
-        pauseVideo();
+        if (!mutableVideoState.current.isPlayerUnmounted) {
+          // If the player is still mounted, revert to a paused state
+          pauseVideo();
+        }
       })
       .finally(() => {
         // The play attempt is now complete

@@ -252,6 +252,35 @@ exports[`Handles interaction events correctly touch events take the video throug
 </div>
 `;
 
+exports[`Prevents memory leaks when unmounted cleans everything up correctly if the video is unmounted during a failed play attempt 1`] = `
+<div>
+  <div
+    class=""
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <div
+      class=""
+      data-testid="loading-overlay-wrapper"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+    >
+      <div />
+    </div>
+    <video
+      class=""
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
 exports[`Prevents memory leaks when unmounted cleans everything up correctly if the video is unmounted during a pause attempt 1`] = `
 <div>
   <div
