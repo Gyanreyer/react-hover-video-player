@@ -406,19 +406,6 @@ export default function HoverVideoPlayer({
       // Mark that the player is unmounted so that we won't try to update the component state
       // if the play promise resolves afterward
       mutableVideoState.current.isPlayerUnmounted = true;
-
-      // Clean up the sources for the video to avoid potential memory leaks
-      // It's debatable how necessary this really is but playing it safe never hurts
-      const videoSourceElements = videoElement.getElementsByTagName('source');
-      for (
-        let i = 0, videoSourceCount = videoSourceElements.length;
-        i < videoSourceCount;
-        i += 1
-      ) {
-        videoSourceElements[i].src = '';
-        videoSourceElements[i].removeAttribute('src');
-      }
-      videoElement.load();
     };
   }, []);
   /* ~~~~ END EFFECTS ~~~~ */
