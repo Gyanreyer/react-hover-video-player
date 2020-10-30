@@ -368,6 +368,24 @@ describe('Video props', () => {
     expect(videoElement).toHaveAttribute('loop');
   });
 
+  test('crossOrigin prop correctly sets crossorigin attribute on video', () => {
+    const { rerenderWithProps } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+      // crossOrigin is 'anonymous' by default
+    });
+
+    const videoElement = screen.getByTestId('video-element');
+
+    expect(videoElement).toHaveAttribute('crossorigin', 'anonymous');
+
+    // Re-render with looping disabled on the video
+    rerenderWithProps({
+      videoSrc: 'fake/video-file.mp4',
+      crossOrigin: 'use-credentials',
+    });
+    expect(videoElement).toHaveAttribute('crossorigin', 'use-credentials');
+  });
+
   test('preload', () => {
     const { rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',

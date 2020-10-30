@@ -76,7 +76,7 @@ injectGlobal`
 
     /* All links to another section on the page should have an underline
         which is hidden and transitions in when hovered over */
-    &[href^="#"]:after {
+    &:after {
       content: '';
       position: absolute;
       bottom: 0;
@@ -96,7 +96,7 @@ injectGlobal`
     :hover, :focus,
     /* Links inside a paragraph should always have an underline */
     p > & {
-      :after {
+      &:after {
         left: 0;
         right: auto !important;
         width: 100% !important;

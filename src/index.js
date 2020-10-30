@@ -46,6 +46,9 @@ import {
  *                              - **"none"**: Nothing should be preloaded before the video is played
  *                              - **"metadata"**: Only the video's metadata (ie length, dimensions) should be preloaded
  *                              - **"auto"**: The whole video file should be preloaded even if it won't be played
+ * @param {string}  [crossOrigin='anonymous'] - Sets how the video element should handle CORS requests. Accepts one of the following values:
+ *                                              - **"anonymous"**: CORS requests will have the credentials flag set to 'same-origin'
+ *                                              - **"use-credentials"**: CORS requests for this element will have the credentials flag set to 'include'
  * @param {string}  [className] - Optional className to apply custom styling to the container element
  * @param {object}  [style] - Style object to apply custom inlined styles to the hover player container
  * @param {string}  [pausedOverlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
@@ -77,6 +80,7 @@ export default function HoverVideoPlayer({
   muted = true,
   loop = true,
   preload = null,
+  crossOrigin = 'anonymous',
   className = '',
   style = null,
   pausedOverlayWrapperClassName = '',
@@ -455,6 +459,7 @@ export default function HoverVideoPlayer({
         loop={loop}
         playsInline
         preload={preload}
+        crossOrigin={crossOrigin}
         ref={videoRef}
         style={{
           ...videoSizingStyles[sizingMode],
