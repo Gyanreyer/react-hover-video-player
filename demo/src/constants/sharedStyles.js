@@ -74,9 +74,9 @@ injectGlobal`
     position: relative;
     transition: opacity 0.1s;
 
-    /* All links to another section on the page should have an underline
+    /* All links aside from those wrapping images should have an underline
         which is hidden and transitions in when hovered over */
-    &:after {
+    :not(.image-link):after {
       content: '';
       position: absolute;
       bottom: 0;

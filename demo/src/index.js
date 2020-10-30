@@ -6,6 +6,7 @@ import useFetch, { Provider } from 'use-http';
 
 import Heading from './components/MarkdownHeading';
 import { InlineCode, CodeBlock } from './components/MarkdownCodeSnippet';
+import Link from './components/MarkdownLink';
 import TableOfContentsSideBar from './components/TableOfContentsSideBar';
 import LoadingSpinnerOverlay from './components/LoadingSpinnerOverlay';
 import HoverVideoPlayer from '../../src';
@@ -48,6 +49,7 @@ const markdownRenderers = {
 
     return <img alt={alt} src={src} />;
   },
+  link: Link,
 };
 
 /**
