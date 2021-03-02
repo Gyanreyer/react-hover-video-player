@@ -386,7 +386,7 @@ describe('Video props', () => {
     expect(videoElement).toHaveAttribute('crossorigin', 'use-credentials');
   });
 
-  test('preload', () => {
+  test('preload prop correctly sets preload attribute on video', () => {
     const { rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
     });
@@ -401,6 +401,82 @@ describe('Video props', () => {
       preload: 'metadata',
     });
     expect(videoElement).toHaveAttribute('preload', 'metadata');
+  });
+
+  test('controls prop correctly sets controls attribute on video', () => {
+    const { rerenderWithProps } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+    });
+
+    const videoElement = screen.getByTestId('video-element');
+
+    // The video's `controls` attribute should not be set by default
+    expect(videoElement).not.toHaveAttribute('controls');
+
+    // Re-render with `controls` set to true
+    rerenderWithProps({
+      videoSrc: 'fake/video-file.mp4',
+      controls: true,
+    });
+    // The video should have a `controls` attribute set
+    expect(videoElement).toHaveAttribute('controls');
+  });
+
+  test('controlsList prop correctly sets controlslist attribute on video', () => {
+    const { rerenderWithProps } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+    });
+
+    const videoElement = screen.getByTestId('video-element');
+
+    // The video's `controlslist` attribute should not be set by default
+    expect(videoElement).not.toHaveAttribute('controlslist');
+
+    // Re-render with `controlsList` set to "nodownload"
+    rerenderWithProps({
+      videoSrc: 'fake/video-file.mp4',
+      controlsList: 'nodownload',
+    });
+    // The video should have a `controls` attribute set
+    expect(videoElement).toHaveAttribute('controlslist', 'nodownload');
+  });
+
+  test('disableRemotePlayback prop correctly sets disableRemotePlayback property on video', () => {
+    const { rerenderWithProps } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+    });
+
+    const videoElement = screen.getByTestId('video-element');
+
+    // The video's `disableRemotePlayback` attribute should be set to true by default
+    expect(videoElement.disableRemotePlayback).toBe(true);
+
+    // Re-render with `disableRemotePlayback` set to false
+    rerenderWithProps({
+      videoSrc: 'fake/video-file.mp4',
+      disableRemotePlayback: false,
+    });
+    // The video should have `disableRemotePlayback` set to false
+    expect(videoElement.disableRemotePlayback).toBe(false);
+  });
+
+  test('disablePictureInPicture prop correctly sets disablePictureInPicture property on video', () => {
+    const { rerenderWithProps } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+    });
+
+    const videoElement = screen.getByTestId('video-element');
+
+    // The video's `disablePictureInPicture` attribute should be set to true by default
+    expect(videoElement.disablePictureInPicture).toBe(true);
+
+    // Re-render with `disablePictureInPicture` set to false
+    rerenderWithProps({
+      videoSrc: 'fake/video-file.mp4',
+      disablePictureInPicture: false,
+    });
+    // The video should have `disablePictureInPicture` set to false
+    expect(videoElement.disablePictureInPicture).toBe(false);
   });
 });
 
@@ -566,40 +642,72 @@ describe('pausedOverlay and loadingOverlay', () => {
     const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     // The paused overlay should be visible since we're in the initial idle paused state
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(pausedOverlayWrapper.style.transition).toBe('opacity 500ms');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+      transition: 'opacity 500ms',
+    });
     // The loading overlay should be hidden
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
-    expect(loadingOverlayWrapper.style.transition).toBe('opacity 500ms');
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+      transition: 'opacity 500ms',
+    });
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
 
     // The paused overlay should still be visible while we wait for the video to play
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
     // The loading overlay should still be hidden until the loading state timeout has passed
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Complete the loading state timeout
     act(() => jest.runAllTimers());
 
+    // The paused overlay should still be visible since the video is not playing yet
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
     // The loading state timeout has now passed without the video playing so the loading overlay should be visible
-    expect(loadingOverlayWrapper.style.opacity).toBe('1');
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
 
     // Wait until the play promise has resolved
     await act(() => getPlayPromise(videoElement, 0));
 
     // Both overlays should be hidden now that we are playing
-    expect(pausedOverlayWrapper.style.opacity).toBe('0');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Fire a mouseLeave event to stop the video
     fireEvent.mouseLeave(playerContainer);
 
     // Since we're stopping, the paused overlay should be visible again
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
     // The loading overlay should still be hidden
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
     // The video should still be playing
     expect(videoElement).toBePlaying();
 
@@ -607,8 +715,14 @@ describe('pausedOverlay and loadingOverlay', () => {
     act(() => jest.runAllTimers());
 
     expect(videoElement).toBePaused();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
   });
 
   test('the loading state overlay is not shown if the video plays before the loading state timeout completes', async () => {
@@ -623,30 +737,45 @@ describe('pausedOverlay and loadingOverlay', () => {
     const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     // The loading overlay should be hidden initially
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
 
     // The loading overlay should be hidden until the loading state timeout has completed
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     act(() => jest.advanceTimersByTime(499));
 
     // We're 1 ms short of the loading state timeout so the loading overlay should still be hidden
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Resolve the play promise
     await act(() => getPlayPromise(videoElement, 0));
 
     // The loading overlay should stil be hidden
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Advance the timer sufficiently to prove the loading state timeout was cancelled
     act(() => jest.advanceTimersByTime(500));
 
     // The loading overlay should still be hidden
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
   });
 });
 
@@ -956,9 +1085,11 @@ describe('sizingMode', () => {
     const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
     const videoElement = screen.getByTestId('video-element');
 
-    expect(videoElement.style.position).toBe('');
-    expect(videoElement.style.display).toBe('block');
-    expect(pausedOverlayWrapper.style.position).toBe('absolute');
+    expect(videoElement).toHaveStyle({
+      position: '',
+      display: 'block',
+    });
+    expect(pausedOverlayWrapper).toHaveStyle({ position: 'absolute' });
   });
 
   test('sizingMode "overlay" sets correct styling on the player', () => {
@@ -971,8 +1102,8 @@ describe('sizingMode', () => {
     const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
     const videoElement = screen.getByTestId('video-element');
 
-    expect(pausedOverlayWrapper.style.position).toBe('relative');
-    expect(videoElement.style.position).toBe('absolute');
+    expect(pausedOverlayWrapper).toHaveStyle({ position: 'relative' });
+    expect(videoElement).toHaveStyle({ position: 'absolute' });
   });
 
   test('sizingMode "container" sets correct styling on the player', () => {
@@ -985,8 +1116,8 @@ describe('sizingMode', () => {
     const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
     const videoElement = screen.getByTestId('video-element');
 
-    expect(videoElement.style.position).toBe('absolute');
-    expect(pausedOverlayWrapper.style.position).toBe('absolute');
+    expect(videoElement).toHaveStyle({ position: 'absolute' });
+    expect(pausedOverlayWrapper).toHaveStyle({ position: 'absolute' });
   });
 
   test('sizingMode "manual" sets correct styling on the player', () => {
@@ -999,6 +1130,7 @@ describe('sizingMode', () => {
     const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
     const videoElement = screen.getByTestId('video-element');
 
+    // Position styles should not be set on the video or paused overlay
     expect(videoElement.style.position).toBe('');
     expect(pausedOverlayWrapper.style.position).toBe('');
   });
@@ -1030,8 +1162,14 @@ describe('Handles interaction events correctly', () => {
     // The video should initially be paused
     expect(videoElement.play).toHaveBeenCalledTimes(0);
     expect(videoElement).toBePaused();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
@@ -1039,29 +1177,53 @@ describe('Handles interaction events correctly', () => {
     // The video should have a play attempt in progress
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBeLoading();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Let the loading state timeout run to show the loading overlay
     act(() => jest.runAllTimers());
 
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('1');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
 
     // Wait until the play promise has resolved
     await act(() => getPlayPromise(videoElement, 0));
 
     expect(videoElement).toBePlaying();
-    expect(pausedOverlayWrapper.style.opacity).toBe('0');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Mouse out of the container to stop playing the video
     fireEvent.mouseLeave(playerContainer);
 
     // The video should not be paused until the timeout has completed
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Let the pause timeout run
     act(() => jest.runAllTimers());
@@ -1069,8 +1231,14 @@ describe('Handles interaction events correctly', () => {
     // The video should have been paused
     expect(videoElement.pause).toHaveBeenCalledTimes(1);
     expect(videoElement).toBePaused();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
   });
 
   test('touch events take the video through its play and pause flows correctly', async () => {
@@ -1088,8 +1256,14 @@ describe('Handles interaction events correctly', () => {
     // The video should initially be paused
     expect(videoElement.play).toHaveBeenCalledTimes(0);
     expect(videoElement).toBePaused();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Touch the container to start playing the video
     fireEvent.touchStart(playerContainer);
@@ -1097,21 +1271,39 @@ describe('Handles interaction events correctly', () => {
     // The video should have a play attempt in progress
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBeLoading();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Let the loading state timeout run
     act(() => jest.runAllTimers());
 
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('1');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
 
     // Wait until the play promise has resolved
     await act(() => getPlayPromise(videoElement, 0));
 
     expect(videoElement).toBePlaying();
-    expect(pausedOverlayWrapper.style.opacity).toBe('0');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Touching an element inside of the player container should not start a stop attempt
     fireEvent.touchStart(videoElement);
@@ -1121,8 +1313,14 @@ describe('Handles interaction events correctly', () => {
 
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
     expect(videoElement).toBePlaying();
-    expect(pausedOverlayWrapper.style.opacity).toBe('0');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Touching outside of the player container should start a stop attempt
     fireEvent.touchStart(document.body);
@@ -1136,8 +1334,14 @@ describe('Handles interaction events correctly', () => {
     // The video should have been paused
     expect(videoElement.pause).toHaveBeenCalledTimes(1);
     expect(videoElement).toBePaused();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
   });
 });
 
@@ -1169,15 +1373,27 @@ describe('Follows video interaction flows correctly', () => {
 
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBeLoading();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     await act(() => getPlayPromise(videoElement, 0));
 
     expect(videoElement).toBePlaying();
     // THe paused overlay should be hidden
-    expect(pausedOverlayWrapper.style.opacity).toBe('0');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // We are now in playing state, so mouse out to pause again
     fireEvent.mouseLeave(playerContainer);
@@ -1186,7 +1402,10 @@ describe('Follows video interaction flows correctly', () => {
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
     expect(videoElement).toBePlaying();
     // The paused overlay should be fading back in
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
 
     // Mouse back over to cancel the pause attempt and start a play attempt
     fireEvent.mouseEnter(playerContainer);
@@ -1194,7 +1413,10 @@ describe('Follows video interaction flows correctly', () => {
     // Play should not have been called a second time since we're already playing
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBePlaying();
-    expect(pausedOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Run any outstanding timers to prove the pause attempt was cancelled
     act(() => jest.runAllTimers());
@@ -1202,7 +1424,10 @@ describe('Follows video interaction flows correctly', () => {
     // The video shouldn't have been paused
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
     expect(videoElement).toBePlaying();
-    expect(pausedOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
   });
 
   test('the video will be paused immediately when its play attempt completes after we have already stopped', async () => {
@@ -1222,8 +1447,14 @@ describe('Follows video interaction flows correctly', () => {
 
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBeLoading();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Fire a mouseLeave event to kick off a stop attempt before the play promise has resolved
     fireEvent.mouseLeave(playerContainer);
@@ -1231,14 +1462,26 @@ describe('Follows video interaction flows correctly', () => {
     // At this point the video should have begun its stop attempt but not completed it
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
     expect(videoElement).toBeLoading();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // The player should have been moved into the paused state but technically the video is not paused because we're waiting for the play promise to resolve
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
     expect(videoElement).toBeLoading();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Wait until the play promise has resolved
     await act(() => getPlayPromise(videoElement, 0));
@@ -1246,7 +1489,10 @@ describe('Follows video interaction flows correctly', () => {
     // We should have immediately paused after the promise resolved
     expect(videoElement.pause).toHaveBeenCalledTimes(1);
     expect(videoElement).toBePaused();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
   });
 
   test('an attempt to play the video when it is already playing will be ignored', async () => {
@@ -1267,15 +1513,27 @@ describe('Follows video interaction flows correctly', () => {
     // The play attempt should have started
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBeLoading();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Wait until the play promise has resolved
     await act(() => getPlayPromise(videoElement, 0));
 
     expect(videoElement).toBePlaying();
-    expect(pausedOverlayWrapper.style.opacity).toBe('0');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // A second mouseEnter event should effectively be ignored
     fireEvent.mouseEnter(playerContainer);
@@ -1287,8 +1545,14 @@ describe('Follows video interaction flows correctly', () => {
     // We should not have run through the play attempt flow again
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBePlaying();
-    expect(pausedOverlayWrapper.style.opacity).toBe('0');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
   });
 
   test('an attempt to play the video when a previous play attempt is still loading will show the loading state again', async () => {
@@ -1308,8 +1572,14 @@ describe('Follows video interaction flows correctly', () => {
 
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBeLoading();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Stop the video while it's still loading in the background
     fireEvent.mouseLeave(playerContainer);
@@ -1320,21 +1590,39 @@ describe('Follows video interaction flows correctly', () => {
     // The video shouldn't have been paused since the initial play attempt is still in progress
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
     expect(videoElement).toBeLoading();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     fireEvent.mouseEnter(playerContainer);
     // We shouldn't have called play a second time but the onStartingVideo callback should've fired again
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBeLoading();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Let the loading state timeout run
     act(() => jest.runAllTimers());
 
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('1');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
 
     // Wait until the play promise has resolved
     await act(() => getPlayPromise(videoElement, 0));
@@ -1342,8 +1630,14 @@ describe('Follows video interaction flows correctly', () => {
     // The start attempt should have succeeded
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement).toBePlaying();
-    expect(pausedOverlayWrapper.style.opacity).toBe('0');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
   });
 
   test('an attempt to pause the video when it is already paused will be ignored', () => {
@@ -1366,8 +1660,14 @@ describe('Follows video interaction flows correctly', () => {
 
     expect(videoElement.pause).toHaveBeenCalledTimes(0);
     expect(videoElement).toBePaused();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
   });
 });
 
@@ -1529,8 +1829,14 @@ describe('Supports browsers that do not return a promise from video.play()', () 
     const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
 
     expect(videoElement).toBePaused();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Mouse over the container to start playing the video
     fireEvent.mouseEnter(playerContainer);
@@ -1538,23 +1844,41 @@ describe('Supports browsers that do not return a promise from video.play()', () 
     expect(videoElement.play).toHaveBeenCalledTimes(1);
     expect(videoElement.play).toHaveReturnedWith(undefined);
     expect(videoElement).toBeLoading();
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
 
     // Advance time sufficiently for the play timeout to complete
     act(() => jest.advanceTimersByTime(400));
 
-    expect(pausedOverlayWrapper.style.opacity).toBe('1');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
     // The loading overlay should now be visible
-    expect(loadingOverlayWrapper.style.opacity).toBe('1');
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '1',
+      pointerEvents: 'auto',
+    });
 
     // Flush out our promise which should have been resolved
     await act(() => new Promise(setImmediate));
 
     // The video should now be playing
     expect(videoElement).toBePlaying();
-    expect(pausedOverlayWrapper.style.opacity).toBe('0');
-    expect(loadingOverlayWrapper.style.opacity).toBe('0');
+    expect(pausedOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
+    expect(loadingOverlayWrapper).toHaveStyle({
+      opacity: '0',
+      pointerEvents: 'none',
+    });
   });
 
   test('handles start flow correctly multiple times in a row', async () => {

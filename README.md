@@ -38,6 +38,11 @@
 1. **[Optimization](#optimization)**
     - [preload](#preload)
     - [unloadVideoOnPaused](#unloadvideoonpaused)
+1. **[Video Controls](#video-controls)**
+    - [controls](#controls)
+    - [controlsList](#controlslist)
+    - [disableRemotePlayback](#disableremoteplayback)
+    - [disablePictureInPicture](#disablepictureinpicture)
 
 ## What It Is
 
@@ -141,11 +146,12 @@ A caption track object should follow the shape:
   srcLang: 'en',
   // The title of the captions track
   label: 'English',
-  // OPTIONAL: whether this track should be used by default if
-  // the user's preferences don't match an available srcLang
+  // OPTIONAL: whether this track should be used by default
   default: true,
 }
 ```
+
+Note that if you do not set `default: true` or have more than one track, it is recommended that you set the [controls](#controls) prop to `true` so that the user may enable the captions or choose the correct captions for their desired language.
 
 In practice this looks like:
 
@@ -165,6 +171,8 @@ In practice this looks like:
       label: 'French',
     },
   ]}
+  // Enable the video's controls so that the user can select the caption track they want or toggle captions on and off
+  controls
 />
 ```
 
@@ -503,3 +511,67 @@ Additionally, nothing will be displayed for the video element when it is unloade
   unloadVideoOnPaused
 />
 ```
+
+## Video Controls
+
+### controls
+
+**Type**: `boolean` | **Default**: `false`
+
+`controls` accepts a boolean value which toggles whether the video element should have the browser's video playback controls enabled.
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Show playback controls on the video
+  controls
+/>
+```
+
+### controlsList
+
+**Type**: `string` | **Default**: `null`
+
+`controlsList` accepts a string describing buttons that should be excluded from the video's playback controls. The string can include the following possible values, with spaces separating each one:
+
+- `"nodownload"`: Removes the download button from the video's controls
+- `"nofullscreen"`: Removes the fullscreen button from the video's controls
+
+Be aware that this feature [is not currently supported across all major browsers.](https://caniuse.com/mdn-api_htmlmediaelement_controlslist)
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Show playback controls on the video
+  controls
+  // Disable both the download and fullscreen buttons
+  controlsList="nodownload nofullscreen"
+/>
+```
+
+### disableRemotePlayback
+
+**Type**: `boolean` | **Default**: `true`
+
+`disableRemotePlayback` toggles whether the browser should show a remote playback UI on the video, which allows the user to cast the video to other devices.
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Show controls for casting this video to remote devices
+  disableRemotePlayback={false}
+/>
+```
+
+### disablePictureInPicture
+
+**Type**: `boolean` | **Default**: `true`
+
+`disablePictureInPicture` toggles whether the browser should show a picture-in-picture UI on the video, which allows the user to pop the video out into a floating window that persists over other tabs or apps.
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Show controls for playing this video in picture-in-picture mode
+  disablePictureInPicture={false}
+/>

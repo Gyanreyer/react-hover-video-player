@@ -10,14 +10,14 @@ exports[`Follows video interaction flows correctly an attempt to pause the video
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -47,14 +47,14 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -84,14 +84,14 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -121,14 +121,14 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -158,14 +158,14 @@ exports[`Follows video interaction flows correctly the video will be paused imme
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -195,14 +195,14 @@ exports[`Handles interaction events correctly mouseEnter and mouseLeave events t
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -232,14 +232,14 @@ exports[`Handles interaction events correctly touch events take the video throug
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -269,7 +269,7 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -299,7 +299,7 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
@@ -329,7 +329,7 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -359,14 +359,14 @@ exports[`Supports browsers that do not return a promise from video.play() handle
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -455,7 +455,99 @@ exports[`Video playback errors handles playback errors correctly for browsers th
 </div>
 `;
 
+exports[`Video props controls prop correctly sets controls attribute on video 1`] = `
+<div>
+  <div
+    class=""
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <video
+      class=""
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Video props controlsList prop correctly sets controlslist attribute on video 1`] = `
+<div>
+  <div
+    class=""
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <video
+      class=""
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
 exports[`Video props crossOrigin prop correctly sets crossorigin attribute on video 1`] = `
+<div>
+  <div
+    class=""
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <video
+      class=""
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Video props disablePictureInPicture prop correctly sets disablePictureInPicture property on video 1`] = `
+<div>
+  <div
+    class=""
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <video
+      class=""
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Video props disableRemotePlayback prop correctly sets disableRemotePlayback property on video 1`] = `
 <div>
   <div
     class=""
@@ -524,7 +616,7 @@ exports[`Video props muted prop correctly sets muted attribute on video 1`] = `
 </div>
 `;
 
-exports[`Video props preload 1`] = `
+exports[`Video props preload prop correctly sets preload attribute on video 1`] = `
 <div>
   <div
     class=""
@@ -649,7 +741,7 @@ exports[`overlayTransitionDuration Stop attempts take the amount of time set by 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 900ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 900ms; pointer-events: auto;"
     >
       <div />
     </div>
@@ -679,14 +771,14 @@ exports[`pausedOverlay and loadingOverlay pausedOverlay and loadingOverlay are s
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 500ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 500ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 500ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 500ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -716,7 +808,7 @@ exports[`pausedOverlay and loadingOverlay the loading state overlay is not shown
     <div
       class=""
       data-testid="loading-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
@@ -792,7 +884,7 @@ exports[`sizingMode sizingMode "container" sets correct styling on the player 1`
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
@@ -822,7 +914,7 @@ exports[`sizingMode sizingMode "manual" sets correct styling on the player 1`] =
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
@@ -852,7 +944,7 @@ exports[`sizingMode sizingMode "overlay" sets correct styling on the player 1`] 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: relative; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: relative; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
@@ -882,7 +974,7 @@ exports[`sizingMode sizingMode "video" sets correct styling on the player 1`] = 
     <div
       class=""
       data-testid="paused-overlay-wrapper"
-      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms;"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
