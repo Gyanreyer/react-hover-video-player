@@ -13,51 +13,60 @@ import {
 /**
  * @component HoverVideoPlayer
  *
- * @param {(string|string[]|VideoSource|VideoSource[])}  videoSrc - Source(s) to use for the video player. Accepts 3 different formats:
+ * @param {object}  props - Component props
+ * @param {(string|string[]|VideoSource|VideoSource[])}  props.videoSrc - Source(s) to use for the video player. Accepts 3 different formats:
  *                                                                   - **String**: the URL string to use as the video player's src
  *                                                                   - **Object**: an object with attributes:
  *                                                                     - src: The src URL string to use for a video player source
  *                                                                     - type: The media type of the video source, ie 'video/mp4'
  *                                                                   - **Array**: if you would like to provide multiple sources, you can provide an array of URL strings and/or objects with the shape described above
- * @param {(VideoCaptionsTrack|VideoCaptionsTrack[])} [videoCaptions] - Captions track(s) to use for the video player for accessibility. Accepts 2 formats:
+ * @param {(VideoCaptionsTrack|VideoCaptionsTrack[])} [props.videoCaptions] - Captions track(s) to use for the video player for accessibility. Accepts 2 formats:
  *                                                                                      - **Object**: an object with attributes:
  *                                                                                        - src: The src URL string for the captions track file
  *                                                                                        - srcLang: The language code for the language that these captions are in (ie, 'en', 'es', 'fr')
  *                                                                                        - label: The title of the captions track
  *                                                                                        - default: Whether this track should be used by default if the user's preferences don't match an available srcLang
  *                                                                                      - **Array**: if you would like to provide multiple caption tracks, you can provide an array of objects with the shape described above
- * @param {boolean} [focused=false] - Offers a prop interface for forcing the video to start/stop without DOM events
+ * @param {boolean} [props.focused=false] - Offers a prop interface for forcing the video to start/stop without DOM events
  *                                      When set to true, the video will begin playing and any events that would normally stop it will be ignored
- * @param {boolean} [disableDefaultEventHandling] - Whether the video player's default mouse and touch event handling should be disabled in favor of a fully custom solution using the `focused` prop
- * @param {node}    [hoverTargetRef] - Ref to a custom element that should be used as the target for hover events to start/stop the video
+ * @param {boolean} [props.disableDefaultEventHandling] - Whether the video player's default mouse and touch event handling should be disabled in favor of a fully custom solution using the `focused` prop
+ * @param {node}    [props.hoverTargetRef] - Ref to a custom element that should be used as the target for hover events to start/stop the video
  *                                      By default will just use the container div wrapping the player
- * @param {node}    [pausedOverlay] - Contents to render over the video while it's not playing
- * @param {node}    [loadingOverlay] - Contents to render over the video while it's loading
- * @param {number}  [loadingStateTimeout=200] - Duration in ms to wait after attempting to start the video before showing the loading overlay
- * @param {number}  [overlayTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
- * @param {boolean} [restartOnPaused=false] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
- * @param {boolean} [unloadVideoOnPaused=false] - Whether we should unload the video's sources when it is not playing in order to free up memory and bandwidth
+ * @param {node}    [props.pausedOverlay] - Contents to render over the video while it's not playing
+ * @param {node}    [props.loadingOverlay] - Contents to render over the video while it's loading
+ * @param {number}  [props.loadingStateTimeout=200] - Duration in ms to wait after attempting to start the video before showing the loading overlay
+ * @param {number}  [props.overlayTransitionDuration=400] - The transition duration in ms for how long it should take for the overlay to fade in/out
+ * @param {boolean} [props.restartOnPaused=false] - Whether the video should reset to the beginning every time it stops playing after the user mouses out of the player
+ * @param {boolean} [props.unloadVideoOnPaused=false] - Whether we should unload the video's sources when it is not playing in order to free up memory and bandwidth
  *                                                  This can be useful in scenarios where you may have a large number of relatively large video files on a single page;
  *                                                  particularly due to a known bug in Google Chrome, if too many videos are loading in the background at the same time,
  *                                                  it starts to gum up the works so that nothing loads properly and performance can degrade significantly.
- * @param {boolean} [muted=true] - Whether the video player should be muted
- * @param {boolean} [loop=true] - Whether the video player should loop when it reaches the end
- * @param {string}  [preload] - Sets how much information the video element should preload before being played. Accepts one of the following values:
+ * @param {boolean} [props.muted=true] - Whether the video player should be muted
+ * @param {boolean} [props.loop=true] - Whether the video player should loop when it reaches the end
+ * @param {string}  [props.preload] - Sets how much information the video element should preload before being played. Accepts one of the following values:
  *                              - **"none"**: Nothing should be preloaded before the video is played
  *                              - **"metadata"**: Only the video's metadata (ie length, dimensions) should be preloaded
  *                              - **"auto"**: The whole video file should be preloaded even if it won't be played
- * @param {string}  [crossOrigin='anonymous'] - Sets how the video element should handle CORS requests. Accepts one of the following values:
+ * @param {string}  [props.crossOrigin='anonymous'] - Sets how the video element should handle CORS requests. Accepts one of the following values:
  *                                              - **"anonymous"**: CORS requests will have the credentials flag set to 'same-origin'
  *                                              - **"use-credentials"**: CORS requests for this element will have the credentials flag set to 'include'
- * @param {string}  [className] - Optional className to apply custom styling to the container element
- * @param {object}  [style] - Style object to apply custom inlined styles to the hover player container
- * @param {string}  [pausedOverlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
- * @param {object}  [pausedOverlayWrapperStyle] - Style object to apply custom inlined styles to the paused overlay wrapper
- * @param {string}  [loadingOverlayWrapperClassName] - Optional className to apply custom styling to the loading state overlay contents' wrapper
- * @param {object}  [loadingOverlayWrapperStyle] - Style object to apply custom inlined styles to the loading overlay wrapper
- * @param {string}  [videoClassName] - Optional className to apply custom styling to the video element
- * @param {object}  [videoStyle] - Style object to apply custom inlined styles to the video element
- * @param {string}  [sizingMode='video'] - Describes sizing mode to use to determine how the player's contents should be styled. Accepts 4 possible values:
+ * @param {boolean} [props.controls=false] - Sets whether the video element should have the browser's video playback controls enabled.
+ * @param {string}  [props.controlsList] - Allows finer control over which controls the browser should exclude from the video playback controls.
+ *                                    Be aware that this feature is not currently supported across all major browsers.
+ *                                    Accepts a string with the following values, separated by spaces if using more than one:
+ *                                      - **"nodownload"**: Removes the download button from the video's controls
+ *                                      - **"nofullscreen"**: Removes the fullscreen button from the video's controls
+ * @param {boolean} [props.disableRemotePlayback=true] - Prevents the browser from showing controls to cast the video
+ * @param {boolean} [props.disablePictureInPicture=true] - Prevents the browser from showing picture-in-picture controls on the video
+ * @param {string}  [props.className] - Optional className to apply custom styling to the container element
+ * @param {object}  [props.style] - Style object to apply custom inlined styles to the hover player container
+ * @param {string}  [props.pausedOverlayWrapperClassName] - Optional className to apply custom styling to the overlay contents' wrapper
+ * @param {object}  [props.pausedOverlayWrapperStyle] - Style object to apply custom inlined styles to the paused overlay wrapper
+ * @param {string}  [props.loadingOverlayWrapperClassName] - Optional className to apply custom styling to the loading state overlay contents' wrapper
+ * @param {object}  [props.loadingOverlayWrapperStyle] - Style object to apply custom inlined styles to the loading overlay wrapper
+ * @param {string}  [props.videoClassName] - Optional className to apply custom styling to the video element
+ * @param {object}  [props.videoStyle] - Style object to apply custom inlined styles to the video element
+ * @param {string}  [props.sizingMode='video'] - Describes sizing mode to use to determine how the player's contents should be styled. Accepts 4 possible values:
  *                                         - **"video"**: Everything should be sized based on the video element's dimensions - the overlays will expand to cover the video
  *                                         - **"overlay"**: Everything should be sized based on the paused overlay's dimensions - the video element will expand to fit inside those dimensions
  *                                         - **"container"**: Everything should be sized based on the player's outer container div - the overlays and video will all expand to cover the container
@@ -81,6 +90,10 @@ export default function HoverVideoPlayer({
   loop = true,
   preload = null,
   crossOrigin = 'anonymous',
+  controls = false,
+  controlsList = null,
+  disableRemotePlayback = true,
+  disablePictureInPicture = true,
   className = '',
   style = null,
   pausedOverlayWrapperClassName = '',
@@ -397,11 +410,14 @@ export default function HoverVideoPlayer({
   }, [isVideoUnloaded, onHoverStart, playVideo]);
 
   React.useEffect(() => {
+    // React does not support directly setting disableRemotePlayback or disablePictureInPicture directly
+    // via the video element's props, so make sure we manually set them in an effect
     const videoElement = videoRef.current;
-    // Ensure casting and PiP controls aren't shown on the video
-    videoElement.disableRemotePlayback = true;
-    videoElement.disablePictureInPicture = true;
+    videoElement.disableRemotePlayback = disableRemotePlayback;
+    videoElement.disablePictureInPicture = disablePictureInPicture;
+  }, [disablePictureInPicture, disableRemotePlayback]);
 
+  React.useEffect(() => {
     return () => {
       // Clear any outstanding timeouts when the component unmounts to prevent memory leaks
       clearTimeout(mutableVideoState.current.pauseTimeout);
@@ -413,6 +429,9 @@ export default function HoverVideoPlayer({
     };
   }, []);
   /* ~~~~ END EFFECTS ~~~~ */
+
+  const isPausedOverlayVisible = overlayState !== HOVER_PLAYER_STATE.playing;
+  const isLoadingOverlayVisibile = overlayState === HOVER_PLAYER_STATE.loading;
 
   return (
     <div
@@ -429,8 +448,10 @@ export default function HoverVideoPlayer({
           style={{
             ...pausedOverlayWrapperSizingStyles[sizingMode],
             zIndex: 1,
-            opacity: overlayState !== HOVER_PLAYER_STATE.playing ? 1 : 0,
+            opacity: isPausedOverlayVisible ? 1 : 0,
             transition: `opacity ${overlayTransitionDuration}ms`,
+            // Disable pointer events on the paused overlay when it's hidden
+            pointerEvents: isPausedOverlayVisible ? 'auto' : 'none',
             ...pausedOverlayWrapperStyle,
           }}
           className={pausedOverlayWrapperClassName}
@@ -444,8 +465,10 @@ export default function HoverVideoPlayer({
           style={{
             ...expandToFillContainerStyle,
             zIndex: 2,
-            opacity: overlayState === HOVER_PLAYER_STATE.loading ? 1 : 0,
+            opacity: isLoadingOverlayVisibile ? 1 : 0,
             transition: `opacity ${overlayTransitionDuration}ms`,
+            // Disable pointer events on the loading overlay when it's hidden
+            pointerEvents: isLoadingOverlayVisibile ? 'auto' : 'none',
             ...loadingOverlayWrapperStyle,
           }}
           className={loadingOverlayWrapperClassName}
@@ -466,6 +489,8 @@ export default function HoverVideoPlayer({
           objectFit: 'cover',
           ...videoStyle,
         }}
+        controls={controls}
+        controlsList={controlsList}
         className={videoClassName}
         data-testid="video-element"
       >
