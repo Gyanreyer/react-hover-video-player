@@ -31,6 +31,7 @@
 1. **[Video Behavior](#video-behavior)**
     - [restartOnPaused](#restartonpaused)
     - [muted](#muted)
+    - [volume](#volume)
     - [loop](#loop)
 1. **[Custom Styling](#custom-styling)**
     - [Applying classNames and styles](#applying-classnames-and-styles)
@@ -388,6 +389,23 @@ const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 />
 ```
 
+### volume
+
+**Type**: `number` | **Default**: 1
+
+`volume` accepts a number on a scale from 0-1 for the volume that the video's audio should play at.
+
+Note that this will only work if the [muted](#muted) prop is also set to `false`.
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // The video should play sound at 50% volume
+  volume={0.5}
+  muted={false}
+/>
+```
+
 ### loop
 
 **Type**: `boolean` | **Default**: `true`
@@ -480,7 +498,7 @@ The `sizingMode` prop can be used to apply one of four available styling presets
 The `preload` prop maps directly to the [HTML Video element's preload attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video#attr-preload) and allows us to define how much data a video element should preload before it is played. This prop defaults to null, which will use whatever the browser's default setting is. The acceptable values are:
 
 - `"auto"`: We can load the whole video file before playing, even if it never gets used. This is usually the browser default.
-- `"metadata"`: We should only load the video's metadata (video dimensions, duration, etc) before playing. This helps us avoid loading large amounts of data unless they are absolutely needed.
+- `"metadata"`: We should only load the video's metadata (video dimensions, duration, etc) before playing. This helps us avoid loading large amounts of data unless it is absolutely needed.
   - Note that in Safari, video elements with `preload="metadata"` applied will just appear empty rather than displaying the first frame of the video like other browsers do. As a result, it is recommended that if you use this setting, you should have [paused overlay](#pausedoverlay) contents set that will hide the video element until it is playing.
 - `"none"`: We should not preload any part of the video before playing, including metadata.
   - Note that this means that the video's dimensions will not be loaded until the video is played. This can potentially cause a content jump when the video starts loading if you are using the `"video"` [sizing mode](#sizing-mode-presets).

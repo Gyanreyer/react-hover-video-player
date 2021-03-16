@@ -343,6 +343,21 @@ describe('Video props', () => {
     expect(videoElement.muted).toBe(true);
   });
 
+  test('volume prop correctly sets volume attribute on video', () => {
+    const { rerenderWithProps } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+      // volume is 1 by default
+    });
+
+    const videoElement = screen.getByTestId('video-element');
+
+    expect(videoElement.volume).toBe(1);
+
+    // Re-render with a different volume level
+    rerenderWithProps({ videoSrc: 'fake/video-file.mp4', volume: 0.2 });
+    expect(videoElement.volume).toBe(0.2);
+  });
+
   test('loop prop correctly sets loop attribute on video', () => {
     const { rerenderWithProps } = renderHoverVideoPlayer({
       videoSrc: 'fake/video-file.mp4',
