@@ -42,6 +42,7 @@ import {
  *                                                  particularly due to a known bug in Google Chrome, if too many videos are loading in the background at the same time,
  *                                                  it starts to gum up the works so that nothing loads properly and performance can degrade significantly.
  * @param {boolean} [props.muted=true] - Whether the video player should be muted
+ * @param {number}  [props.volume=1] - The volume that the video's audio should play at, on a scale from 0-1. This will only work if the muted prop is also set to false.
  * @param {boolean} [props.loop=true] - Whether the video player should loop when it reaches the end
  * @param {string}  [props.preload] - Sets how much information the video element should preload before being played. Accepts one of the following values:
  *                              - **"none"**: Nothing should be preloaded before the video is played
@@ -87,6 +88,7 @@ export default function HoverVideoPlayer({
   restartOnPaused = false,
   unloadVideoOnPaused = false,
   muted = true,
+  volume = 1,
   loop = true,
   preload = null,
   crossOrigin = 'anonymous',
@@ -391,6 +393,12 @@ export default function HoverVideoPlayer({
     // https://github.com/facebook/react/issues/10389
     videoRef.current.muted = muted;
   }, [muted]);
+
+  React.useEffect(() => {
+    // Set the video's volume to match the `volume` prop
+    // Note that this will have no effect if the `muted` prop is set to true
+    videoRef.current.volume = volume;
+  }, [volume]);
 
   React.useEffect(() => {
     // Don't do anything if the video's unloaded state hasn't changed
