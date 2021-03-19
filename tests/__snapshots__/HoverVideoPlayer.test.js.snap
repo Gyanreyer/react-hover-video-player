@@ -3,26 +3,22 @@
 exports[`Follows video interaction flows correctly an attempt to pause the video when it is already paused will be ignored 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -40,26 +36,22 @@ exports[`Follows video interaction flows correctly an attempt to pause the video
 exports[`Follows video interaction flows correctly an attempt to play the video when a previous play attempt is still loading will show the loading state again 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -77,26 +69,22 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
 exports[`Follows video interaction flows correctly an attempt to play the video when it is already playing will be ignored 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -114,26 +102,22 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
 exports[`Follows video interaction flows correctly an attempt to play the video will correctly interrupt any attempts to pause it 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -151,26 +135,22 @@ exports[`Follows video interaction flows correctly an attempt to play the video 
 exports[`Follows video interaction flows correctly the video will be paused immediately when its play attempt completes after we have already stopped 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -188,26 +168,22 @@ exports[`Follows video interaction flows correctly the video will be paused imme
 exports[`Handles interaction events correctly mouseEnter and mouseLeave events take the video through its play and pause flows correctly 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -225,26 +201,22 @@ exports[`Handles interaction events correctly mouseEnter and mouseLeave events t
 exports[`Handles interaction events correctly touch events take the video through its play and pause flows correctly 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -262,19 +234,16 @@ exports[`Handles interaction events correctly touch events take the video throug
 exports[`Prevents memory leaks when unmounted cleans everything up correctly if the video is unmounted during a failed play attempt 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -292,19 +261,16 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
 exports[`Prevents memory leaks when unmounted cleans everything up correctly if the video is unmounted during a pause attempt 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -322,19 +288,49 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
 exports[`Prevents memory leaks when unmounted cleans everything up correctly if the video is unmounted during a play attempt 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Style props applies className and id props correctly 1`] = `
+<div>
+  <div
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <div
+      data-testid="paused-overlay-wrapper"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
+    >
+      <div />
+    </div>
+    <div
+      data-testid="loading-overlay-wrapper"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
+    >
+      <div />
+    </div>
+    <video
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -352,26 +348,22 @@ exports[`Prevents memory leaks when unmounted cleans everything up correctly if 
 exports[`Supports browsers that do not return a promise from video.play() handles start flow correctly 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -389,12 +381,10 @@ exports[`Supports browsers that do not return a promise from video.play() handle
 exports[`Supports browsers that do not return a promise from video.play() handles start flow correctly multiple times in a row 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -412,12 +402,10 @@ exports[`Supports browsers that do not return a promise from video.play() handle
 exports[`Video playback errors handles a video playback error correectly 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -435,12 +423,10 @@ exports[`Video playback errors handles a video playback error correectly 1`] = `
 exports[`Video playback errors handles playback errors correctly for browsers that do not support promises 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -458,12 +444,10 @@ exports[`Video playback errors handles playback errors correctly for browsers th
 exports[`Video props controls prop correctly sets controls attribute on video 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -481,12 +465,10 @@ exports[`Video props controls prop correctly sets controls attribute on video 1`
 exports[`Video props controlsList prop correctly sets controlslist attribute on video 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -504,12 +486,10 @@ exports[`Video props controlsList prop correctly sets controlslist attribute on 
 exports[`Video props crossOrigin prop correctly sets crossorigin attribute on video 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -527,12 +507,10 @@ exports[`Video props crossOrigin prop correctly sets crossorigin attribute on vi
 exports[`Video props disablePictureInPicture prop correctly sets disablePictureInPicture property on video 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -550,12 +528,10 @@ exports[`Video props disablePictureInPicture prop correctly sets disablePictureI
 exports[`Video props disableRemotePlayback prop correctly sets disableRemotePlayback property on video 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -573,12 +549,10 @@ exports[`Video props disableRemotePlayback prop correctly sets disableRemotePlay
 exports[`Video props loop prop correctly sets loop attribute on video 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -596,12 +570,10 @@ exports[`Video props loop prop correctly sets loop attribute on video 1`] = `
 exports[`Video props muted prop correctly sets muted attribute on video 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -619,12 +591,10 @@ exports[`Video props muted prop correctly sets muted attribute on video 1`] = `
 exports[`Video props preload prop correctly sets preload attribute on video 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -642,12 +612,10 @@ exports[`Video props preload prop correctly sets preload attribute on video 1`] 
 exports[`Video props volume prop correctly sets volume attribute on video 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -665,12 +633,10 @@ exports[`Video props volume prop correctly sets volume attribute on video 1`] = 
 exports[`disableDefaultEventHandling disableDefaultEventHandling prop disables all default event handling 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -688,12 +654,10 @@ exports[`disableDefaultEventHandling disableDefaultEventHandling prop disables a
 exports[`focused focused prop starts and stops the video correctly 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -711,12 +675,10 @@ exports[`focused focused prop starts and stops the video correctly 1`] = `
 exports[`focused other events which would normally stop the video are ignored if focused prop is true 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -734,12 +696,10 @@ exports[`focused other events which would normally stop the video are ignored if
 exports[`overlayTransitionDuration Stop attempts stop immediately if a pausedOverlay is not provided 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -757,19 +717,16 @@ exports[`overlayTransitionDuration Stop attempts stop immediately if a pausedOve
 exports[`overlayTransitionDuration Stop attempts take the amount of time set by overlayTransitionDuration prop if a pausedOverlay is provided 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 900ms; pointer-events: auto;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -787,26 +744,22 @@ exports[`overlayTransitionDuration Stop attempts take the amount of time set by 
 exports[`pausedOverlay and loadingOverlay pausedOverlay and loadingOverlay are shown and hidden correctly as the video is started and stopped 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 500ms; pointer-events: auto;"
     >
       <div />
     </div>
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 500ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -824,19 +777,16 @@ exports[`pausedOverlay and loadingOverlay pausedOverlay and loadingOverlay are s
 exports[`pausedOverlay and loadingOverlay the loading state overlay is not shown if the video plays before the loading state timeout completes 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="loading-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -854,12 +804,10 @@ exports[`pausedOverlay and loadingOverlay the loading state overlay is not shown
 exports[`restartOnPaused restartOnPaused prop does not restart the video when set to false 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -877,12 +825,10 @@ exports[`restartOnPaused restartOnPaused prop does not restart the video when se
 exports[`restartOnPaused restartOnPaused prop restarts the video when set to true 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -900,19 +846,16 @@ exports[`restartOnPaused restartOnPaused prop restarts the video when set to tru
 exports[`sizingMode sizingMode "container" sets correct styling on the player 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -930,19 +873,16 @@ exports[`sizingMode sizingMode "container" sets correct styling on the player 1`
 exports[`sizingMode sizingMode "manual" sets correct styling on the player 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -960,19 +900,16 @@ exports[`sizingMode sizingMode "manual" sets correct styling on the player 1`] =
 exports[`sizingMode sizingMode "overlay" sets correct styling on the player 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: relative; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -990,19 +927,16 @@ exports[`sizingMode sizingMode "overlay" sets correct styling on the player 1`] 
 exports[`sizingMode sizingMode "video" sets correct styling on the player 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <div
-      class=""
       data-testid="paused-overlay-wrapper"
       style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 400ms; pointer-events: auto;"
     >
       <div />
     </div>
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1020,12 +954,10 @@ exports[`sizingMode sizingMode "video" sets correct styling on the player 1`] = 
 exports[`unloadVideoOnPaused unloadVideoOnPaused prop unloads the video's sources while it is paused when set to true 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1039,12 +971,10 @@ exports[`unloadVideoOnPaused unloadVideoOnPaused prop unloads the video's source
 exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly correctly handles receiving a single invalid value for the videoCaptions prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1062,12 +992,10 @@ exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly 
 exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly correctly handles receiving an invalid value in an array for the videoCaptions prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1097,12 +1025,10 @@ exports[`videoCaptions prop Handles invalid videoCaptions prop values correctly 
 exports[`videoCaptions prop Handles valid videoCaptions prop values correctly correctly handles receiving a valid object for the videoCaptions prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1126,12 +1052,10 @@ exports[`videoCaptions prop Handles valid videoCaptions prop values correctly co
 exports[`videoCaptions prop Handles valid videoCaptions prop values correctly correctly handles receiving an array of objects for the videoCaptions prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1167,12 +1091,10 @@ exports[`videoCaptions prop Handles valid videoCaptions prop values correctly co
 exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly handles not receiving a videoSrc prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1186,12 +1108,10 @@ exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly 
 exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly handles receiving a single invalid value for the videoSrc prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1205,12 +1125,10 @@ exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly 
 exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly handles receiving an invalid value in an array for the videoSrc prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1232,12 +1150,10 @@ exports[`videoSrc prop Handles invalid videoSrc prop values correctly correctly 
 exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly handles receiving a string for the videoSrc prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1255,12 +1171,10 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
 exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly handles receiving a valid object for the videoSrc prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1279,12 +1193,10 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
 exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly handles receiving an array of objects for the videoSrc prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1307,12 +1219,10 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
 exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly handles receiving an array of strings for the videoSrc prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""
@@ -1333,12 +1243,10 @@ exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly ha
 exports[`videoSrc prop Handles valid videoSrc prop values correctly correctly handles receiving an array with a mix of strings and objects for the videoSrc prop 1`] = `
 <div>
   <div
-    class=""
     data-testid="hover-video-player-container"
     style="position: relative;"
   >
     <video
-      class=""
       crossorigin="anonymous"
       data-testid="video-element"
       loop=""

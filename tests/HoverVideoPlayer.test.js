@@ -2040,3 +2040,43 @@ describe('Video playback errors', () => {
     );
   });
 });
+
+describe('Style props', () => {
+  mockConsoleError();
+
+  test('applies className and id props correctly', () => {
+    const { rerenderWithProps } = renderHoverVideoPlayer({
+      videoSrc: 'fake/video-file.mp4',
+      pausedOverlay: <div />,
+      loadingOverlay: <div />,
+    });
+
+    const videoElement = screen.getByTestId('video-element');
+    const playerContainer = screen.getByTestId('hover-video-player-container');
+    const pausedOverlayWrapper = screen.getByTestId('paused-overlay-wrapper');
+    const loadingOverlayWrapper = screen.getByTestId('loading-overlay-wrapper');
+
+    expect(playerContainer).not.toHaveClass();
+    expect(pausedOverlayWrapper).not.toHaveClass();
+    expect(loadingOverlayWrapper).not.toHaveClass();
+    expect(videoElement.id).toBe('');
+    expect(videoElement).not.toHaveClass();
+
+    rerenderWithProps({
+      videoSrc: 'fake/video-file.mp4',
+      pausedOverlay: <div />,
+      loadingOverlay: <div />,
+      className: 'container-class',
+      pausedOverlayWrapperClassName: 'paused-overlay-class',
+      loadingOverlayWrapperClassName: 'loading-overlay-class',
+      videoClassName: 'video-class',
+      videoId: 'video-id',
+    });
+
+    expect(playerContainer).toHaveClass('container-class');
+    expect(pausedOverlayWrapper).toHaveClass('paused-overlay-class');
+    expect(loadingOverlayWrapper).toHaveClass('loading-overlay-class');
+    expect(videoElement.id).toBe('video-id');
+    expect(videoElement).toHaveClass('video-class');
+  });
+});
