@@ -33,6 +33,7 @@
     - [muted](#muted)
     - [volume](#volume)
     - [loop](#loop)
+    - [videoId](#videoid)
 1. **[Custom Styling](#custom-styling)**
     - [Applying classNames and styles](#applying-classnames-and-styles)
     - [sizingMode](#sizingmode)
@@ -418,6 +419,26 @@ Note that this will only work if the [muted](#muted) prop is also set to `false`
   // The video should not loop when it reaches the end
   loop={false}
 />
+```
+
+### videoId
+
+**Type**: `string` | **Default**: null
+
+`videoId` can be used to set an `id` on the video element. This can be useful if you need to access the video element via `document.getElementById()` in order to extend its behavior in some unique way.
+
+```jsx
+useEffect(()=>{
+  const videoElement = document.getElementById('hover-video');
+  // DO SOMETHING WITH THE VIDEO ELEMENT HERE
+},[]);
+
+return (
+  <HoverVideoPlayer
+    videoSrc="video.mp4"
+    videoId="hover-video"
+  />
+)
 ```
 
 ## Custom Styling
