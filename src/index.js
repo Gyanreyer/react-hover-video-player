@@ -66,6 +66,7 @@ import {
  * @param {string}  [props.loadingOverlayWrapperClassName] - Optional className to apply custom styling to the loading state overlay contents' wrapper
  * @param {object}  [props.loadingOverlayWrapperStyle] - Style object to apply custom inlined styles to the loading overlay wrapper
  * @param {string}  [props.videoClassName] - Optional className to apply custom styling to the video element
+ * @param {string}  [props.videoId] - Optional unique id to apply to the video element to make it easier to access
  * @param {object}  [props.videoStyle] - Style object to apply custom inlined styles to the video element
  * @param {string}  [props.sizingMode='video'] - Describes sizing mode to use to determine how the player's contents should be styled. Accepts 4 possible values:
  *                                         - **"video"**: Everything should be sized based on the video element's dimensions - the overlays will expand to cover the video
@@ -96,13 +97,14 @@ export default function HoverVideoPlayer({
   controlsList = null,
   disableRemotePlayback = true,
   disablePictureInPicture = true,
-  className = '',
+  className = null,
   style = null,
-  pausedOverlayWrapperClassName = '',
+  pausedOverlayWrapperClassName = null,
   pausedOverlayWrapperStyle = null,
-  loadingOverlayWrapperClassName = '',
+  loadingOverlayWrapperClassName = null,
   loadingOverlayWrapperStyle = null,
-  videoClassName = '',
+  videoClassName = null,
+  videoId = null,
   videoStyle = null,
   sizingMode = SIZING_MODES.video,
 }) {
@@ -500,6 +502,7 @@ export default function HoverVideoPlayer({
         controls={controls}
         controlsList={controlsList}
         className={videoClassName}
+        id={videoId}
         data-testid="video-element"
       >
         {!isVideoUnloaded &&
