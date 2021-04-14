@@ -15,6 +15,7 @@
     "test": "jest --config=tests/jest.dev.config.js",
     "test:release": "npm run build -- --no-demo && jest --config=tests/jest.prod.config.js",
     "test:watch": "npm run test -- --watch --no-cache",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand --config=tests/jest.dev.config.js",
     "commit": "npx git-cz"
   },
   "dependencies": {},
@@ -102,6 +103,10 @@
               "type": "docs",
               "scope": "readme",
               "release": "patch"
+            },
+            {
+              "type": "refactor",
+              "release": "minor"
             }
           ],
           "parserOpts": {
