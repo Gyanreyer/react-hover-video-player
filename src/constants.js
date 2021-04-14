@@ -1,14 +1,10 @@
-// Enumerates states that the video can be in
-export const VIDEO_STATE = {
+// Enumerates states that the hover player's overlay can be in
+export const OVERLAY_STATE = {
+  // Only the paused overlay is visible, if provided
   paused: 'paused',
+  // Both the paused and loading overlays are visible, if provided
   loading: 'loading',
-  playing: 'playing',
-};
-
-// Enumerates states that the hover player can be in
-export const HOVER_PLAYER_STATE = {
-  paused: 'paused',
-  loading: 'loading',
+  // No overlays are visible
   playing: 'playing',
 };
 
