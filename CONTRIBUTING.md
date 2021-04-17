@@ -21,47 +21,44 @@ Tests are written using [jest](https://github.com/facebook/jest) and [react-test
 
 - `npm run test:release` will perform a webpack build (`npm run build`) and then run all tests on the resulting release-ready version of the component for smoke testing purposes. Note that this is much slower and does not perform coverage testing, so you will almost always want to stick with `npm run test`.
 
+- `npm run test:debug` will run the tests in a Node process that an external debugger can connect to (ie, <chrome://inspect>) so that you can use breakpoints and step through the code as needed. See Jest's [troubleshooting docs](https://jestjs.io/docs/troubleshooting) for more details.
+
  **100% code coverage for tests is required**. If you make a change, you must add a test accordingly.
+
+#### Utils for writing tests
 
 There are some handy utils available to help make writing tests easier:
 
-- `renderHoverVideoPlayer`: takes a configuration and renders a `HoverVideoPlayer` component for testing
+##### renderHoverVideoPlayer
 
-  **Arguments**:
+`renderHoverVideoPlayer` takes a configuration and renders a `HoverVideoPlayer` component for testing. This also injects mocked behavior into the rendered video element so we can emulate how a real video element loads and plays as closely as possible in our tests.
 
-  - `props` (Object): Accepts an object representing all props to pass to the component for the test
-  - `videoConfig` (Object): Accepts an object for customizing what behavior should be simulated for the video element. Valid properties for this object are:
-    - `shouldPlaybackFail` (Boolean): Whether we should simulate an error occuring while attempting to play the video. This is false by default.
-    - `shouldPlayReturnPromise` (Boolean): Whether video.play() should return a Promise or not. This is true by default but setting it to false can be useful for simulating the behavior of older browsers where the play function does not return a Promise.
+*Arguments*:
 
-  **Returns**:
+- `props` (Object): Accepts an object representing all props to pass to the component for the test
+- `videoConfig` (Object): Accepts an object for customizing what behavior should be simulated for the video element. Valid properties for this object are:
+- `shouldPlaybackFail` (Boolean): Whether we should simulate an error occuring while attempting to play the video. This is false by default.
 
-  An object with the following properties:
-  - `rerenderWithProps` (Function): Takes an object for new props to re-render the component with.
-  - [All properties returned by react-testing-library's render function](https://testing-library.com/docs/react-testing-library/api#render-result)
+*Returns*:
 
-- `getPlayPromise`: Gets the play promise returned by a given call to video.play(). The main use case for this is that you will often need to simulate the promise resolving before the player's state will update. This typically looks like:
+An object with the following properties:
 
-  ```javascript
-  await act(() => getPlayPromise(videoElement, 0));
-  ```
+- `rerenderWithProps` (Function): Takes an object for new props to re-render the component with.
+- `videoElement` (HTMLVideoElement): The video element rendered by the HoverVideoPlayer component.
+- `playerContainer` (HTMLDivElement): The container div element rendered by the HoverVideoPlayerComponent.
+- `pausedOverlayWrapper` (HTMLDivElement): The wrapper div element around the contents provided to the `pausedOverlay` prop. This should be null if no `pausedOverlay` was provided.
+- `loadingOverlayWrapper` (HTMLDivElement): The wrapper div element around the contents provided to the `loadingOverlay` prop. This should be null if no `loadingOverlay` was provided.
+- [All properties returned by react-testing-library's render function](https://testing-library.com/docs/react-testing-library/api#render-result)
 
-  You will almost always need to use `act` since resolving the promise will asynchronously perform an operation that will update the component's state.
+##### advanceVideoTime
 
-  **Arguments**:
+Syntactic sugar for `act(() => jest.advanceTimersByTime(time));`.
 
-  - `videoElement` (Node): The video element whose play promise we want to retrieve.
-  - `playCallIndex` (Number): The index of the play call you would like to retrieve. This is useful if video.play() is called multiple times in your test.
+`advanceVideoTime` takes a number of milliseconds to advance Jest's [mock timers](https://jestjs.io/docs/jest-object#mock-timers) by, and uses `act()` to ensure any resulting updates to the React component's state will be handled safely.
 
-  **Returns**:
+*Arguments*:
 
-  The `Promise` returned by the given call to video.play().
-
-- `mockConsoleError`: Mocks console.error for a group of tests and ensures that errors were only logged when they were expected to be.
-
-  **Arguments**
-
-  - `shouldExpectErrors` (Boolean): Whether we should expect any errors to be logged in the tests.
+- `time` (Number): Number of milliseconds to advance timers by.
 
 ## Builds
 

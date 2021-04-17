@@ -71,8 +71,10 @@ const mockLoadVideoElement = (videoElement) => {
       i <= VIDEO_READY_STATES.HAVE_ENOUGH_DATA;
       i += 1
     ) {
+      // Set a timeout to advance the video's ready state and store the timeout ID
+      // so we can clean up/cancel it as needed
       videoElement.mockLoadTimeoutIds.push(
-        setTimeout(() => {
+        window.setTimeout(() => {
           videoElement.readyState = i;
 
           switch (i) {
@@ -203,13 +205,13 @@ const VIDEO_STATE = {
   loading: 'loading',
   playing: 'playing',
 };
-
 /**
  * @function getVideoState
  *
  * Takes a video element and returns its current playing state
  *
  * @param {node} videoElement
+ * @returns {VideoState}  The video's current playback state
  */
 function getVideoState(videoElement) {
   if (videoElement.paused || videoElement.ended) {

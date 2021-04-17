@@ -1,11 +1,10 @@
 module.exports = {
   rootDir: '../',
   verbose: true,
-  transform: {
-    '^.+\\.js$': '<rootDir>/tests/jest.transform.js',
-  },
-  testRegex: '(/__tests__/.*|\\.(test|spec))\\.jsx?$',
-  moduleFileExtensions: ['js', 'json', 'jsx', 'node'],
+  // Clear calls to mocked functions before each test
+  clearMocks: true,
+  // All timers should be faked
+  timers: 'fake',
   coverageThreshold: {
     global: {
       branches: 100,
@@ -14,6 +13,5 @@ module.exports = {
       statements: 100,
     },
   },
-  setupFiles: ['core-js/stable', 'regenerator-runtime/runtime'],
   setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.js'],
 };

@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pausedOverlay and loadingOverlay pausedOverlay and loadingOverlay are shown and hidden correctly as the video is started and stopped 1`] = `
+<div>
+  <div
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <div
+      data-testid="paused-overlay-wrapper"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 500ms; pointer-events: auto;"
+    >
+      <div />
+    </div>
+    <div
+      data-testid="loading-overlay-wrapper"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 500ms; pointer-events: none;"
+    >
+      <div />
+    </div>
+    <video
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`pausedOverlay and loadingOverlay the loading state overlay is not shown if the video plays before the loading state timeout completes 1`] = `
+<div>
+  <div
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <div
+      data-testid="loading-overlay-wrapper"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
+    >
+      <div />
+    </div>
+    <video
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
