@@ -2,49 +2,10 @@
 
 [![npm version](https://badgen.net/npm/v/react-hover-video-player)](https://www.npmjs.com/package/react-hover-video-player)
 [![minzipped size](https://badgen.net/bundlephobia/minzip/react-hover-video-player)](https://bundlephobia.com/result?p=react-hover-video-player)
-[![code coverage](https://codecov.io/gh/Gyanreyer/react-hover-video-player/branch/master/graph/badge.svg)](https://codecov.io/gh/Gyanreyer/react-hover-video-player)
-[![build status](https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=master)](https://travis-ci.com/github/Gyanreyer/react-hover-video-player)
+[![code coverage](https://codecov.io/gh/Gyanreyer/react-hover-video-player/branch/main/graph/badge.svg)](https://codecov.io/gh/Gyanreyer/react-hover-video-player)
+[![build status](https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=main)](https://travis-ci.com/github/Gyanreyer/react-hover-video-player)
 
-![demo](./demo/public/image/hover_preview_demo.gif)
-
-## Table of Contents
-
-1. **[What It Is](#what-it-is)**
-1. **[Features](#features)**
-1. **[How It Works](#how-it-works)**
-1. **[Get Started](#get-started)**
-    - [Installation](#installation)
-    - [Basic Usage](#basic-usage)
-1. **[Sources](#sources)**
-    - [videoSrc](#videosrc)
-    - [videoCaptions](#videocaptions)
-    - [crossOrigin](#crossorigin)
-1. **[Overlays](#overlays)**
-    - [pausedOverlay](#pausedoverlay)
-    - [loadingOverlay](#loadingoverlay)
-    - [overlayTransitionDuration](#overlaytransitionduration)
-    - [loadingStateTimeout](#loadingstatetimeout)
-1. **[Custom Event Handling](#custom-event-handling)**
-    - [hoverTargetRef](#hovertargetref)
-    - [focused](#focused)
-    - [disableDefaultEventHandling](#disabledefaulteventhandling)
-1. **[Video Behavior](#video-behavior)**
-    - [restartOnPaused](#restartonpaused)
-    - [muted](#muted)
-    - [volume](#volume)
-    - [loop](#loop)
-    - [videoId](#videoid)
-1. **[Custom Styling](#custom-styling)**
-    - [Applying classNames and styles](#applying-classnames-and-styles)
-    - [sizingMode](#sizingmode)
-1. **[Optimization](#optimization)**
-    - [preload](#preload)
-    - [unloadVideoOnPaused](#unloadvideoonpaused)
-1. **[Video Controls](#video-controls)**
-    - [controls](#controls)
-    - [controlsList](#controlslist)
-    - [disableRemotePlayback](#disableremoteplayback)
-    - [disablePictureInPicture](#disablepictureinpicture)
+![demo](assets/images/hover_preview_demo.gif)
 
 ## What It Is
 
@@ -367,7 +328,7 @@ const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
 **Type**: `boolean` | **Default**: `false`
 
-`restartOnPaused` accepts a boolean value which will toggle whether the video should be reset to the start every time it is paused after the user stops hovering. `restartOnPaused` is false by default so it will retain the current place in the video.
+`restartOnPaused` accepts a boolean value which will toggle whether the video should be reset to the start every time it is paused or resume from the previous time it was at.
 
 ```jsx
 <HoverVideoPlayer
@@ -614,3 +575,4 @@ Be aware that this feature [is not currently supported across all major browsers
   // Show controls for playing this video in picture-in-picture mode
   disablePictureInPicture={false}
 />
+```

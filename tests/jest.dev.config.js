@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const baseConfig = require('./jest.base.config');
 
 module.exports = {
@@ -6,6 +7,6 @@ module.exports = {
   coverageDirectory: './coverage',
   coveragePathIgnorePatterns: ['<rootDir>/tests/', '<rootDir>/node_modules/'],
   moduleNameMapper: {
-    'react-hover-video-player': '<rootDir>/src/index.js',
+    'react-hover-video-player': '<rootDir>/src/index.ts',
   },
 };

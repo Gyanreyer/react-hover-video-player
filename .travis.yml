@@ -2,7 +2,7 @@ language: node_js
 
 node_js:
   - lts/*
-  - 10
+  - 12
 
 cache:
   directories:
@@ -24,22 +24,24 @@ script:
 
 jobs:
   include:
-    # Define release stage which handles publishing to github page and npm
+    # Define release stage which handles publishing to npm
     - stage: release
-      # Only run deploy on pushes to master branch
-      if: branch = master AND type = push
+      # Perform a release on pushes to the `main` branch
+      if: branch = main AND type = push
       node_js: lts/*
       script: npm run build
       deploy:
-        - provider: pages
-          local_dir: demo/dist
-          fqdn: react-hover-video-player.dev
-          project_name: react-hover-video-player
-          keep_history: true
-          allow_empty_commit: true
-          edge:
-            branch: master
         - provider: script
           script: npx semantic-release
           edge:
-            branch: master
+            branch: main
+    - stage: release-next
+      # Perform a preview release on pushes to the `next` branch
+      if: branch = next AND type = push
+      node_js: lts/*
+      script: npm run build
+      deploy:
+        - provider: script
+          script: npx semantic-release
+          edge:
+            branch: next

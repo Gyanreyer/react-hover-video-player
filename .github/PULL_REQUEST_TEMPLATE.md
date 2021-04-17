@@ -1,6 +1,6 @@
 ## Checklist
 
-- [ ] I have read the [CONTRIBUTING](https://github.com/Gyanreyer/react-hover-video-player/blob/master/CONTRIBUTING.md) doc.
+- [ ] I have read the [CONTRIBUTING](https://github.com/Gyanreyer/react-hover-video-player/blob/main/CONTRIBUTING.md) doc.
 - [ ] I have added/updated unit tests to cover my changes.
 - [ ] Unit tests pass locally.
 - [ ] I have added appropriate documentation for my changes.
