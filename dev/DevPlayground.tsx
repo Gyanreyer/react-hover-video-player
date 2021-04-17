@@ -3,12 +3,17 @@ import React, { Profiler } from 'react';
 import { render } from 'react-dom';
 import { css } from 'emotion';
 
-import HoverVideoPlayer from '../../src';
-import LoadingSpinnerOverlay from './components/LoadingSpinnerOverlay';
+import HoverVideoPlayer from '../src';
+import LoadingSpinnerOverlay from './LoadingSpinnerOverlay';
 import testVideos from './constants/testVideos';
 
+interface RenderTiming {
+  averageRenderTime: number;
+  renderCount: number;
+}
+
 function TestPlayer({ videoSrc, thumbnailImageSrc }) {
-  const renderTiming = React.useRef();
+  const renderTiming = React.useRef<RenderTiming>();
   if (!renderTiming.current) {
     renderTiming.current = {
       averageRenderTime: 0,
@@ -20,8 +25,8 @@ function TestPlayer({ videoSrc, thumbnailImageSrc }) {
   const onProfilerRender = React.useCallback(
     (
       id, // the "id" prop of the Profiler tree that has just committed
-      phase, // either "mount" (if the tree just mounted) or "update" (if it re-rendered)
-      actualDuration // time spent rendering the committed update
+      phase: string, // either "mount" (if the tree just mounted) or "update" (if it re-rendered)
+      actualDuration: number // time spent rendering the committed update
     ) => {
       if (phase === 'mount') {
         console.log(`${videoSrc} | MOUNT: ${actualDuration}ms`);
@@ -60,43 +65,41 @@ function TestPlayer({ videoSrc, thumbnailImageSrc }) {
         `}
         sizingMode="container"
         unloadVideoOnPaused
+        restartOnPaused
       />
     </Profiler>
   );
 }
 
 // Use this component for testing out the component
-export default function DevPlayground() {
-  return (
-    <main
+const DevPlayground: React.FC = () => (
+  <main
+    className={css`
+      margin: 0 32px;
+    `}
+  >
+    <h1>REACT HOVER VIDEO PLAYER</h1>
+    <div
       className={css`
-        margin: 0 32px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 24px;
       `}
     >
-      <h1>REACT HOVER VIDEO PLAYER</h1>
-      <div
-        className={css`
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          grid-gap: 24px;
-        `}
-      >
-        {testVideos.map(({ videoSrc, thumbnailImageSrc }) => (
-          <TestPlayer
-            key={videoSrc}
-            videoSrc={videoSrc}
-            thumbnailImageSrc={thumbnailImageSrc}
-          />
-        ))}
-      </div>
-    </main>
-  );
-}
-
-const devPlaygroundContainer = document.getElementById(
-  'react-hover-video-player-dev-playground'
+      {testVideos.map(({ videoSrc, thumbnailImageSrc }) => (
+        <TestPlayer
+          key={videoSrc}
+          videoSrc={videoSrc}
+          thumbnailImageSrc={thumbnailImageSrc}
+        />
+      ))}
+    </div>
+  </main>
 );
 
-if (devPlaygroundContainer) {
-  render(<DevPlayground />, devPlaygroundContainer);
-}
+const rootElement = document.createElement('div');
+document.body.appendChild(rootElement);
+
+render(<DevPlayground />, rootElement);
+
+export default DevPlayground;

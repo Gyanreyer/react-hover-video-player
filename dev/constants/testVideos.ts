@@ -1,5 +1,10 @@
-// Public test videos courtesy of https://gist.github.com/jsturgis/3b19447b304616f18657
-const testVideos = [
+// Public test videos courtesy of https://gist.github.com/jsturgis/
+interface Video {
+  videoSrc: string;
+  thumbnailImageSrc: string;
+}
+
+const testVideos: Video[] = [
   {
     videoSrc:
       'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',

@@ -3,11 +3,17 @@
 ## Developing locally
 
 - `npm install`
-- `npm start`
-  - This will serve the contents of `demo/src/DevPlayground.js` on a development server at [http://localhost:3000](http://localhost:3000) with hot module reloading.
-    - You may edit the `DevPlayground.js` file however you like to test your changes, but please refrain from committing any changes to this file.
-- `npm start:demo`
-  - This will serve the demo documentation site contents which will be published to [react-hover-video-player.com](https://react-hover-video-player.com). The site contents are almost entirely derived from the README file so there typically should not be any need to make changes to this stuff yourself.
+- `npm run dev`
+  - This will serve the contents of `dev/DevPlayground.tsx` at <http://localhost:3000> with hot reloading.
+    - You may edit the `DevPlayground.tsx` file however you like to test your changes, but please refrain from committing any changes to this file.
+
+## Documentation
+
+Please add documentation for your changes! If adding a prop, make sure to add it to the README file at `docs/README.md` accordingly.
+
+The documentation site at <https://react-hover-video-player.dev> uses the [docsify](https://docsify.js.org/) library to automatically construct a page based on the README file's contents.
+
+To preview the documentation site locally, run `npx docsify serve docs` to serve it at <http://localhost:3000>.
 
 ## Tests
 
@@ -37,7 +43,7 @@ There are some handy utils available to help make writing tests easier:
 
 - `props` (Object): Accepts an object representing all props to pass to the component for the test
 - `videoConfig` (Object): Accepts an object for customizing what behavior should be simulated for the video element. Valid properties for this object are:
-- `shouldPlaybackFail` (Boolean): Whether we should simulate an error occuring while attempting to play the video. This is false by default.
+  - `shouldPlaybackFail` (Boolean): Whether we should simulate an error occuring while attempting to play the video. This is false by default.
 
 *Returns*:
 
@@ -62,7 +68,7 @@ Syntactic sugar for `act(() => jest.advanceTimersByTime(time));`.
 
 ## Builds
 
-This project uses automated builds with [Travis CI](https://travis-ci.com/). When a change is merged into the master branch, Travis will run all unit tests and if they pass, it will build and deploy a new version of the `react-hover-video-player` package to npm using [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
+This project uses automated builds with [Travis CI](https://travis-ci.com/). When a change is merged into the main branch, Travis will run all unit tests and if they pass, it will build and deploy a new version of the `react-hover-video-player` package to npm using [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
 
 If you wish to do a production build locally for testing purposes:
 

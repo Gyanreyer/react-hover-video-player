@@ -41,6 +41,16 @@ const animateStroke = css`
   }
 `;
 
+interface LoadingSpinnerOverlayProps {
+  spinnerDiameter?: number;
+  animationDuration?: number;
+  shouldAnimateStroke?: boolean;
+  shouldShowDarkenedBackground?: boolean;
+  shouldShowSemiTransparentRing?: boolean;
+  strokeColor?: string;
+  className?: string;
+}
+
 /**
  * @component LoadingSpinnerOverlay
  *
@@ -54,7 +64,7 @@ const animateStroke = css`
  * @param {string}  [strokeColor="#ffffff"] - The color to apply to the spinner circle's stroke
  * @param {string}  [className] - Custom className to apply to the loading overlay wrapper
  */
-export default function LoadingSpinnerOverlay({
+const LoadingSpinnerOverlay: React.FC<LoadingSpinnerOverlayProps> = ({
   spinnerDiameter = 60,
   animationDuration = 1000,
   shouldAnimateStroke = true,
@@ -62,40 +72,63 @@ export default function LoadingSpinnerOverlay({
   shouldShowSemiTransparentRing = false,
   strokeColor = '#ffffff',
   className = '',
-}) {
-  return (
-    <div
-      className={cx(
-        loadingOverlayWrapper,
-        {
-          [darkenedBackground]: shouldShowDarkenedBackground,
-        },
-        className
-      )}
-    >
-      <svg
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        className={css`
-          animation-name: spinner-rotate-animation;
-          animation-timing-function: linear;
-          animation-iteration-count: infinite;
+}) => (
+  <div
+    className={cx(
+      loadingOverlayWrapper,
+      {
+        [darkenedBackground]: shouldShowDarkenedBackground,
+      },
+      className
+    )}
+  >
+    <svg
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      className={css`
+        animation-name: spinner-rotate-animation;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
 
-          @keyframes spinner-rotate-animation {
-            0% {
-              transform: rotate(45deg);
-            }
-            100% {
-              transform: rotate(405deg);
-            }
+        @keyframes spinner-rotate-animation {
+          0% {
+            transform: rotate(45deg);
           }
-        `}
+          100% {
+            transform: rotate(405deg);
+          }
+        }
+      `}
+      style={{
+        animationDuration: `${animationDuration}ms`,
+      }}
+      width={spinnerDiameter}
+      height={spinnerDiameter}
+    >
+      <circle
+        cx={12}
+        cy={12}
+        r={10}
+        className={cx(
+          css`
+            fill: transparent;
+            stroke-width: 2px;
+            stroke-dasharray: 57;
+            stroke-linecap: round;
+            transform-origin: 50% 50%;
+            stroke-dashoffset: 18;
+            z-index: 1;
+          `,
+          {
+            [animateStroke]: shouldAnimateStroke,
+          }
+        )}
         style={{
-          animationDuration: `${animationDuration}ms`,
+          animationDuration: `${animationDuration * 1.5}ms`,
+          stroke: strokeColor,
         }}
-        width={spinnerDiameter}
-        height={spinnerDiameter}
-      >
+      />
+      {shouldShowSemiTransparentRing && (
         <circle
           cx={12}
           cy={12}
@@ -104,40 +137,17 @@ export default function LoadingSpinnerOverlay({
             css`
               fill: transparent;
               stroke-width: 2px;
-              stroke-dasharray: 57;
-              stroke-linecap: round;
-              transform-origin: 50% 50%;
-              stroke-dashoffset: 18;
-              z-index: 1;
-            `,
-            {
-              [animateStroke]: shouldAnimateStroke,
-            }
+              opacity: 0.2;
+              z-index: 0;
+            `
           )}
           style={{
-            animationDuration: `${animationDuration * 1.5}ms`,
             stroke: strokeColor,
           }}
         />
-        {shouldShowSemiTransparentRing && (
-          <circle
-            cx={12}
-            cy={12}
-            r={10}
-            className={cx(
-              css`
-                fill: transparent;
-                stroke-width: 2px;
-                opacity: 0.2;
-                z-index: 0;
-              `
-            )}
-            style={{
-              stroke: strokeColor,
-            }}
-          />
-        )}
-      </svg>
-    </div>
-  );
-}
+      )}
+    </svg>
+  </div>
+);
+
+export default LoadingSpinnerOverlay;
