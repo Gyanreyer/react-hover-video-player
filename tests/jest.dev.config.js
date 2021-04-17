@@ -6,6 +6,6 @@ module.exports = {
   coverageDirectory: './coverage',
   coveragePathIgnorePatterns: ['<rootDir>/tests/', '<rootDir>/node_modules/'],
   moduleNameMapper: {
-    'react-hover-video-player': '<rootDir>/src',
+    'react-hover-video-player': '<rootDir>/src/index.js',
   },
 };
