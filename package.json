@@ -8,8 +8,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c rollup.config.js",
-    "dev": "rollup -c rollup.dev.config.js -w",
+    "build": "npx rollup -c rollup.config.js",
+    "dev": "npx rollup -c rollup.dev.config.js -w",
     "test": "jest --config=tests/jest.dev.config.js",
     "test:release": "npm run build && jest --config=tests/jest.prod.config.js",
     "test:watch": "npm run test -- --watch --no-cache",

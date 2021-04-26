@@ -1,7 +1,6 @@
 language: node_js
 
 node_js:
-  - lts/*
   - 12
 
 cache:
@@ -26,22 +25,13 @@ jobs:
   include:
     # Define release stage which handles publishing to npm
     - stage: release
-      # Perform a release on pushes to the `main` branch
+      # Publish to npm on pushes to `main` branch
       if: branch = main AND type = push
       node_js: lts/*
       script: npm run build
       deploy:
         - provider: script
+          skip_cleanup: true
           script: npx semantic-release
-          edge:
-            branch: main
-    - stage: release-next
-      # Perform a preview release on pushes to the `next` branch
-      if: branch = next AND type = push
-      node_js: lts/*
-      script: npm run build
-      deploy:
-        - provider: script
-          script: npx semantic-release
-          edge:
-            branch: next
+          on:
+            all_branches: true
