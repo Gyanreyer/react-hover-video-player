@@ -3,3 +3,4 @@
 /node_modules
 /dev/build
 npm-debug.log*
+/docs/README.md

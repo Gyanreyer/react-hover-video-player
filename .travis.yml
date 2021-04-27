@@ -33,5 +33,13 @@ jobs:
         - provider: script
           skip_cleanup: true
           script: npx semantic-release
-          on:
-            all_branches: true
+          edge:
+            branch: main
+        - provider: pages
+          local_dir: docs
+          fqdn: react-hover-video-player.dev
+          project_name: react-hover-video-player
+          keep_history: true
+          allow_empty_commit: true
+          edge:
+            branch: main
