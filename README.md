@@ -4,6 +4,7 @@
 [![minzipped size](https://badgen.net/bundlephobia/minzip/react-hover-video-player)](https://bundlephobia.com/result?p=react-hover-video-player)
 [![code coverage](https://codecov.io/gh/Gyanreyer/react-hover-video-player/branch/main/graph/badge.svg)](https://codecov.io/gh/Gyanreyer/react-hover-video-player)
 [![build status](https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=main)](https://travis-ci.com/github/Gyanreyer/react-hover-video-player)
+[![license](https://img.shields.io/npm/l/react-hover-video-player)](https://github.com/Gyanreyer/react-hover-video-player/blob/main/LICENSE)
 
 ![demo](assets/images/hover_preview_demo.gif)
 
