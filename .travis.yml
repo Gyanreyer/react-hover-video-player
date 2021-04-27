@@ -10,14 +10,13 @@ cache:
 notifications:
   email: false
 
-before_install:
-  - npm install -g codecov
-  - npm install -g @commitlint/travis-cli
-
 jobs:
   include:
     # Run tests on all branches
     - stage: test
+      before_install:
+        - npm install -g codecov
+        - npm install -g @commitlint/travis-cli
       script:
         - commitlint-travis
         - npm test
@@ -27,7 +26,7 @@ jobs:
 
     # Define release stage which handles publishing to npm
     - stage: release
-      if: $TRAVIS_BRANCH = main
+      if: branch = main AND type = push
       node_js: lts/*
       script: npm run build
       deploy:
