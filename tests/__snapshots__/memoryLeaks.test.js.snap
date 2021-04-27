@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Prevents memory leaks when unmounted cleans everything up correctly if the video is unmounted during a pause attempt 1`] = `
+<div>
+  <div
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <div
+      data-testid="paused-overlay-wrapper"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1; opacity: 1; transition: opacity 200ms; pointer-events: auto;"
+    >
+      <div />
+    </div>
+    <video
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      preload="auto"
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`Prevents memory leaks when unmounted cleans everything up correctly if the video is unmounted during a play attempt 1`] = `
+<div>
+  <div
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <div
+      data-testid="loading-overlay-wrapper"
+      style="position: absolute; width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2; opacity: 0; transition: opacity 400ms; pointer-events: none;"
+    >
+      <div />
+    </div>
+    <video
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake/video-file.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
