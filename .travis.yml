@@ -14,26 +14,27 @@ before_install:
   - npm install -g codecov
   - npm install -g @commitlint/travis-cli
 
-script:
-  - commitlint-travis
-  - npm test
-  - codecov
-  # Run tests against a built release-ready version of the component
-  - npm run test:release
-
 jobs:
   include:
+    # Run tests on all branches
+    - stage: test
+      script:
+        - commitlint-travis
+        - npm test
+        - codecov
+        # Run tests against a built release-ready version of the component
+        - npm run test:release
+
     # Define release stage which handles publishing to npm
     - stage: release
-      # Publish to npm on pushes to `main` branch
-      if: branch = main AND type = push
+      if: $TRAVIS_BRANCH = main
       node_js: lts/*
       script: npm run build
       deploy:
         - provider: script
           skip_cleanup: true
           script: npx semantic-release
-          on:
+          edge:
             branch: main
         - provider: pages
           local_dir: docs
@@ -41,5 +42,5 @@ jobs:
           project_name: react-hover-video-player
           keep_history: true
           allow_empty_commit: true
-          on:
+          edge:
             branch: main
