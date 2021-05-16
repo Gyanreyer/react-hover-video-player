@@ -25,7 +25,11 @@ export default {
   plugins: [
     // Make sure the latest README file is copied into the docs folder
     // so the documentation page can work correctly
-    copy({ targets: [{ src: 'README.md', dest: 'docs' }] }),
+    copy({
+      targets: [
+        { src: 'README.md', dest: 'docs', rename: 'README-doc-site-copy.md' },
+      ],
+    }),
     peerDepsExternal(),
     resolve(),
     commonjs(),

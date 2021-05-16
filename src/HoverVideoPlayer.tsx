@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useImperativeHandle,
+  useMemo,
+} from 'react';
 
 import {
   expandToFillContainerStyle,
@@ -158,6 +164,7 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
   loadingOverlayWrapperStyle = null,
   videoId = null,
   videoClassName = null,
+  videoRef: forwardedVideoRef = null,
   videoStyle = null,
   sizingMode = 'video',
 }: HoverVideoPlayerProps) => {
@@ -190,6 +197,9 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
   // Element refs
   const containerRef = useRef(null);
   const videoRef = useRef(null);
+
+  // Forward out local videoRef along to the videoRef prop
+  useImperativeHandle(forwardedVideoRef, () => videoRef.current);
 
   const hasPausedOverlay = Boolean(pausedOverlay);
   const hasLoadingOverlay = Boolean(loadingOverlay);

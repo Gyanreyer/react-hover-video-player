@@ -197,6 +197,11 @@ export interface HoverVideoPlayerProps {
    */
   loadingOverlayWrapperStyle?: React.CSSProperties;
   /**
+   * React ref to forward to the video element rendered by HoverVideoPlayer.
+   * @defaultValue null
+   */
+  videoRef?: React.Ref<HTMLVideoElement>;
+  /**
    * Optional unique ID to apply to the video element.
    * This can be useful for scenarios where you need to manually access
    * and manipulate the video element via `getElementById`.
