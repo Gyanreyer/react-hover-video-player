@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hoverTarget hoverTarget accepts a DOM node 1`] = `
+<div>
+  <div
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <video
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake-video.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`hoverTarget hoverTarget accepts a React ref 1`] = `
+<div>
+  <div>
+    <a
+      data-testid="test-hover-target"
+      href="#test"
+    >
+      Hovering on me will start the video!
+    </a>
+    <div
+      data-testid="hover-video-player-container"
+      style="position: relative;"
+    >
+      <video
+        crossorigin="anonymous"
+        data-testid="video-element"
+        loop=""
+        playsinline=""
+        style="display: block; width: 100%; object-fit: cover;"
+      >
+        <source
+          src="fake-video.mp4"
+        />
+      </video>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`hoverTarget hoverTarget accepts a function that returns an element 1`] = `
+<div>
+  <div
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <video
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake-video.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`hoverTarget logs errors if hoverTarget receives an invalid value 1`] = `
+<div>
+  <div
+    data-testid="hover-video-player-container"
+    style="position: relative;"
+  >
+    <video
+      crossorigin="anonymous"
+      data-testid="video-element"
+      loop=""
+      playsinline=""
+      style="display: block; width: 100%; object-fit: cover;"
+    >
+      <source
+        src="fake-video.mp4"
+      />
+    </video>
+  </div>
+</div>
+`;
+
+exports[`hoverTargetRef hoverTargetRef works correctly for a class component 1`] = `
+<div>
+  <div>
+    <a
+      data-testid="test-hover-target"
+      href="#test"
+    >
+      Hovering on me will start the video!
+    </a>
+    <div
+      data-testid="hover-video-player-container"
+      style="position: relative;"
+    >
+      <video
+        crossorigin="anonymous"
+        data-testid="video-element"
+        loop=""
+        playsinline=""
+        style="display: block; width: 100%; object-fit: cover;"
+      >
+        <source
+          src="fake-video.mp4"
+        />
+      </video>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`hoverTargetRef hoverTargetRef works correctly for a functional component 1`] = `
+<div>
+  <div>
+    <a
+      data-testid="test-hover-target"
+      href="#test"
+    >
+      Hovering on me will start the video!
+    </a>
+    <div
+      data-testid="hover-video-player-container"
+      style="position: relative;"
+    >
+      <video
+        crossorigin="anonymous"
+        data-testid="video-element"
+        loop=""
+        playsinline=""
+        style="display: block; width: 100%; object-fit: cover;"
+      >
+        <source
+          src="fake-video.mp4"
+        />
+      </video>
+    </div>
+  </div>
+</div>
+`;

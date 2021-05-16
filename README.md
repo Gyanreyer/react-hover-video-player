@@ -252,27 +252,42 @@ After the user stops hovering on the player, the video will continue playing unt
 
 ## Custom Event Handling
 
-### hoverTargetRef
+### hoverTarget
 
-**Type**: `RefObject` | **Default**: `null`
+**Type**: `Node`, a function that returns a `Node`, or a `React.RefObject` | **Default**: `null`
 
-`hoverTargetRef` accepts a React ref to the element that you would like to apply the component's [default event handling](#how-it-works) to. If no ref is provided, it will use the component's container `<div>` as the hover target. This prop is useful if you would like a simple way to make the video play when the user hovers over a larger surrounding area.
+`hoverTarget` accepts a DOM node, a function that returns a DOM node, or a React ref to an element. The component will apply the component's [default event handling](#how-it-works) to the received element. If no `hoverTarget` is provided, HoverVideoPlayer will use the component's container `<div>` as the hover target. A common use case for this would be to make the video play when the user hovers over a larger area around the player.
 
 ```jsx
-const wrapperLinkRef = useRef();
+// Passing a DOM node
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Play the video when the user hovers over the element with id "hover-target"
+  hoverTarget={document.getElementById("hover-target")}
+/>
 
 ...
+
+// Passing a function that returns a DOM node
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Play the video when the user hovers over the element with id "hover-target"
+  hoverTarget={() => document.getElementById("hover-target")}
+/>
+
+...
+
+// Using a React ref
+const wrapperLinkRef = useRef();
 
 <a href="/other-page" ref={wrapperLinkRef}>
   <HoverVideoPlayer
     videoSrc="video.mp4"
-    // We want the video to play when the wrapping link element is hovered or focused
-    hoverTargetRef={wrapperLinkRef}
+  // Play the video when the user hovers over the wrapper link
+    hoverTarget={wrapperLinkRef}
   />
 </a>
 ```
-
-Note that this is only intended to work with refs created by React's `useRef` or `createRef` functions; custom callback refs will not work.
 
 ### focused
 
@@ -285,7 +300,7 @@ const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
 ...
 
-<button 
+<button
   // Clicking this button should toggle whether the video is playing
   onClick={()=>setIsVideoPlaying(!isVideoPlaying)}
 >

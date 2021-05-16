@@ -141,6 +141,7 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
   focused = false,
   disableDefaultEventHandling = false,
   hoverTargetRef = null,
+  hoverTarget = null,
   pausedOverlay = null,
   loadingOverlay = null,
   loadingStateTimeout = 200,
@@ -319,27 +320,55 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
     // If default event handling is disabled, we shouldn't check for touch events outside of the player
     if (disableDefaultEventHandling) return undefined;
 
-    // If a ref to a custom hover target was provided, we'll use that as our target element,
-    // but otherwise just default to our container element
-    const hoverTargetElement = (hoverTargetRef || containerRef).current;
+    // Get the element that we should add our hover event listeners to
+    let hoverEventTargetElement: Node;
+
+    if (hoverTarget) {
+      // If the `hoverTarget` prop was provided, it could be a function, a DOM element, or a React ref, so
+      // figure out which one it is and get the hover target element out of it accordingly
+      if (typeof hoverTarget === 'function') {
+        hoverEventTargetElement = hoverTarget();
+      } else if (hoverTarget instanceof Node) {
+        hoverEventTargetElement = hoverTarget;
+      } else if (hoverTarget.current) {
+        hoverEventTargetElement = hoverTarget.current;
+      }
+    } else if (hoverTargetRef) {
+      // Log a warning for legacy usage of the `hoverTargetRef` prop
+      console.warn(
+        'The `hoverTargetRef` prop is deprecated in favor of `hoverTarget` and will be removed in the next major version of `react-hover-video-player`. To migrate, simply rename the prop to `hoverTarget` and it should continue working as intended.'
+      );
+      hoverEventTargetElement = hoverTargetRef.current;
+    } else {
+      // If no prop was provided to specify a hover target, default to using HoverVideoPlayer's container element
+      hoverEventTargetElement = containerRef.current;
+    }
+
+    // If we weren't able to get a valid hover target to attach event listeners to, return early
+    if (!hoverEventTargetElement || !hoverEventTargetElement.addEventListener) {
+      console.error(
+        'HoverVideoPlayer was unable to add event listeners to a hover target. Please check your usage of the `hoverTarget` prop.'
+      );
+      return undefined;
+    }
 
     // Add the event listeners
     const onHoverStart = () => setIsHoveringOverVideo(true);
     const onHoverEnd = () => setIsHoveringOverVideo(false);
 
     // Mouse events
-    hoverTargetElement.addEventListener('mouseenter', onHoverStart);
-    hoverTargetElement.addEventListener('mouseleave', onHoverEnd);
+    hoverEventTargetElement.addEventListener('mouseenter', onHoverStart);
+    hoverEventTargetElement.addEventListener('mouseleave', onHoverEnd);
 
     // Focus/blur
-    hoverTargetElement.addEventListener('focus', onHoverStart);
-    hoverTargetElement.addEventListener('blur', onHoverEnd);
+    hoverEventTargetElement.addEventListener('focus', onHoverStart);
+    hoverEventTargetElement.addEventListener('blur', onHoverEnd);
 
     // Touch events
-    hoverTargetElement.addEventListener('touchstart', onHoverStart);
+    hoverEventTargetElement.addEventListener('touchstart', onHoverStart);
     // Event listener pauses the video when the user touches somewhere outside of the player
     const onWindowTouchStart = (event: TouchEvent) => {
-      if (!hoverTargetElement.contains(event.target)) {
+      if (!hoverEventTargetElement.contains(event.target as Node)) {
         onHoverEnd();
       }
     };
@@ -348,14 +377,14 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
 
     // Return a cleanup function that removes all event listeners
     return () => {
-      hoverTargetElement.removeEventListener('mouseenter', onHoverStart);
-      hoverTargetElement.removeEventListener('mouseleave', onHoverEnd);
-      hoverTargetElement.removeEventListener('focus', onHoverStart);
-      hoverTargetElement.removeEventListener('blur', onHoverEnd);
-      hoverTargetElement.removeEventListener('touchstart', onHoverStart);
+      hoverEventTargetElement.removeEventListener('mouseenter', onHoverStart);
+      hoverEventTargetElement.removeEventListener('mouseleave', onHoverEnd);
+      hoverEventTargetElement.removeEventListener('focus', onHoverStart);
+      hoverEventTargetElement.removeEventListener('blur', onHoverEnd);
+      hoverEventTargetElement.removeEventListener('touchstart', onHoverStart);
       window.removeEventListener('touchstart', onWindowTouchStart);
     };
-  }, [disableDefaultEventHandling, hoverTargetRef]);
+  }, [disableDefaultEventHandling, hoverTarget, hoverTargetRef]);
 
   // Effect sets attributes on the video which can't be done via props
   useEffect(() => {
