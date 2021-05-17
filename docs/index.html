@@ -18,19 +18,20 @@
 <body>
   <div id="app"></div>
   <script>
-    var homepage;
+    var basePath;
 
     if (window.location.host.startsWith('localhost')) {
       // If we're testing locally, use the local README file
-      homepage = 'README.md';
+      basePath = '/';
     } else {
       // If we're not in a local environment, load the README from the github repo
-      homepage = 'https://github.com/Gyanreyer/react-hover-video-player/blob/main/README.md?raw=true';
+      basePath = 'https://raw.githubusercontent.com/Gyanreyer/react-hover-video-player/main/';
     }
 
     window.$docsify = {
-      repo: 'https://github.com/Gyanreyer/react-hover-video-player.git',
-      homepage: homepage,
+      repo: 'https://github.com/Gyanreyer/react-hover-video-player',
+      homepage: 'README.md',
+      basePath: basePath,
     }
   </script>
   <script src="vendor/docsify.js"></script>
