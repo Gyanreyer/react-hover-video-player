@@ -18,9 +18,19 @@
 <body>
   <div id="app"></div>
   <script>
+    var homepage;
+
+    if (window.location.host.startsWith('localhost')) {
+      // If we're testing locally, use the local README file
+      homepage = 'README.md';
+    } else {
+      // If we're not in a local environment, load the README from the github repo
+      homepage = 'https://github.com/Gyanreyer/react-hover-video-player/blob/main/README.md?raw=true';
+    }
+
     window.$docsify = {
       repo: 'https://github.com/Gyanreyer/react-hover-video-player.git',
-      homepage: 'README-doc-site-copy.md',
+      homepage: homepage,
     }
   </script>
   <script src="vendor/docsify.js"></script>
