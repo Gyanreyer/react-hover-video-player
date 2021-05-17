@@ -66,6 +66,13 @@ export interface HoverVideoPlayerProps {
    */
   disableDefaultEventHandling?: boolean;
   /**
+   * Provides a custom element that should be used as the target for hover events to start/stop the video.
+   * Accepts a DOM Node, a function which returns a DOM Node, or a React ref.
+   * The component's container div element will be used by default if no hover target is provided.
+   * @defaultValue null
+   */
+  hoverTarget?: Node | (() => Node) | React.RefObject<Node>;
+  /**
    * Ref to a custom element that should be used as the target for hover events to start/stop the video.
    * The component's container div element will be used by default if no hover target ref is provided.
    * @defaultValue null
@@ -196,6 +203,11 @@ export interface HoverVideoPlayerProps {
    * @defaultValue null
    */
   loadingOverlayWrapperStyle?: React.CSSProperties;
+  /**
+   * React ref to forward to the video element rendered by HoverVideoPlayer.
+   * @defaultValue null
+   */
+  videoRef?: React.Ref<HTMLVideoElement>;
   /**
    * Optional unique ID to apply to the video element.
    * This can be useful for scenarios where you need to manually access

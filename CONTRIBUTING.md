@@ -74,8 +74,6 @@ If you wish to do a production build locally for testing purposes:
 
 - `npm run build` will build the component and demo page for production.
 
-- `npm run clean` will delete all built resources.
-
 ## Commits
 
 In order to work best with semantic-release, commit messages must follow the [Angular commit guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines):

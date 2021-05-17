@@ -252,27 +252,42 @@ After the user stops hovering on the player, the video will continue playing unt
 
 ## Custom Event Handling
 
-### hoverTargetRef
+### hoverTarget
 
-**Type**: `RefObject` | **Default**: `null`
+**Type**: `Node`, a function that returns a `Node`, or a `React.RefObject` | **Default**: `null`
 
-`hoverTargetRef` accepts a React ref to the element that you would like to apply the component's [default event handling](#how-it-works) to. If no ref is provided, it will use the component's container `<div>` as the hover target. This prop is useful if you would like a simple way to make the video play when the user hovers over a larger surrounding area.
+`hoverTarget` accepts a DOM node, a function that returns a DOM node, or a React ref to an element. The component will apply the component's [default event handling](#how-it-works) to the received element. If no `hoverTarget` is provided, HoverVideoPlayer will use the component's container `<div>` as the hover target. A common use case for this would be to make the video play when the user hovers over a larger area around the player.
 
 ```jsx
-const wrapperLinkRef = useRef();
+// Passing a DOM node
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Play the video when the user hovers over the element with id "hover-target"
+  hoverTarget={document.getElementById("hover-target")}
+/>
 
 ...
+
+// Passing a function that returns a DOM node
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Play the video when the user hovers over the element with id "hover-target"
+  hoverTarget={() => document.getElementById("hover-target")}
+/>
+
+...
+
+// Using a React ref
+const wrapperLinkRef = useRef();
 
 <a href="/other-page" ref={wrapperLinkRef}>
   <HoverVideoPlayer
     videoSrc="video.mp4"
-    // We want the video to play when the wrapping link element is hovered or focused
-    hoverTargetRef={wrapperLinkRef}
+  // Play the video when the user hovers over the wrapper link
+    hoverTarget={wrapperLinkRef}
   />
 </a>
 ```
-
-Note that this is only intended to work with refs created by React's `useRef` or `createRef` functions; custom callback refs will not work.
 
 ### focused
 
@@ -285,7 +300,7 @@ const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
 ...
 
-<button 
+<button
   // Clicking this button should toggle whether the video is playing
   onClick={()=>setIsVideoPlaying(!isVideoPlaying)}
 >
@@ -383,22 +398,25 @@ Note that this will only work if the [muted](#muted) prop is also set to `false`
 />
 ```
 
-### videoId
+### videoRef
 
-**Type**: `string` | **Default**: null
+**Type**: `React.Ref` | **Default**: null
 
-`videoId` can be used to set an `id` on the video element. This can be useful if you need to access the video element via `document.getElementById()` in order to extend its behavior in some unique way.
+`videoRef` can be used to expose a ref to the video element rendered by HoverVideoPlayer. This is useful if you need to directly access the video element to extend its behavior in some way, but beware that any changes you make could produce unexpected behavior from the component.
 
 ```jsx
+const hoverVideoRef = useRef();
+
 useEffect(()=>{
-  const videoElement = document.getElementById('hover-video');
-  // DO SOMETHING WITH THE VIDEO ELEMENT HERE
-},[]);
+  const videoElement = hoverVideoRef.current;
+
+  videoElement.playbackRate = 2;
+}, []);
 
 return (
   <HoverVideoPlayer
     videoSrc="video.mp4"
-    videoId="hover-video"
+    videoRef={hoverVideoRef}
   />
 )
 ```
@@ -438,6 +456,8 @@ The base styling for this component's contents are set using inline styling. You
   /* ~~~ VIDEO ELEMENT ~~~ */
   // Applies a custom class to the video element
   videoClassName="player-video"
+  // Applies an id to the video element
+  videoId="hover-video"
   // Applies inline styles to the video element
   videoStyle={{
     padding: 24,
