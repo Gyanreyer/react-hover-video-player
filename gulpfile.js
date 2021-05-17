@@ -10,5 +10,9 @@ gulp.task('copy-docs-readme', () =>
 // Watches the README file and copies it into the docs/ directory every time it is changed
 // Run with `npx gulp watch-docs`
 gulp.task('watch-docs', () => {
-  gulp.watch(['README.md'], gulp.series('copy-docs-readme'));
+  const copyDocsReadmeTask = gulp.series('copy-docs-readme');
+  // Run the task once initially
+  copyDocsReadmeTask();
+  // Re-run the task every time the README.md file changes
+  gulp.watch('README.md', copyDocsReadmeTask);
 });
