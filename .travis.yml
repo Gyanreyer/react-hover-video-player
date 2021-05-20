@@ -19,6 +19,7 @@ jobs:
         - npm install -g @commitlint/travis-cli
       script:
         - commitlint-travis
+        - npm run validate-docs
         - npm test
         - codecov
         # Run tests against a built release-ready version of the component
