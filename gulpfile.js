@@ -2,27 +2,17 @@
 const gulp = require('gulp');
 const through = require('through2');
 
-// Copies the README file into the docs/ directory so the documentation site can load and preview it locally
-// Run with `npx gulp copy-docs-readme`
-gulp.task('copy-docs-readme', () =>
-  gulp.src('README.md').pipe(gulp.dest('docs/'))
+// Copies the README file from /docs into the root directory so it can be displayed correctly
+// on the npm package page.
+// This should be run in the `prepack` script which is run before the npm package is published
+gulp.task('copy-docs-readme-to-root', () =>
+  gulp.src('docs/README.md').pipe(gulp.dest('./'))
 );
-
-// Watches the README file and copies it into the docs/ directory every time it is changed
-// Run with `npx gulp watch-docs`
-gulp.task('watch-docs', () => {
-  const copyDocsReadmeTask = gulp.series('copy-docs-readme');
-  // Run the task once initially
-  copyDocsReadmeTask();
-  // Re-run the task every time the README.md file changes
-  gulp.watch('README.md', copyDocsReadmeTask);
-});
 
 // Gulp task checks that the README file does not contain any incorrect/stale links
 // to sections that don't exist
-// This has unfurtunately been a big enough problem that it merits writing this script
 gulp.task('validate-readme-links', () =>
-  gulp.src('README.md').pipe(
+  gulp.src('docs/README.md').pipe(
     through.obj(function (file, encoding, callback) {
       if (file.isNull()) {
         this.emit('error', new Error('README file does not exist.'));

@@ -6,11 +6,11 @@
 [![build status](https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=main)](https://travis-ci.com/github/Gyanreyer/react-hover-video-player)
 [![license](https://img.shields.io/npm/l/react-hover-video-player)](https://github.com/Gyanreyer/react-hover-video-player/blob/main/LICENSE)
 
-![demo](https://github.com/Gyanreyer/react-hover-video-player/blob/main/docs/assets/images/hover_preview_demo.gif?raw=true)
+![demo](./assets/images/hover_preview_demo.gif?raw=true)
 
 ## What It Is
 
-A React component that makes it super easy to set up a video that will play when the user hovers over it. This is particularly useful for setting up a thumbnail that will play a video preview on hover.
+A React component that makes it simple to set up a video that will play when the user hovers over it. This is particularly useful for setting up a thumbnail that will play a video preview on hover.
 
 ## Features
 

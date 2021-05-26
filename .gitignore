@@ -3,4 +3,6 @@
 /node_modules
 /dev/build
 npm-debug.log*
-/docs/README.md
+.DS_Store
+/README.md
+/docs/.vuepress/dist
