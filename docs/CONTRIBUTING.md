@@ -11,9 +11,9 @@
 
 Please add documentation for your changes! If adding a prop, make sure to add it to the README file accordingly.
 
-The documentation site at <https://react-hover-video-player.dev> uses the [docsify](https://docsify.js.org/) library to automatically construct a page based on the README file's contents.
+The documentation site at <https://react-hover-video-player.dev> uses the [VuePress](https://vuepress.vuejs.org/) library to automatically construct a page based on the README file's contents.
 
-To preview the documentation site locally, run `npm run docs` to serve it at <http://localhost:3000>.
+To preview the documentation site locally, run `npm run docs:dev` to serve it at <http://localhost:8080>.
 
 ## Tests
 

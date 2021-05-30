@@ -19,6 +19,7 @@ jobs:
         - npm install -g @commitlint/travis-cli
       script:
         - commitlint-travis
+        - npm run validate-docs
         - npm test
         - codecov
         # Run tests against a built release-ready version of the component
@@ -28,7 +29,9 @@ jobs:
     - stage: release
       if: branch = main AND type = push
       node_js: lts/*
-      script: npm run build
+      script:
+        - npm run build
+        - npm run docs:build
       deploy:
         - provider: script
           skip_cleanup: true
@@ -37,7 +40,7 @@ jobs:
             branch: main
           edge: true
         - provider: pages
-          local_dir: docs
+          local_dir: docs/.vuepress/dist
           fqdn: react-hover-video-player.dev
           project_name: react-hover-video-player
           keep_history: true

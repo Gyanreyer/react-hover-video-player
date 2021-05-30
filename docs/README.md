@@ -6,11 +6,11 @@
 [![build status](https://travis-ci.com/Gyanreyer/react-hover-video-player.svg?branch=main)](https://travis-ci.com/github/Gyanreyer/react-hover-video-player)
 [![license](https://img.shields.io/npm/l/react-hover-video-player)](https://github.com/Gyanreyer/react-hover-video-player/blob/main/LICENSE)
 
-![demo](https://github.com/Gyanreyer/react-hover-video-player/blob/main/docs/assets/images/hover_preview_demo.gif?raw=true)
+![demo](./assets/images/hover_preview_demo.gif?raw=true)
 
 ## What It Is
 
-A React component that makes it super easy to set up a video that will play when the user hovers over it. This is particularly useful for setting up a thumbnail that will play a video preview on hover.
+A React component that makes it simple to set up a video that will play when the user hovers over it. This is particularly useful for setting up a thumbnail that will play a video preview on hover.
 
 ## Features
 
@@ -22,7 +22,7 @@ A React component that makes it super easy to set up a video that will play when
 
 ## How It Works
 
-This component will render a video element which will start playing when an `onMouseEnter`, `onTouchStart`, or `onFocus` event is fired on the [hover target](#hovertargetref) and will accordingly be paused when an `onMouseLeave` or `onBlur` event is fired on the target, or an `onTouchStart` event is fired outside of the target. This default behavior can be [disabled, overridden, and customized](#custom-event-handling) as needed.
+This component will render a video element which will start playing when an `onMouseEnter`, `onTouchStart`, or `onFocus` event is fired on the [hover target](#hovertarget) and will accordingly be paused when an `onMouseLeave` or `onBlur` event is fired on the target, or an `onTouchStart` event is fired outside of the target. This default behavior can be [disabled, overridden, and customized](#custom-event-handling) as needed.
 
 Everything is written with extra care to cleanly handle the video element's state as it asynchronously loads and plays.
 
@@ -44,7 +44,16 @@ function MyComponent () {
     <HoverVideoPlayer
       videoSrc="path-to/your-video.mp4"
       pausedOverlay={
-        <img src="thumbnail-image.jpg" alt="" />
+        <img
+          src="thumbnail-image.jpg"
+          alt=""
+          style={{
+            // Make the image expand to cover the video's dimensions
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
       }
       loadingOverlay={
         <div className="loading-spinner-overlay" />
@@ -179,6 +188,7 @@ A common use case for this would be displaying a thumbnail image over the video 
         // Make the image expand to cover the video's dimensions
         width: "100%",
         height: "100%",
+        objectFit: "cover",
       }}
     />
   }
@@ -256,18 +266,9 @@ After the user stops hovering on the player, the video will continue playing unt
 
 **Type**: `Node`, a function that returns a `Node`, or a `React.RefObject` | **Default**: `null`
 
-`hoverTarget` accepts a DOM node, a function that returns a DOM node, or a React ref to an element. The component will apply the component's [default event handling](#how-it-works) to the received element. If no `hoverTarget` is provided, HoverVideoPlayer will use the component's container `<div>` as the hover target. A common use case for this would be to make the video play when the user hovers over a larger area around the player.
+`hoverTarget` accepts a DOM node, a function that returns a DOM node, or a React ref to an element. The component will apply [default event handling](#how-it-works) to the received target element so the video will play when a user hovers over it with a mouse or touch interaction. If no `hoverTarget` is provided, HoverVideoPlayer will use the component's container `<div>` as the hover target.
 
 ```jsx
-// Passing a DOM node
-<HoverVideoPlayer
-  videoSrc="video.mp4"
-  // Play the video when the user hovers over the element with id "hover-target"
-  hoverTarget={document.getElementById("hover-target")}
-/>
-
-...
-
 // Passing a function that returns a DOM node
 <HoverVideoPlayer
   videoSrc="video.mp4"
@@ -280,13 +281,24 @@ After the user stops hovering on the player, the video will continue playing unt
 // Using a React ref
 const wrapperLinkRef = useRef();
 
-<a href="/other-page" ref={wrapperLinkRef}>
+<a href="/other-page" ref={wrapperLinkRef} className="link-card">
   <HoverVideoPlayer
     videoSrc="video.mp4"
   // Play the video when the user hovers over the wrapper link
     hoverTarget={wrapperLinkRef}
   />
 </a>
+
+...
+
+// Passing a DOM node
+// PLEASE BEWARE THAT THIS CAN BE UNSAFE: Only do this if you are confident that the element
+// will always already exist on the DOM before this component is rendered.
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Play the video when the user hovers over the element with id "hover-target"
+  hoverTarget={document.getElementById("hover-target")}
+/>
 ```
 
 ### focused
@@ -504,7 +516,7 @@ The `preload` prop maps directly to the [HTML Video element's preload attribute]
 - `"metadata"`: We should only load the video's metadata (video dimensions, duration, etc) before playing. This helps us avoid loading large amounts of data unless it is absolutely needed.
   - Note that in Safari, video elements with `preload="metadata"` applied will just appear empty rather than displaying the first frame of the video like other browsers do. As a result, it is recommended that if you use this setting, you should have [paused overlay](#pausedoverlay) contents set that will hide the video element until it is playing.
 - `"none"`: We should not preload any part of the video before playing, including metadata.
-  - Note that this means that the video's dimensions will not be loaded until the video is played. This can potentially cause a content jump when the video starts loading if you are using the `"video"` [sizing mode](#sizing-mode-presets).
+  - Note that this means that the video's dimensions will not be loaded until the video is played. This can potentially cause a content jump when the video starts loading if you are using the `"video"` [sizing mode](#sizingmode).
   - Additionally, nothing will be displayed for the video element until it starts playing, so you should make sure you provide [paused overlay](#pausedoverlay) contents to hide the video element.
 
 ```jsx
@@ -521,7 +533,7 @@ The `preload` prop maps directly to the [HTML Video element's preload attribute]
 
 Having a large number of videos with large file sizes on the page at the same time can cause severe performance problems in some cases, especially in Google Chrome. This is because after you play a video for the first time, it will continue loading in the background even after it is paused, taking up bandwidth and memory even though it is not in use. If you have too many large videos loading in the background at once, this can gum up the works very quickly and cause significant performance degredation to the point where other assets may stop loading entirely as well. This is where the `unloadVideoOnPaused` prop comes in: when set to true, it will ensure that video assets will be kept completely unloaded whenever the video is not playing. This may result in the video being slighly slower to start on repeat play attempts, but assuming the browser is caching the video assets correctly, the difference should not be too significant.
 
-Note that this will also keep the video's metadata unloaded when it is not playing, causing content jump issues with the `"video"` [sizing mode](#sizing-mode-presets).
+Note that this will also keep the video's metadata unloaded when it is not playing, causing content jump issues with the `"video"` [sizing mode](#sizingmode).
 
 Additionally, nothing will be displayed for the video element when it is unloaded, so it is highly recommended that you provide [paused overlay](#pausedoverlay) contents to hide the video when it is paused.
 
