@@ -26,12 +26,14 @@ module.exports = {
     ],
   ],
   themeConfig: {
-    nav: [
+    docsDir: 'docs',
+    navbar: [
       { text: 'Home', link: '/' },
-      { text: 'Contributing', link: '/CONTRIBUTING' },
+      { text: 'Contributing', link: '/CONTRIBUTING.md' },
     ],
     repo: 'gyanreyer/react-hover-video-player',
     sidebar: 'auto',
     sidebarDepth: 2,
   },
+  plugins: ['@vuepress/plugin-search'],
 };
