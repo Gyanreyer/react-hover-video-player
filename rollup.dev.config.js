@@ -7,7 +7,7 @@ import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
 
 export default {
-  input: 'dev/DevPlayground.tsx',
+  input: 'dev/index.tsx',
   output: {
     file: 'dev/build/bundle.js',
     format: 'iife',

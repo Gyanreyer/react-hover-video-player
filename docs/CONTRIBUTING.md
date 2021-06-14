@@ -4,8 +4,11 @@
 
 - `npm install`
 - `npm run dev`
-  - This will serve the contents of `dev/DevPlayground.tsx` at <http://localhost:3000> with hot reloading.
-    - You may edit the `DevPlayground.tsx` file however you like to test your changes, but please refrain from committing any changes to this file.
+  - This will serve the contents of `dev/index.tsx` at <http://localhost:3000> with hot reloading.
+    - You may edit the `TestComponent.tsx` file for all testing purposes.
+      You may modify this file however you want for testing, but your changes
+      should not be committed. If you think your changes should be committed,
+      please contact the maintainer.
 
 ## Documentation
 

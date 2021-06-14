@@ -64,7 +64,7 @@ interface LoadingSpinnerOverlayProps {
  * @param {string}  [strokeColor="#ffffff"] - The color to apply to the spinner circle's stroke
  * @param {string}  [className] - Custom className to apply to the loading overlay wrapper
  */
-const LoadingSpinnerOverlay: React.FC<LoadingSpinnerOverlayProps> = ({
+const LoadingSpinnerOverlay = ({
   spinnerDiameter = 60,
   animationDuration = 1000,
   shouldAnimateStroke = true,
@@ -72,7 +72,7 @@ const LoadingSpinnerOverlay: React.FC<LoadingSpinnerOverlayProps> = ({
   shouldShowSemiTransparentRing = false,
   strokeColor = '#ffffff',
   className = '',
-}) => (
+}: LoadingSpinnerOverlayProps): JSX.Element => (
   <div
     className={cx(
       loadingOverlayWrapper,
