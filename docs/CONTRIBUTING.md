@@ -12,7 +12,7 @@
 
 ## Documentation
 
-Please add documentation for your changes! If adding a prop, make sure to add it to the README file accordingly.
+Please add documentation for your changes! If you add a prop, make sure to add it to the README file accordingly.
 
 The documentation site at <https://react-hover-video-player.dev> uses the [VuePress](https://vuepress.vuejs.org/) library to automatically construct a page based on the README file's contents.
 
@@ -20,11 +20,11 @@ To preview the documentation site locally, run `npm run docs:dev` to serve it at
 
 ## Tests
 
-### Running tests
+### Unit tests
 
-Tests are written using [jest](https://github.com/facebook/jest) and [react-testing-library](https://github.com/testing-library/react-testing-library).
+All unit tests can be found in the `tests/jest` directory. These tests are written using [jest](https://github.com/facebook/jest) and [react-testing-library](https://github.com/testing-library/react-testing-library).
 
-- `npm run test` will run all tests once.
+- `npm run test` will run all unit tests once.
 
 - `npm run test:watch` will continually re-run tests as you make changes.
 
@@ -32,9 +32,9 @@ Tests are written using [jest](https://github.com/facebook/jest) and [react-test
 
 - `npm run test:debug` will run the tests in a Node process that an external debugger can connect to (ie, <chrome://inspect>) so that you can use breakpoints and step through the code as needed. See Jest's [troubleshooting docs](https://jestjs.io/docs/troubleshooting) for more details.
 
- **100% code coverage for tests is required**. If you make a change, you must add a test accordingly.
+ **100% code coverage for unit tests is required**. If you make a change, you must add a test accordingly.
 
-#### Utils for writing tests
+#### Utils for writing unit tests
 
 There are some handy utils available to help make writing tests easier:
 
@@ -69,13 +69,21 @@ Syntactic sugar for `act(() => jest.advanceTimersByTime(time));`.
 
 - `time` (Number): Number of milliseconds to advance timers by.
 
+### Integration tests
+
+The jest unit tests are built on a very heavy amount of mocking when it comes to the video's loading/playback behavior, so sometimes
+it's valuable to add some additional integration tests so we can feel truly confident that the component actually does work as expected
+in real-world scenarios. Integration tests live in the `tests/cypress/component` directory and are written with [cypress](https://github.com/cypress-io/cypress).
+
+- `npm run test:integrationn` will run through all integration tests once.
+
+- `npm run test:integration-test-runner` will open a browser window with the Cypress test runner, providing a nice UI which makes it much easier to troubleshoot your integration tests and see exactly what they are doing.
+
 ## Builds
 
-This project uses automated builds with [Travis CI](https://travis-ci.com/). When a change is merged into the main branch, Travis will run all unit tests and if they pass, it will build and deploy a new version of the `react-hover-video-player` package to npm using [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
+This project uses automated builds with [Travis CI](https://travis-ci.com/). When a change is merged into the main branch, Travis will run all tests and if they pass, it will build and deploy a new version of the `react-hover-video-player` package to npm using [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
 
-If you wish to do a production build locally for testing purposes:
-
-- `npm run build` will build the component and demo page for production.
+If you wish to do a production build locally for testing purposes, `npm run build` will build the component for production.
 
 ## Commits
 
