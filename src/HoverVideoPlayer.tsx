@@ -360,7 +360,13 @@ const HoverVideoPlayer = ({
     hoverEventTargetElement.addEventListener('blur', onHoverEnd);
 
     // Touch events
-    hoverEventTargetElement.addEventListener('touchstart', onHoverStart);
+    const touchStartListenerOptions = { passive: true };
+
+    hoverEventTargetElement.addEventListener(
+      'touchstart',
+      onHoverStart,
+      touchStartListenerOptions
+    );
     // Event listener pauses the video when the user touches somewhere outside of the player
     const onWindowTouchStart = (event: TouchEvent) => {
       if (!hoverEventTargetElement.contains(event.target as Node)) {
@@ -368,7 +374,11 @@ const HoverVideoPlayer = ({
       }
     };
 
-    window.addEventListener('touchstart', onWindowTouchStart);
+    window.addEventListener(
+      'touchstart',
+      onWindowTouchStart,
+      touchStartListenerOptions
+    );
 
     // Return a cleanup function that removes all event listeners
     return () => {
