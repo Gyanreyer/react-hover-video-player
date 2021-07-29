@@ -135,7 +135,7 @@ enum OverlayState {
  *
  * @param {HoverVideoPlayerProps} props
  */
-const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
+const HoverVideoPlayer = ({
   videoSrc,
   videoCaptions = null,
   focused = false,
@@ -168,7 +168,7 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
   videoRef: forwardedVideoRef = null,
   videoStyle = null,
   sizingMode = 'video',
-}: HoverVideoPlayerProps) => {
+}: HoverVideoPlayerProps): JSX.Element => {
   // Keep track of whether the user is hovering over the video and it should therefore be playing or not
   const [isHoveringOverVideo, setIsHoveringOverVideo] = useState(false);
   // Keep track of how the paused and loading overlays should be displayed
@@ -216,44 +216,39 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
 
       // If shouldPlayVideo is true, attempt to start playing the video
       if (shouldPlayVideo) {
-        // Use heuristics to check if the video is already playing.
+        // The video is stopped if it is paused or ended
+        const isVideoStopped = videoElement.paused || videoElement.ended;
+        // readyState 3 is HAVE_FUTURE_DATA, meaning the video has loaded enough data that it can play
+        const isVideoLoadedEnoughToPlay = videoElement.readyState >= 3;
+
+        // If the video is stopped or still loading and we have a loading overlay,
+        // set a timeout to display the overlay if the video doesn't finish loading
+        // after a certain amount of time
         if (
-          // A video is playing if...
-          // The video isn't paused
-          !videoElement.paused &&
-          // The video hasn't ended
-          !videoElement.ended &&
-          // The video has loaded enough data that it can play
-          // (readyState 3 is HAVE_FUTURE_DATA, meaning the video has loaded enough data that it can play)
-          videoElement.readyState >= 3
+          (isVideoStopped || !isVideoLoadedEnoughToPlay) &&
+          hasLoadingOverlay
         ) {
-          // If the video is already playing, ensure the overlays are hidden to reflect that!
+          // If we have a loading overlay, set a timeout to start showing it if the video doesn't start playing
+          // before the loading state timeout has elapsed
+          mutableVideoState.current.loadingStateTimeout = setTimeout(() => {
+            // If this timeout wasn't cancelled, we're still trying to play the video
+            // and it's still loading, so fade in the loading overlay
+            setOverlayState(OverlayState.loading);
+          }, loadingStateTimeout);
+        }
+
+        // If the video is fully stopped, we need to attempt to start it by calling play()
+        if (isVideoStopped) {
+          // Ensure we're at the correct time to start playing from
+          videoElement.currentTime =
+            mutableVideoState.current.videoTimeToRestore;
+
+          // Start attempting to play
+          videoElement.play();
+        } else if (isVideoLoadedEnoughToPlay) {
+          // If the video isn't stopped and is loaded enough to play. it's already playing,
+          // so ensure the overlays are hidden to reflect that!
           setOverlayState(OverlayState.playing);
-        } else {
-          // If the video is not currently playing, proceed to kick off a loading timeout if needed and attempt to play the video
-          // if there isn't already one in progress
-
-          if (hasLoadingOverlay) {
-            // If we have a loading overlay, set a timeout to start showing it if the video doesn't start playing
-            // before the loading state timeout has elapsed
-            mutableVideoState.current.loadingStateTimeout = setTimeout(() => {
-              // If this timeout wasn't cancelled, we're still trying to play the video
-              // and it's still loading, so fade in the loading overlay
-              setOverlayState(OverlayState.loading);
-            }, loadingStateTimeout);
-          }
-
-          // If videoElement.paused is false that means a play attempt is already in progress so there's no need to actually
-          // start attempting to play again. This can happen if the video is taking a long time to load and still hasn't
-          // finished since the user has hovered off of the player and then back on again.
-          if (videoElement.paused) {
-            // Ensure we're at the correct time to start playing from
-            videoElement.currentTime =
-              mutableVideoState.current.videoTimeToRestore;
-
-            // Start attempting to play
-            videoElement.play();
-          }
         }
       }
       // Otherwise if shouldPlayVideo is false, go through the process necessary to pause the video
@@ -365,15 +360,28 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
     hoverEventTargetElement.addEventListener('blur', onHoverEnd);
 
     // Touch events
-    hoverEventTargetElement.addEventListener('touchstart', onHoverStart);
+    const touchStartListenerOptions = { passive: true };
+
+    hoverEventTargetElement.addEventListener(
+      'touchstart',
+      onHoverStart,
+      touchStartListenerOptions
+    );
     // Event listener pauses the video when the user touches somewhere outside of the player
     const onWindowTouchStart = (event: TouchEvent) => {
-      if (!hoverEventTargetElement.contains(event.target as Node)) {
+      if (
+        !(event.target instanceof Node) ||
+        !hoverEventTargetElement.contains(event.target)
+      ) {
         onHoverEnd();
       }
     };
 
-    window.addEventListener('touchstart', onWindowTouchStart);
+    window.addEventListener(
+      'touchstart',
+      onWindowTouchStart,
+      touchStartListenerOptions
+    );
 
     // Return a cleanup function that removes all event listeners
     return () => {
