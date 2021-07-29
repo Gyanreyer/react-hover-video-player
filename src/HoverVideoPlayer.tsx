@@ -369,7 +369,10 @@ const HoverVideoPlayer = ({
     );
     // Event listener pauses the video when the user touches somewhere outside of the player
     const onWindowTouchStart = (event: TouchEvent) => {
-      if (!hoverEventTargetElement.contains(event.target as Node)) {
+      if (
+        !(event.target instanceof Node) ||
+        !hoverEventTargetElement.contains(event.target)
+      ) {
         onHoverEnd();
       }
     };
