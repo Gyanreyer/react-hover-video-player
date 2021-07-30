@@ -1,5 +1,5 @@
 module.exports = {
-  rootDir: '../',
+  rootDir: '../../',
   verbose: true,
   // Clear calls to mocked functions before each test
   clearMocks: true,
@@ -13,5 +13,6 @@ module.exports = {
       statements: 100,
     },
   },
-  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/tests/jest/jest.setup.js'],
+  testMatch: ['<rootDir>/**/*.test.js'],
 };

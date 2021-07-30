@@ -6,3 +6,7 @@ npm-debug.log*
 .DS_Store
 /README.md
 /docs/.vuepress/dist
+/docs/.vuepress/.temp
+/docs/.vuepress/.cache
+/tests/cypress/videos
+/tests/cypress/screenshots
