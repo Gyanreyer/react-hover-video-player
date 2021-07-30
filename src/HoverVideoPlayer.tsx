@@ -214,10 +214,11 @@ const HoverVideoPlayer = ({
     () => {
       const videoElement = videoRef.current;
 
+      // The video is stopped if it is paused or ended
+      const isVideoStopped = videoElement.paused || videoElement.ended;
+
       // If shouldPlayVideo is true, attempt to start playing the video
       if (shouldPlayVideo) {
-        // The video is stopped if it is paused or ended
-        const isVideoStopped = videoElement.paused || videoElement.ended;
         // readyState 3 is HAVE_FUTURE_DATA, meaning the video has loaded enough data that it can play
         const isVideoLoadedEnoughToPlay = videoElement.readyState >= 3;
 
@@ -257,7 +258,7 @@ const HoverVideoPlayer = ({
         setOverlayState(OverlayState.paused);
 
         // Only proceed to pause the video if it's not already paused
-        if (!videoElement.paused) {
+        if (!isVideoStopped) {
           const pauseVideo = () => {
             // If there isn't a play attempt in progress and the video can therefore
             //  safely be paused right away, do it!
