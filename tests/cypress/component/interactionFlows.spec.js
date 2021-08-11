@@ -2,7 +2,13 @@ import React from 'react';
 import { mount } from '@cypress/react';
 import HoverVideoPlayer from '../../../src';
 
-import { PausedOverlay, LoadingOverlay, makeMockVideoSrc } from '../utils';
+import {
+  PausedOverlay,
+  LoadingOverlay,
+  HoverVideoPlayerWrappedWithFocusToggleButton,
+  makeMockVideoSrc,
+} from '../utils';
+import { videoElementSelector } from '../constants';
 
 describe('Handles interactions correctly', () => {
   beforeEach(() => {
@@ -11,7 +17,10 @@ describe('Handles interactions correctly', () => {
   });
 
   it('mouseEnter and mouseLeave events take the video through its play and pause flows correctly', () => {
-    const videoSrc = makeMockVideoSrc();
+    const videoSrc = makeMockVideoSrc({
+      // Throttle loading the video to ensure we can step through its states as it loads
+      throttleKbps: 1000,
+    });
 
     mount(
       <HoverVideoPlayer
@@ -21,7 +30,6 @@ describe('Handles interactions correctly', () => {
       />
     );
 
-    cy.validateVideoSrc(videoSrc);
     cy.checkVideoPlaybackState('paused');
 
     // The paused overlay should be visible but the loading overlay should not
@@ -57,9 +65,9 @@ describe('Handles interactions correctly', () => {
     });
 
     // The video's time should have advanced if it's playing
-    cy.videoElement().should((videoElement) =>
-      expect(videoElement.currentTime).to.be.greaterThan(0)
-    );
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentTime')
+      .should('be.greaterThan', 0);
 
     // Mouse out of the container to pause
     cy.triggerEventOnPlayer('mouseleave');
@@ -87,7 +95,9 @@ describe('Handles interactions correctly', () => {
   });
 
   it('touch events take the video through its play and pause flows correctly', () => {
-    const videoSrc = makeMockVideoSrc();
+    const videoSrc = makeMockVideoSrc({
+      throttleKbps: 1000,
+    });
 
     mount(
       <HoverVideoPlayer
@@ -97,7 +107,6 @@ describe('Handles interactions correctly', () => {
       />
     );
 
-    cy.validateVideoSrc(videoSrc);
     cy.checkVideoPlaybackState('paused');
 
     // The paused overlay should be visible but the loading overlay should not
@@ -134,14 +143,14 @@ describe('Handles interactions correctly', () => {
     });
 
     // The video's time should have advanced if it's playing
-    cy.videoElement().should((videoElement) =>
-      expect(videoElement.currentTime).to.be.greaterThan(0)
-    );
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentTime')
+      .should('be.greaterThan', 0);
 
     // Touch an element inside the container and tick forward enough
     // where the video would be paused if this event was erroneously
     // counted as a touch outside of the player
-    cy.get('[data-testid="video-element"]').trigger('touchstart');
+    cy.get(videoElementSelector).trigger('touchstart');
     cy.tick(400);
     cy.checkVideoPlaybackState(
       'playing',
@@ -190,7 +199,6 @@ describe('Handles interactions correctly', () => {
       />
     );
 
-    cy.validateVideoSrc(videoSrc);
     cy.checkVideoPlaybackState('paused');
 
     // The paused overlay should be visible but the loading overlay should not
@@ -243,7 +251,9 @@ describe('Handles interactions correctly', () => {
   });
 
   it('an attempt to play the video when it is already loading will be handled correctly', () => {
-    const videoSrc = makeMockVideoSrc();
+    const videoSrc = makeMockVideoSrc({
+      throttleKbps: 1000,
+    });
 
     mount(
       <HoverVideoPlayer
@@ -253,7 +263,6 @@ describe('Handles interactions correctly', () => {
       />
     );
 
-    cy.validateVideoSrc(videoSrc);
     cy.checkVideoPlaybackState('paused');
 
     // The paused overlay should be visible but the loading overlay should not
@@ -310,7 +319,9 @@ describe('Handles interactions correctly', () => {
   });
 
   it('pausing the video will correctly interrupt an active attempt to play the video', () => {
-    const videoSrc = makeMockVideoSrc();
+    const videoSrc = makeMockVideoSrc({
+      throttleKbps: 1000,
+    });
 
     mount(
       <HoverVideoPlayer
@@ -319,8 +330,6 @@ describe('Handles interactions correctly', () => {
         loadingOverlay={<LoadingOverlay />}
       />
     );
-
-    cy.validateVideoSrc(videoSrc);
 
     // Mouse over the video and wait for it to start playing
     cy.triggerEventOnPlayer('mouseenter');
@@ -339,13 +348,10 @@ describe('Handles interactions correctly', () => {
     });
 
     cy.checkVideoPlaybackState('loading');
-    // Wait for the video to finish loading
-    cy.videoElement().should((videoElement) => {
-      expect(videoElement.readyState).to.be.gte(
-        3,
-        "The video's readyState should be HAVE_FUTURE_DATA or greater."
-      );
-    });
+    // Wait for the video to finish loading enough that the play attempt should resolve
+    cy.get(videoElementSelector)
+      .invoke('prop', 'readyState')
+      .should('be.gte', HTMLVideoElement.HAVE_FUTURE_DATA);
     // The video should have been transitioned into a paused state
     cy.checkVideoPlaybackState('paused');
 
@@ -367,10 +373,8 @@ describe('Handles interactions correctly', () => {
       />
     );
 
-    cy.validateVideoSrc(videoSrc);
-
-    cy.videoElement().should('have.property', 'loop', false);
-    cy.videoElement().should('have.property', 'ended', false);
+    cy.get(videoElementSelector).invoke('prop', 'loop').should('be.false');
+    cy.get(videoElementSelector).invoke('prop', 'ended').should('be.false');
 
     // Get the video playing right away
     cy.triggerEventOnPlayer('mouseenter');
@@ -381,18 +385,12 @@ describe('Handles interactions correctly', () => {
       loading: false,
     });
 
-    // Advance the video's time to the end
-    cy.videoElement()
-      .should((videoElement) => {
-        expect(videoElement.readyState).to.be.gte(4);
-      })
-      .then((videoElement) => {
-        videoElement.currentTime = videoElement.duration;
-      });
+    // Advance the video's time to well past the end
+    cy.get(videoElementSelector).invoke('prop', 'currentTime', 10);
 
     // video.ended should be true to indicate the video has ended
-    cy.videoElement().should('have.property', 'ended', true);
-    cy.videoElement().should('have.property', 'paused', true);
+    cy.get(videoElementSelector).invoke('prop', 'ended').should('be.true');
+    cy.get(videoElementSelector).invoke('prop', 'paused').should('be.true');
 
     // The overlays should still be hidden even though the video isn't actually playing
     // because the user hasn't moused out
@@ -418,5 +416,49 @@ describe('Handles interactions correctly', () => {
       paused: false,
       loading: false,
     });
+  });
+
+  it('the video can be played and paused through the focused prop', () => {
+    const videoSrc = makeMockVideoSrc();
+
+    mount(
+      <HoverVideoPlayerWrappedWithFocusToggleButton
+        videoSrc={videoSrc}
+        disableDefaultEventHandling
+      />
+    );
+
+    cy.checkVideoPlaybackState(
+      'paused',
+      'The video should initially be paused'
+    );
+    cy.triggerEventOnPlayer('mouseenter');
+    cy.checkVideoPlaybackState(
+      'paused',
+      'Mousing over the player should not have done anything'
+    );
+
+    cy.get('[data-testid="toggle-focus-button"]').click();
+    cy.checkVideoPlaybackState(
+      'playing',
+      'The video should be toggled to start playing'
+    );
+
+    cy.get('[data-testid="toggle-focus-button"]').click();
+    cy.checkVideoPlaybackState(
+      'paused',
+      'The video should be toggled back to a paused state'
+    );
+  });
+
+  it('the video starts playing immediately if the focused prop is true', () => {
+    const videoSrc = makeMockVideoSrc();
+
+    mount(<HoverVideoPlayer videoSrc={videoSrc} focused />);
+
+    cy.checkVideoPlaybackState(
+      'playing',
+      'The video should start playing without any interaction'
+    );
   });
 });

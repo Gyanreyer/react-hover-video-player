@@ -1,31 +1,17 @@
-// Custom cypress commands for common operations performed in our integration tests
-Cypress.Commands.add('videoElement', () =>
-  cy
-    .get('[data-testid="hover-video-player-container"]')
-    .children('video')
-    // Wrap the video element so it can be chained with other cypress commands
-    // and return it from this command's promise
-    // This means we can now safely do things like cy.videoElement().should("have.property", "paused", false)
-    .then(([videoElement]) => cy.wrap(videoElement))
-);
-
-Cypress.Commands.add('validateVideoSrc', (videoSrc) =>
-  cy
-    .videoElement()
-    .should(
-      'have.property',
-      'currentSrc',
-      `${window.location.origin}${videoSrc}`
-    )
-);
+import {
+  videoElementSelector,
+  pausedOverlayWrapperSelector,
+  loadingOverlayWrapperSelector,
+  playerContainerSelector,
+} from '../constants';
 
 Cypress.Commands.add('triggerEventOnPlayer', (event) =>
-  cy.get('[data-testid="hover-video-player-container"]').trigger(event)
+  cy.get(playerContainerSelector).trigger(event)
 );
 
 Cypress.Commands.add('checkOverlayVisibilty', ({ paused, loading }) => {
-  cy.get('[data-testid="hover-video-player-container"]')
-    .children('[data-testid="paused-overlay-wrapper"]')
+  cy.get(playerContainerSelector)
+    .children(pausedOverlayWrapperSelector)
     .should(([pausedOverlay]) => {
       if (paused === undefined) {
         assert.notExists(
@@ -41,8 +27,8 @@ Cypress.Commands.add('checkOverlayVisibilty', ({ paused, loading }) => {
       }
     });
 
-  cy.get('[data-testid="hover-video-player-container"]')
-    .children('[data-testid="loading-overlay-wrapper"]')
+  cy.get(playerContainerSelector)
+    .children(loadingOverlayWrapperSelector)
     .should(([loadingOverlay]) => {
       if (loading === undefined) {
         assert.notExists(
@@ -61,56 +47,53 @@ Cypress.Commands.add('checkOverlayVisibilty', ({ paused, loading }) => {
 
 Cypress.Commands.add(
   'checkVideoPlaybackState',
-  (expectedPlaybackState, contextMessage) => {
-    expect(['playing', 'loading', 'paused']).to.include(expectedPlaybackState);
+  (
+    expectedPlaybackState,
+    message = `the video should be ${expectedPlaybackState}`
+  ) => {
+    cy.log(message);
 
-    const errorMessageContext = ` (${
-      contextMessage || `the video should be ${expectedPlaybackState}`
-    })`;
+    expect(['playing', 'loading', 'paused', 'ended']).to.include(
+      expectedPlaybackState
+    );
 
-    return cy.videoElement().should((videoElement) => {
-      switch (expectedPlaybackState) {
-        case 'playing':
-          assert.isFalse(
-            videoElement.paused,
-            'the video should not be paused' + errorMessageContext
-          );
-          assert.isFalse(
-            videoElement.ended,
-            'the video should not be ended' + errorMessageContext
-          );
+    switch (expectedPlaybackState) {
+      case 'playing':
+        // The video should not be paused or ended
+        cy.get(videoElementSelector)
+          .invoke('prop', 'paused')
+          .should('be.false');
+        cy.get(videoElementSelector).invoke('prop', 'ended').should('be.false');
 
-          assert.isAtLeast(
-            videoElement.readyState,
-            3,
-            "The video's readyState should be HAVE_FUTURE_DATA or greater." +
-              errorMessageContext
-          );
-          break;
-        case 'loading':
-          assert.isFalse(
-            videoElement.paused,
-            'the video should not be paused' + errorMessageContext
-          );
-          assert.isFalse(
-            videoElement.ended,
-            'the video should not be ended' + errorMessageContext
-          );
+        // The video's readyState should be HAVE_FUTURE_DATA or greater.
+        cy.get(videoElementSelector)
+          .invoke('prop', 'readyState')
+          .should('be.gte', HTMLVideoElement.HAVE_FUTURE_DATA);
 
-          assert.isBelow(
-            videoElement.readyState,
-            3,
-            "The video's readyState should be less than HAVE_FUTURE_DATA" +
-              errorMessageContext
-          );
-          break;
-        case 'paused':
-        default:
-          assert.isTrue(
-            videoElement.paused || videoElement.ended,
-            'the video should be either paused or ended' + errorMessageContext
-          );
-      }
-    });
+        break;
+      case 'loading':
+        // The video should not be paused or ended
+        cy.get(videoElementSelector)
+          .invoke('prop', 'paused')
+          .should('be.false');
+        cy.get(videoElementSelector).invoke('prop', 'ended').should('be.false');
+
+        // The video's readyState should be less than HAVE_FUTURE_DATA
+        cy.get(videoElementSelector)
+          .invoke('prop', 'readyState')
+          .should('be.lessThan', HTMLVideoElement.HAVE_FUTURE_DATA);
+
+        break;
+      case 'paused':
+        // The video should be paused but not ended
+        cy.get(videoElementSelector).invoke('prop', 'paused').should('be.true');
+        cy.get(videoElementSelector).invoke('prop', 'ended').should('be.false');
+        break;
+      case 'ended':
+      default:
+        // The video should be ended and paused
+        cy.get(videoElementSelector).invoke('prop', 'ended').should('be.true');
+        cy.get(videoElementSelector).invoke('prop', 'paused').should('be.true');
+    }
   }
 );
