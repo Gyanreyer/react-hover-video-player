@@ -30,7 +30,13 @@ export interface VideoCaptionsTrack {
    */
   label: string;
   /**
+   * The kind of captions that this captions track represents (ie, "subtitles", "captions", "descriptions")
+   * @defaultValue "captions"
+   */
+  kind?: string;
+  /**
    * Whether this track should be used by default if the user's preferences don't match an available srcLang
+   * @defaultValue "false"
    */
   default?: boolean;
 }
@@ -41,6 +47,12 @@ export interface VideoCaptionsTrack {
  * @typedef {VideoCaptionsTrack|VideoCaptionsTrack[]} VideoCaptionsProp
  */
 export type VideoCaptionsProp = VideoCaptionsTrack | VideoCaptionsTrack[];
+
+/**
+ * Node, callback function that returns a node, or a React ref which can resolve to the desired
+ * DOM Node to use as the target to attach hover interaction events to
+ */
+export type HoverTarget = Node | (() => Node) | React.RefObject<Node>;
 
 export interface HoverVideoPlayerProps {
   /**
@@ -71,13 +83,7 @@ export interface HoverVideoPlayerProps {
    * The component's container div element will be used by default if no hover target is provided.
    * @defaultValue null
    */
-  hoverTarget?: Node | (() => Node) | React.RefObject<Node>;
-  /**
-   * Ref to a custom element that should be used as the target for hover events to start/stop the video.
-   * The component's container div element will be used by default if no hover target ref is provided.
-   * @defaultValue null
-   */
-  hoverTargetRef?: React.RefObject<HTMLElement>;
+  hoverTarget?: HoverTarget;
   /**
    * Contents to render over the video while it's not playing.
    * @defaultValue null
@@ -111,6 +117,20 @@ export interface HoverVideoPlayerProps {
    * @defaultValue false
    */
   unloadVideoOnPaused?: boolean;
+  /**
+   * The time in seconds that we should start loading and playing the video from using the
+   * playback range media fragment identifier. If not specified, the video will
+   * be played from the start.
+   * @defaultValue null
+   */
+  playbackRangeStart?: number;
+  /**
+   * The maximum time in seconds that we can load/play the video to using the
+   * playback range media fragment identifier. If not specified, the video
+   * will play through to the end.
+   * @defaultValue null
+   */
+  playbackRangeEnd?: number;
   /**
    * Whether the video's audio should be muted.
    * @defaultValue true

@@ -1,5 +1,12 @@
 import React from 'react';
 
+interface SizingModeStyle {
+  video: React.CSSProperties;
+  overlay: React.CSSProperties;
+  container: React.CSSProperties;
+  manual: React.CSSProperties;
+}
+
 // CSS styles to make some contents in the player expand to fill the container
 export const expandToFillContainerStyle: React.CSSProperties = {
   position: 'absolute',
@@ -11,12 +18,16 @@ export const expandToFillContainerStyle: React.CSSProperties = {
   right: 0,
 };
 
-interface SizingModeStyle {
-  video: React.CSSProperties;
-  overlay: React.CSSProperties;
-  container: React.CSSProperties;
-  manual: React.CSSProperties;
-}
+const containerMatchContentDimensionsStyle: React.CSSProperties = {
+  display: 'inline-block',
+};
+
+export const containerSizingStyles: SizingModeStyle = {
+  video: containerMatchContentDimensionsStyle,
+  overlay: containerMatchContentDimensionsStyle,
+  container: null,
+  manual: null,
+};
 
 // Styles to apply to the paused overlay wrapper for each sizing mode
 export const pausedOverlayWrapperSizingStyles: SizingModeStyle = {

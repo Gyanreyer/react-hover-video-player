@@ -1,1 +1,1 @@
-export { default } from './HoverVideoPlayer';
+export { default } from './component/HoverVideoPlayer';
