@@ -513,4 +513,45 @@ describe('Playback works as expected when both playbackRangeStart and playbackRa
       .invoke('prop', 'currentTime')
       .should('equal', 5);
   });
+
+  it('keeps the video inside the playback range', () => {
+    mount(
+      <HoverVideoPlayer
+        videoSrc={makeMockVideoSrc({
+          throttleKbps: 1000,
+        })}
+        playbackRangeStart={4.6}
+        playbackRangeEnd={5}
+        loop={false}
+        // restartOnPaused is false by default
+      />
+    );
+
+    cy.log(
+      'The video should initially be set to the start of its playback range'
+    );
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentTime')
+      .should('equal', 4.6);
+
+    cy.log("Attempt to set the video's time to before the playback range");
+    cy.get(videoElementSelector).invoke('prop', 'currentTime', 0);
+
+    cy.log(
+      'The video should have been set back to the start of its playback range'
+    );
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentTime')
+      .should('equal', 4.6);
+
+    cy.log("Attempt to set the video's time to after the playback range");
+    cy.get(videoElementSelector).invoke('prop', 'currentTime', 8);
+
+    cy.log(
+      'The video should have been set back to the end of its playback range'
+    );
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentTime')
+      .should('equal', 5);
+  });
 });

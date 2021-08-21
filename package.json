@@ -10,7 +10,7 @@
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "dev": "rollup -c rollup.dev.config.js -w",
-    "test": "BABEL_ENV=test nyc --check-coverage --reporter=lcov cypress run-ct",
+    "test": "BABEL_ENV=test nyc --check-coverage --reporter=lcov --reporter=text cypress run-ct",
     "test-runner": "cypress open-ct",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
