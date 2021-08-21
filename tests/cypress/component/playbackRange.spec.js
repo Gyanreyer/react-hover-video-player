@@ -9,7 +9,9 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
   it('behaves correctly when loop is true and restartOnPaused is false', () => {
     mount(
       <HoverVideoPlayer
-        videoSrc={makeMockVideoSrc()}
+        videoSrc={makeMockVideoSrc({
+          throttleKbps: 1000,
+        })}
         playbackRangeStart={8.7}
         // loop is true by default
         // restartOnPaused is false by default
@@ -74,7 +76,9 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
   it('behaves correctly when loop is false and restartOnPaused is true', () => {
     mount(
       <HoverVideoPlayer
-        videoSrc={makeMockVideoSrc()}
+        videoSrc={makeMockVideoSrc({
+          throttleKbps: 1000,
+        })}
         playbackRangeStart={8.7}
         loop={false}
         restartOnPaused
@@ -122,7 +126,9 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
   it('behaves correctly when loop and restartOnPaused are both false', () => {
     mount(
       <HoverVideoPlayer
-        videoSrc={makeMockVideoSrc()}
+        videoSrc={makeMockVideoSrc({
+          throttleKbps: 1000,
+        })}
         playbackRangeStart={8.7}
         loop={false}
         // restartOnPaused is false by default
@@ -173,7 +179,9 @@ describe('Playback works as expected when only playbackRangeEnd is set', () => {
   it('behaves correctly when loop is true and restartOnPaused is false', () => {
     mount(
       <HoverVideoPlayer
-        videoSrc={makeMockVideoSrc()}
+        videoSrc={makeMockVideoSrc({
+          throttleKbps: 1000,
+        })}
         playbackRangeEnd={0.5}
         // loop is true by default
         // restartOnPaused is false by default
@@ -231,7 +239,9 @@ describe('Playback works as expected when only playbackRangeEnd is set', () => {
   it('behaves correctly when loop is false and restartOnPaused is true', () => {
     mount(
       <HoverVideoPlayer
-        videoSrc={makeMockVideoSrc()}
+        videoSrc={makeMockVideoSrc({
+          throttleKbps: 1000,
+        })}
         playbackRangeEnd={0.5}
         loop={false}
         restartOnPaused
@@ -280,7 +290,9 @@ describe('Playback works as expected when only playbackRangeEnd is set', () => {
   it('behaves correctly when loop and restartOnPaused are both false', () => {
     mount(
       <HoverVideoPlayer
-        videoSrc={makeMockVideoSrc()}
+        videoSrc={makeMockVideoSrc({
+          throttleKbps: 1000,
+        })}
         playbackRangeEnd={0.5}
         loop={false}
         // restartOnPaused is false by default
@@ -330,7 +342,9 @@ describe('Playback works as expected when both playbackRangeStart and playbackRa
   it('behaves correctly when loop is true and restartOnPaused is false', () => {
     mount(
       <HoverVideoPlayer
-        videoSrc={makeMockVideoSrc()}
+        videoSrc={makeMockVideoSrc({
+          throttleKbps: 1000,
+        })}
         playbackRangeStart={4.6}
         playbackRangeEnd={5}
         // loop is true by default
@@ -389,7 +403,9 @@ describe('Playback works as expected when both playbackRangeStart and playbackRa
   it('behaves correctly when loop is false and restartOnPaused is true', () => {
     mount(
       <HoverVideoPlayer
-        videoSrc={makeMockVideoSrc()}
+        videoSrc={makeMockVideoSrc({
+          throttleKbps: 1000,
+        })}
         playbackRangeStart={4.6}
         playbackRangeEnd={5}
         loop={false}
@@ -447,7 +463,9 @@ describe('Playback works as expected when both playbackRangeStart and playbackRa
   it('behaves correctly when loop and restartOnPaused are both false', () => {
     mount(
       <HoverVideoPlayer
-        videoSrc={makeMockVideoSrc()}
+        videoSrc={makeMockVideoSrc({
+          throttleKbps: 1000,
+        })}
         playbackRangeStart={4.6}
         playbackRangeEnd={5}
         loop={false}
