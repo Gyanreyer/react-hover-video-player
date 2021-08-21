@@ -48,9 +48,8 @@ jobs:
       - checkout
       - node/install-packages
       - run:
-          name: Install and configure gh-pages
+          name: Configure git user for gh-pages
           command: |
-            npm install -g gh-pages
             git config --global user.email "builds@circleci.com"
             git config --global user.name "CircleCI"
       - run:
@@ -58,7 +57,7 @@ jobs:
           command: npm run docs:build
       - run:
           name: Publish the built docs to GitHub pages
-          command: gh-pages --dist docs/.vuepress/dist --message "[skip ci] Update react-hover-video-player.dev"
+          command: npx gh-pages --dist docs/.vuepress/dist
 
 workflows:
   # Workflow runs on non-main branches and simply runs tests but does not deploy anything
