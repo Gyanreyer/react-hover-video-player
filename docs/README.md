@@ -119,7 +119,9 @@ A caption track object should follow the shape:
   srcLang: 'en',
   // The title of the captions track
   label: 'English',
-  // OPTIONAL: whether this track should be used by default
+  // OPTIONAL: the kind of captions that this captions track represents (ie, "subtitles", "captions", "descriptions")
+  kind: 'captions',
+  // OPTIONAL: whether this track should be applied by default without requiring any interaction from the user
   default: true,
 }
 ```
@@ -136,12 +138,14 @@ In practice this looks like:
       src: 'captions/english.vtt',
       srcLang: 'en',
       label: 'English',
+      kind: "captions",
       default: true,
     },
     {
       src: 'captions/french.vtt',
       srcLang: 'fr',
       label: 'French',
+      kind: "subtitles",
     },
   ]}
   // Enable the video's controls so that the user can select the caption track they want or toggle captions on and off
@@ -433,6 +437,45 @@ return (
 )
 ```
 
+## Playback Range
+
+### Why use a playback range?
+
+Setting a playback range on `HoverVideoPlayer` allows you to set the times in the video that it should start from and/or play to.
+This can be useful if you want to show a smaller preview of a longer video without having to manually edit the file,
+perhaps because you wish to still use the full video file elsewhere on the site.
+
+If a playback range is set, the component will add a [media fragment identifier to the video's URL](https://developer.mozilla.org/en-US/docs/Web/Guide/Audio_and_video_delivery#specifying_playback_range) to tell browsers to only load the portion
+of the video within the desired playback range. Note that support for media fragments is not entirely consistent across all browsers, but regardless the component will still be able to play within the desired range, just without the added performance benefit of avoiding downloading the full video file.
+
+### playbackRangeStart
+
+**Type**: `number` | **Default**: null
+
+`playbackRangeStart` accepts a number in seconds for what time video playback should start from. If not set, playback will start from the beginning of the video file.
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Playback should start 2.5 seconds into the video
+  playbackRangeStart={2.5}
+/>
+```
+
+### playbackRangeEnd
+
+**Type**: `number` | **Default**: null
+
+`playbackRangeEnd` accepts a number in seconds for what time video playback should end at. If not set, the video will play all the way to the end of the video file.
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Playback should end at 5 seconds into the video
+  playbackRangeEnd={5}
+/>
+```
+
 ## Custom Styling
 
 ### Applying classNames and styles
@@ -510,14 +553,23 @@ The `sizingMode` prop can be used to apply one of four available styling presets
 
 **Type**: `string` | **Default**: `null`
 
-The `preload` prop maps directly to the [HTML Video element's preload attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video#attr-preload) and allows us to define how much data a video element should preload before it is played. This prop defaults to null, which will use whatever the browser's default setting is. The acceptable values are:
+The `preload` prop maps directly to the [HTML Video element's preload attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video#attr-preload) and allows us to define how much data a video element should preload before it is played. This prop defaults to null, which will use whatever the browser's default setting is.
+The acceptable values are:
 
-- `"auto"`: We can load the whole video file before playing, even if it never gets used. This is usually the browser default.
+- `"auto"`: We can load the whole video file before playing, even if it never gets used. If you have a large number of videos on the page, beware that this can create performance problems as the browser will attempt to load them all up front at once.
 - `"metadata"`: We should only load the video's metadata (video dimensions, duration, etc) before playing. This helps us avoid loading large amounts of data unless it is absolutely needed.
   - Note that in Safari, video elements with `preload="metadata"` applied will just appear empty rather than displaying the first frame of the video like other browsers do. As a result, it is recommended that if you use this setting, you should have [paused overlay](#pausedoverlay) contents set that will hide the video element until it is playing.
 - `"none"`: We should not preload any part of the video before playing, including metadata.
   - Note that this means that the video's dimensions will not be loaded until the video is played. This can potentially cause a content jump when the video starts loading if you are using the `"video"` [sizing mode](#sizingmode).
   - Additionally, nothing will be displayed for the video element until it starts playing, so you should make sure you provide [paused overlay](#pausedoverlay) contents to hide the video element.
+
+The official specs recommend that browsers should use `metadata` as the default, but implementations differ between browsers. As of writing, the defaults for each browser seem to be:
+| Browser | Default `preload` value |
+| ------- | ----------------------- |
+| Chrome  | `metadata`              |
+| Firefox | `metadata`              |
+| Safari  | `auto`                  |
+| Edge    | `metadata`              |
 
 ```jsx
 <HoverVideoPlayer
