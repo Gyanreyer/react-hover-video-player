@@ -38,7 +38,7 @@ and at that point you are likely testing your own mock implementation more than 
 
 ## Builds
 
-This project uses automated builds with [Travis CI](https://travis-ci.com/). When a change is merged into the main branch, Travis will run all tests and if they pass, it will build and deploy a new version of the `react-hover-video-player` package to npm using [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
+This project uses automated builds with [CircleCI](https://app.circleci.com/pipelines/github/Gyanreyer/react-hover-video-player). When a change is merged into the main branch, CircleCI will run all tests and if they pass, it will build and deploy a new version of the `react-hover-video-player` package to npm using [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
 
 If you wish to do a production build locally for testing purposes, `npm run build` will build the component for production.
 
