@@ -60,7 +60,7 @@ jobs:
           command: npm run docs:build
       - run:
           name: Publish the built docs to GitHub pages
-          command: npx gh-pages --dist docs/.vuepress/dist --message "[skip ci] Update react-hover-video-player.dev"
+          command: npx gh-pages --dist docs/.vuepress/dist --message "[ci skip] Update react-hover-video-player.dev"
 
 workflows:
   # Workflow runs on non-main branches and simply runs tests but does not deploy anything
