@@ -3,6 +3,10 @@ import { mount } from '@cypress/react';
 import HoverVideoPlayer from '../../../src';
 
 import { PausedOverlay, LoadingOverlay, makeMockVideoSrc } from '../utils';
+import {
+  pausedOverlayWrapperSelector,
+  loadingOverlayWrapperSelector,
+} from '../constants';
 
 describe('overlayTransitionDuration', () => {
   beforeEach(() => {
@@ -21,11 +25,9 @@ describe('overlayTransitionDuration', () => {
       />
     );
 
-    cy.validateVideoSrc(videoSrc);
-
     // The transition duration on the paused overlay wrapper
     // should match the overlayTransitionDuration prop value
-    cy.get('[data-testid="paused-overlay-wrapper"]').should(
+    cy.get(pausedOverlayWrapperSelector).should(
       'have.css',
       'transition-duration',
       '0.9s'
@@ -69,8 +71,6 @@ describe('overlayTransitionDuration', () => {
       />
     );
 
-    cy.validateVideoSrc(videoSrc);
-
     // We shouldn't have a paused overlay at all
     cy.checkOverlayVisibilty({
       loading: false,
@@ -78,7 +78,7 @@ describe('overlayTransitionDuration', () => {
 
     // The transition duration on the loading overlay wrapper
     // should match the overlayTransitionDuration prop value
-    cy.get('[data-testid="loading-overlay-wrapper"]').should(
+    cy.get(loadingOverlayWrapperSelector).should(
       'have.css',
       'transition-duration',
       '0.9s'

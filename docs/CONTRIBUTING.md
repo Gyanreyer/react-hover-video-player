@@ -20,64 +20,21 @@ To preview the documentation site locally, run `npm run docs:dev` to serve it at
 
 ## Tests
 
-### Unit tests
+All tests can be found in the `tests/cypress/component` directory. These are 100% end-to-end tests written with [Cypress](https://github.com/cypress-io/cypress).
 
-All unit tests can be found in the `tests/jest` directory. These tests are written using [jest](https://github.com/facebook/jest) and [react-testing-library](https://github.com/testing-library/react-testing-library).
+Tests can be run with the following commands:
 
-- `npm run test` will run all unit tests once.
+- `npm run test` will run all tests once.
 
-- `npm run test:watch` will continually re-run tests as you make changes.
+- `npm run test-runner` will open a browser window with the Cypress test runner, providing a nice UI which makes it much easier to troubleshoot your tests and see exactly what they are doing.
 
-- `npm run test:release` will perform a webpack build (`npm run build`) and then run all tests on the resulting release-ready version of the component for smoke testing purposes. Note that this is much slower and does not perform coverage testing, so you will almost always want to stick with `npm run test`.
+ **100% code coverage for tests is required**. If you make a change, you must add a test accordingly.
 
-- `npm run test:debug` will run the tests in a Node process that an external debugger can connect to (ie, <chrome://inspect>) so that you can use breakpoints and step through the code as needed. See Jest's [troubleshooting docs](https://jestjs.io/docs/troubleshooting) for more details.
+### Why all end-to-end tests?
 
- **100% code coverage for unit tests is required**. If you make a change, you must add a test accordingly.
-
-#### Utils for writing unit tests
-
-There are some handy utils available to help make writing tests easier:
-
-##### renderHoverVideoPlayer
-
-`renderHoverVideoPlayer` takes a configuration and renders a `HoverVideoPlayer` component for testing. This also injects mocked behavior into the rendered video element so we can emulate how a real video element loads and plays as closely as possible in our tests.
-
-*Arguments*:
-
-- `props` (Object): Accepts an object representing all props to pass to the component for the test
-- `videoConfig` (Object): Accepts an object for customizing what behavior should be simulated for the video element. Valid properties for this object are:
-  - `shouldPlaybackFail` (Boolean): Whether we should simulate an error occuring while attempting to play the video. This is false by default.
-
-*Returns*:
-
-An object with the following properties:
-
-- `rerenderWithProps` (Function): Takes an object for new props to re-render the component with.
-- `videoElement` (HTMLVideoElement): The video element rendered by the HoverVideoPlayer component.
-- `playerContainer` (HTMLDivElement): The container div element rendered by the HoverVideoPlayerComponent.
-- `pausedOverlayWrapper` (HTMLDivElement): The wrapper div element around the contents provided to the `pausedOverlay` prop. This should be null if no `pausedOverlay` was provided.
-- `loadingOverlayWrapper` (HTMLDivElement): The wrapper div element around the contents provided to the `loadingOverlay` prop. This should be null if no `loadingOverlay` was provided.
-- [All properties returned by react-testing-library's render function](https://testing-library.com/docs/react-testing-library/api#render-result)
-
-##### advanceVideoTime
-
-Syntactic sugar for `act(() => jest.advanceTimersByTime(time));`.
-
-`advanceVideoTime` takes a number of milliseconds to advance Jest's [mock timers](https://jestjs.io/docs/jest-object#mock-timers) by, and uses `act()` to ensure any resulting updates to the React component's state will be handled safely.
-
-*Arguments*:
-
-- `time` (Number): Number of milliseconds to advance timers by.
-
-### Integration tests
-
-The jest unit tests are built on a very heavy amount of mocking when it comes to the video's loading/playback behavior, so sometimes
-it's valuable to add some additional integration tests so we can feel truly confident that the component actually does work as expected
-in real-world scenarios. Integration tests live in the `tests/cypress/component` directory and are written with [cypress](https://github.com/cypress-io/cypress).
-
-- `npm run test:integrationn` will run through all integration tests once.
-
-- `npm run test:integration-test-runner` will open a browser window with the Cypress test runner, providing a nice UI which makes it much easier to troubleshoot your integration tests and see exactly what they are doing.
+This component's behavior is built heavily on browsers' implementations of the `HTMLVideoElement`.
+In normal unit tests, this implementation is disabled and requires unbelievable amounts of mocking in order to get anything close to 100% test coverage,
+and at that point you are likely testing your own mock implementation more than the component itself.
 
 ## Builds
 
@@ -100,3 +57,9 @@ In order to work best with semantic-release, commit messages must follow the [An
 This formatting is enforced using [Husky](https://github.com/typicode/husky) and [Commitlint](https://github.com/conventional-changelog/commitlint).
 
 To make things easy, you can write your commit messages using [Commitizen](https://github.com/commitizen/cz-cli), a CLI tool which will provide an interactive experience for walking you through writing your commit message. All you have to do is stage your changes and run `npm run commit` and it'll guide you from there.
+
+### Updating the README
+
+Semantic-release normally skips commits of type `docs`, but this can result in the npm package page's README not getting updated to reflect the changes.
+If your commit is only updating the README, please use `docs(readme)` as your commit's type and scope; this indicates to semantic-release that the change
+should be published to the npm package as a patched version.

@@ -5,17 +5,10 @@ import HoverVideoPlayer from '../../../src';
 import { makeMockVideoSrc } from '../utils';
 
 describe('hoverTarget prop', () => {
-  beforeEach(() => {
-    // Take manual control of timing so we can manually step through timeouts
-    cy.clock();
-  });
-
   it('works with a DOM node', () => {
     const videoSrc = makeMockVideoSrc();
 
     mount(<HoverVideoPlayer videoSrc={videoSrc} hoverTarget={document} />);
-
-    cy.validateVideoSrc(videoSrc);
 
     cy.checkVideoPlaybackState('paused');
 
@@ -55,7 +48,6 @@ describe('hoverTarget prop', () => {
       </>
     );
 
-    cy.validateVideoSrc(videoSrc);
     cy.checkVideoPlaybackState('paused');
 
     cy.get('[data-testid="test-hover-target"]').trigger('mouseenter');
@@ -96,7 +88,6 @@ describe('hoverTarget prop', () => {
 
     mount(<PlayerWithCustomHoverTargetFunctionalComponent />);
 
-    cy.validateVideoSrc(videoSrc);
     cy.checkVideoPlaybackState('paused');
 
     cy.get('[data-testid="test-hover-target"]').trigger('mouseenter');
@@ -109,6 +100,19 @@ describe('hoverTarget prop', () => {
     cy.checkVideoPlaybackState(
       'paused',
       'mousing out of the hover target should pause the video'
+    );
+  });
+
+  it('logs an error if an invalid value is provided', () => {
+    const videoSrc = makeMockVideoSrc();
+
+    cy.spy(console, 'error').as('consoleError');
+
+    mount(<HoverVideoPlayer videoSrc={videoSrc} hoverTarget={'hello'} />);
+
+    cy.get('@consoleError').should(
+      'have.been.calledOnceWith',
+      'HoverVideoPlayer was unable to add event listeners to a hover target. Please check your usage of the `hoverTarget` prop.'
     );
   });
 });
