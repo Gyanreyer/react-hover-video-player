@@ -7,12 +7,21 @@ executors:
     docker:
       - image: cypress/browsers:node14.17.0-chrome91-ff89
 
+jobs:
+  test:
+    executor: chrome-91
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run test:ci
+
 workflows:
   test:
     jobs:
-      - cypress/install
-      - cypress/run:
-          executor: chrome-91
-          requires:
-            - cypress/install
-          command: npm run test:ci
+      - test
+      # - cypress/install
+      # - cypress/run:
+      #     executor: chrome-91
+      #     requires:
+      #       - cypress/install
+      #     command: npm run test:ci
