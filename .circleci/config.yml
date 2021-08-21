@@ -1,0 +1,18 @@
+version: 2.1
+
+orbs:
+  cypress: cypress-io/cypress@1.29.0
+executors:
+  chrome-91:
+    docker:
+      - image: cypress/browsers:node14.17.0-chrome91-ff89
+
+workflows:
+  test:
+    jobs:
+      - cypress/install
+      - cypress/run:
+          executor: chrome-91
+          requires:
+            - cypress/install
+          command: npm run test:ci
