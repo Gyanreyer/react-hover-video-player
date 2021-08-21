@@ -54,24 +54,20 @@ jobs:
             git config --global user.name "CircleCI"
       - add_ssh_keys:
           fingerprints:
-            - "54:9a:57:02:63:bb:3e:db:a8:46:51:76:03:23:c5:6a"
+            - '54:9a:57:02:63:bb:3e:db:a8:46:51:76:03:23:c5:6a'
       - run:
           name: Build the Vuepress doc site
           command: npm run docs:build
       - run:
           name: Publish the built docs to GitHub pages
-          command: npx gh-pages --dist docs/.vuepress/dist
+          command: npx gh-pages --dist docs/.vuepress/dist --message "[skip ci] Update react-hover-video-player.dev"
 
 workflows:
   # Workflow runs on non-main branches and simply runs tests but does not deploy anything
   test:
     when:
-      and:
-        - not:
-            equal: [main, << pipeline.git.branch >>]
-        - not:
-            # Don't run tests against the gh-pages branch
-            equal: [gh-pages, << pipeline.git.branch >>]
+      not:
+        equal: [main, << pipeline.git.branch >>]
     jobs:
       - validate
       - test
