@@ -30,7 +30,7 @@
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
     "@cypress/code-coverage": "^3.9.10",
-    "@cypress/react": "^5.9.1",
+    "@cypress/react": "^5.9.4",
     "@cypress/webpack-dev-server": "^1.4.0",
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-html": "^0.2.3",

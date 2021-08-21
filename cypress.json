@@ -8,5 +8,9 @@
   "supportFile": "tests/cypress/support/index.js",
   "testFiles": "**/*.spec.{js,ts,jsx,tsx}",
   "video": false,
-  "screenshotOnRunFailure": false
+  "screenshotOnRunFailure": false,
+  "retries": {
+    "runMode": 2,
+    "openMode": 0
+  }
 }
