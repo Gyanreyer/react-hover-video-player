@@ -22,10 +22,6 @@ jobs:
         - npm run validate-docs
         - npm test
         - codecov
-        # Run tests against a built release-ready version of the component
-        - npm run test:release
-        # Run integraton tests
-        - npm run test:integration
 
     # Define release stage which handles publishing to npm
     - stage: release
