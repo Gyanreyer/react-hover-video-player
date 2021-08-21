@@ -2,26 +2,90 @@ version: 2.1
 
 orbs:
   cypress: cypress-io/cypress@1.29.0
+  node: circleci/node@4.7.0
 executors:
   chrome-91:
     docker:
       - image: cypress/browsers:node14.17.0-chrome91-ff89
+  node-14:
+    docker:
+      - image: cimg/node:14.17.0
 
 jobs:
   test:
+    # Run Cypress tests on Chrome 91
     executor: chrome-91
     steps:
       - checkout
       - run: npm ci
-      - run: npm run test:ci
+      - run:
+          name: Install codecov
+          command: npm install -g codecov
+      - run:
+          name: Running end-to-end tests
+          command: npm run test:ci
+  validate:
+    executor: node-14
+    steps:
+      - checkout
+      - run: npm ci
+      - run:
+          name: Validating README
+          command: npm run validate-docs
+  release-npm:
+    executor: node-14
+    steps:
+      - checkout
+      - run: npm ci
+      - run:
+          name: Building package
+          command: npm run build
+      - run:
+          name: Running semantic release
+          command: npx semantic-release
+  deploy-docs-site:
+    executor: node-14
+    steps:
+      - checkout
+      - run: npm ci
+      - run:
+          name: Install and configure gh-pages
+          command: |
+            npm install -g gh-pages
+            git config --global user.email "builds@circleci.com"
+            git config --global user.name "CircleCI"
+      - run:
+          name: Build the Vuepress doc site
+          command: npm run docs:build
+      - run:
+          name: Publish the built docs to GitHub pages
+          command: .gh-pages --dist docs/.vuepress/dist --message "[skip ci] Update react-hover-video-player.dev"
 
 workflows:
+  # Workflow runs on non-main branches and simply runs tests but does not deploy anything
   test:
+    when:
+      and:
+        - not:
+            equal: [main, << pipeline.git.branch >>]
+        - not:
+            # Don't run tests against the gh-pages branch
+            equal: [gh-pages, << pipeline.git.branch >>]
     jobs:
+      - validate
       - test
-      # - cypress/install
-      # - cypress/run:
-      #     executor: chrome-91
-      #     requires:
-      #       - cypress/install
-      #     command: npm run test:ci
+  # Workflow runs tests and then deploys the package to npm and the docs site to Github pages
+  test-and-release:
+    when:
+      equal: [main, << pipeline.git.branch >>]
+    jobs:
+      - validate
+      - test
+      - release-npm:
+          requires:
+            - test
+            - validate
+      - deploy-docs-site:
+          requires:
+            - test
+            - validate
