@@ -52,6 +52,9 @@ jobs:
           command: |
             git config --global user.email "builds@circleci.com"
             git config --global user.name "CircleCI"
+      - add_ssh_keys:
+          fingerprints:
+            - "39:6d:4b:f8:3d:a5:5c:e8:ce:d7:33:0d:a0:f5:3c:73"
       - run:
           name: Build the Vuepress doc site
           command: npm run docs:build
