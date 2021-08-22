@@ -12,6 +12,8 @@
 
 A React component that makes it simple to set up a video that will play when the user hovers over it. This is particularly useful for setting up a thumbnail that will play a video preview on hover.
 
+**Want to play around with a real working example? [Check it out on CodeSandbox!](https://codesandbox.io/s/hovervideoplayer-example-6y0fn?file=/src/App.js)**
+
 ## Features
 
 - Out-of-the-box support for both mouse and touchscreen interactions
@@ -56,7 +58,9 @@ function MyComponent () {
         />
       }
       loadingOverlay={
-        <div className="loading-spinner-overlay" />
+        <div className="loading-overlay">
+          <div className="loading-spinner" />
+        </div>
       }
     />
   );
