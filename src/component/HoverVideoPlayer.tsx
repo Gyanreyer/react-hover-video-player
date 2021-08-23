@@ -28,6 +28,7 @@ const HoverVideoPlayer = ({
   focused = false,
   disableDefaultEventHandling = false,
   hoverTarget = null,
+  hoverOverlay = null,
   pausedOverlay = null,
   loadingOverlay = null,
   loadingStateTimeout = 200,
@@ -47,6 +48,8 @@ const HoverVideoPlayer = ({
   disablePictureInPicture = true,
   className = null,
   style = null,
+  hoverOverlayWrapperClassName = null,
+  hoverOverlayWrapperStyle = null,
   pausedOverlayWrapperClassName = null,
   pausedOverlayWrapperStyle = null,
   loadingOverlayWrapperClassName = null,
@@ -82,6 +85,14 @@ const HoverVideoPlayer = ({
   const shouldPlayVideo = isHoveringOverVideo || focused;
 
   const hasPausedOverlay = Boolean(pausedOverlay);
+  const hasHoverOverlay = Boolean(hoverOverlay);
+
+  // If we have a paused or hover overlay, the player should wait
+  // for the overlay(s) to finish transitioning back in before we
+  // pause the video
+  const shouldWaitForOverlayTransitionBeforePausing =
+    hasPausedOverlay || hasHoverOverlay;
+
   const hasLoadingOverlay = Boolean(loadingOverlay);
 
   // Effect handles transitioning the video between playing or paused states
@@ -93,7 +104,7 @@ const HoverVideoPlayer = ({
     playbackRangeEnd,
     loop,
     restartOnPaused,
-    hasPausedOverlay,
+    shouldWaitForOverlayTransitionBeforePausing,
     hasLoadingOverlay,
     overlayTransitionDuration,
     loadingStateTimeout
@@ -166,6 +177,24 @@ const HoverVideoPlayer = ({
           data-testid="loading-overlay-wrapper"
         >
           {loadingOverlay}
+        </div>
+      ) : null}
+      {hasHoverOverlay ? (
+        <div
+          style={{
+            ...expandToFillContainerStyle,
+            zIndex: 3,
+            // Show the hover overlay when the player is hovered/playing
+            opacity: shouldPlayVideo ? 1 : 0,
+            transition: `opacity ${overlayTransitionDuration}ms`,
+            // Disable pointer events on the hover overlay when it's hidden
+            pointerEvents: shouldPlayVideo ? 'auto' : 'none',
+            ...hoverOverlayWrapperStyle,
+          }}
+          className={hoverOverlayWrapperClassName}
+          data-testid="hover-overlay-wrapper"
+        >
+          {hoverOverlay}
         </div>
       ) : null}
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}

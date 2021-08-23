@@ -7,6 +7,7 @@ import {
   videoElementSelector,
   pausedOverlayWrapperSelector,
   loadingOverlayWrapperSelector,
+  hoverOverlayWrapperSelector,
   playerContainerSelector,
 } from '../constants';
 
@@ -42,6 +43,18 @@ describe('sizingMode prop', () => {
             data-testid="loading-overlay"
           >
             LOADING
+          </div>
+        }
+        hoverOverlay={
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(0, 255, 255, 0.7)',
+            }}
+            data-testid="hover-overlay"
+          >
+            HOVER
           </div>
         }
       />
@@ -91,17 +104,6 @@ describe('sizingMode prop', () => {
     });
 
     // The loading overlay should be sized to match the paused overlay's dimensions
-    cy.get(loadingOverlayWrapperSelector).should(([loadingOverlayWrapper]) => {
-      expect(loadingOverlayWrapper).to.have.css('width', '200px');
-
-      const loadingOverlayWrapperHeight = parseFloat(
-        window.getComputedStyle(loadingOverlayWrapper).height
-      );
-      expect(loadingOverlayWrapperHeight).to.be.closeTo(
-        videoElementHeight,
-        0.001
-      );
-    });
     cy.get('[data-testid="loading-overlay"]').should(([loadingOverlay]) => {
       expect(loadingOverlay).to.have.css('width', '200px');
 
@@ -109,6 +111,15 @@ describe('sizingMode prop', () => {
         window.getComputedStyle(loadingOverlay).height
       );
       expect(loadingOverlayHeight).to.be.closeTo(videoElementHeight, 0.001);
+    });
+    // The hover overlay should be sized to match the paused overlay's dimensions
+    cy.get('[data-testid="hover-overlay"]').should(([hoverOverlay]) => {
+      expect(hoverOverlay).to.have.css('width', '200px');
+
+      const hoverOverlayHeight = parseFloat(
+        window.getComputedStyle(hoverOverlay).height
+      );
+      expect(hoverOverlayHeight).to.be.closeTo(videoElementHeight, 0.001);
     });
   });
 
@@ -141,6 +152,18 @@ describe('sizingMode prop', () => {
             LOADING
           </div>
         }
+        hoverOverlay={
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(0, 255, 255, 0.7)',
+            }}
+            data-testid="hover-overlay"
+          >
+            HOVER
+          </div>
+        }
       />
     );
 
@@ -167,6 +190,14 @@ describe('sizingMode prop', () => {
       .should('have.css', 'width', '300px')
       .should('have.css', 'height', '100px');
     cy.get('[data-testid="loading-overlay"]')
+      .should('have.css', 'width', '300px')
+      .should('have.css', 'height', '100px');
+
+    // The hover overlay should be sized to match the paused overlay's dimensions
+    cy.get(hoverOverlayWrapperSelector)
+      .should('have.css', 'width', '300px')
+      .should('have.css', 'height', '100px');
+    cy.get('[data-testid="hover-overlay"]')
       .should('have.css', 'width', '300px')
       .should('have.css', 'height', '100px');
   });
@@ -204,6 +235,18 @@ describe('sizingMode prop', () => {
             LOADING
           </div>
         }
+        hoverOverlay={
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(0, 255, 255, 0.7)',
+            }}
+            data-testid="hover-overlay"
+          >
+            HOVER
+          </div>
+        }
       />
     );
 
@@ -229,8 +272,15 @@ describe('sizingMode prop', () => {
     cy.get(loadingOverlayWrapperSelector)
       .should('have.css', 'width', '100px')
       .should('have.css', 'height', '200px');
-
     cy.get('[data-testid="loading-overlay"]')
+      .should('have.css', 'width', '100px')
+      .should('have.css', 'height', '200px');
+
+    // The hover overlay should be sized to match the container's dimensions
+    cy.get(hoverOverlayWrapperSelector)
+      .should('have.css', 'width', '100px')
+      .should('have.css', 'height', '200px');
+    cy.get('[data-testid="hover-overlay"]')
       .should('have.css', 'width', '100px')
       .should('have.css', 'height', '200px');
   });

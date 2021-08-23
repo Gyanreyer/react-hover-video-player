@@ -2,6 +2,7 @@ import {
   videoElementSelector,
   pausedOverlayWrapperSelector,
   loadingOverlayWrapperSelector,
+  hoverOverlayWrapperSelector,
   playerContainerSelector,
 } from '../constants';
 
@@ -9,40 +10,42 @@ Cypress.Commands.add('triggerEventOnPlayer', (event) =>
   cy.get(playerContainerSelector).trigger(event)
 );
 
-Cypress.Commands.add('checkOverlayVisibilty', ({ paused, loading }) => {
-  cy.get(playerContainerSelector)
-    .children(pausedOverlayWrapperSelector)
-    .should(([pausedOverlay]) => {
-      if (paused === undefined) {
-        assert.notExists(
-          pausedOverlay,
-          'There should not be a loading overlay'
-        );
-      } else {
-        assert.strictEqual(
-          pausedOverlay.style.opacity,
-          paused ? '1' : '0',
-          `The paused overlay should be ${paused ? 'visible' : 'hidden'}`
-        );
-      }
-    });
+Cypress.Commands.add('checkOverlayVisibilty', ({ paused, loading, hover }) => {
+  if (paused === undefined) {
+    cy.log('There should not be a paused overlay');
+    cy.get(pausedOverlayWrapperSelector).should('not.exist');
+  } else {
+    cy.log(`The paused overlay should be ${paused ? 'visible' : 'hidden'}`);
+    cy.get(pausedOverlayWrapperSelector).should(
+      'have.css',
+      'opacity',
+      paused ? '1' : '0'
+    );
+  }
 
-  cy.get(playerContainerSelector)
-    .children(loadingOverlayWrapperSelector)
-    .should(([loadingOverlay]) => {
-      if (loading === undefined) {
-        assert.notExists(
-          loadingOverlay,
-          'There should not be a loading overlay'
-        );
-      } else {
-        assert.strictEqual(
-          loadingOverlay.style.opacity,
-          loading ? '1' : '0',
-          `The loading overlay should be ${loading ? 'visible' : 'hidden'}`
-        );
-      }
-    });
+  if (loading === undefined) {
+    cy.log('There should not be a loading overlay');
+    cy.get(loadingOverlayWrapperSelector).should('not.exist');
+  } else {
+    cy.log(`The loading overlay should be ${loading ? 'visible' : 'hidden'}`);
+    cy.get(loadingOverlayWrapperSelector).should(
+      'have.css',
+      'opacity',
+      loading ? '1' : '0'
+    );
+  }
+
+  if (hover === undefined) {
+    cy.log('There should not be a hover overlay');
+    cy.get(hoverOverlayWrapperSelector).should('not.exist');
+  } else {
+    cy.log(`The hover overlay should be ${hover ? 'visible' : 'hidden'}`);
+    cy.get(hoverOverlayWrapperSelector).should(
+      'have.css',
+      'opacity',
+      hover ? '1' : '0'
+    );
+  }
 });
 
 Cypress.Commands.add(
