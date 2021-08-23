@@ -7,8 +7,8 @@ import {
 } from '../utils';
 import { videoElementSelector } from '../constants';
 
-describe('unloadVideoOnPaused', () => {
-  it("unloadVideoOnPaused prop unloads the video's sources while it is paused when set to true", () => {
+describe('unloadVideoOnPaused prop', () => {
+  it("unloads the video's sources while it is paused when set to true", () => {
     const videoSrc = makeMockVideoSrc({
       throttleKbps: 1000,
     });
@@ -81,7 +81,7 @@ describe('unloadVideoOnPaused', () => {
     cy.checkVideoPlaybackState('playing');
   });
 
-  it('unloadVideoOnPaused prop does not restore previous time when restartOnPaused is true', () => {
+  it('does not restore previous time when restartOnPaused is true', () => {
     const videoSrc = makeMockVideoSrc();
 
     mount(
@@ -161,5 +161,43 @@ describe('unloadVideoOnPaused', () => {
     // The video should successfully load and play again when we toggle focused back to true
     cy.get('[data-testid="toggle-focus-button"]').click();
     cy.checkVideoPlaybackState('playing');
+  });
+
+  it('does not unload the video until any pending play attempt is resolved', () => {
+    mount(
+      <HoverVideoPlayer
+        videoSrc={makeMockVideoSrc({
+          throttleKbps: 1000,
+        })}
+        unloadVideoOnPaused
+      />
+    );
+
+    cy.checkVideoPlaybackState('paused');
+
+    cy.get(videoElementSelector).should('not.have.descendants', 'source');
+    cy.get(videoElementSelector)
+      .invoke('prop', 'readyState')
+      .should('equal', HTMLVideoElement.HAVE_NOTHING);
+
+    // Mouse over the video to get it to start loading
+    cy.triggerEventOnPlayer('mouseenter');
+
+    cy.checkVideoPlaybackState('loading');
+    cy.get(videoElementSelector).should('have.descendants', 'source');
+
+    cy.triggerEventOnPlayer('mouseleave');
+
+    cy.log(
+      'the video should still be loading even if it is no longer being hovered over'
+    );
+    cy.checkVideoPlaybackState('loading');
+    cy.get(videoElementSelector).should('have.descendants', 'source');
+
+    cy.checkVideoPlaybackState('paused');
+    cy.get(videoElementSelector).should('not.have.descendants', 'source');
+    cy.get(videoElementSelector)
+      .invoke('prop', 'readyState')
+      .should('equal', HTMLVideoElement.HAVE_NOTHING);
   });
 });

@@ -419,11 +419,9 @@ describe('Handles interactions correctly', () => {
   });
 
   it('the video can be played and paused through the focused prop', () => {
-    const videoSrc = makeMockVideoSrc();
-
     mount(
       <HoverVideoPlayerWrappedWithFocusToggleButton
-        videoSrc={videoSrc}
+        videoSrc={makeMockVideoSrc()}
         disableDefaultEventHandling
       />
     );
