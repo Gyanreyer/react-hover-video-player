@@ -71,13 +71,27 @@ export function LoadingOverlay(): JSX.Element {
   return (
     <div
       style={{
-        display: 'block',
         width: '100%',
         height: '100%',
         backgroundColor: 'yellow',
       }}
     >
       LOADING
+    </div>
+  );
+}
+
+export function HoverOverlay(): JSX.Element {
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 180, 180, 0.7)',
+        color: 'white',
+      }}
+    >
+      HOVERING
     </div>
   );
 }

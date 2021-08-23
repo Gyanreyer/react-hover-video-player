@@ -85,6 +85,11 @@ export interface HoverVideoPlayerProps {
    */
   hoverTarget?: HoverTarget;
   /**
+   * Contents to render over the video while the user is hovering over the player.
+   * @defaultValue null
+   */
+  hoverOverlay?: JSX.Element;
+  /**
    * Contents to render over the video while it's not playing.
    * @defaultValue null
    */
@@ -203,6 +208,16 @@ export interface HoverVideoPlayerProps {
    * @defaultValue null
    */
   style?: React.CSSProperties;
+  /**
+   * Optional className to apply custom styling to the div element wrapping the `hoverOverlay` contents.
+   * @defaultValue null
+   */
+  hoverOverlayWrapperClassName?: string;
+  /**
+   * Style object to apply custom inlined styles to the div element wrapping the `hoverOverlay` contents.
+   * @defaultValue null
+   */
+  hoverOverlayWrapperStyle?: React.CSSProperties;
   /**
    * Optional className to apply custom styling to the div element wrapping the `pausedOverlay` contents.
    * @defaultValue null

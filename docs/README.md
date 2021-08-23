@@ -268,6 +268,32 @@ After the user stops hovering on the player, the video will continue playing unt
 />
 ```
 
+### hoverOverlay
+
+**Type**: `node` | **Default**: `null`
+
+`hoverOverlay` is an optional prop that accepts any renderable content that you would like to be displayed over the video while the player is active from a hover/touch event or when the [focused](#focused) prop is `true`.
+
+This can be useful if you wish to reveal content to the user when they hover while the video still plays underneath it.
+
+Note that this overlay takes highest ordering priority and will be displayed on top of both the [pausedOverlay](#pausedoverlay) and [loadingOverlay](#loadingoverlay) if they are set.
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  hoverOverlay={
+    <div className="hover-overlay">
+      <h1>Video Title</h1>
+      <p>
+        Here is a short description of the video.
+        You can still see the video playing underneath this overlay.
+        <a href="/video-page">Click here to read more</a>
+      </p>
+    </div>
+  }
+/>
+```
+
 ## Custom Event Handling
 
 ### hoverTarget
@@ -496,7 +522,7 @@ The base styling for this component's contents are set using inline styling. You
     width: '50%',
   }}
 
-  /* ~~~ PAUSEED OVERLAY WRAPPER DIV ~~~ */
+  /* ~~~ PAUSED OVERLAY WRAPPER DIV ~~~ */
   // Applies a custom class to the div wrapping the pausedOverlay contents
   pausedOverlayWrapperClassName="paused-overlay-wrapper"
   // Applies inline styles to the div wrapping the pausedOverlay contents
@@ -510,6 +536,15 @@ The base styling for this component's contents are set using inline styling. You
   // Applies inline styles to the div wrapping the loadingOverlay contents
   loadingOverlayWrapperStyle={{
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  }}
+
+  /* ~~~ HOVER OVERLAY WRAPPER DIV ~~~ */
+  // Applies a custom class to the div wrapping the hoverOverlay contents
+  hoverOverlayWrapperClassName="hover-overlay-wrapper"
+  // Applies inline styles to the div wrapping the hoverOverlay contents
+  hoverOverlayWrapperStyle={{
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    color: "white",
   }}
 
   /* ~~~ VIDEO ELEMENT ~~~ */
