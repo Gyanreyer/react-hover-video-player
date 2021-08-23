@@ -23,7 +23,7 @@ interface MutableVideoState {
  *                        If a playback range is set, the native `loop` video attribute will not work, so we have to
  *                        manually implement this behavior ourselves.
  * @param {bool} restartOnPaused - Whether the video should be reset to the start when paused
- * @param {bool} hasPausedOverlay - Whether the player has an overlay to display when paused
+ * @param {bool} shouldWaitForOverlayTransitionBeforePausing - Whether the player has an overlay which we should wait to fade back in before we pause the video
  * @param {bool} hasLoadingOverlay - Whether the player has an overlay to display when loading
  * @param {number} overlayTransitionDuration - How long it should take for overlays to fade in/out; this influences how long we should wait
  *                                              after the user stops hovering before fully pausing the video since the paused overlay needs time to fade in.
@@ -38,7 +38,7 @@ export default function useManageVideoPlayback(
   playbackRangeEnd: number,
   loop: boolean,
   restartOnPaused: boolean,
-  hasPausedOverlay: boolean,
+  shouldWaitForOverlayTransitionBeforePausing: boolean,
   hasLoadingOverlay: boolean,
   overlayTransitionDuration: number,
   loadingStateTimeout: number
@@ -47,9 +47,19 @@ export default function useManageVideoPlayback(
   const [overlayState, setOverlayState] = useState<OverlayState>(
     OverlayState.paused
   );
-  // Keep track of whether the video is "active" for the user, meaning they are either hovering over it or the component is
-  // transitioning to a paused state where the video still needs to remain loaded and playing in the meantime
-  const [isVideoActive, setIsVideoActive] = useState<boolean>(shouldPlayVideo);
+  // Keep track of whether the video is currently playing or attempting to play
+  const [isVideoLoadingOrPlaying, setIsVideoLoadingOrPlaying] = useState<
+    boolean
+  >(false);
+
+  // Keep track of when the video is "active", meaning it is in one of the following states:
+  // 1. The user is hovering over the video but it is still loading
+  // 2. The user is hovering over the video and it is playing
+  // 3. The user is no longer hovering over the video but it is still transitioning back into a paused state
+  //
+  // This helps us keep track of when the player is truly done with the video so we can perform
+  // cleanup such as resetting the time to the start or unloading the video
+  const isVideoActive = shouldPlayVideo || isVideoLoadingOrPlaying;
 
   // Keep a ref for all variables related to the video's playback state
   // which we need to persist between renders and manage asynchronously
@@ -90,9 +100,6 @@ export default function useManageVideoPlayback(
 
   // Method begins an attempt to play the video and updates state accordingly
   const attemptToPlayVideo = useCallback(() => {
-    // Update state to indicate that the video is now "active", meaning
-    // that we want it to load/play and keep its sources loaded
-    setIsVideoActive(true);
     mutableVideoState.current.isPlayAttemptInProgress = true;
 
     videoRef.current.play();
@@ -112,6 +119,22 @@ export default function useManageVideoPlayback(
     ) {
       videoElement.pause();
     }
+  }, [videoRef]);
+
+  // Effect adds a `play` and `pause` event listener to the video element to keep our state
+  // updated to reflect whether the video is currently playing or paused
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    const onPause = () => setIsVideoLoadingOrPlaying(false);
+    const onPlay = () => setIsVideoLoadingOrPlaying(true);
+    videoElement.addEventListener('pause', onPause);
+    videoElement.addEventListener('play', onPlay);
+
+    return () => {
+      videoElement.removeEventListener('pause', onPause);
+      videoElement.removeEventListener('play', onPlay);
+    };
   }, [videoRef]);
 
   // Effect adds a `playing` event listener to the video to update state to reflect when the video successfully starts playing
@@ -148,12 +171,12 @@ export default function useManageVideoPlayback(
     if (mutableVideoState.current.previousIsVideoActive !== isVideoActive) {
       mutableVideoState.current.previousIsVideoActive = isVideoActive;
     } else {
-      return undefined;
+      return;
     }
 
-    const videoElement = videoRef.current;
-
     if (!isVideoActive) {
+      const videoElement = videoRef.current;
+
       // Ensure we cancel any pending timeouts to pause or show a loading state
       // since we are now officially paused
       clearVideoStateTimeouts();
@@ -207,7 +230,7 @@ export default function useManageVideoPlayback(
 
           // If the video is paused, start playing it again (when the video reaches the end
           // of the playback range for the first time, most browsers will pause it)
-          if (isVideoActive && videoElement.paused) {
+          if (shouldPlayVideo && videoElement.paused) {
             attemptToPlayVideo();
           }
         } else {
@@ -232,10 +255,10 @@ export default function useManageVideoPlayback(
   }, [
     attemptToPauseVideo,
     attemptToPlayVideo,
-    isVideoActive,
     loop,
     playbackRangeEnd,
     playbackRangeStart,
+    shouldPlayVideo,
     videoRef,
   ]);
 
@@ -295,26 +318,20 @@ export default function useManageVideoPlayback(
       // Start fading the paused overlay back in
       setOverlayState(OverlayState.paused);
 
-      const stopVideo = () => {
-        attemptToPauseVideo();
-
-        // Now that the video is officially fully paused and no longer in use, update that
-        // we're done with the video's sources for the time being
-        // so they can be safely unloaded if desired
-        setIsVideoActive(false);
-      };
-
-      if (hasPausedOverlay) {
-        // If we have a paused overlay, set a timeout with a duration of the overlay's fade
+      if (
+        shouldWaitForOverlayTransitionBeforePausing &&
+        overlayTransitionDuration
+      ) {
+        // If we have a paused/hover overlay, set a timeout with a duration of the overlay's fade
         // transition since we want to keep the video playing until the overlay has fully
         // faded in and hidden it.
         mutableVideoState.current.pauseTimeout = window.setTimeout(
-          stopVideo,
+          attemptToPauseVideo,
           overlayTransitionDuration
         );
       } else {
-        // If we don't have a paused overlay, pause right away!
-        stopVideo();
+        // If we don't have an overlay transition to wait on, pause right away!
+        attemptToPauseVideo();
       }
     }
   }, [
@@ -322,7 +339,7 @@ export default function useManageVideoPlayback(
     attemptToPlayVideo,
     clearVideoStateTimeouts,
     hasLoadingOverlay,
-    hasPausedOverlay,
+    shouldWaitForOverlayTransitionBeforePausing,
     loadingStateTimeout,
     overlayTransitionDuration,
     shouldPlayVideo,
