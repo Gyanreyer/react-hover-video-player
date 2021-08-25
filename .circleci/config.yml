@@ -50,11 +50,12 @@ jobs:
       - run:
           name: Configure git user for gh-pages
           command: |
-            git config --global user.email "builds@circleci.com"
-            git config --global user.name "CircleCI"
+            git config user.email "builds@circleci.com"
+            git config user.name "CircleCI"
       - add_ssh_keys:
+          # Add an SSH key so we can have write access to the gh-pages branch
           fingerprints:
-            - '54:9a:57:02:63:bb:3e:db:a8:46:51:76:03:23:c5:6a'
+            - $GH_READ_WRITE_SSH_FINGERPRINT
       - run:
           name: Build the Vuepress doc site
           command: npm run docs:build
