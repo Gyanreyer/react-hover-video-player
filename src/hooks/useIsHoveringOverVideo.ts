@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { HoverTarget } from '../HoverVideoPlayer.types';
 
@@ -9,15 +9,20 @@ import { HoverTarget } from '../HoverVideoPlayer.types';
  *                                      If the user did not specify one with the hoverTarget prop, we will fall back to use
  *                                      the hover player's container div element.
  * @param {bool} disableDefaultEventHandling - Whether our default event handling should be disabled.
+ * @param {func} onHoverStart - Callback fired when the user starts hovering on the player's hover target
+ * @param {func} onHoverEnd - Callback fired when the user stops hovering on the player's hover target
  *
  * @returns {bool}  Whether the user is currently hovering over the player's hover target
  */
 export default function useIsHoveringOverVideo(
   hoverTarget: HoverTarget,
-  disableDefaultEventHandling: boolean
+  disableDefaultEventHandling: boolean,
+  onHoverStartCallback: () => void,
+  onHoverEndCallback: () => void
 ): boolean {
   // Keep track of whether the user is hovering over the video and it should therefore be playing or not
   const [isHoveringOverVideo, setIsHoveringOverVideo] = useState(false);
+  const previousIsHoveringOverVideoRef = useRef(isHoveringOverVideo);
 
   useEffect(() => {
     // If default event handling is disabled, we shouldn't check for touch events outside of the player
@@ -90,6 +95,18 @@ export default function useIsHoveringOverVideo(
       window.removeEventListener('touchstart', onWindowTouchStart);
     };
   }, [disableDefaultEventHandling, hoverTarget]);
+
+  // Effect fires hover callbacks as isHoveringOverVideo changes
+  useEffect(() => {
+    if (previousIsHoveringOverVideoRef.current === isHoveringOverVideo) return;
+    previousIsHoveringOverVideoRef.current = isHoveringOverVideo;
+
+    if (isHoveringOverVideo && onHoverStartCallback != null) {
+      onHoverStartCallback();
+    } else if (!isHoveringOverVideo && onHoverEndCallback != null) {
+      onHoverEndCallback();
+    }
+  }, [isHoveringOverVideo, onHoverEndCallback, onHoverStartCallback]);
 
   return isHoveringOverVideo;
 }
