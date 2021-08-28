@@ -48,6 +48,11 @@ jobs:
       - checkout
       - node/install-packages
       - run:
+          name: Configure git user for gh-pages
+          command: |
+            git config --global user.email "deploys@react-hover-video-player.dev"
+            git config --global user.name "ReactHoverVideoPlayer-DeployBot"
+      - run:
           name: Build the Vuepress doc site
           command: npm run docs:build
       - run:
