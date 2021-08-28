@@ -168,11 +168,10 @@ export default function useManageVideoPlayback(
   // When the video becomes inactive, effect resets it to the start if restartOnPaused is true and
   // stores the video's current time so we can restore to it when we start playing the video again
   useEffect(() => {
-    if (mutableVideoState.current.previousIsVideoActive !== isVideoActive) {
-      mutableVideoState.current.previousIsVideoActive = isVideoActive;
-    } else {
+    if (mutableVideoState.current.previousIsVideoActive === isVideoActive) {
       return;
     }
+    mutableVideoState.current.previousIsVideoActive = isVideoActive;
 
     if (!isVideoActive) {
       const videoElement = videoRef.current;
@@ -265,11 +264,10 @@ export default function useManageVideoPlayback(
   // Effect attempts to play or pause the video as shouldPlayVideo changes
   useEffect(() => {
     // Only run the effect when shouldPlayVideo changes
-    if (mutableVideoState.current.previousShouldPlayVideo !== shouldPlayVideo) {
-      mutableVideoState.current.previousShouldPlayVideo = shouldPlayVideo;
-    } else {
-      return undefined;
+    if (mutableVideoState.current.previousShouldPlayVideo === shouldPlayVideo) {
+      return;
     }
+    mutableVideoState.current.previousShouldPlayVideo = shouldPlayVideo;
 
     // Clear any outstanding timeouts since our playback state is changing
     clearVideoStateTimeouts();

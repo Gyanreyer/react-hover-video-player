@@ -24,7 +24,7 @@ A React component that makes it simple to set up a video that will play when the
 
 ## How It Works
 
-This component will render a video element which will start playing when an `onMouseEnter`, `onTouchStart`, or `onFocus` event is fired on the [hover target](#hovertarget) and will accordingly be paused when an `onMouseLeave` or `onBlur` event is fired on the target, or an `onTouchStart` event is fired outside of the target. This default behavior can be [disabled, overridden, and customized](#custom-event-handling) as needed.
+This component will render a video element which will start playing when an `onMouseEnter`, `onTouchStart`, or `onFocus` event is fired on the [hover target](#hovertarget) and will accordingly be paused when an `onMouseLeave` or `onBlur` event is fired on the target, or an `onTouchStart` event is fired outside of the target. This default behavior can be [disabled, overridden, and customized](#hover-event-handling) as needed.
 
 Everything is written with extra care to cleanly handle the video element's state as it asynchronously loads and plays.
 
@@ -294,7 +294,7 @@ Note that this overlay takes highest ordering priority and will be displayed on 
 />
 ```
 
-## Custom Event Handling
+## Hover Event Handling
 
 ### hoverTarget
 
@@ -384,6 +384,38 @@ const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 </div>
 ```
 
+### onHoverStart
+
+**Type**: `function` | **Default**: `null`
+
+`onHoverStart` accepts a callback function which will be fired when the user hovers on the player's [hover target](#hovertarget).
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  onHoverStart={()=>{
+    console.log("User just moused over or touched hover target.");
+    console.log("The video will now attempt to play.")
+  }}
+/>
+```
+
+### onHoverEnd
+
+**Type**: `function` | **Default**: `null`
+
+`onHoverStart` accepts a callback function which will be fired when the user stops hovering on the player's [hover target](#hovertarget).
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  onHoverEnd={()=>{
+    console.log("User just moused out of or touched outside of hover target.");
+    console.log("The video will now stop playing.")
+  }}
+/>
+```
+
 ## Video Behavior
 
 ### restartOnPaused
@@ -467,9 +499,7 @@ return (
 )
 ```
 
-## Playback Range
-
-### Why use a playback range?
+## Setting a Playback Range
 
 Setting a playback range on `HoverVideoPlayer` allows you to set the times in the video that it should start from and/or play to.
 This can be useful if you want to show a smaller preview of a longer video without having to manually edit the file,

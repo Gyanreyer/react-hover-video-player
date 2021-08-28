@@ -85,6 +85,16 @@ export interface HoverVideoPlayerProps {
    */
   hoverTarget?: HoverTarget;
   /**
+   * Callback fired when the user starts hovering on the player's hover target
+   * @defaultValue null
+   */
+  onHoverStart?: () => void;
+  /**
+   * Callback fired when the user stops hovering on the player's hover target
+   * @defaultValue null
+   */
+  onHoverEnd?: () => void;
+  /**
    * Contents to render over the video while the user is hovering over the player.
    * @defaultValue null
    */

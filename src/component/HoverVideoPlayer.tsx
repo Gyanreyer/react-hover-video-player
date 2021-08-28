@@ -28,6 +28,8 @@ const HoverVideoPlayer = ({
   focused = false,
   disableDefaultEventHandling = false,
   hoverTarget = null,
+  onHoverStart = null,
+  onHoverEnd = null,
   hoverOverlay = null,
   pausedOverlay = null,
   loadingOverlay = null,
@@ -78,7 +80,9 @@ const HoverVideoPlayer = ({
   const isHoveringOverVideo = useIsHoveringOverVideo(
     // If the hoverTarget prop wasn't provided, fall back to the component's container div
     hoverTarget || containerRef,
-    disableDefaultEventHandling
+    disableDefaultEventHandling,
+    onHoverStart,
+    onHoverEnd
   );
 
   // We should attempt to play the video if the user is hovering over it or the `focused` override prop is enabled
