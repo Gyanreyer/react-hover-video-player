@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import HoverVideoPlayer from '../../src';
+import HoverVideoPlayer from 'react-hover-video-player';
 import { HoverVideoPlayerProps } from '../../src/HoverVideoPlayer.types';
 
 interface MockVideoSrcOptions {

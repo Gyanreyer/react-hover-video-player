@@ -3,6 +3,14 @@
     "cypress"
   ],
   "rules": {
-    "@typescript-eslint/no-var-requires": "off"
+    "@typescript-eslint/no-var-requires": "off",
+    "import/no-unresolved": [
+      "error",
+      {
+        "ignore": [
+          "react-hover-video-player"
+        ]
+      }
+    ]
   }
 }

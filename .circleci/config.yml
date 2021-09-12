@@ -20,7 +20,7 @@ jobs:
           command: npm install -g codecov
       - run:
           name: Running end-to-end tests
-          command: npm run test:ci && codecov
+          command: npm run test:smoke && codecov
   validate:
     executor: node/default
     steps:
