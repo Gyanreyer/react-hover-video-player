@@ -8,16 +8,17 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c rollup.config.js",
-    "dev": "rollup -c rollup.dev.config.js -w",
-    "test": "BABEL_ENV=test nyc --check-coverage --reporter=lcov --reporter=text cypress run-ct",
-    "test:ci": "npm test -- --browser=chrome",
-    "test-runner": "cypress open-ct",
+    "build": "rollup -c rollup/prod.config.js",
+    "dev": "rollup -c rollup/dev.config.js -w",
+    "test": "nyc --check-coverage --reporter=lcov --reporter=text cypress run-ct --config-file=tests/cypress/cypress.json",
+    "test:smoke": "npm run build && BABEL_ENV=production npm test -- --browser=chrome",
+    "test-runner": "cypress open-ct --config-file=tests/cypress/cypress.json",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "validate-docs": "gulp validate-readme-links",
+    "validate-docs": "gulp --gulpfile=scripts/validateReadme.gulp.js",
     "commit": "git-cz",
-    "prepack": "gulp copy-docs-readme-to-root"
+    "prepare": "husky install",
+    "prepack": "gulp --gulpfile=scripts/copyDocsReadmeToRoot.gulp.js"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
@@ -31,7 +32,7 @@
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
     "@cypress/code-coverage": "^3.9.10",
-    "@cypress/react": "^5.9.4",
+    "@cypress/react": "^5.10.0",
     "@cypress/webpack-dev-server": "^1.4.0",
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-html": "^0.2.3",

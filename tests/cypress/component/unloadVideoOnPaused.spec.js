@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from '@cypress/react';
-import HoverVideoPlayer from '../../../src';
+import HoverVideoPlayer from 'react-hover-video-player';
 import {
   makeMockVideoSrc,
   HoverVideoPlayerWrappedWithFocusToggleButton,
