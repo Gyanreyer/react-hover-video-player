@@ -27,7 +27,7 @@ export default {
       },
       check: false,
     }),
-    html(),
+    html({}),
     serve({
       port: 3000,
       contentBase: 'dev/build',
