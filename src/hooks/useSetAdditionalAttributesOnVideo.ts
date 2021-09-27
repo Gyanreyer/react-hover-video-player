@@ -1,12 +1,5 @@
 import React, { useEffect } from 'react';
 
-// Interface extends the HTMLVideoElement type to include some additional missing properties
-// that we use
-interface VideoElement extends HTMLVideoElement {
-  disableRemotePlayback?: boolean;
-  disablePictureInPicture?: boolean;
-}
-
 /**
  * Hook handles manually setting some additional attributes on the video that
  * can't be set directly via attributes on the element.
@@ -18,7 +11,7 @@ interface VideoElement extends HTMLVideoElement {
  * @param {bool} disablePictureInPicture - Whether we want to disable showing controls to play the video in picture-in-picture mode
  */
 export default function useSetAdditionalAttributesOnVideo(
-  videoRef: React.RefObject<VideoElement>,
+  videoRef: React.RefObject<HTMLVideoElement>,
   muted: boolean,
   volume: number,
   disableRemotePlayback: boolean,
