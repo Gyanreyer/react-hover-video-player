@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es5", "dom"],
+    "types": ["cypress", "node"],
+    "jsx": "react",
+    "baseUrl": "./",
+    "paths": {
+      "react-hover-video-player": ["../../src"]
+    },
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
+  },
+  "include": ["**/*", "../../src/**/*"]
+}

@@ -1,10 +1,14 @@
-const injectDevServer = require('@cypress/react/plugins/babel');
-const injectCodeCoverage = require('@cypress/code-coverage/task');
-const path = require('path');
+import injectDevServer from '@cypress/react/plugins/babel';
+import injectCodeCoverage from '@cypress/code-coverage/task';
+import path from 'path';
+import { RuleSetRule } from 'webpack';
 
 // `on` is used to hook into various events Cypress emits
 // `config` is the resolved Cypress config
-module.exports = (on, config) => {
+export default (
+  on: Cypress.PluginEvents,
+  config: Cypress.PluginConfigOptions
+): Cypress.ResolvedConfigOptions => {
   if (config.testingType === 'component') {
     injectDevServer(on, config, {
       setWebpackConfig: (webpackConfig) => {
@@ -26,20 +30,21 @@ module.exports = (on, config) => {
 
         // Inject babel presets and plugins so we can transpile the component for cypress tests
         // without needing to create an entire babelrc file that's only for tests
-        const babelConfigRule = webpackConfig.module.rules.find(
-          ({ loader }) => loader === 'babel-loader'
-        );
+        webpackConfig.module.rules.forEach((webpackRule: RuleSetRule) => {
+          if (webpackRule?.loader === 'babel-loader') {
+            webpackRule.options = {
+              // Standard babel presets for a react + typescript project
+              presets: [
+                '@babel/preset-env',
+                '@babel/preset-typescript',
+                '@babel/preset-react',
+              ],
+              // Use istanbul plugin to instrument the component code for checking code coverage
+              plugins: ['istanbul'],
+            };
+          }
+        });
 
-        babelConfigRule.options = {
-          // Standard babel presets for a react + typescript project
-          presets: [
-            '@babel/preset-env',
-            '@babel/preset-typescript',
-            '@babel/preset-react',
-          ],
-          // Use istanbul plugin to instrument the component code for checking code coverage
-          plugins: ['istanbul'],
-        };
         return webpackConfig;
       },
     });

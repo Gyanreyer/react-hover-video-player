@@ -62,8 +62,9 @@ describe('sizingMode prop', () => {
 
     let videoElementHeight;
 
-    cy.get(videoElementSelector).should(([videoElement]) => {
-      expect(videoElement.readyState).to.be.gte(HTMLVideoElement.HAVE_METADATA);
+    cy.get(videoElementSelector).should(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
+      expect(videoElement.readyState).to.be.gte(HTMLMediaElement.HAVE_METADATA);
       expect(videoElement).to.have.css('width', '200px');
 
       // The video's height should match the native aspect ratio
@@ -75,52 +76,67 @@ describe('sizingMode prop', () => {
       expect(videoElementHeight).to.be.closeTo(200 / videoAspectRatio, 0.05);
     });
 
-    cy.get(playerContainerSelector).should(([playerContainer]) => {
-      expect(playerContainer).to.have.css('width', '200px');
+    cy.get(playerContainerSelector).should(
+      ($container: JQuery<HTMLDivElement>) => {
+        const playerContainer = $container[0];
+        expect(playerContainer).to.have.css('width', '200px');
 
-      const playerContainerHeight = parseFloat(
-        window.getComputedStyle(playerContainer).height
-      );
-      expect(playerContainerHeight).to.be.closeTo(videoElementHeight, 0.001);
-    });
-    cy.get(pausedOverlayWrapperSelector).should(([pausedOverlayWrapper]) => {
-      expect(pausedOverlayWrapper).to.have.css('width', '200px');
+        const playerContainerHeight = parseFloat(
+          window.getComputedStyle(playerContainer).height
+        );
+        expect(playerContainerHeight).to.be.closeTo(videoElementHeight, 0.001);
+      }
+    );
+    cy.get(pausedOverlayWrapperSelector).should(
+      ($pausedOverlayWrapper: JQuery<HTMLDivElement>) => {
+        const pausedOverlayWrapper = $pausedOverlayWrapper[0];
+        expect(pausedOverlayWrapper).to.have.css('width', '200px');
 
-      const pausedOverlayWrapperHeight = parseFloat(
-        window.getComputedStyle(pausedOverlayWrapper).height
-      );
-      expect(pausedOverlayWrapperHeight).to.be.closeTo(
-        videoElementHeight,
-        0.001
-      );
-    });
-    cy.get('[data-testid="paused-overlay"]').should(([pausedOverlay]) => {
-      expect(pausedOverlay).to.have.css('width', '200px');
+        const pausedOverlayWrapperHeight = parseFloat(
+          window.getComputedStyle(pausedOverlayWrapper).height
+        );
+        expect(pausedOverlayWrapperHeight).to.be.closeTo(
+          videoElementHeight,
+          0.001
+        );
+      }
+    );
+    cy.get('[data-testid="paused-overlay"]').should(
+      ($pausedOverlay: JQuery<HTMLDivElement>) => {
+        const pausedOverlay = $pausedOverlay[0];
+        expect(pausedOverlay).to.have.css('width', '200px');
 
-      const pausedOverlayHeight = parseFloat(
-        window.getComputedStyle(pausedOverlay).height
-      );
-      expect(pausedOverlayHeight).to.be.closeTo(videoElementHeight, 0.001);
-    });
+        const pausedOverlayHeight = parseFloat(
+          window.getComputedStyle(pausedOverlay).height
+        );
+        expect(pausedOverlayHeight).to.be.closeTo(videoElementHeight, 0.001);
+      }
+    );
 
     // The loading overlay should be sized to match the paused overlay's dimensions
-    cy.get('[data-testid="loading-overlay"]').should(([loadingOverlay]) => {
-      expect(loadingOverlay).to.have.css('width', '200px');
+    cy.get('[data-testid="loading-overlay"]').should(
+      ($loadingOverlay: JQuery<HTMLDivElement>) => {
+        const loadingOverlay = $loadingOverlay[0];
+        expect(loadingOverlay).to.have.css('width', '200px');
 
-      const loadingOverlayHeight = parseFloat(
-        window.getComputedStyle(loadingOverlay).height
-      );
-      expect(loadingOverlayHeight).to.be.closeTo(videoElementHeight, 0.001);
-    });
+        const loadingOverlayHeight = parseFloat(
+          window.getComputedStyle(loadingOverlay).height
+        );
+        expect(loadingOverlayHeight).to.be.closeTo(videoElementHeight, 0.001);
+      }
+    );
     // The hover overlay should be sized to match the paused overlay's dimensions
-    cy.get('[data-testid="hover-overlay"]').should(([hoverOverlay]) => {
-      expect(hoverOverlay).to.have.css('width', '200px');
+    cy.get('[data-testid="hover-overlay"]').should(
+      ($hoverOverlay: JQuery<HTMLDivElement>) => {
+        const hoverOverlay = $hoverOverlay[0];
+        expect(hoverOverlay).to.have.css('width', '200px');
 
-      const hoverOverlayHeight = parseFloat(
-        window.getComputedStyle(hoverOverlay).height
-      );
-      expect(hoverOverlayHeight).to.be.closeTo(videoElementHeight, 0.001);
-    });
+        const hoverOverlayHeight = parseFloat(
+          window.getComputedStyle(hoverOverlay).height
+        );
+        expect(hoverOverlayHeight).to.be.closeTo(videoElementHeight, 0.001);
+      }
+    );
   });
 
   it("the player should be styled correctly for the 'overlay' sizing mode", () => {
