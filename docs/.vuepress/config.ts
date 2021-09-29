@@ -1,4 +1,7 @@
-module.exports = {
+import { defineUserConfig } from 'vuepress';
+import type { DefaultThemeOptions } from 'vuepress';
+
+export default defineUserConfig<DefaultThemeOptions>({
   description:
     'A React component for setting up a video that plays on hover. Supports both desktop mouse events and mobile touch events, and provides an easy interface for adding thumbnails and loading states.',
   head: [
@@ -36,4 +39,4 @@ module.exports = {
     sidebarDepth: 2,
   },
   plugins: ['@vuepress/plugin-search'],
-};
+});
