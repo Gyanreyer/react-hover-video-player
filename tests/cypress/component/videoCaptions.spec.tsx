@@ -115,11 +115,13 @@ describe('Caption tracks are formatted and rendered correctly from the videoCapt
       'track[src="/captions-ga.vtt"]'
     );
 
-    cy.get(videoElementSelector).should(([videoElement]) => {
+    cy.get(videoElementSelector).should(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
       const { textTracks } = videoElement;
 
       expect(textTracks).to.have.length(2);
-      const [track1, track2] = textTracks;
+      const track1 = textTracks[0];
+      const track2 = textTracks[1];
 
       // Neither track should be active
       expect(track1.mode).to.equal('disabled');
@@ -134,9 +136,10 @@ describe('Caption tracks are formatted and rendered correctly from the videoCapt
       expect(track2.kind).to.equal('subtitles');
     });
 
-    cy.get(videoElementSelector).then(([videoElement]) => {
+    cy.get(videoElementSelector).then(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
       // Programmatically simulate selecting the second captions track
-      const [, track2] = videoElement.textTracks;
+      const track2 = videoElement.textTracks[1];
       track2.mode = 'showing';
     });
 
@@ -152,12 +155,13 @@ describe('Caption tracks are formatted and rendered correctly from the videoCapt
     cy.checkVideoPlaybackState('paused');
 
     // The irish language subtitles should be active in the video
-    cy.get(videoElementSelector).should(([videoElement]) => {
-      const [, track2] = videoElement.textTracks;
+    cy.get(videoElementSelector).should(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
+      const track2 = videoElement.textTracks[1];
 
       expect(track2.mode).to.equal('showing');
       expect(track2.activeCues).to.have.length(1);
-      const [cue] = track2.activeCues;
+      const cue = track2.activeCues[0];
 
       expect(cue.text).to.equal('Seo roinnt téacs fotheidil');
     });

@@ -21,7 +21,7 @@ describe('unloadVideoOnPaused prop', () => {
     cy.get(videoElementSelector).should('not.have.descendants', 'source');
     cy.get(videoElementSelector)
       .invoke('prop', 'readyState')
-      .should('equal', HTMLVideoElement.HAVE_NOTHING);
+      .should('equal', HTMLMediaElement.HAVE_NOTHING);
     cy.get(videoElementSelector)
       .invoke('prop', 'currentSrc')
       .should('equal', '');
@@ -42,7 +42,7 @@ describe('unloadVideoOnPaused prop', () => {
     );
     cy.get(videoElementSelector)
       .invoke('prop', 'readyState')
-      .should('be.gte', HTMLVideoElement.HAVE_FUTURE_DATA);
+      .should('be.gte', HTMLMediaElement.HAVE_FUTURE_DATA);
     cy.get(videoElementSelector)
       .invoke('prop', 'currentSrc')
       .should('equal', `${window.location.origin}${videoSrc}`);
@@ -59,7 +59,7 @@ describe('unloadVideoOnPaused prop', () => {
     cy.get(videoElementSelector).should('not.have.descendants', 'source');
     cy.get(videoElementSelector)
       .invoke('prop', 'readyState')
-      .should('equal', HTMLVideoElement.HAVE_NOTHING);
+      .should('equal', HTMLMediaElement.HAVE_NOTHING);
     cy.get(videoElementSelector)
       .invoke('prop', 'currentTime')
       .should('equal', 0);
@@ -156,7 +156,7 @@ describe('unloadVideoOnPaused prop', () => {
     // The readyState should be reset to HAVE_NOTHING
     cy.get(videoElementSelector)
       .invoke('prop', 'readyState')
-      .should('equal', HTMLVideoElement.HAVE_NOTHING);
+      .should('equal', HTMLMediaElement.HAVE_NOTHING);
 
     // The video should successfully load and play again when we toggle focused back to true
     cy.get('[data-testid="toggle-focus-button"]').click();
@@ -178,7 +178,7 @@ describe('unloadVideoOnPaused prop', () => {
     cy.get(videoElementSelector).should('not.have.descendants', 'source');
     cy.get(videoElementSelector)
       .invoke('prop', 'readyState')
-      .should('equal', HTMLVideoElement.HAVE_NOTHING);
+      .should('equal', HTMLMediaElement.HAVE_NOTHING);
 
     // Mouse over the video to get it to start loading
     cy.triggerEventOnPlayer('mouseenter');
@@ -198,6 +198,6 @@ describe('unloadVideoOnPaused prop', () => {
     cy.get(videoElementSelector).should('not.have.descendants', 'source');
     cy.get(videoElementSelector)
       .invoke('prop', 'readyState')
-      .should('equal', HTMLVideoElement.HAVE_NOTHING);
+      .should('equal', HTMLMediaElement.HAVE_NOTHING);
   });
 });

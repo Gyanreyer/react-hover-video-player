@@ -38,7 +38,8 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
     );
 
     // The video should play through to the end of its duration
-    cy.get(videoElementSelector).should(([videoElement]) => {
+    cy.get(videoElementSelector).should(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
       expect(videoElement.currentTime).to.equal(videoElement.duration);
     });
 
@@ -53,7 +54,8 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
     );
 
     // The video's time should play through to the end
-    cy.get(videoElementSelector).should(([videoElement]) => {
+    cy.get(videoElementSelector).should(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
       expect(videoElement.currentTime).to.equal(videoElement.duration);
     });
 
@@ -93,7 +95,8 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
     cy.checkVideoPlaybackState('playing');
 
     // The video should play through to the end of its duration
-    cy.get(videoElementSelector).should(([videoElement]) => {
+    cy.get(videoElementSelector).should(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
       expect(videoElement.currentTime).to.equal(videoElement.duration);
     });
 
@@ -112,7 +115,8 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
     cy.checkVideoPlaybackState('playing');
 
     // The video should play through to the end of its duration again
-    cy.get(videoElementSelector).should(([videoElement]) => {
+    cy.get(videoElementSelector).should(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
       expect(videoElement.currentTime).to.equal(videoElement.duration);
     });
 
@@ -141,7 +145,8 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
     cy.checkVideoPlaybackState('playing');
 
     // The video should play through to the end of its duration
-    cy.get(videoElementSelector).should(([videoElement]) => {
+    cy.get(videoElementSelector).should(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
       expect(videoElement.currentTime).to.equal(videoElement.duration);
     });
 
@@ -152,7 +157,8 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
     cy.checkVideoPlaybackState('ended');
 
     // The video should still be stuck at the end of its duration
-    cy.get(videoElementSelector).should(([videoElement]) => {
+    cy.get(videoElementSelector).should(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
       expect(videoElement.currentTime).to.equal(videoElement.duration);
     });
 
@@ -163,7 +169,8 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
     );
 
     // The video should still be at the end of its duration
-    cy.get(videoElementSelector).should(([videoElement]) => {
+    cy.get(videoElementSelector).should(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
       expect(videoElement.currentTime).to.equal(videoElement.duration);
     });
   });

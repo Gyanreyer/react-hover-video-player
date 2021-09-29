@@ -8,7 +8,7 @@ import { videoElementSelector } from '../constants';
 describe('videoRef prop', () => {
   it("exposes a valid ref to the player's video element", () => {
     const HoverVideoPlayerWithRef = () => {
-      const videoRef = React.useRef();
+      const videoRef: React.RefObject<HTMLVideoElement> = React.useRef();
 
       return (
         <>
