@@ -48,9 +48,8 @@ export default function useManageVideoPlayback(
     OverlayState.paused
   );
   // Keep track of whether the video is currently playing or attempting to play
-  const [isVideoLoadingOrPlaying, setIsVideoLoadingOrPlaying] = useState<
-    boolean
-  >(false);
+  const [isVideoLoadingOrPlaying, setIsVideoLoadingOrPlaying] =
+    useState<boolean>(false);
 
   // Keep track of when the video is "active", meaning it is in one of the following states:
   // 1. The user is hovering over the video but it is still loading
@@ -201,7 +200,7 @@ export default function useManageVideoPlayback(
     videoRef,
   ]);
 
-  // Effect adds a `timeupdate` event listener to the video if a playback range is set to ensure
+  // Effect adds starts an update loop if a playback range is set to ensure
   // the video stays within the bounds of its playback range
   useEffect(() => {
     if (
@@ -213,8 +212,11 @@ export default function useManageVideoPlayback(
 
     const videoElement = videoRef.current;
 
-    // Makes sure the video stays clamped inside the playback range as its time updates
-    const onTimeUpdate = () => {
+    let animationFrameId = null;
+
+    // Update loop checks the video's time each frame while it's playing to make sure
+    // it stays clamped inside the playback range
+    const checkPlaybackRangeTime = () => {
       // Use playbackRangeEnd as our maximum time to play to, or default to the video's full duration
       const playbackRangeMaxTime = playbackRangeEnd || videoElement.duration;
       // Use playbackRangeStart as our minimum time to play from, or default to the very beginning of the video (0sƒ)
@@ -245,11 +247,16 @@ export default function useManageVideoPlayback(
         // clamp it to the lower end of the playback range
         videoElement.currentTime = playbackRangeMinTime;
       }
+
+      animationFrameId = requestAnimationFrame(checkPlaybackRangeTime);
     };
 
-    videoElement.addEventListener('timeupdate', onTimeUpdate);
+    // Start the animation frame loop
+    animationFrameId = requestAnimationFrame(checkPlaybackRangeTime);
+
     return () => {
-      videoElement.removeEventListener('timeupdate', onTimeUpdate);
+      // Cancel the animation frame loop on cleanup
+      cancelAnimationFrame(animationFrameId);
     };
   }, [
     attemptToPauseVideo,
