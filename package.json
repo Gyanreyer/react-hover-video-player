@@ -134,6 +134,10 @@
             {
               "type": "refactor",
               "release": "minor"
+            },
+            {
+              "type": "perf",
+              "release": "minor"
             }
           ],
           "parserOpts": {
