@@ -101,7 +101,35 @@ export default function useManageVideoPlayback(
   const attemptToPlayVideo = useCallback(() => {
     mutableVideoState.current.isPlayAttemptInProgress = true;
 
-    videoRef.current.play();
+    const videoElement = videoRef.current;
+
+    videoElement.play().catch((error) => {
+      // Additional handling for when browsers block playback for unmuted videos.
+      // This is unfortunately necessary because most modern browsers do not allow playing videos with audio
+      //  until the user has "interacted" with the page by clicking somewhere at least once; mouseenter events
+      //  don't count.
+
+      // If the video isn't muted and playback failed with a `NotAllowedError`, this means the browser blocked
+      // playing the video because the user hasn't clicked anywhere on the page yet.
+      if (!videoElement.muted && error.name === 'NotAllowedError') {
+        console.warn(
+          'HoverVideoPlayer: Playback with sound was blocked by the browser. Attempting to play again with the video muted; audio will be restored if the user clicks on the page.'
+        );
+        // Mute the video and attempt to play again
+        videoElement.muted = true;
+        videoElement.play();
+
+        // When the user clicks on the document, unmute the video since we should now
+        // be free to play audio
+        const onClickDocument = () => {
+          videoElement.muted = false;
+
+          // Clean up the event listener so it is only fired once
+          document.removeEventListener('click', onClickDocument);
+        };
+        document.addEventListener('click', onClickDocument);
+      }
+    });
   }, [videoRef]);
 
   // Method attempts to pause the video, if it is safe to do so without interrupting a pending play promise
@@ -200,8 +228,8 @@ export default function useManageVideoPlayback(
     videoRef,
   ]);
 
-  // Effect adds starts an update loop if a playback range is set to ensure
-  // the video stays within the bounds of its playback range
+  // Effect starts an update loop while the video is playing
+  // to ensure the video stays within the bounds of its playback range
   useEffect(() => {
     if (
       // If we don't have a playback range set, we don't need to do anything here
@@ -231,7 +259,7 @@ export default function useManageVideoPlayback(
 
           // If the video is paused, start playing it again (when the video reaches the end
           // of the playback range for the first time, most browsers will pause it)
-          if (shouldPlayVideo && videoElement.paused) {
+          if (shouldPlayVideo && (videoElement.paused || videoElement.ended)) {
             attemptToPlayVideo();
           }
         } else {
@@ -248,10 +276,14 @@ export default function useManageVideoPlayback(
         videoElement.currentTime = playbackRangeMinTime;
       }
 
-      animationFrameId = requestAnimationFrame(checkPlaybackRangeTime);
+      // If the video is playing, keep the update loop going for the next frame
+      if (shouldPlayVideo) {
+        animationFrameId = requestAnimationFrame(checkPlaybackRangeTime);
+      }
     };
 
-    // Start the animation frame loop
+    // Run our update loop at least once; if the video is playing,
+    // it will continue running every frame until the video is paused again
     animationFrameId = requestAnimationFrame(checkPlaybackRangeTime);
 
     return () => {

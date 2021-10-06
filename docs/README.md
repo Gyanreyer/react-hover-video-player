@@ -18,9 +18,11 @@ A React component that makes it simple to set up a video that will play when the
 
 - Out-of-the-box support for both mouse and touchscreen interactions
 - Easily add custom thumbnails and loading states
-- Clean, error-free handling of async video playback
 - Lightweight and fast
 - No dependencies
+- Cleanly handles edge cases that can arise from managing async video playback, including:
+  - Avoids play promise interruption errors whenever possible
+  - Gracefully uses fallback behavior if browser policies block a video from playing with sound on
 
 ## How It Works
 
@@ -436,6 +438,13 @@ const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 **Type**: `boolean` | **Default**: `true`
 
 `muted` accepts a boolean value which toggles whether or not the video should be muted.
+
+Note that if the video is unmuted, you may encounter issues with [browser autoplay policies](https://developer.chrome.com/blog/autoplay/) blocking the video
+from playing with sound. This is an unfortunate limitation stemming from the fact that modern browsers will block playing
+audio until the user has "interacted" with the page by doing something like clicking or tapping anywhere at least once.
+
+If playback is initially blocked for an unmuted video, the component will fall back by muting the video and attempting to play again without audio;
+if the user clicks on the page, the video will be unmuted again and continue playing.
 
 ```jsx
 <HoverVideoPlayer
