@@ -101,7 +101,35 @@ export default function useManageVideoPlayback(
   const attemptToPlayVideo = useCallback(() => {
     mutableVideoState.current.isPlayAttemptInProgress = true;
 
-    videoRef.current.play();
+    const videoElement = videoRef.current;
+
+    videoElement.play().catch((error) => {
+      // Additional handling for when browsers block playback for unmuted videos.
+      // This is unfortunately necessary because most modern browsers do not allow playing videos with audio
+      //  until the user has "interacted" with the page by clicking somewhere at least once; mouseenter events
+      //  don't count.
+
+      // If the video isn't muted and playback failed with a `NotAllowedError`, this means the browser blocked
+      // playing the video because the user hasn't clicked anywhere on the page yet.
+      if (!videoElement.muted && error.name === 'NotAllowedError') {
+        console.warn(
+          'HoverVideoPlayer: Playback with sound was blocked by the browser. Attempting to play again with the video muted; audio will be restored if the user clicks on the page.'
+        );
+        // Mute the video and attempt to play again
+        videoElement.muted = true;
+        videoElement.play();
+
+        // When the user clicks on the document, unmute the video since we should now
+        // be free to play audio
+        const onClickDocument = () => {
+          videoElement.muted = false;
+
+          // Clean up the event listener so it is only fired once
+          document.removeEventListener('click', onClickDocument);
+        };
+        document.addEventListener('click', onClickDocument);
+      }
+    });
   }, [videoRef]);
 
   // Method attempts to pause the video, if it is safe to do so without interrupting a pending play promise
