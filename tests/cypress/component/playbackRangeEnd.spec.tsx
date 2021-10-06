@@ -181,6 +181,13 @@ describe('Playback works as expected when only playbackRangeEnd is set', () => {
     );
     cy.get(videoElementSelector).invoke('prop', 'currentTime', 5);
 
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentTime')
+      .should('equal', 5);
+
+    // Make the video start playing
+    cy.triggerEventOnPlayer('mouseenter');
+
     cy.log(
       'The video should have been set back to the end of the playback range'
     );

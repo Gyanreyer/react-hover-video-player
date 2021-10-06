@@ -228,8 +228,8 @@ export default function useManageVideoPlayback(
     videoRef,
   ]);
 
-  // Effect adds starts an update loop if a playback range is set to ensure
-  // the video stays within the bounds of its playback range
+  // Effect starts an update loop while the video is playing
+  // to ensure the video stays within the bounds of its playback range
   useEffect(() => {
     if (
       // If we don't have a playback range set, we don't need to do anything here
@@ -259,7 +259,7 @@ export default function useManageVideoPlayback(
 
           // If the video is paused, start playing it again (when the video reaches the end
           // of the playback range for the first time, most browsers will pause it)
-          if (shouldPlayVideo && videoElement.paused) {
+          if (shouldPlayVideo && (videoElement.paused || videoElement.ended)) {
             attemptToPlayVideo();
           }
         } else {
@@ -276,10 +276,14 @@ export default function useManageVideoPlayback(
         videoElement.currentTime = playbackRangeMinTime;
       }
 
-      animationFrameId = requestAnimationFrame(checkPlaybackRangeTime);
+      // If the video is playing, keep the update loop going for the next frame
+      if (shouldPlayVideo) {
+        animationFrameId = requestAnimationFrame(checkPlaybackRangeTime);
+      }
     };
 
-    // Start the animation frame loop
+    // Run our update loop at least once; if the video is playing,
+    // it will continue running every frame until the video is paused again
     animationFrameId = requestAnimationFrame(checkPlaybackRangeTime);
 
     return () => {
