@@ -59,6 +59,14 @@ describe('Playback works as expected when only playbackRangeEnd is set', () => {
       'The video should still be playing after looping a second time'
     );
 
+    cy.log(
+      'Setting the video to a time past the end of the playback range will loop it back to the start'
+    );
+    cy.get(videoElementSelector).invoke('prop', 'currentTime', 5);
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentTime')
+      .should('be.closeTo', 0, 0.03);
+
     // Mouse out of the container to pause
     cy.triggerEventOnPlayer('mouseleave');
     cy.checkVideoPlaybackState('paused');
@@ -159,38 +167,11 @@ describe('Playback works as expected when only playbackRangeEnd is set', () => {
     cy.get(videoElementSelector)
       .invoke('prop', 'currentTime')
       .should('equal', 0.5);
-  });
-
-  it('keeps the video inside the playback range', () => {
-    mount(
-      <HoverVideoPlayer
-        videoSrc={makeMockVideoSrc()}
-        playbackRangeEnd={0.5}
-        loop={false}
-        // restartOnPaused is false by default
-      />
-    );
-
-    cy.log('The video should initially be set to the start');
-    cy.get(videoElementSelector)
-      .invoke('prop', 'currentTime')
-      .should('equal', 0);
 
     cy.log(
-      "Attempt to set the video's time to after the end of the playback range"
+      'Setting the video to a time past the end of the playback range will keep the time clamped to the end time'
     );
     cy.get(videoElementSelector).invoke('prop', 'currentTime', 5);
-
-    cy.get(videoElementSelector)
-      .invoke('prop', 'currentTime')
-      .should('equal', 5);
-
-    // Make the video start playing
-    cy.triggerEventOnPlayer('mouseenter');
-
-    cy.log(
-      'The video should have been set back to the end of the playback range'
-    );
     cy.get(videoElementSelector)
       .invoke('prop', 'currentTime')
       .should('equal', 0.5);

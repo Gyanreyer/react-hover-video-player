@@ -104,9 +104,7 @@ Cypress.Commands.add(
   ) => {
     cy.log(message);
 
-    expect(['playing', 'loading', 'paused', 'ended']).to.include(
-      expectedPlaybackState
-    );
+    expect(['playing', 'loading', 'paused']).to.include(expectedPlaybackState);
 
     switch (expectedPlaybackState) {
       case 'playing':
@@ -136,15 +134,14 @@ Cypress.Commands.add(
 
         break;
       case 'paused':
-        // The video should be paused but not ended
-        cy.get(videoElementSelector).invoke('prop', 'paused').should('be.true');
-        cy.get(videoElementSelector).invoke('prop', 'ended').should('be.false');
-        break;
-      case 'ended':
       default:
-        // The video should be ended and paused
-        cy.get(videoElementSelector).invoke('prop', 'ended').should('be.true');
-        cy.get(videoElementSelector).invoke('prop', 'paused').should('be.true');
+        // The video should not be playing (paused and/or ended)
+        cy.get(videoElementSelector).should(
+          ($video: JQuery<HTMLVideoElement>) => {
+            const videoElement = $video[0];
+            expect(videoElement.paused || videoElement.ended).to.be.true;
+          }
+        );
     }
   }
 );

@@ -55,10 +55,6 @@ export default (
   // Override the args passed to the browser to ensure we
   // can test against its autoplay policy
   on('before:browser:launch', (browser, launchOptions) => {
-    launchOptions.args = launchOptions.args.filter(
-      (arg) => !arg.startsWith('--autoplay-policy')
-    );
-
     const autoplayPolicyOptionIndex = launchOptions.args.indexOf(
       '--autoplay-policy=no-user-gesture-required'
     );
