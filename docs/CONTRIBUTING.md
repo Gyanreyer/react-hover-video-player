@@ -46,7 +46,7 @@ This library uses [semantic-release](https://github.com/semantic-release/semanti
 
 ### Breaking changes
 
-If your commit contains breaking changes from the current package version (ie, removes a prop, significantly changes how a feature works, etc), the commit message needs to be marked as such. To do so, add `"BREAKING CHANGE: [description of breaking change]"` to the footer of your commit message.
+If your commit contains breaking changes from the current package version (ie, removes a prop, fundamentally changes how a feature works, etc), the commit message needs to be marked as such. To do so, add `"BREAKING CHANGE: [description of breaking change]"` to the footer of your commit message.
 This will result in the package being incremented by a major version (+1.0.0).
 
 ## I want to update documentation
@@ -73,11 +73,11 @@ The HoverVideoPlayer component is defined in the `src/component/HoverVideoPlayer
 
 This library uses [Cypress component tests](https://docs.cypress.io/guides/component-testing/introduction) for automated testing; all test files can be found in the `tests/cypress/component` directory.
 
-`npm run test` will run all tests once and check the tests' code coverage. **100% code coverage is required**. If you make a change, you must add a test accordingly.
-
-`npm run test-runner` will open the Cypress test runner; this will provide a nice interface which helps with debugging and will automatically re-run tests as you make changes.
-
-`npm run test:smoke` will perform a production build and then run all tests against the built code in a Chrome browser window. This can be used to catch potential problems introduced by the rollup config, but is otherwise slower to run and therefore not recommended for usage during regular development.
+- `npm run test` will run all tests once and check the tests' code coverage. **100% code coverage is required**. If you make a change, you must add a test accordingly.
+  - To run a specific test file, use the `--spec` flag like so: `npm run test -- --spec tests/cypress/component/testFile.spec.tsx`
+  - To only run a single test within a specific test file, change `it()` to `it.only()` for the desired test
+- `npm run test-runner` will open the Cypress test runner; this will provide a nice interface which helps with debugging and will automatically re-run tests as you make changes.
+- `npm run test:smoke` will perform a production build and then run all tests against the built code in a Chrome browser window. This can be used to catch potential problems introduced by the rollup config, but is otherwise slower to run and therefore not recommended for usage during regular development.
 
 ### Development playground
 
@@ -88,3 +88,26 @@ Running `npm run dev` will serve the contents of `dev/index.tsx` at <http://loca
 For the most part, you will likely want to focus on editing the `TestComponent.tsx` file when testing your changes.
 You may modify playground files however you want for testing purposes, but your changes should not be committed.
 That being said, if you think your changes really should be committed, you are welcome to make a case for it!
+
+## Other miscellaneous things
+
+### Recommended process for creating an example gif for documentation
+
+1. Make a new sandbox in CodeSandbox (for an easy head start, [fork this sandbox](https://codesandbox.io/s/hovervideoplayer-example-6y0fn)).
+2. Once the example is set up, make a screen recording.
+   - On Macs, QuickTime Player is a decent option for making quick screen recordings
+   - Try to keep the recording short and loop-friendly if possible (ie, start and end with the mouse cursor off the screen)
+3. Convert the recording to a .gif file
+
+   - To guarantee the gif comes out with a good balance between file size and quality, it's recommended to use the following ffmpeg command for conversion:
+
+   ```sh
+   ffmpeg -i path/to/original-recording.mp4 -vf "fps=10,scale=1024:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" output/demo.gif
+   ```
+
+   (special thanks to [llogan's very helpful answer](https://superuser.com/a/556031) which this command is based on)
+
+4. Add the .gif file to the README
+   - Put the .gif file in the `docs/assets/images` directory.
+   - Add `![alt text](./assets/images/your_file_name.gif)]` to the appropriate place in the README.
+   - If you feel comfortable, please wrap the gif with a link to your CodeSandbox!

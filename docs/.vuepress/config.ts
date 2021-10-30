@@ -10,8 +10,7 @@ export default defineUserConfig<DefaultThemeOptions>({
       'link',
       {
         rel: 'icon',
-        href:
-          'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎞️</text></svg>',
+        href: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎞️</text></svg>',
       },
     ],
     // Add GA tags to the <head> of the page
@@ -37,6 +36,11 @@ export default defineUserConfig<DefaultThemeOptions>({
     repo: 'gyanreyer/react-hover-video-player',
     sidebar: 'auto',
     sidebarDepth: 2,
+  },
+  markdown: {
+    links: {
+      externalIcon: false,
+    },
   },
   plugins: ['@vuepress/plugin-search'],
 });

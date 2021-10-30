@@ -6,7 +6,7 @@
 [![CircleCI](https://circleci.com/gh/Gyanreyer/react-hover-video-player/tree/main.svg?style=svg)](https://circleci.com/gh/Gyanreyer/react-hover-video-player/tree/main)
 [![license](https://img.shields.io/npm/l/react-hover-video-player)](https://github.com/Gyanreyer/react-hover-video-player/blob/main/LICENSE)
 
-![demo](./assets/images/hover_preview_demo.gif?raw=true)
+![demo](./assets/images/heading_demo.gif?raw=true)
 
 ## What It Is
 
@@ -43,7 +43,7 @@ npm install react-hover-video-player
 ```jsx
 import HoverVideoPlayer from 'react-hover-video-player';
 
-function MyComponent () {
+function MyComponent() {
   return (
     <HoverVideoPlayer
       videoSrc="path-to/your-video.mp4"
@@ -53,9 +53,9 @@ function MyComponent () {
           alt=""
           style={{
             // Make the image expand to cover the video's dimensions
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
           }}
         />
       }
@@ -80,14 +80,12 @@ function MyComponent () {
 If you only have **one video source**, you can simply provide a single string for the URL path to the video file like so:
 
 ```jsx
-<HoverVideoPlayer
-  videoSrc="path/video-file.mp4"
-/>
+<HoverVideoPlayer videoSrc="path/video-file.mp4" />
 ```
 
 If you have **multiple video sources**, you can provide all of them in an array of strings or objects with the shape:
 
-```javascript
+```js
 {
   // The URL path string for this source
   src: 'path/video-file.mp4',
@@ -117,7 +115,7 @@ If you have multiple video sources, make sure you order your `videoSrc` array by
 
 A caption track object should follow the shape:
 
-```javascript
+```js
 {
   // The URL string for the captions track file
   src: 'path-to/captions-track.vtt',
@@ -144,21 +142,20 @@ In practice this looks like:
       src: 'captions/english.vtt',
       srcLang: 'en',
       label: 'English',
-      kind: "captions",
+      kind: 'captions',
       default: true,
     },
     {
       src: 'captions/french.vtt',
       srcLang: 'fr',
       label: 'French',
-      kind: "subtitles",
+      kind: 'subtitles',
     },
   ]}
   // Enable the video's controls so that the user can select the caption track they want or toggle captions on and off
   controls
 />
 ```
-
 
 ### crossOrigin
 
@@ -170,10 +167,7 @@ The `crossOrigin` prop maps directly to the [HTML Video element's crossorigin at
 - `"use-credentials"`: The video element will send cross-origin requests with credentials.
 
 ```jsx
-<HoverVideoPlayer
-  videoSrc="video.mp4"
-  crossOrigin="use-credentials"
-/>
+<HoverVideoPlayer videoSrc="video.mp4" crossOrigin="use-credentials" />
 ```
 
 ## Overlays
@@ -183,6 +177,8 @@ The `crossOrigin` prop maps directly to the [HTML Video element's crossorigin at
 **Type**: `node` | **Default**: `null`
 
 This optional prop accepts any renderable content that you would like to be displayed over the video while it is in a paused or loading state. When the video starts playing, this content will be faded out.
+
+[![Demo of the pausedOverlay prop being used](./assets/images/paused_overlay_prop_demo.gif?raw=true)](https://codesandbox.io/s/hovervideoplayer-examples-pausedoverlay-uo2oh?file=/src/App.js)
 
 A common use case for this would be displaying a thumbnail image over the video while it is paused.
 
@@ -196,9 +192,9 @@ A common use case for this would be displaying a thumbnail image over the video 
       alt=""
       style={{
         // Make the image expand to cover the video's dimensions
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
       }}
     />
   }
@@ -213,6 +209,8 @@ The [overlayTransitionDuration](#overlaytransitionduration) prop allows you to s
 
 `loadingOverlay` is an optional prop that accepts any renderable content that you would like to be displayed over the video if it takes too long to start after the user attempts to play it.
 
+[![Demo of the loadingOverlay prop being used](./assets/images/loading_overlay_prop_demo.gif?raw=true)](https://codesandbox.io/s/hovervideoplayer-examples-loadingoverlay-kc8lz?file=/src/App.js)
+
 This allows you to provide a better user experience for users with slower internet connections, particularly if you are using larger video assets.
 
 Note that the [pausedOverlay](#pausedoverlay) will still be rendered while the video is in a loading state, so this overlay will simply be displayed on top of that one.
@@ -222,11 +220,7 @@ Note that the [pausedOverlay](#pausedoverlay) will still be rendered while the v
   videoSrc="video.mp4"
   // We should display a custom element on top of
   // the video when it is loading
-  loadingOverlay={
-    <div className="loading-overlay">
-      Loading...
-    </div>
-  }
+  loadingOverlay={<div className="loading-overlay">Loading...</div>}
 />
 ```
 
@@ -259,11 +253,7 @@ After the user stops hovering on the player, the video will continue playing unt
 ```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
-  loadingOverlay={
-    <div className="loading-overlay">
-      Loading...
-    </div>
-  }
+  loadingOverlay={<div className="loading-overlay">Loading...</div>}
   // We should only show the loading state if the video takes
   // more than 1 full second to start after attempting to play
   loadingStateTimeout={1000}
@@ -276,6 +266,8 @@ After the user stops hovering on the player, the video will continue playing unt
 
 `hoverOverlay` is an optional prop that accepts any renderable content that you would like to be displayed over the video while the player is active from a hover/touch event or when the [focused](#focused) prop is `true`.
 
+[![Demo of the hoverOverlay prop being used](./assets/images/hover_overlay_prop_demo.gif?raw=true)](https://codesandbox.io/s/hovervideoplayer-examples-hover-overlay-8wnq0?file=/src/App.js)
+
 This can be useful if you wish to reveal content to the user when they hover while the video still plays underneath it.
 
 Note that this overlay takes highest ordering priority and will be displayed on top of both the [pausedOverlay](#pausedoverlay) and [loadingOverlay](#loadingoverlay) if they are set.
@@ -287,8 +279,8 @@ Note that this overlay takes highest ordering priority and will be displayed on 
     <div className="hover-overlay">
       <h1>Video Title</h1>
       <p>
-        Here is a short description of the video.
-        You can still see the video playing underneath this overlay.
+        Here is a short description of the video. You can still see the video
+        playing underneath this overlay.
         <a href="/video-page">Click here to read more</a>
       </p>
     </div>
@@ -395,9 +387,9 @@ const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 ```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
-  onHoverStart={()=>{
-    console.log("User just moused over or touched hover target.");
-    console.log("The video will now attempt to play.")
+  onHoverStart={() => {
+    console.log('User just moused over or touched hover target.');
+    console.log('The video will now attempt to play.');
   }}
 />
 ```
@@ -411,9 +403,9 @@ const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 ```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
-  onHoverEnd={()=>{
-    console.log("User just moused out of or touched outside of hover target.");
-    console.log("The video will now stop playing.")
+  onHoverEnd={() => {
+    console.log('User just moused out of or touched outside of hover target.');
+    console.log('The video will now stop playing.');
   }}
 />
 ```
@@ -494,18 +486,13 @@ Note that this will only work if the [muted](#muted) prop is also set to `false`
 ```jsx
 const hoverVideoRef = useRef();
 
-useEffect(()=>{
+useEffect(() => {
   const videoElement = hoverVideoRef.current;
 
   videoElement.playbackRate = 2;
 }, []);
 
-return (
-  <HoverVideoPlayer
-    videoSrc="video.mp4"
-    videoRef={hoverVideoRef}
-  />
-)
+return <HoverVideoPlayer videoSrc="video.mp4" videoRef={hoverVideoRef} />;
 ```
 
 ## Setting a Playback Range
@@ -513,6 +500,8 @@ return (
 Setting a playback range on `HoverVideoPlayer` allows you to set the times in the video that it should start from and/or play to.
 This can be useful if you want to show a smaller preview of a longer video without having to manually edit the file,
 perhaps because you wish to still use the full video file elsewhere on the site.
+
+[![Demo of the playback range props being used](./assets/images/playback_range_demo.gif?raw=true)](https://codesandbox.io/s/hovervideoplayer-examples-playbackrange-unggy?file=/src/App.js)
 
 If a playback range is set, the component will add a [media fragment identifier to the video's URL](https://developer.mozilla.org/en-US/docs/Web/Guide/Audio_and_video_delivery#specifying_playback_range) to tell browsers to only load the portion
 of the video within the desired playback range. Note that support for media fragments is not entirely consistent across all browsers, but regardless the component will still be able to play within the desired range, just without the added performance benefit of avoiding downloading the full video file.
@@ -560,7 +549,6 @@ The base styling for this component's contents are set using inline styling. You
   style={{
     width: '50%',
   }}
-
   /* ~~~ PAUSED OVERLAY WRAPPER DIV ~~~ */
   // Applies a custom class to the div wrapping the pausedOverlay contents
   pausedOverlayWrapperClassName="paused-overlay-wrapper"
@@ -568,7 +556,6 @@ The base styling for this component's contents are set using inline styling. You
   pausedOverlayWrapperStyle={{
     backgroundColor: '#ff0000',
   }}
-
   /* ~~~ LOADING OVERLAY WRAPPER DIV ~~~ */
   // Applies a custom class to the div wrapping the loadingOverlay contents
   loadingOverlayWrapperClassName="loading-overlay-wrapper"
@@ -576,16 +563,14 @@ The base styling for this component's contents are set using inline styling. You
   loadingOverlayWrapperStyle={{
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
   }}
-
   /* ~~~ HOVER OVERLAY WRAPPER DIV ~~~ */
   // Applies a custom class to the div wrapping the hoverOverlay contents
   hoverOverlayWrapperClassName="hover-overlay-wrapper"
   // Applies inline styles to the div wrapping the hoverOverlay contents
   hoverOverlayWrapperStyle={{
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    color: "white",
+    color: 'white',
   }}
-
   /* ~~~ VIDEO ELEMENT ~~~ */
   // Applies a custom class to the video element
   videoClassName="player-video"
@@ -644,10 +629,10 @@ The acceptable values are:
 The official specs recommend that browsers should use `metadata` as the default, but implementations differ between browsers. As of writing, the defaults for each browser seem to be:
 | Browser | Default `preload` value |
 | ------- | ----------------------- |
-| Chrome  | `metadata`              |
-| Firefox | `metadata`              |
-| Safari  | `auto`                  |
-| Edge    | `metadata`              |
+| Chrome | `metadata` |
+| Firefox | `metadata` |
+| Safari | `auto` |
+| Edge | `metadata` |
 
 ```jsx
 <HoverVideoPlayer
@@ -655,7 +640,7 @@ The official specs recommend that browsers should use `metadata` as the default,
   // We should only preload the video's metadata
   preload="metadata"
 />
-  ```
+```
 
 ### unloadVideoOnPaused
 
