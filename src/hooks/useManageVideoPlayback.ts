@@ -69,7 +69,7 @@ export default function useManageVideoPlayback(
     // Set initial values for our video state
     mutableVideoState.current = {
       // Whether there is a play promise in progress which we should avoid interrupting
-      // with calls to video.play() or video.load()
+      // with calls to video.pause() or video.load()
       isPlayAttemptInProgress: false,
       // Keep refs for timeouts so we can keep track of and cancel them
       pauseTimeout: null,
@@ -103,7 +103,7 @@ export default function useManageVideoPlayback(
 
     const videoElement = videoRef.current;
 
-    videoElement.play().catch((error) => {
+    videoElement.play().catch((error: DOMException) => {
       // Additional handling for when browsers block playback for unmuted videos.
       // This is unfortunately necessary because most modern browsers do not allow playing videos with audio
       //  until the user has "interacted" with the page by clicking somewhere at least once; mouseenter events
@@ -128,6 +128,9 @@ export default function useManageVideoPlayback(
           document.removeEventListener('click', onClickDocument);
         };
         document.addEventListener('click', onClickDocument);
+      } else {
+        // Log any other playback errors with console.error
+        console.error(`HoverVideoPlayer: ${error.message}`);
       }
     });
   }, [videoRef]);
