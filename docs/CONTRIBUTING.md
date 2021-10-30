@@ -1,24 +1,25 @@
 # Contributing
 
-## Developing locally
+## How to make a contribution
 
-- `npm install`
-- `npm run dev`
-  - This will serve the contents of `dev/index.tsx` at <http://localhost:3000> with hot reloading.
-    - You may edit the `TestComponent.tsx` file for all testing purposes.
-      You may modify this file however you want for testing, but your changes
-      should not be committed. If you think your changes should be committed,
-      please contact the maintainer.
+1. Click the "Fork" button on this library's [GitHub page](https://github.com/gyanreyer/react-hover-video-player) to make a copy of the repository in your account which you can work on.
+2. Clone your forked repo to your computer.
+3. Move into the root of this project's directory and run `npm install` to get all dependencies installed; this will also set up Husky commit hooks automatically.
+4. Start coding! Check out the "I want to..." sections below for guidance on where to start.
+5. Once you are confident that your work is done, push your changes up to your repository and click "Contribute" > "Open pull request". Fill out a description of your changes and then create the pull request.
+6. A maintainer will review your code and may give feedback on anything that should be changed. Once tests are passing and your changes are approved, they will be merged into the main repository and automatically deployed via CircleCI using [semantic-release](https://github.com/semantic-release/semantic-release).
 
-## Builds
+Thank you so much for your contribution ❤️
 
-This project uses automated builds with [CircleCI](https://app.circleci.com/pipelines/github/Gyanreyer/react-hover-video-player). When a change is merged into the main branch, CircleCI will run all tests and if they pass, it will build and deploy a new version of the `react-hover-video-player` package to npm using [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
+## Commit messages
 
-If you wish to do a production build locally for testing purposes, `npm run build` will build the component for production.
+This library strictly enforces following the [Angular commit guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines) for commit messages.
 
-## Commits
+To make things as easy as possible, it is recommended that you run
+`npm run commit` to commit staged changes; this will open [Commitizen](https://github.com/commitizen/cz-cli), a CLI tool which
+will walk you through writing your commit message and handle all of the formatting for you.
 
-In order to work best with semantic-release, commit messages must follow the [Angular commit guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines):
+However, if you prefer to manually write the commit message yourself, it should follow the following structure:
 
 ```text
 <type>(<scope>): <subject>
@@ -28,37 +29,85 @@ In order to work best with semantic-release, commit messages must follow the [An
 <footer>
 ```
 
-This formatting is enforced using [Husky](https://github.com/typicode/husky) and [Commitlint](https://github.com/conventional-changelog/commitlint).
+### Accepted commit types
 
-To make things easy, you can write your commit messages using [Commitizen](https://github.com/commitizen/cz-cli), a CLI tool which will provide an interactive experience for walking you through writing your commit message. All you have to do is stage your changes and run `npm run commit` and it'll guide you from there.
+This library uses [semantic-release](https://github.com/semantic-release/semantic-release) to determine how the package version should be incremented based on your commit message's `type`.
 
-## Documentation
+| Type     | Description                                                                                            | Package Version Increment                                                                               |
+| -------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| feat     | A new feature                                                                                          | Minor version (+0.1.0)                                                                                  |
+| fix      | A bug fix                                                                                              | Patch version (+0.0.1)                                                                                  |
+| refactor | A code change that neither fixes a bug nor adds a feature                                              | Minor version (+0.1.0)                                                                                  |
+| perf     | A code change that improves performance                                                                | Minor version (+0.1.0)                                                                                  |
+| docs     | Documentation only changes                                                                             | No change unless the commit scope is `"readme"`, in which case it will publish a patch version (+0.0.1) |
+| style    | Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) | No change                                                                                               |
+| test     | Adding missing or correcting existing tests                                                            | No change                                                                                               |
+| chore    | Changes to the build process or auxiliary tools and libraries such as documentation generation         | No change                                                                                               |
 
-Please add documentation for your changes! If you add a prop, make sure to add it to the README file accordingly.
+### Breaking changes
 
-The documentation site at <https://react-hover-video-player.dev> uses the [VuePress](https://vuepress.vuejs.org/) library to automatically construct a page based on the README file's contents.
+If your commit contains breaking changes from the current package version (ie, removes a prop, fundamentally changes how a feature works, etc), the commit message needs to be marked as such. To do so, add `"BREAKING CHANGE: [description of breaking change]"` to the footer of your commit message.
+This will result in the package being incremented by a major version (+1.0.0).
+
+## I want to update documentation
+
+All documentation can be found in the `src` directory.
+
+The documentation site at <https://react-hover-video-player.dev> uses the [VuePress](https://vuepress.vuejs.org/) library to automatically construct a site with pages based on the `README.md` and `CONTRIBUTING.md` files' contents.
 
 To preview the documentation site locally, run `npm run docs:dev` to serve it at <http://localhost:8080>.
 
 When committing changes to the README, make sure you use the appropriate commit type and scope. Semantic-release normally skips commits of type `docs`, but this can result
 in the npm package page's README not getting updated to reflect any changes that have been made to it.
 
-If the main purpose of your commit is to update the README, please use `docs(readme)` as your commit's type and scope; this indicates to semantic-release that the change
+If the main purpose of your commit is to update the README, please use `"docs"` as your commit's type and `"readme"` as the scope; this indicates to semantic-release that the change
 should be published to the npm package as a patched version.
 
-## Tests
+## I want to fix a bug or add a feature
 
-All tests can be found in the `tests/cypress/component` directory. These are 100% end-to-end tests written with [Cypress](https://github.com/cypress-io/cypress).
+All component code can be found in the `src` directory.
 
-Tests can be run with the following commands:
+The HoverVideoPlayer component is defined in the `src/component/HoverVideoPlayer.tsx` file, so it is recommended that you start there.
+
+### Automated testing
+
+This library uses [Cypress component tests](https://docs.cypress.io/guides/component-testing/introduction) for automated testing; all test files can be found in the `tests/cypress/component` directory.
 
 - `npm run test` will run all tests once and check the tests' code coverage. **100% code coverage is required**. If you make a change, you must add a test accordingly.
-
-- `npm run test-runner` will open a browser window with the Cypress test runner, providing a nice UI which makes it much easier to troubleshoot your tests and see exactly what they are doing.
-
+  - To run a specific test file, use the `--spec` flag like so: `npm run test -- --spec tests/cypress/component/testFile.spec.tsx`
+  - To only run a single test within a specific test file, change `it()` to `it.only()` for the desired test
+- `npm run test-runner` will open the Cypress test runner; this will provide a nice interface which helps with debugging and will automatically re-run tests as you make changes.
 - `npm run test:smoke` will perform a production build and then run all tests against the built code in a Chrome browser window. This can be used to catch potential problems introduced by the rollup config, but is otherwise slower to run and therefore not recommended for usage during regular development.
 
-### Why all end-to-end tests?
+### Development playground
 
-This component's behavior is built heavily on the `HTMLVideoElement`.
-In normal unit tests, most of `HTMLVideoElement`'s functionality is disabled and requires unbelievable amounts of mocking in order to get anything close to 100% test coverage. It became clear that taking that approach would result in the unit tests testing the mock implementation more than the component itself; end-to-end tests help us feel much more confident that everything works exactly as it would in the real world!
+Along with automated tests, you can also test your changes in a live demo playground environment located in the `dev` directory.
+
+Running `npm run dev` will serve the contents of `dev/index.tsx` at <http://localhost:3000> with hot reloading.
+
+For the most part, you will likely want to focus on editing the `TestComponent.tsx` file when testing your changes.
+You may modify playground files however you want for testing purposes, but your changes should not be committed.
+That being said, if you think your changes really should be committed, you are welcome to make a case for it!
+
+## Other miscellaneous things
+
+### Recommended process for creating an example gif for documentation
+
+1. Make a new sandbox in CodeSandbox (for an easy head start, [fork this sandbox](https://codesandbox.io/s/hovervideoplayer-example-6y0fn)).
+2. Once the example is set up, make a screen recording.
+   - On Macs, QuickTime Player is a decent option for making quick screen recordings
+   - Try to keep the recording short and loop-friendly if possible (ie, start and end with the mouse cursor off the screen)
+3. Convert the recording to a .gif file
+
+   - To guarantee the gif comes out with a good balance between file size and quality, it's recommended to use the following ffmpeg command for conversion:
+
+   ```sh
+   ffmpeg -i path/to/original-recording.mp4 -vf "fps=10,scale=1024:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" output/demo.gif
+   ```
+
+   (special thanks to [llogan's very helpful answer](https://superuser.com/a/556031) which this command is based on)
+
+4. Add the .gif file to the README
+   - Put the .gif file in the `docs/assets/images` directory.
+   - Add `![alt text](./assets/images/your_file_name.gif)]` to the appropriate place in the README.
+   - If you feel comfortable, please wrap the gif with a link to your CodeSandbox!

@@ -20,17 +20,13 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
       'paused',
       'The video should initially be paused'
     );
-    // The video's time should initially be at 0s
-    cy.get(videoElementSelector)
-      .invoke('prop', 'currentTime')
-      .should('equal', 0);
 
-    cy.triggerEventOnPlayer('mouseenter');
-
-    // The video should now be set to the start of its playback range
+    // The video should be set to the start of its playback range
     cy.get(videoElementSelector)
       .invoke('prop', 'currentTime')
       .should('equal', 8.7);
+
+    cy.triggerEventOnPlayer('mouseenter');
 
     cy.checkVideoPlaybackState(
       'playing',
@@ -100,7 +96,7 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
       expect(videoElement.currentTime).to.equal(videoElement.duration);
     });
 
-    cy.checkVideoPlaybackState('ended');
+    cy.checkVideoPlaybackState('paused');
 
     cy.triggerEventOnPlayer('mouseleave');
 
@@ -120,7 +116,11 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
       expect(videoElement.currentTime).to.equal(videoElement.duration);
     });
 
-    cy.checkVideoPlaybackState('ended');
+    cy.checkVideoPlaybackState('paused');
+
+    // Mouse out of the container to pause
+    cy.triggerEventOnPlayer('mouseleave');
+    cy.checkVideoPlaybackState('paused');
   });
 
   it('behaves correctly when loop and restartOnPaused are both false', () => {
@@ -150,11 +150,11 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
       expect(videoElement.currentTime).to.equal(videoElement.duration);
     });
 
-    cy.checkVideoPlaybackState('ended');
+    cy.checkVideoPlaybackState('paused');
 
     cy.triggerEventOnPlayer('mouseleave');
 
-    cy.checkVideoPlaybackState('ended');
+    cy.checkVideoPlaybackState('paused');
 
     // The video should still be stuck at the end of its duration
     cy.get(videoElementSelector).should(($video: JQuery<HTMLVideoElement>) => {
@@ -164,7 +164,7 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
 
     cy.triggerEventOnPlayer('mouseenter');
     cy.checkVideoPlaybackState(
-      'ended',
+      'paused',
       'The video should stay stuck at the end'
     );
 
@@ -173,6 +173,10 @@ describe('Playback works as expected when only playbackRangeStart is set', () =>
       const videoElement = $video[0];
       expect(videoElement.currentTime).to.equal(videoElement.duration);
     });
+
+    // Mouse out of the container to pause
+    cy.triggerEventOnPlayer('mouseleave');
+    cy.checkVideoPlaybackState('paused');
   });
 
   it('keeps the video inside the playback range', () => {
