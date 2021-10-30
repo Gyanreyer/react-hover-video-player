@@ -243,11 +243,9 @@ export default function useManageVideoPlayback(
 
     const videoElement = videoRef.current;
 
-    let animationFrameId = null;
-
-    // Update loop checks the video's time each frame while it's playing to make sure
-    // it stays clamped inside the playback range
-    const checkPlaybackRangeTime = () => {
+    // Checks the video's time to make sure it
+    // stays clamped inside the playback range
+    const keepVideoTimeWithinPlaybackRange = () => {
       // Use playbackRangeEnd as our maximum time to play to, or default to the video's full duration
       const playbackRangeMaxTime = playbackRangeEnd || videoElement.duration;
       // Use playbackRangeStart as our minimum time to play from, or default to the very beginning of the video (0sƒ)
@@ -278,21 +276,24 @@ export default function useManageVideoPlayback(
         // clamp it to the lower end of the playback range
         videoElement.currentTime = playbackRangeMinTime;
       }
-
-      // If the video is playing, keep the update loop going for the next frame
-      if (shouldPlayVideo) {
-        animationFrameId = requestAnimationFrame(checkPlaybackRangeTime);
-      }
     };
 
-    // Run our update loop at least once; if the video is playing,
-    // it will continue running every frame until the video is paused again
-    animationFrameId = requestAnimationFrame(checkPlaybackRangeTime);
+    // Run one initial check to make sure the video is initially clamped within its playback range
+    keepVideoTimeWithinPlaybackRange();
 
-    return () => {
-      // Cancel the animation frame loop on cleanup
-      cancelAnimationFrame(animationFrameId);
-    };
+    // Add a timeupdate event listener to keep the video within its playback range
+    // as its time changes
+    videoElement.addEventListener(
+      'timeupdate',
+      keepVideoTimeWithinPlaybackRange
+    );
+
+    // Remove the event listener on cleanup
+    return () =>
+      videoElement.removeEventListener(
+        'timeupdate',
+        keepVideoTimeWithinPlaybackRange
+      );
   }, [
     attemptToPauseVideo,
     attemptToPlayVideo,
