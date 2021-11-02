@@ -33,16 +33,16 @@ However, if you prefer to manually write the commit message yourself, it should 
 
 This library uses [semantic-release](https://github.com/semantic-release/semantic-release) to determine how the package version should be incremented based on your commit message's `type`.
 
-| Type     | Description                                                                                            | Package Version Increment                                                                               |
-| -------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| feat     | A new feature                                                                                          | Minor version (+0.1.0)                                                                                  |
-| fix      | A bug fix                                                                                              | Patch version (+0.0.1)                                                                                  |
-| refactor | A code change that neither fixes a bug nor adds a feature                                              | Minor version (+0.1.0)                                                                                  |
-| perf     | A code change that improves performance                                                                | Minor version (+0.1.0)                                                                                  |
-| docs     | Documentation only changes                                                                             | No change unless the commit scope is `"readme"`, in which case it will publish a patch version (+0.0.1) |
-| style    | Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) | No change                                                                                               |
-| test     | Adding missing or correcting existing tests                                                            | No change                                                                                               |
-| chore    | Changes to the build process or auxiliary tools and libraries such as documentation generation         | No change                                                                                               |
+| Type     | Description                                                                                            | Package Version Increment                                                                             |
+| -------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| feat     | A new feature                                                                                          | Minor version (+0.1.0)                                                                                |
+| fix      | A bug fix                                                                                              | Patch version (+0.0.1)                                                                                |
+| refactor | A code change that neither fixes a bug nor adds a feature                                              | Minor version (+0.1.0)                                                                                |
+| perf     | A code change that improves performance                                                                | Minor version (+0.1.0)                                                                                |
+| docs     | Documentation only changes                                                                             | No change unless the commit scope is `readme`, in which case it will publish a patch version (+0.0.1) |
+| style    | Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) | No change                                                                                             |
+| test     | Adding missing or correcting existing tests                                                            | No change                                                                                             |
+| chore    | Changes to the build process or auxiliary tools and libraries such as documentation generation         | No change                                                                                             |
 
 ### Breaking changes
 
@@ -51,17 +51,18 @@ This will result in the package being incremented by a major version (+1.0.0).
 
 ## I want to update documentation
 
-All documentation can be found in the `src` directory.
+All documentation can be found in the `docs` directory.
 
-The documentation site at <https://react-hover-video-player.dev> uses the [VuePress](https://vuepress.vuejs.org/) library to automatically construct a site with pages based on the `README.md` and `CONTRIBUTING.md` files' contents.
+The documentation site at <https://react-hover-video-player.dev> uses [VuePress](https://vuepress.vuejs.org/) to automatically construct a site with pages based on the `README.md` and `CONTRIBUTING.md` files' contents.
 
 To preview the documentation site locally, run `npm run docs:dev` to serve it at <http://localhost:8080>.
 
 When committing changes to the README, make sure you use the appropriate commit type and scope. Semantic-release normally skips commits of type `docs`, but this can result
-in the npm package page's README not getting updated to reflect any changes that have been made to it.
+in the npm package page's README not getting updated to reflect changes that have been made to it.
 
-If the main purpose of your commit is to update the README, please use `"docs"` as your commit's type and `"readme"` as the scope; this indicates to semantic-release that the change
+If the main purpose of your commit is to update the README, please use `docs` as your commit's type and `readme` as the scope; this indicates to semantic-release that the change
 should be published to the npm package as a patched version.
+An example commit message might look like `docs(readme): fix typo in readme`.
 
 ## I want to fix a bug or add a feature
 
