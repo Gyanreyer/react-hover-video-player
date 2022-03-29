@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useRef } from 'react';
 import { VideoSource, VideoSrcProp } from '../HoverVideoPlayer.types';
 
 /**
@@ -24,64 +24,90 @@ export default function useFormatVideoSrc(
   playbackRangeStart?: number,
   playbackRangeEnd?: number
 ): VideoSource[] {
-  return useMemo(() => {
-    const formattedVideoSources = [];
+  const previousVideoSrc = useRef(null);
+  const previousFormattedVideoSources = useRef<VideoSource[]>(null);
 
-    if (videoSrc == null) {
-      // A videoSrc value is required in order to make the video player work
-      console.error(
-        "Error: 'videoSrc' prop is required for HoverVideoPlayer component"
-      );
-    } else {
-      // Make sure we can treat the videoSrc value as an array
-      const rawVideoSources = Array.isArray(videoSrc) ? videoSrc : [videoSrc];
+  // If videoSrc is shallowly equal with the previous videoSrc we can just return the previous formatted video sources
+  if (
+    previousVideoSrc.current !== null &&
+    videoSrc === previousVideoSrc.current
+  ) {
+    return previousFormattedVideoSources.current;
+  }
 
-      // Parse our video source values into an array of VideoSource objects that can be used to render sources for the video
-      for (
-        let i = 0, numSources = rawVideoSources.length;
-        i < numSources;
-        i += 1
-      ) {
-        const source = rawVideoSources[i];
+  // Store the previous videoSrc so we can compare it on the next render
+  previousVideoSrc.current = videoSrc;
 
-        const hasPlaybackRangeStart = playbackRangeStart !== null;
-        const hasPlaybackRangeEnd = playbackRangeEnd !== null;
+  const formattedVideoSources = [];
 
-        // Construct a media fragment identifier string to append to the video's URL to ensure
-        // we only load the portion of the video that we need for the provided playback range
-        // (see here for more details: https://developer.mozilla.org/en-US/docs/Web/Guide/Audio_and_video_delivery#specifying_playback_range)
-        const playbackRangeMediaFragmentIdentifier =
-          hasPlaybackRangeStart || hasPlaybackRangeEnd
-            ? // If we have a playback range defined, construct a #t media fragment identifier string
-              // This identifier follows the format `#t=[starttime][,endtime]` and will tell the browser to only load the video file
-              // within this defined time range.
-              // This helps save us from loading some unneeded data when we only need whatever is within the playback range!
-              `#t=${hasPlaybackRangeStart ? playbackRangeStart : ''}${
-                hasPlaybackRangeEnd ? `,${playbackRangeEnd}` : ''
-              }`
-            : '';
+  if (videoSrc == null) {
+    // A videoSrc value is required in order to make the video player work
+    console.error(
+      "Error: 'videoSrc' prop is required for HoverVideoPlayer component"
+    );
+  } else {
+    // Make sure we can treat the videoSrc value as an array
+    const rawVideoSources = Array.isArray(videoSrc) ? videoSrc : [videoSrc];
 
-        if (typeof source === 'string') {
-          // If the source is a string, it's an src URL so format it into a VideoSource object and add it to the array
-          formattedVideoSources.push({
-            src: `${source}${playbackRangeMediaFragmentIdentifier}`,
-          });
-        } else if (source && source.src) {
-          // If the source is an object with an src, just add it to the array
-          formattedVideoSources.push({
-            src: `${source.src}${playbackRangeMediaFragmentIdentifier}`,
-            type: source.type,
-          });
-        } else {
-          // Log an error if one of the videoSrc values is invalid
-          console.error(
-            "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
-            source
-          );
-        }
+    // Parse our video source values into an array of VideoSource objects that can be used to render sources for the video
+    for (
+      let i = 0, numSources = rawVideoSources.length;
+      i < numSources;
+      i += 1
+    ) {
+      const source = rawVideoSources[i];
+
+      const hasPlaybackRangeStart = playbackRangeStart !== null;
+      const hasPlaybackRangeEnd = playbackRangeEnd !== null;
+
+      // Construct a media fragment identifier string to append to the video's URL to ensure
+      // we only load the portion of the video that we need for the provided playback range
+      // (see here for more details: https://developer.mozilla.org/en-US/docs/Web/Guide/Audio_and_video_delivery#specifying_playback_range)
+      const playbackRangeMediaFragmentIdentifier =
+        hasPlaybackRangeStart || hasPlaybackRangeEnd
+          ? // If we have a playback range defined, construct a #t media fragment identifier string
+            // This identifier follows the format `#t=[starttime][,endtime]` and will tell the browser to only load the video file
+            // within this defined time range.
+            // This helps save us from loading some unneeded data when we only need whatever is within the playback range!
+            `#t=${hasPlaybackRangeStart ? playbackRangeStart : ''}${
+              hasPlaybackRangeEnd ? `,${playbackRangeEnd}` : ''
+            }`
+          : '';
+
+      if (typeof source === 'string') {
+        // If the source is a string, it's an src URL so format it into a VideoSource object and add it to the array
+        formattedVideoSources.push({
+          src: `${source}${playbackRangeMediaFragmentIdentifier}`,
+        });
+      } else if (source && source.src) {
+        // If the source is an object with an src, just add it to the array
+        formattedVideoSources.push({
+          src: `${source.src}${playbackRangeMediaFragmentIdentifier}`,
+          type: source.type,
+        });
+      } else {
+        // Log an error if one of the videoSrc values is invalid
+        console.error(
+          "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
+          source
+        );
       }
     }
+  }
 
-    return formattedVideoSources;
-  }, [videoSrc, playbackRangeStart, playbackRangeEnd]);
+  // If our formatted video sources are deeply equal to the previous formatted sources
+  // based on a simple string comparison, return the previous formatted sources instead to maintain
+  // referential equality
+  if (
+    JSON.stringify(formattedVideoSources) ===
+    JSON.stringify(previousFormattedVideoSources.current)
+  ) {
+    return previousFormattedVideoSources.current;
+  }
+
+  // Store the final formatted video sources so we can return them on subsequent renders
+  // if the videoSrc hasn't changed
+  previousFormattedVideoSources.current = formattedVideoSources;
+
+  return formattedVideoSources;
 }

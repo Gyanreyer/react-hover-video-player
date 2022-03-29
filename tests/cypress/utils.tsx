@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import HoverVideoPlayer from 'react-hover-video-player';
-import { HoverVideoPlayerProps } from '../../src/HoverVideoPlayer.types';
+import {
+  HoverVideoPlayerProps,
+  VideoSrcProp,
+} from '../../src/HoverVideoPlayer.types';
 
 interface MockVideoSrcOptions {
   /**
@@ -111,6 +114,49 @@ export function HoverVideoPlayerWrappedWithFocusToggleButton({
         Toggle focus
       </button>
       <HoverVideoPlayer focused={isFocused} {...props} />
+    </>
+  );
+}
+
+export function HoverVideoPlayerWithToggleVideoSrcButton({
+  videoSrc1,
+  videoSrc2,
+  onVideoReloaded,
+}: {
+  videoSrc1: VideoSrcProp;
+  videoSrc2: VideoSrcProp;
+  onVideoReloaded: () => void;
+}): JSX.Element {
+  const [videoSrc, setVideoSrc] = useState(videoSrc1);
+
+  const videoRef = useRef<HTMLVideoElement>();
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    // `emptied` event is fired when a video is re-loaded by calling `video.load()`
+    videoElement.addEventListener('emptied', onVideoReloaded);
+
+    return () => videoElement.removeEventListener('emptied', onVideoReloaded);
+  }, [onVideoReloaded]);
+
+  return (
+    <>
+      <button
+        onClick={() =>
+          setVideoSrc((currentVideoSrc) =>
+            currentVideoSrc === videoSrc1 ? videoSrc2 : videoSrc1
+          )
+        }
+        data-testid="toggle-video-src-button"
+      >
+        Toggle videoSrc
+      </button>
+      <HoverVideoPlayer
+        videoSrc={videoSrc}
+        videoRef={videoRef}
+        preload="none"
+      />
     </>
   );
 }

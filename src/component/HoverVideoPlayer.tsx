@@ -1,9 +1,8 @@
-import React, { useRef, useImperativeHandle } from 'react';
+import React, { useRef, useImperativeHandle, useEffect } from 'react';
 
 import useSetAdditionalAttributesOnVideo from '../hooks/useSetAdditionalAttributesOnVideo';
 import useIsHoveringOverVideo from '../hooks/useIsHoveringOverVideo';
 import useManageVideoPlayback from '../hooks/useManageVideoPlayback';
-import useUnloadVideo from '../hooks/useUnloadVideo';
 import useFormatVideoSrc from '../hooks/useFormatVideoSrc';
 import useFormatVideoCaptions from '../hooks/useFormatVideoCaptions';
 
@@ -14,7 +13,7 @@ import {
   videoSizingStyles,
 } from './HoverVideoPlayer.styles';
 import { OverlayState } from '../constants/OverlayState';
-import { HoverVideoPlayerProps } from '../HoverVideoPlayer.types';
+import { HoverVideoPlayerProps, VideoSource } from '../HoverVideoPlayer.types';
 
 /**
  * @component HoverVideoPlayer
@@ -118,16 +117,37 @@ const HoverVideoPlayer = ({
   // We will remove the video's <source> tags in this render and then call video.load() in an effect to
   // fully unload the video
   const shouldUnloadVideo = unloadVideoOnPaused && !isVideoActive;
-  useUnloadVideo(videoRef, shouldUnloadVideo);
 
   // Parse the sources and captions into formatted arrays that we can use to
   // render <source> and <track> elements for the video
+  const formattedVideoCaptions = useFormatVideoCaptions(videoCaptions);
+
   const formattedVideoSources = useFormatVideoSrc(
     videoSrc,
     playbackRangeStart,
     playbackRangeEnd
   );
-  const formattedVideoCaptions = useFormatVideoCaptions(videoCaptions);
+  // Keep a ref to the previous formatted video sources so we can track when the video sources change
+  const previousFormattedVideoSourcesRef = useRef<VideoSource[]>(
+    formattedVideoSources
+  );
+
+  // Effect re-loads the video if its sources should be unloaded when paused or if the videoSrc changed
+  useEffect(() => {
+    // Only reload when the video is paused
+    if (isVideoActive) return;
+
+    if (
+      unloadVideoOnPaused ||
+      previousFormattedVideoSourcesRef.current !== formattedVideoSources
+    ) {
+      // Perform a manual load to unload the video's current source
+      const videoElement = videoRef.current;
+      videoElement.load();
+
+      previousFormattedVideoSourcesRef.current = formattedVideoSources;
+    }
+  }, [isVideoActive, unloadVideoOnPaused, formattedVideoSources]);
 
   const hasPlaybackRange =
     playbackRangeStart !== null || playbackRangeEnd !== null;
