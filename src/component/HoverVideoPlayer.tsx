@@ -60,6 +60,7 @@ const HoverVideoPlayer = ({
   videoRef: forwardedVideoRef = null,
   videoStyle = null,
   sizingMode = 'video',
+  shouldSuppressPlaybackInterruptedErrors = true,
 }: HoverVideoPlayerProps): JSX.Element => {
   // Element refs
   const containerRef = useRef(null);
@@ -110,7 +111,8 @@ const HoverVideoPlayer = ({
     shouldWaitForOverlayTransitionBeforePausing,
     hasLoadingOverlay,
     overlayTransitionDuration,
-    loadingStateTimeout
+    loadingStateTimeout,
+    shouldSuppressPlaybackInterruptedErrors
   );
 
   // If the video's sources should be unloaded when it's paused and the video is not currently active, we can unload the video's sources.

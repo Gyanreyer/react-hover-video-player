@@ -282,4 +282,14 @@ export interface HoverVideoPlayerProps {
    * @defaultValue "video"
    */
   sizingMode?: 'video' | 'overlay' | 'container' | 'manual';
+  /**
+   * Whether "the play() request was interrupted" errors should be suppressed.
+   * It's almost never that big of a deal when these errors are thrown, and in some cases it's
+   * unavoidable, ie if a HoverVideoPlayer element is unmounted while a play() promise is in progress.
+   * This prop allows you to suppress those errors so they don't clutter your console with
+   * unhelpful error messages unless you want to see them.
+   *
+   * @defaultValue true
+   */
+  shouldSuppressPlaybackInterruptedErrors?: boolean;
 }

@@ -41,7 +41,8 @@ export default function useManageVideoPlayback(
   shouldWaitForOverlayTransitionBeforePausing: boolean,
   hasLoadingOverlay: boolean,
   overlayTransitionDuration: number,
-  loadingStateTimeout: number
+  loadingStateTimeout: number,
+  shouldSuppressPlaybackInterruptedErrors: boolean
 ): [OverlayState, boolean] {
   // Keep track of how the paused and loading overlays should be displayed
   const [overlayState, setOverlayState] = useState<OverlayState>(
@@ -104,11 +105,18 @@ export default function useManageVideoPlayback(
     const videoElement = videoRef.current;
 
     videoElement.play().catch((error: DOMException) => {
+      // If shouldSuppressPlaybackInterruptedErrors is true and this is an AbortError, do nothing instead of logging it.
+      if (
+        shouldSuppressPlaybackInterruptedErrors &&
+        error.name === 'AbortError'
+      ) {
+        return;
+      }
+
       // Additional handling for when browsers block playback for unmuted videos.
       // This is unfortunately necessary because most modern browsers do not allow playing videos with audio
       //  until the user has "interacted" with the page by clicking somewhere at least once; mouseenter events
       //  don't count.
-
       // If the video isn't muted and playback failed with a `NotAllowedError`, this means the browser blocked
       // playing the video because the user hasn't clicked anywhere on the page yet.
       if (!videoElement.muted && error.name === 'NotAllowedError') {
@@ -133,7 +141,7 @@ export default function useManageVideoPlayback(
         console.error(`HoverVideoPlayer: ${error.message}`);
       }
     });
-  }, [videoRef]);
+  }, [videoRef, shouldSuppressPlaybackInterruptedErrors]);
 
   // Method attempts to pause the video, if it is safe to do so without interrupting a pending play promise
   const attemptToPauseVideo = useCallback(() => {
