@@ -10,7 +10,7 @@
   "scripts": {
     "build": "rollup -c rollup/prod.config.ts",
     "dev": "rollup -c rollup/dev.config.ts -w",
-    "test": "nyc --check-coverage --reporter=lcov --reporter=text cypress run-ct --config-file=tests/cypress/cypress.json --browser=chrome",
+    "test": "nyc --check-coverage --reporter=text --reporter=lcov cypress run-ct --config-file=tests/cypress/cypress.json --browser=chrome --headless",
     "test:smoke": "npm run build && BABEL_ENV=production npm test",
     "test-runner": "cypress open-ct --config-file=tests/cypress/cypress.json",
     "docs:dev": "vuepress dev docs",

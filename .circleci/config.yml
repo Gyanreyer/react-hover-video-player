@@ -3,11 +3,11 @@ version: 2.1
 orbs:
   cypress: cypress-io/cypress@1.29.0
   node: circleci/node@4.7.0
+  codecov: codecov/codecov@3.2.2
 executors:
   chrome-91:
     docker:
       - image: cypress/browsers:node14.17.0-chrome91-ff89
-
 jobs:
   test:
     # Run Cypress tests on Chrome 91
@@ -16,11 +16,9 @@ jobs:
       - checkout
       - run: npm ci
       - run:
-          name: Install codecov
-          command: npm install -g codecov
-      - run:
           name: Running end-to-end tests
-          command: npm run test:smoke && codecov
+          command: npm run test:smoke
+      - codecov/upload
   validate:
     executor: node/default
     steps:

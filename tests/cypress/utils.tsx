@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import HoverVideoPlayer from 'react-hover-video-player';
@@ -121,24 +121,11 @@ export function HoverVideoPlayerWrappedWithFocusToggleButton({
 export function HoverVideoPlayerWithToggleVideoSrcButton({
   videoSrc1,
   videoSrc2,
-  onVideoReloaded,
 }: {
   videoSrc1: VideoSrcProp;
   videoSrc2: VideoSrcProp;
-  onVideoReloaded: () => void;
 }): JSX.Element {
   const [videoSrc, setVideoSrc] = useState(videoSrc1);
-
-  const videoRef = useRef<HTMLVideoElement>();
-
-  useEffect(() => {
-    const videoElement = videoRef.current;
-
-    // `emptied` event is fired when a video is re-loaded by calling `video.load()`
-    videoElement.addEventListener('emptied', onVideoReloaded);
-
-    return () => videoElement.removeEventListener('emptied', onVideoReloaded);
-  }, [onVideoReloaded]);
 
   return (
     <>
@@ -152,11 +139,7 @@ export function HoverVideoPlayerWithToggleVideoSrcButton({
       >
         Toggle videoSrc
       </button>
-      <HoverVideoPlayer
-        videoSrc={videoSrc}
-        videoRef={videoRef}
-        preload="none"
-      />
+      <HoverVideoPlayer videoSrc={videoSrc} />
     </>
   );
 }
