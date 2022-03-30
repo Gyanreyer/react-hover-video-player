@@ -5,11 +5,32 @@ import HoverVideoPlayer from 'react-hover-video-player';
 import { makeMockVideoSrc } from '../utils';
 
 describe('handles playback errors', () => {
-  it('logs a warning if a play promise gets interrupted by the component being unmounted', () => {
+  it('If shouldSuppressPlaybackInterruptedErrors is true, does not log anything', () => {
     cy.spy(console, 'error').as('consoleError');
 
     mount(
-      <HoverVideoPlayer videoSrc={makeMockVideoSrc({ throttleKbps: 1000 })} />
+      <HoverVideoPlayer
+        videoSrc={makeMockVideoSrc({ throttleKbps: 1000 })}
+        // shouldSuppressPlaybackInterruptedErrors is true by default
+      />
+    );
+
+    cy.triggerEventOnPlayer('mouseenter');
+    cy.checkVideoPlaybackState('loading');
+
+    unmount();
+
+    cy.get('@consoleError').should('not.have.been.called');
+  });
+
+  it('If shouldSuppressPlaybackInterruptedErrors is false, logs a warning if a play promise gets interrupted by the component being unmounted', () => {
+    cy.spy(console, 'error').as('consoleError');
+
+    mount(
+      <HoverVideoPlayer
+        videoSrc={makeMockVideoSrc({ throttleKbps: 1000 })}
+        shouldSuppressPlaybackInterruptedErrors={false}
+      />
     );
 
     cy.triggerEventOnPlayer('mouseenter');

@@ -2,7 +2,10 @@ import React from 'react';
 import { mount } from '@cypress/react';
 import HoverVideoPlayer from 'react-hover-video-player';
 
-import { makeMockVideoSrc } from '../utils';
+import {
+  makeMockVideoSrc,
+  HoverVideoPlayerWithToggleVideoSrcButton,
+} from '../utils';
 import { videoElementSelector } from '../constants';
 
 describe('Video sources are formatted and rendered correctly from the videoSrc prop', () => {
@@ -142,5 +145,164 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
       "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
       { bad: 'value' }
     );
+  });
+
+  it('reloads correctly if a single string videoSrc changes', () => {
+    const videoSrc1 = makeMockVideoSrc();
+    const videoSrc2 = makeMockVideoSrc();
+    const onVideoReloaded = cy.stub().as('onVideoReloaded');
+
+    mount(
+      <HoverVideoPlayerWithToggleVideoSrcButton
+        videoSrc1={videoSrc1}
+        videoSrc2={videoSrc2}
+        onVideoReloaded={onVideoReloaded}
+      />
+    );
+
+    cy.get(videoElementSelector)
+      .children()
+      .should('have.length', 1)
+      .first()
+      .should('have.attr', 'src', videoSrc1);
+
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc1}`);
+
+    cy.get('@onVideoReloaded').should('not.have.been.called');
+
+    cy.get('[data-testid="toggle-video-src-button"]').click();
+
+    cy.get('@onVideoReloaded').should('have.been.calledOnce');
+
+    cy.get(videoElementSelector)
+      .children()
+      .should('have.length', 1)
+      .first()
+      .should('have.attr', 'src', videoSrc2);
+
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc2}`);
+
+    // Mouse over the container to start loading/playing
+    cy.triggerEventOnPlayer('mouseenter');
+    cy.checkVideoPlaybackState('playing');
+
+    cy.get('[data-testid="toggle-video-src-button"]').click();
+
+    // We shouldn't have reloaded yet because the video is still playing
+    cy.get('@onVideoReloaded').should('have.been.calledOnce');
+
+    // The <source> tag should have updated but the video element hasn't reloaded yet because it's still playing
+    cy.get(videoElementSelector)
+      .children()
+      .should('have.length', 1)
+      .first()
+      .should('have.attr', 'src', videoSrc1);
+
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc2}`);
+
+    // Mouse out to allow the video to pause and reload with the new source
+    cy.triggerEventOnPlayer('mouseleave');
+
+    cy.get('@onVideoReloaded').should('have.been.calledTwice');
+
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc1}`);
+  });
+
+  it('reloads correctly if a videoSrc array changes', () => {
+    const videoSrc1 = makeMockVideoSrc();
+    const videoSrc2 = makeMockVideoSrc();
+    const onVideoReloaded = cy.stub().as('onVideoReloaded');
+
+    const videoSrcArray1 = [
+      {
+        src: videoSrc1,
+        type: 'video/mp4',
+      },
+    ];
+
+    const videoSrcArray2 = [
+      {
+        src: videoSrc2,
+        type: 'video/mp4',
+      },
+      {
+        src: videoSrc1,
+        type: 'video/mp4',
+      },
+    ];
+
+    mount(
+      <HoverVideoPlayerWithToggleVideoSrcButton
+        videoSrc1={videoSrcArray1}
+        videoSrc2={videoSrcArray2}
+        onVideoReloaded={onVideoReloaded}
+      />
+    );
+
+    cy.get(videoElementSelector)
+      .children()
+      .should('have.length', 1)
+      .first()
+      .should('have.attr', 'src', videoSrc1)
+      .should('have.attr', 'type', 'video/mp4');
+
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc1}`);
+
+    cy.get('@onVideoReloaded').should('not.have.been.called');
+
+    cy.get('[data-testid="toggle-video-src-button"]').click();
+
+    // video.load() should have been called after changing the source
+    cy.get('@onVideoReloaded').should('have.been.calledOnce');
+
+    cy.get(videoElementSelector)
+      .children()
+      .should('have.length', 2)
+      .first()
+      .should('have.attr', 'src', videoSrc2)
+      .should('have.attr', 'type', 'video/mp4')
+      .next()
+      .should('have.attr', 'src', videoSrc1)
+      .should('have.attr', 'type', 'video/mp4');
+
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc2}`);
+  });
+
+  it('does not reload if the videoSrc changes but is deeply equal to the previous src', () => {
+    const videoSrc = makeMockVideoSrc();
+    const onVideoReloaded = cy.stub().as('onVideoReloaded');
+
+    mount(
+      <HoverVideoPlayerWithToggleVideoSrcButton
+        // videoSrc1 and videoSrc2 are deeply equal but not referentially equal
+        videoSrc1={{ src: videoSrc, type: 'video/mp4' }}
+        videoSrc2={[{ type: 'video/mp4', src: `${videoSrc}` }]}
+        onVideoReloaded={onVideoReloaded}
+      />
+    );
+
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc}`);
+
+    cy.get('[data-testid="toggle-video-src-button"]').click();
+
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc}`);
+
+    cy.get('@onVideoReloaded').should('not.have.been.called');
   });
 });

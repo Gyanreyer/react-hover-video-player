@@ -724,3 +724,21 @@ Be aware that this feature [is not currently supported across all major browsers
   disablePictureInPicture={false}
 />
 ```
+
+## Developer Experience
+
+### shouldSuppressPlaybackInterruptedErrors
+
+**Type**: `boolean` | **Default**: `true`
+
+`shouldSuppressPlaybackInterruptedErrors` toggles whether "play() request was interrupted" video errors should be suppressed rather than being logged.
+A majority of the time, when one of these errors is thrown from the HoverVideoPlayer component, it is both unavoidable and nothing to worry about, so the error just ends up cluttering your console logs.
+If for whatever reason you want to see these errors in your console, you can simply set `shouldSuppressPlaybackInterruptedErrors` to `false` in order to opt into them.
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // Log "play() request was interrupted" errors
+  shouldSuppressPlaybackInterruptedErrors={false}
+/>
+```
