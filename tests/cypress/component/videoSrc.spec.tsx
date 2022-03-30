@@ -150,15 +150,20 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
   it('reloads correctly if a single string videoSrc changes', () => {
     const videoSrc1 = makeMockVideoSrc();
     const videoSrc2 = makeMockVideoSrc();
-    const onVideoReloaded = cy.stub().as('onVideoReloaded');
 
     mount(
       <HoverVideoPlayerWithToggleVideoSrcButton
         videoSrc1={videoSrc1}
         videoSrc2={videoSrc2}
-        onVideoReloaded={onVideoReloaded}
       />
     );
+
+    cy.get(videoElementSelector).then(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
+
+      const onVideoReloaded = cy.stub().as('onVideoReloaded');
+      videoElement.addEventListener('emptied', onVideoReloaded);
+    });
 
     cy.get(videoElementSelector)
       .children()
@@ -192,7 +197,7 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
 
     cy.get('[data-testid="toggle-video-src-button"]').click();
 
-    // We shouldn't have reloaded yet because the video is still playing
+    // We shouldn't have reloaded a second time because the video is still playing
     cy.get('@onVideoReloaded').should('have.been.calledOnce');
 
     // The <source> tag should have updated but the video element hasn't reloaded yet because it's still playing
@@ -219,7 +224,6 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
   it('reloads correctly if a videoSrc array changes', () => {
     const videoSrc1 = makeMockVideoSrc();
     const videoSrc2 = makeMockVideoSrc();
-    const onVideoReloaded = cy.stub().as('onVideoReloaded');
 
     const videoSrcArray1 = [
       {
@@ -243,9 +247,15 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
       <HoverVideoPlayerWithToggleVideoSrcButton
         videoSrc1={videoSrcArray1}
         videoSrc2={videoSrcArray2}
-        onVideoReloaded={onVideoReloaded}
       />
     );
+
+    cy.get(videoElementSelector).then(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
+
+      const onVideoReloaded = cy.stub().as('onVideoReloaded');
+      videoElement.addEventListener('emptied', onVideoReloaded);
+    });
 
     cy.get(videoElementSelector)
       .children()
@@ -282,16 +292,21 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
 
   it('does not reload if the videoSrc changes but is deeply equal to the previous src', () => {
     const videoSrc = makeMockVideoSrc();
-    const onVideoReloaded = cy.stub().as('onVideoReloaded');
 
     mount(
       <HoverVideoPlayerWithToggleVideoSrcButton
         // videoSrc1 and videoSrc2 are deeply equal but not referentially equal
         videoSrc1={{ src: videoSrc, type: 'video/mp4' }}
         videoSrc2={[{ type: 'video/mp4', src: `${videoSrc}` }]}
-        onVideoReloaded={onVideoReloaded}
       />
     );
+
+    cy.get(videoElementSelector).then(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
+
+      const onVideoReloaded = cy.stub().as('onVideoReloaded');
+      videoElement.addEventListener('emptied', onVideoReloaded);
+    });
 
     cy.get(videoElementSelector)
       .invoke('prop', 'currentSrc')
