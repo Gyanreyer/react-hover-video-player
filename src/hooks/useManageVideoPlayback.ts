@@ -5,7 +5,6 @@ import { OverlayState } from '../constants/OverlayState';
 interface MutableVideoState {
   isPlayAttemptInProgress: boolean;
   pauseTimeout: number;
-  loadingStateTimeout: number;
   videoTimeToRestore: number;
   previousIsVideoActive: boolean;
   previousShouldPlayVideo: boolean;
@@ -27,7 +26,6 @@ interface MutableVideoState {
  * @param {bool} hasLoadingOverlay - Whether the player has an overlay to display when loading
  * @param {number} overlayTransitionDuration - How long it should take for overlays to fade in/out; this influences how long we should wait
  *                                              after the user stops hovering before fully pausing the video since the paused overlay needs time to fade in.
- * @param {number} loadingStateTimeout - How long to wait after starting a play attempt to fade in the loading overlay
  *
  * @returns {[OverlayState, bool]} An array with the current overlay state in the first position and whether the video player is active in the second positions
  */
@@ -41,7 +39,6 @@ export default function useManageVideoPlayback(
   shouldWaitForOverlayTransitionBeforePausing: boolean,
   hasLoadingOverlay: boolean,
   overlayTransitionDuration: number,
-  loadingStateTimeout: number,
   shouldSuppressPlaybackInterruptedErrors: boolean
 ): [OverlayState, boolean] {
   // Keep track of how the paused and loading overlays should be displayed
@@ -74,7 +71,6 @@ export default function useManageVideoPlayback(
       isPlayAttemptInProgress: false,
       // Keep refs for timeouts so we can keep track of and cancel them
       pauseTimeout: null,
-      loadingStateTimeout: null,
       // Keep track of the video time that we should start from when the video is played again
       // This is particularly useful so we can restore our previous place in the video even if
       // we are unloading it every time it gets paused
@@ -89,7 +85,6 @@ export default function useManageVideoPlayback(
   // Cancel any pending timeouts to pause or show a loading state
   const clearVideoStateTimeouts = useCallback(() => {
     clearTimeout(mutableVideoState.current.pauseTimeout);
-    clearTimeout(mutableVideoState.current.loadingStateTimeout);
   }, []);
 
   useEffect(
@@ -333,24 +328,10 @@ export default function useManageVideoPlayback(
       // readyState 3 is HAVE_FUTURE_DATA, meaning the video has loaded enough data that it can play
       const isVideoLoadedEnoughToPlay = videoElement.readyState >= 3;
 
-      // If the video is stopped or still loading and we have a loading overlay,
-      // set a timeout to display the overlay if the video doesn't finish loading
-      // after a certain amount of time
-      if ((isVideoStopped || !isVideoLoadedEnoughToPlay) && hasLoadingOverlay) {
-        // If we have a loading overlay, set a timeout to start showing it if the video doesn't start playing
-        // before the loading state timeout has elapsed
-        mutableVideoState.current.loadingStateTimeout = window.setTimeout(
-          () => {
-            // If this timeout wasn't cancelled, we're still trying to play the video
-            // and it's still loading, so fade in the loading overlay
-            setOverlayState(OverlayState.loading);
-          },
-          loadingStateTimeout
-        );
-      }
-
       // If the video is fully stopped, we need to attempt to start it by calling play()
       if (isVideoStopped) {
+        setOverlayState(OverlayState.loading);
+
         // Ensure we're at the correct time to start playing from
         videoElement.currentTime = mutableVideoState.current.videoTimeToRestore;
 
@@ -389,7 +370,6 @@ export default function useManageVideoPlayback(
     clearVideoStateTimeouts,
     hasLoadingOverlay,
     shouldWaitForOverlayTransitionBeforePausing,
-    loadingStateTimeout,
     overlayTransitionDuration,
     shouldPlayVideo,
     videoRef,

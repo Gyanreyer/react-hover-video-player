@@ -111,7 +111,6 @@ const HoverVideoPlayer = ({
     shouldWaitForOverlayTransitionBeforePausing,
     hasLoadingOverlay,
     overlayTransitionDuration,
-    loadingStateTimeout,
     shouldSuppressPlaybackInterruptedErrors
   );
 
@@ -194,7 +193,9 @@ const HoverVideoPlayer = ({
             ...expandToFillContainerStyle,
             zIndex: 2,
             opacity: isLoadingOverlayVisibile ? 1 : 0,
-            transition: `opacity ${overlayTransitionDuration}ms`,
+            transition: `opacity ${overlayTransitionDuration}ms ${
+              isLoadingOverlayVisibile ? loadingStateTimeout : 0
+            }ms`,
             // Disable pointer events on the loading overlay when it's hidden
             pointerEvents: isLoadingOverlayVisibile ? 'auto' : 'none',
             ...loadingOverlayWrapperStyle,
