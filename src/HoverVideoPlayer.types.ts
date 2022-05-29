@@ -122,6 +122,15 @@ export interface HoverVideoPlayerProps {
    */
   overlayTransitionDuration?: number;
   /**
+   * The duration in ms for how long of a delay there should be between when the
+   * user starts hovering over the player and when the video will actually attempt
+   * to start playing.
+   * This prop may help with performance if you are concerned about your server getting
+   * hit with too many requests as the user moves their mouse over a large number of videos.
+   * @defaultValue 0
+   */
+  playbackStartDelay?: number;
+  /**
    * Whether the video should reset to the beginning every time it is paused.
    * @defaultValue false
    */

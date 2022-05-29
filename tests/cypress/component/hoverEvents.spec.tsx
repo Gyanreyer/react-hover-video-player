@@ -22,6 +22,7 @@ describe('Handles mouse and touch events correctly', () => {
         videoSrc={videoSrc}
         pausedOverlay={<PausedOverlay />}
         loadingOverlay={<LoadingOverlay />}
+        loadingStateTimeout={50}
       />
     );
 
@@ -37,16 +38,18 @@ describe('Handles mouse and touch events correctly', () => {
     cy.triggerEventOnPlayer('mouseenter');
     cy.checkVideoPlaybackState('loading');
 
-    // The component's loadingStateTimeout duration should be the default 200ms,
-    // so the loading overlay should still be hidden when we tick forward 199ms.
-    cy.tick(199);
+    cy.log(
+      'The loading overlay should still be hidden until the loadingStateTimeout has elapsed'
+    );
     cy.checkOverlayVisibilty({
       paused: true,
       loading: false,
     });
 
-    // Ticking forward 1ms should reveal the loading overlay
-    cy.tick(1);
+    cy.log('The loading overlay should fade in');
+
+    cy.wait(50);
+
     cy.checkOverlayVisibilty({
       paused: true,
       loading: true,
@@ -99,6 +102,7 @@ describe('Handles mouse and touch events correctly', () => {
         videoSrc={videoSrc}
         pausedOverlay={<PausedOverlay />}
         loadingOverlay={<LoadingOverlay />}
+        loadingStateTimeout={50}
       />
     );
 
@@ -114,22 +118,24 @@ describe('Handles mouse and touch events correctly', () => {
     cy.triggerEventOnPlayer('touchstart');
     cy.checkVideoPlaybackState('loading');
 
-    // The component's loadingStateTimeout duration should be the default 200ms,
-    // so the loading overlay should still be hidden when we tick forward 199ms.
-    cy.tick(199);
+    cy.log(
+      'The loading overlay should still be hidden until the loadingStateTimeout has elapsed'
+    );
     cy.checkOverlayVisibilty({
       paused: true,
       loading: false,
     });
 
-    // Ticking forward 1ms should reveal the loading overlay
-    cy.tick(1);
+    cy.log('The loading overlay should fade in');
+    cy.wait(50);
+
     cy.checkOverlayVisibilty({
       paused: true,
       loading: true,
     });
 
-    // The video should successfully finish loading and start playing
+    cy.log('The video should successfully finish loading and start playing');
+
     cy.checkVideoPlaybackState('playing');
     // Both overlays should be hidden
     cy.checkOverlayVisibilty({

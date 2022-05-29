@@ -73,9 +73,9 @@ describe('The video player transitions between states as expected', () => {
     );
   });
 
-  it('an attempt to play the video when it is already loading will be handled correctly', () => {
+  it.only('pausing the video will correctly interrupt an active attempt to play the video', () => {
     const videoSrc = makeMockVideoSrc({
-      throttleKbps: 1000,
+      throttleKbps: 200,
     });
 
     mount(
@@ -83,100 +83,34 @@ describe('The video player transitions between states as expected', () => {
         videoSrc={videoSrc}
         pausedOverlay={<PausedOverlay />}
         loadingOverlay={<LoadingOverlay />}
+        overlayTransitionDuration={5}
+        loadingStateTimeout={10}
       />
     );
 
+    cy.log('Mouse over the video and wait for it to start playing');
+    cy.triggerEventOnPlayer('mouseenter');
+
+    cy.checkVideoPlaybackState('loading');
+    cy.checkOverlayVisibilty({
+      paused: true,
+      loading: true,
+    });
+
+    cy.log('Mouse out to interrupt the playback attempt');
+    cy.triggerEventOnPlayer('mouseleave');
+    cy.checkOverlayVisibilty({
+      paused: true,
+      loading: false,
+    });
+
+    cy.log('The video should be paused instead of loading now');
     cy.checkVideoPlaybackState('paused');
 
-    // The paused overlay should be visible but the loading overlay should not
-    cy.checkOverlayVisibilty({
-      paused: true,
-      loading: false,
-    });
-
-    // Mouse over the video to get it to start loading
-    cy.triggerEventOnPlayer('mouseenter');
-
-    cy.checkVideoPlaybackState('loading');
-    cy.tick(200);
-    cy.checkOverlayVisibilty({
-      paused: true,
-      loading: true,
-    });
-
-    cy.triggerEventOnPlayer('mouseleave');
-    cy.checkOverlayVisibilty({
-      paused: true,
-      loading: false,
-    });
-
-    // We should not run a pause timeout when the video is still in a loading state
-    cy.tick(500);
-    cy.checkVideoPlaybackState(
-      'loading',
-      'the video should still be loading even if it is no longer being hovered over'
-    );
-
-    cy.triggerEventOnPlayer('mouseenter');
-
-    // Wait 1ms so we can give the component a moment to re-render with its updated state
-    cy.wait(1);
-
-    cy.checkOverlayVisibilty({
-      paused: true,
-      loading: false,
-    });
-
-    // Tick forward enough for the loading state timeout to elapse
-    cy.tick(200);
-    cy.checkOverlayVisibilty({
-      paused: true,
-      loading: true,
-    });
-
-    cy.checkVideoPlaybackState('loading', 'the video should still be loading');
-    cy.checkVideoPlaybackState(
-      'playing',
-      'the video should finish loading and play'
-    );
-  });
-
-  it('pausing the video will correctly interrupt an active attempt to play the video', () => {
-    const videoSrc = makeMockVideoSrc({
-      throttleKbps: 1000,
-    });
-
-    mount(
-      <HoverVideoPlayer
-        videoSrc={videoSrc}
-        pausedOverlay={<PausedOverlay />}
-        loadingOverlay={<LoadingOverlay />}
-      />
-    );
-
-    // Mouse over the video and wait for it to start playing
-    cy.triggerEventOnPlayer('mouseenter');
-
-    cy.checkVideoPlaybackState('loading');
-    cy.tick(200);
-    cy.checkOverlayVisibilty({
-      paused: true,
-      loading: true,
-    });
-
-    cy.triggerEventOnPlayer('mouseleave');
-    cy.checkOverlayVisibilty({
-      paused: true,
-      loading: false,
-    });
-
-    cy.checkVideoPlaybackState('loading');
-    // Wait for the video to finish loading enough that the play attempt should resolve
+    cy.log('The video should not have loaded enough to play');
     cy.get(videoElementSelector)
       .invoke('prop', 'readyState')
-      .should('be.gte', HTMLMediaElement.HAVE_FUTURE_DATA);
-    // The video should have been transitioned into a paused state
-    cy.checkVideoPlaybackState('paused');
+      .should('be.lt', HTMLMediaElement.HAVE_FUTURE_DATA);
 
     cy.checkOverlayVisibilty({
       paused: true,
