@@ -36,14 +36,14 @@ describe('loadingOverlay', () => {
     cy.checkVideoPlaybackState('loading');
 
     // The component's loadingStateTimeout duration is 123ms, so the loading overlay
-    // should still be hidden when we tick forward 122ms.
-    cy.tick(122);
+    // should still be hidden for now
     cy.checkOverlayVisibilty({
       loading: false,
     });
 
-    // Ticking forward 1ms should reveal the loading overlay
-    cy.tick(1);
+    // The overlay should fade in after the 123ms delay has elapsed
+    cy.wait(123);
+
     cy.checkOverlayVisibilty({
       loading: true,
     });

@@ -162,42 +162,4 @@ describe('unloadVideoOnPaused prop', () => {
     cy.get('[data-testid="toggle-focus-button"]').click();
     cy.checkVideoPlaybackState('playing');
   });
-
-  it('does not unload the video until any pending play attempt is resolved', () => {
-    mount(
-      <HoverVideoPlayer
-        videoSrc={makeMockVideoSrc({
-          throttleKbps: 1000,
-        })}
-        unloadVideoOnPaused
-      />
-    );
-
-    cy.checkVideoPlaybackState('paused');
-
-    cy.get(videoElementSelector).should('not.have.descendants', 'source');
-    cy.get(videoElementSelector)
-      .invoke('prop', 'readyState')
-      .should('equal', HTMLMediaElement.HAVE_NOTHING);
-
-    // Mouse over the video to get it to start loading
-    cy.triggerEventOnPlayer('mouseenter');
-
-    cy.checkVideoPlaybackState('loading');
-    cy.get(videoElementSelector).should('have.descendants', 'source');
-
-    cy.triggerEventOnPlayer('mouseleave');
-
-    cy.log(
-      'the video should still be loading even if it is no longer being hovered over'
-    );
-    cy.checkVideoPlaybackState('loading');
-    cy.get(videoElementSelector).should('have.descendants', 'source');
-
-    cy.checkVideoPlaybackState('paused');
-    cy.get(videoElementSelector).should('not.have.descendants', 'source');
-    cy.get(videoElementSelector)
-      .invoke('prop', 'readyState')
-      .should('equal', HTMLMediaElement.HAVE_NOTHING);
-  });
 });

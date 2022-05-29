@@ -8,7 +8,7 @@ const getElementFromHoverTarget = (hoverTarget: HoverTarget) => {
     return hoverTarget();
   } else if (hoverTarget instanceof Node) {
     return hoverTarget;
-  } else if (hoverTarget && hoverTarget.current) {
+  } else if (hoverTarget && hoverTarget.hasOwnProperty('current')) {
     return hoverTarget.current;
   } else {
     console.error(

@@ -111,8 +111,8 @@ describe('hoverTarget prop', () => {
     mount(<HoverVideoPlayer videoSrc={videoSrc} hoverTarget={'hello'} />);
 
     cy.get('@consoleError').should(
-      'have.been.calledOnceWith',
-      'HoverVideoPlayer was unable to add event listeners to a hover target. Please check your usage of the `hoverTarget` prop.'
+      'have.been.calledWith',
+      'HoverVideoPlayer was unable to get a usable hover target element. Please check your usage of the `hoverTarget` prop.'
     );
   });
 });
