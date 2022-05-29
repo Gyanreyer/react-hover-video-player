@@ -660,6 +660,25 @@ Additionally, nothing will be displayed for the video element when it is unloade
 />
 ```
 
+### playbackStartDelay
+
+**Type**: `number` | **Default**: `0`
+
+Although `unloadVideoOnPaused` is usually the best solution for front-end performance issues, some may be concerned about back-end issues; especially if you are self-hosting the video files and you are displaying a lot of videos at once on a page, your server may get barraged by requests for video files as the user moves their mouse around the page even if they don't actually stop to watch any of the videos they hovered over.
+
+This can be solved by using the `playbackStartDelay` prop; this prop takes a number for the time in milliseconds that the component should wait to actually start loading the video after the user has started hovering over it. Using this prop, you can feel more confident that you are only loading video files that your users actually want to watch.
+
+Note that from a user experience perspective, it is highly recommended that you use a [loading overlay](#loadingoverlay) if you use this prop; otherwise the user may have to wait for the duration of the delay you set without getting any visual feedback that that their hover action is actually doing something.
+
+```jsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  // The player should wait 100ms after the user first starts hovering
+  // before actually attempting to load and play the video.
+  playbackStartDelay={100}
+/>
+```
+
 ## Video Controls
 
 ### controls
