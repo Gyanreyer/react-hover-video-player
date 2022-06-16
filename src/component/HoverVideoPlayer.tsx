@@ -25,7 +25,7 @@ import { HoverVideoPlayerProps, VideoSource } from '../HoverVideoPlayer.types';
  *
  * @param {HoverVideoPlayerProps} props
  */
-const HoverVideoPlayer = ({
+export default function HoverVideoPlayer({
   videoSrc,
   videoCaptions = null,
   focused = false,
@@ -66,7 +66,7 @@ const HoverVideoPlayer = ({
   videoStyle = null,
   sizingMode = 'video',
   shouldSuppressPlaybackInterruptedErrors = true,
-}: HoverVideoPlayerProps): JSX.Element => {
+}: HoverVideoPlayerProps): JSX.Element {
   // Element refs
   const containerRef = useRef(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -466,6 +466,4 @@ const HoverVideoPlayer = ({
       </video>
     </div>
   );
-};
-
-export default HoverVideoPlayer;
+}
