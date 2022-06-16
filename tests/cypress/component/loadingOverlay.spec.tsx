@@ -3,6 +3,7 @@ import { mount } from '@cypress/react';
 import HoverVideoPlayer from 'react-hover-video-player';
 
 import { LoadingOverlay, makeMockVideoSrc } from '../utils';
+import { loadingOverlayWrapperSelector } from '../constants';
 
 describe('loadingOverlay', () => {
   beforeEach(() => {
@@ -30,6 +31,11 @@ describe('loadingOverlay', () => {
     cy.checkOverlayVisibilty({
       loading: false,
     });
+    cy.get(loadingOverlayWrapperSelector).should(
+      'have.css',
+      'transition-delay',
+      '0s'
+    );
 
     // Mouse over the container to start loading
     cy.triggerEventOnPlayer('mouseenter');
@@ -37,6 +43,11 @@ describe('loadingOverlay', () => {
 
     // The component's loadingStateTimeout duration is 123ms, so the loading overlay
     // should still be hidden for now
+    cy.get(loadingOverlayWrapperSelector).should(
+      'have.css',
+      'transition-delay',
+      '0.123s'
+    );
     cy.checkOverlayVisibilty({
       loading: false,
     });
@@ -50,6 +61,11 @@ describe('loadingOverlay', () => {
 
     // Wait for the video to finish playing
     cy.checkVideoPlaybackState('playing');
+    cy.get(loadingOverlayWrapperSelector).should(
+      'have.css',
+      'transition-delay',
+      '0s'
+    );
     // Loading overlay should be hidden
     cy.checkOverlayVisibilty({
       loading: false,

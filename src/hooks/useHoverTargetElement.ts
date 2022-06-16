@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { HoverTarget } from '../HoverVideoPlayer.types';
 
 const getElementFromHoverTarget = (hoverTarget: HoverTarget) => {
@@ -26,10 +26,10 @@ export default function useHoverTargetElement(
   hoverTarget: HoverTarget
 ): Node | null {
   const [hoverTargetElement, setHoverTargetElement] = useState<Node | null>(
-    () => getElementFromHoverTarget(hoverTarget)
+    null
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setHoverTargetElement(getElementFromHoverTarget(hoverTarget));
   }, [hoverTarget]);
 
