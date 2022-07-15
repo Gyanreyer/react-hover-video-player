@@ -52,7 +52,6 @@ export default function HoverVideoPlayer({
   controlsList = null,
   disableRemotePlayback = true,
   disablePictureInPicture = true,
-  className = null,
   style = null,
   hoverOverlayWrapperClassName = null,
   hoverOverlayWrapperStyle = null,
@@ -66,6 +65,7 @@ export default function HoverVideoPlayer({
   videoStyle = null,
   sizingMode = 'video',
   shouldSuppressPlaybackInterruptedErrors = true,
+  ...spreadableProps
 }: HoverVideoPlayerProps): JSX.Element {
   // Element refs
   const containerRef = useRef(null);
@@ -326,12 +326,12 @@ export default function HoverVideoPlayer({
     <div
       data-testid="hover-video-player-container"
       ref={containerRef}
-      className={className}
       style={{
         ...containerSizingStyles[sizingMode],
         position: 'relative',
         ...style,
       }}
+      {...spreadableProps}
     >
       {hasPausedOverlay ? (
         <div

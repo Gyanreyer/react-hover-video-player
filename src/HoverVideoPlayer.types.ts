@@ -54,7 +54,8 @@ export type VideoCaptionsProp = VideoCaptionsTrack | VideoCaptionsTrack[];
  */
 export type HoverTarget = Node | (() => Node) | React.RefObject<Node>;
 
-export interface HoverVideoPlayerProps {
+export interface HoverVideoPlayerProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Source(s) to load from and play in the video player.
    */
@@ -217,11 +218,6 @@ export interface HoverVideoPlayerProps {
    * @defaultValue true
    */
   disablePictureInPicture?: boolean;
-  /**
-   * Optional className to apply custom styling to the component's container div element.
-   * @defaultValue null
-   */
-  className?: string;
   /**
    * Style object to apply custom inlined styles to the component's container div element.
    * @defaultValue null
