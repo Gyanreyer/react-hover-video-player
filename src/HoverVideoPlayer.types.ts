@@ -191,7 +191,7 @@ export interface HoverVideoPlayerProps
    *    This is the browser default and usually all you need for most purposes.
    * - **"use-credentials"**: The video element will send cross-origin requests with credentials.
    *
-   * @defaultValue "anonymous"
+   * @defaultValue null
    */
   crossOrigin?: 'anonymous' | 'use-credentials';
   /**
