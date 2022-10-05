@@ -159,15 +159,17 @@ In practice this looks like:
 
 ### crossOrigin
 
-**Type**: `string` | **Default**: `"anonymous"`
+**Type**: `string` | **Default**: `null`
 
-The `crossOrigin` prop maps directly to the [HTML Video element's crossorigin attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video#attr-crossorigin) and allows us to define how the video element should handle CORS requests. For most purposes, you should not need to worry about setting this. The acceptable values are:
+The `crossOrigin` prop maps directly to the [HTML Video element's crossorigin attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video#attr-crossorigin) and allows us to define how the video element should handle CORS requests. For most purposes, you should not need to worry about setting this, but if you are having trouble with CORS a good first step may be to try setting it to `"anonymous"`.
 
-- `"anonymous"`: The video element will send cross-origin requests with no credentials. This is the browser default and usually all you need for most purposes.
+The acceptable values are:
+
+- `"anonymous"`: The video element will send cross-origin requests with no credentials.
 - `"use-credentials"`: The video element will send cross-origin requests with credentials.
 
 ```jsx
-<HoverVideoPlayer videoSrc="video.mp4" crossOrigin="use-credentials" />
+<HoverVideoPlayer videoSrc="video.mp4" crossOrigin="anonymous" />
 ```
 
 ## Overlays

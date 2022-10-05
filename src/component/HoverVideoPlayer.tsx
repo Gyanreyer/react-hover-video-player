@@ -47,7 +47,7 @@ export default function HoverVideoPlayer({
   volume = 1,
   loop = true,
   preload = null,
-  crossOrigin = 'anonymous',
+  crossOrigin = null,
   controls = false,
   controlsList = null,
   disableRemotePlayback = true,

@@ -58,17 +58,13 @@ describe('Sets attributes on the video element correctly', () => {
   });
 
   describe('crossOrigin', () => {
-    it('sets crossOrigin to anonymous by default', () => {
+    it('does not set crossOrigin by default', () => {
       mount(<HoverVideoPlayer videoSrc={makeMockVideoSrc()} />);
 
-      cy.get(videoElementSelector).should(
-        'have.attr',
-        'crossorigin',
-        'anonymous'
-      );
+      cy.get(videoElementSelector).should('not.have.attr', 'crossorigin');
       cy.get(videoElementSelector)
         .invoke('prop', 'crossOrigin')
-        .should('eq', 'anonymous');
+        .should('be.null');
     });
 
     it('sets crossorigin on the video when the crossOrigin prop is set', () => {
