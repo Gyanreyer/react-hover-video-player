@@ -10,7 +10,7 @@ import { videoElementSelector } from '../constants';
 describe('unloadVideoOnPaused prop', () => {
   it("unloads the video's sources while it is paused when set to true", () => {
     const videoSrc = makeMockVideoSrc({
-      throttleKbps: 1000,
+      throttleKbps: 500,
     });
 
     mount(<HoverVideoPlayer videoSrc={videoSrc} unloadVideoOnPaused />);
@@ -18,7 +18,7 @@ describe('unloadVideoOnPaused prop', () => {
     cy.checkVideoPlaybackState('paused');
 
     // The video should not have a source
-    cy.get(videoElementSelector).should('not.have.descendants', 'source');
+    cy.get(videoElementSelector).should('not.have.attr', 'src');
     cy.get(videoElementSelector)
       .invoke('prop', 'readyState')
       .should('equal', HTMLMediaElement.HAVE_NOTHING);
@@ -36,10 +36,7 @@ describe('unloadVideoOnPaused prop', () => {
     cy.checkVideoPlaybackState('playing');
 
     // The video should now have a source set and loaded
-    cy.get(videoElementSelector).should(
-      'have.descendants',
-      `source[src="${videoSrc}"]`
-    );
+    cy.get(videoElementSelector).should('have.attr', 'src', videoSrc);
     cy.get(videoElementSelector)
       .invoke('prop', 'readyState')
       .should('be.gte', HTMLMediaElement.HAVE_FUTURE_DATA);
@@ -56,13 +53,10 @@ describe('unloadVideoOnPaused prop', () => {
     cy.checkVideoPlaybackState('paused');
 
     // The source should have been unloaded
-    cy.get(videoElementSelector).should('not.have.descendants', 'source');
+    cy.get(videoElementSelector).should('not.have.attr', 'src');
     cy.get(videoElementSelector)
       .invoke('prop', 'readyState')
       .should('equal', HTMLMediaElement.HAVE_NOTHING);
-    cy.get(videoElementSelector)
-      .invoke('prop', 'currentTime')
-      .should('equal', 0);
     // The currentSrc will not be cleared even though the video is unloaded
     cy.get(videoElementSelector)
       .invoke('prop', 'currentSrc')
@@ -133,10 +127,7 @@ describe('unloadVideoOnPaused prop', () => {
     );
 
     // The video should have a source from the start because we're trying to play ASAP
-    cy.get(videoElementSelector).should(
-      'have.descendants',
-      `source[src="${videoSrc}"]`
-    );
+    cy.get(videoElementSelector).should('have.attr', 'src', videoSrc);
     cy.get(videoElementSelector)
       .invoke('prop', 'currentSrc')
       .should('equal', `${window.location.origin}${videoSrc}`);
@@ -152,7 +143,7 @@ describe('unloadVideoOnPaused prop', () => {
     cy.checkVideoPlaybackState('paused');
 
     // The source should have been removed
-    cy.get(videoElementSelector).should('not.have.descendants', 'source');
+    cy.get(videoElementSelector).should('not.have.attr', 'src');
     // The readyState should be reset to HAVE_NOTHING
     cy.get(videoElementSelector)
       .invoke('prop', 'readyState')

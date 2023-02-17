@@ -12,19 +12,19 @@ import { useEffect, useRef } from 'react';
  * @param {func} onHoverEndCallback - Optional callback to be called when the hover target element is unhovered.
  */
 export default function useManageHoverEvents(
-  hoverTargetElement: Node,
+  hoverTargetElement: Node | null,
   focused: boolean,
   disableDefaultEventHandling: boolean,
-  onHoverStartCallback: () => void,
-  onHoverEndCallback: () => void
+  onHoverStartCallback?: (() => void) | null,
+  onHoverEndCallback?: (() => void) | null
 ): void {
   // Keeping hover callbacks as refs because we want to be able to access them from within our
   // onHoverStart and onHoverEnd event listeners without needing to re-run the
   // event setup effect every time they change
-  const onHoverStartCallbackRef = useRef<() => void>();
+  const onHoverStartCallbackRef = useRef<typeof onHoverStartCallback>();
   onHoverStartCallbackRef.current = onHoverStartCallback;
 
-  const onHoverEndCallbackRef = useRef<() => void>();
+  const onHoverEndCallbackRef = useRef<typeof onHoverEndCallback>();
   onHoverEndCallbackRef.current = onHoverEndCallback;
 
   useEffect(() => {

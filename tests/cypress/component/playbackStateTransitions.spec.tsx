@@ -73,9 +73,9 @@ describe('The video player transitions between states as expected', () => {
     );
   });
 
-  it.only('pausing the video will correctly interrupt an active attempt to play the video', () => {
+  it('pausing the video will correctly interrupt an active attempt to play the video', () => {
     const videoSrc = makeMockVideoSrc({
-      throttleKbps: 200,
+      throttleKbps: 800,
     });
 
     mount(
@@ -87,6 +87,8 @@ describe('The video player transitions between states as expected', () => {
         loadingStateTimeout={10}
       />
     );
+
+    cy.checkVideoPlaybackState('paused');
 
     cy.log('Mouse over the video and wait for it to start playing');
     cy.triggerEventOnPlayer('mouseenter');

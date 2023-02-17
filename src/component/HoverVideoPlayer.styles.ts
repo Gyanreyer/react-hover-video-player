@@ -1,10 +1,10 @@
 import React from 'react';
 
 interface SizingModeStyle {
-  video: React.CSSProperties;
-  overlay: React.CSSProperties;
-  container: React.CSSProperties;
-  manual: React.CSSProperties;
+  video: React.CSSProperties | null;
+  overlay: React.CSSProperties | null;
+  container: React.CSSProperties | null;
+  manual: React.CSSProperties | null;
 }
 
 // CSS styles to make some contents in the player expand to fill the container

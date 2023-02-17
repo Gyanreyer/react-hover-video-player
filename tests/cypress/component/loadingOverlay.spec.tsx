@@ -14,7 +14,7 @@ describe('loadingOverlay', () => {
   it('loading overlay fades in if the video is taking too long to load', () => {
     const videoSrc = makeMockVideoSrc({
       // Throttle loading the video to ensure we can step through its states as it loads
-      throttleKbps: 1000,
+      throttleKbps: 800,
     });
 
     mount(

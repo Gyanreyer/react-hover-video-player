@@ -1,15 +1,16 @@
-import React, { useRef, useImperativeHandle, useEffect, useState } from 'react';
+import React, {
+  useRef,
+  useImperativeHandle,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 
 import useSetAdditionalAttributesOnVideo from '../hooks/useSetAdditionalAttributesOnVideo';
-import useFormatVideoSrc from '../hooks/useFormatVideoSrc';
-import useFormatVideoCaptions from '../hooks/useFormatVideoCaptions';
 import useHoverTargetElement from '../hooks/useHoverTargetElement';
 import useManageHoverEvents from '../hooks/useManageHoverEvents';
 
-import {
-  isVideoElementPaused,
-  isVideoElementPlaying,
-} from '../utils/videoElementPlaybackStates';
+import { isVideoElementPaused } from '../utils/videoElementPlaybackStates';
 
 import {
   expandToFillContainerStyle,
@@ -17,7 +18,8 @@ import {
   pausedOverlayWrapperSizingStyles,
   videoSizingStyles,
 } from './HoverVideoPlayer.styles';
-import { HoverVideoPlayerProps, VideoSource } from '../HoverVideoPlayer.types';
+
+import { HoverVideoPlayerProps } from '../HoverVideoPlayer.types';
 
 /**
  * @component HoverVideoPlayer
@@ -46,32 +48,34 @@ export default function HoverVideoPlayer({
   muted = true,
   volume = 1,
   loop = true,
-  preload = null,
-  crossOrigin = null,
+  preload = undefined,
+  crossOrigin = undefined,
   controls = false,
-  controlsList = null,
+  controlsList = undefined,
   disableRemotePlayback = true,
   disablePictureInPicture = true,
-  style = null,
-  hoverOverlayWrapperClassName = null,
-  hoverOverlayWrapperStyle = null,
-  pausedOverlayWrapperClassName = null,
-  pausedOverlayWrapperStyle = null,
-  loadingOverlayWrapperClassName = null,
-  loadingOverlayWrapperStyle = null,
-  videoId = null,
-  videoClassName = null,
+  style = undefined,
+  hoverOverlayWrapperClassName = undefined,
+  hoverOverlayWrapperStyle = undefined,
+  pausedOverlayWrapperClassName = undefined,
+  pausedOverlayWrapperStyle = undefined,
+  loadingOverlayWrapperClassName = undefined,
+  loadingOverlayWrapperStyle = undefined,
+  videoId = undefined,
+  videoClassName = undefined,
   videoRef: forwardedVideoRef = null,
-  videoStyle = null,
+  videoStyle = undefined,
   sizingMode = 'video',
-  shouldSuppressPlaybackInterruptedErrors = true,
   ...spreadableProps
 }: HoverVideoPlayerProps): JSX.Element {
   // Element refs
   const containerRef = useRef(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   // Forward out local videoRef along to the videoRef prop
-  useImperativeHandle(forwardedVideoRef, () => videoRef.current);
+  useImperativeHandle(
+    forwardedVideoRef,
+    () => videoRef.current as HTMLVideoElement
+  );
 
   // Effect sets attributes on the video which can't be done via props
   useSetAdditionalAttributesOnVideo(
@@ -82,50 +86,91 @@ export default function HoverVideoPlayer({
     disablePictureInPicture
   );
 
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    if (videoElement && playbackRangeStart) {
+      videoElement.currentTime = playbackRangeStart;
+    }
+  }, [playbackRangeStart]);
+
   // Get the hover target element from the hoverTarget prop, or default to the component's container div
   const hoverTargetElement = useHoverTargetElement(hoverTarget || containerRef);
 
   // Keep a ref for the time which the video should be started from next time it is played
   // This is useful if the video gets unloaded and we want to restore it to the time it was
   // at before if the user tries playing it again
-  const nextVideoStartTimeRef = useRef(null);
+  const nextVideoStartTimeRef = useRef<number | null>(null);
 
-  // Parse the sources and captions into formatted arrays that we can use to
-  // render <source> and <track> elements for the video
-  const formattedVideoCaptions = useFormatVideoCaptions(videoCaptions);
-  const formattedVideoSources = useFormatVideoSrc(
-    videoSrc,
-    playbackRangeStart,
-    playbackRangeEnd
-  );
-  // Keep a ref to the previous formatted video sources so we can track when the video sources change
-  const previousFormattedVideoSourcesRef = useRef<VideoSource[]>(
-    formattedVideoSources
-  );
+  // Whether the user is hovering over the hover target, meaning we should be trying to play the video
+  const [isHovering, setIsHovering] = useState(false);
+  // Whether the video is currently in a loading state, meaning it's not ready to be played yet
+  const [isLoading, setIsLoading] = useState(false);
+  // Whether the video is currently playing or not
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  /**
-   * Attempts to load and play the video.
-   * Storing this on a ref because we don't really want to worry about triggering re-renders when
-   * any of this function's dependencies change; it should only be called when the
-   * player is hovered/focused.
-   */
-  const attemptToPlayVideoRef = useRef<() => void>();
-  attemptToPlayVideoRef.current = () => {
+  const isHoveringRef = useRef<boolean>();
+  isHoveringRef.current = isHovering;
+
+  const playTimeoutRef = useRef<number | undefined>();
+  const pauseTimeoutRef = useRef<number | undefined>();
+
+  const cancelTimeouts = useCallback(() => {
+    // Cancel any previously active pause or playback attempts
+    window.clearTimeout(playTimeoutRef.current);
+    window.clearTimeout(pauseTimeoutRef.current);
+  }, []);
+
+  const hasPausedOverlay = Boolean(pausedOverlay);
+  const hasHoverOverlay = Boolean(hoverOverlay);
+
+  // If we have a paused or hover overlay, the player should wait
+  // for the overlay(s) to finish transitioning back in before we
+  // pause the video
+  const shouldWaitForOverlayTransitionBeforePausing =
+    hasPausedOverlay || hasHoverOverlay;
+
+  useEffect(() => {
     const videoElement = videoRef.current;
 
-    if (nextVideoStartTimeRef.current !== null) {
-      videoElement.currentTime = nextVideoStartTimeRef.current;
-    }
+    if (!hoverTargetElement || !videoElement) return undefined;
+
+    const onHoverStart = () => {
+      // Bail out if we're already hovering
+      if (isHoveringRef.current) return;
+
+      // Cancel any previously active pause or playback attempts
+      cancelTimeouts();
+
+      setIsHovering(true);
+    };
+    const onHoverEnd = () => {
+      cancelTimeouts();
+
+      setIsHovering(false);
+    };
+
+    hoverTargetElement.addEventListener('hvp:hoverStart', onHoverStart);
+    hoverTargetElement.addEventListener('hvp:hoverEnd', onHoverEnd);
+
+    return () => {
+      hoverTargetElement.removeEventListener('hvp:hoverStart', onHoverStart);
+      hoverTargetElement.removeEventListener('hvp:hoverEnd', onHoverEnd);
+    };
+  }, [
+    cancelTimeouts,
+    hoverTargetElement,
+    overlayTransitionDuration,
+    playbackRangeStart,
+    restartOnPaused,
+    shouldWaitForOverlayTransitionBeforePausing,
+  ]);
+
+  const playVideo = useCallback(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
 
     videoElement.play().catch((error: DOMException) => {
-      // If shouldSuppressPlaybackInterruptedErrors is true and this is an AbortError, do nothing instead of logging it.
-      if (
-        shouldSuppressPlaybackInterruptedErrors &&
-        error.name === 'AbortError'
-      ) {
-        return;
-      }
-
       // Additional handling for when browsers block playback for unmuted videos.
       // This is unfortunately necessary because most modern browsers do not allow playing videos with audio
       //  until the user has "interacted" with the page by clicking somewhere at least once; mouseenter events
@@ -138,7 +183,7 @@ export default function HoverVideoPlayer({
         );
         // Mute the video and attempt to play again
         videoElement.muted = true;
-        videoElement.play();
+        playVideo();
 
         // When the user clicks on the document, unmute the video since we should now
         // be free to play audio
@@ -154,138 +199,76 @@ export default function HoverVideoPlayer({
         console.error(`HoverVideoPlayer: ${error.message}`);
       }
     });
-  };
+  }, []);
 
-  /**
-   * Attempts to pause the video.
-   * Storing this on a ref because we don't really want to worry about triggering re-renders when
-   * any of this function's dependencies change; it should only be called when the
-   * player is un-hovered/focused.
-   */
-  const attemptToPauseVideoRef = useRef<() => void>();
-  attemptToPauseVideoRef.current = () => {
+  // Effect attempts to start playing the video if the user is hovering over the hover target
+  // and the video is loaded enough to be played
+  useEffect(() => {
     const videoElement = videoRef.current;
+    if (!videoElement) return;
 
-    videoElement.pause();
-
-    // Performing post-save cleanup tasks in here rather than the onPause listener
-    // because onPause can also be called when the video reaches the end of a playback range
-    // and it's just simpler to deal with that separately
-    if (restartOnPaused) {
-      videoElement.currentTime = playbackRangeStart || 0;
-    }
-    nextVideoStartTimeRef.current = videoElement.currentTime;
-
-    setIsPlaying(false);
-  };
-
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-
-  useEffect(() => {
-    if (!isPlaying) {
-      // When the video isn't playing, check if the sources loaded in the video
-      // have changed from what the video currently has loaded. If so, we'll call videoElement.load()
-      // to trigger a reload with the new source
-      const shouldReloadVideoSources =
-        previousFormattedVideoSourcesRef.current !== formattedVideoSources;
-
-      if (shouldReloadVideoSources) {
-        previousFormattedVideoSourcesRef.current = formattedVideoSources;
-
-        const videoElement = videoRef.current;
-        // If the video element doesn't have a loaded source or the source has changed since the
-        // last time we played the video, make sure to force the video to load the most up-to-date sources
-        videoElement.load();
-        // Reset the next start time to the start of the video
-        nextVideoStartTimeRef.current = playbackRangeStart || 0;
-      }
-    }
-  }, [formattedVideoSources, isPlaying, playbackRangeStart]);
-
-  const hasPausedOverlay = Boolean(pausedOverlay);
-  const hasHoverOverlay = Boolean(hoverOverlay);
-
-  // If we have a paused or hover overlay, the player should wait
-  // for the overlay(s) to finish transitioning back in before we
-  // pause the video
-  const shouldWaitForOverlayTransitionBeforePausing =
-    hasPausedOverlay || hasHoverOverlay;
-
-  useEffect(() => {
-    if (!hoverTargetElement) return undefined;
-
-    let playbackStartTimeout: number | null = null;
-    let pauseTimeout: number | null = null;
-
-    const cancelTimeouts = () => {
-      // Cancel any previously active pause or playback attempts
-      window.clearTimeout(playbackStartTimeout);
-      window.clearTimeout(pauseTimeout);
-    };
-
-    const attemptToPlayVideoOnHover = () => {
-      cancelTimeouts();
-
-      setIsHovering(true);
-
-      // We only need to attempt to play if the video is currently paused
-      if (isVideoElementPaused(videoRef.current)) {
-        if (playbackStartDelay) {
-          playbackStartTimeout = window.setTimeout(
-            () => attemptToPlayVideoRef.current(),
-            playbackStartDelay
-          );
-        } else {
-          attemptToPlayVideoRef.current();
-        }
-      }
-    };
-    const attemptToPauseVideoOnHoverEnd = () => {
-      cancelTimeouts();
-
-      setIsHovering(false);
-
+    if (isHovering && !isLoading && !isPlaying) {
       if (
-        // We only need to delay a pause attempt if the video is currently playing
-        isVideoElementPlaying(videoRef.current) &&
-        shouldWaitForOverlayTransitionBeforePausing
+        nextVideoStartTimeRef.current !== null &&
+        videoElement.currentTime !== nextVideoStartTimeRef.current
       ) {
-        pauseTimeout = window.setTimeout(
-          () => attemptToPauseVideoRef.current(),
+        videoElement.currentTime = nextVideoStartTimeRef.current;
+      }
+
+      if (playbackStartDelay) {
+        playTimeoutRef.current = window.setTimeout(
+          playVideo,
+          playbackStartDelay
+        );
+      } else {
+        playVideo();
+      }
+    }
+  }, [isHovering, isLoading, isPlaying, playVideo, playbackStartDelay]);
+
+  // Effect pauses the video if the user is no longer hovering over the hover target
+  // and the video is currently playing
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    if (!isHovering && (isPlaying || isLoading)) {
+      const pauseVideo = () => {
+        videoElement.pause();
+
+        // Performing post-save cleanup tasks in here rather than the onPause listener
+        // because onPause can also be called when the video reaches the end of a playback range
+        // and it's just simpler to deal with that separately
+        if (restartOnPaused) {
+          videoElement.currentTime = playbackRangeStart || 0;
+        }
+        nextVideoStartTimeRef.current = videoElement.currentTime;
+      };
+
+      if (shouldWaitForOverlayTransitionBeforePausing) {
+        // If we have a paused overlay, the player should wait
+        // for the overlay(s) to finish transitioning back in before we
+        // pause the video
+        pauseTimeoutRef.current = window.setTimeout(
+          pauseVideo,
           overlayTransitionDuration
         );
       } else {
-        attemptToPauseVideoRef.current();
+        setIsHovering(false);
       }
-    };
-
-    hoverTargetElement.addEventListener(
-      'hvp:hoverStart',
-      attemptToPlayVideoOnHover
-    );
-    hoverTargetElement.addEventListener(
-      'hvp:hoverEnd',
-      attemptToPauseVideoOnHoverEnd
-    );
-
-    return () => {
-      hoverTargetElement.removeEventListener(
-        'hvp:hoverStart',
-        attemptToPlayVideoOnHover
-      );
-      hoverTargetElement.removeEventListener(
-        'hvp:hoverEnd',
-        attemptToPauseVideoOnHoverEnd
-      );
-      cancelTimeouts();
-    };
+    }
   }, [
-    hoverTargetElement,
+    isHovering,
+    isLoading,
+    isPlaying,
     overlayTransitionDuration,
-    playbackStartDelay,
+    playbackRangeStart,
+    restartOnPaused,
     shouldWaitForOverlayTransitionBeforePausing,
   ]);
+
+  // Effect cancels any pending timeouts when the component unmounts
+  useEffect(() => () => cancelTimeouts(), [cancelTimeouts]);
 
   useManageHoverEvents(
     hoverTargetElement,
@@ -295,10 +278,21 @@ export default function HoverVideoPlayer({
     onHoverEnd
   );
 
-  // We should attempt to play the video if the user is hovering over it or the `focused` override prop is enabled
-  // const shouldPlayVideo = isHoveringOverVideo || focused;
+  const currentVideoSrc = useRef(videoSrc);
 
-  const hasLoadingOverlay = Boolean(loadingOverlay);
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    if (videoSrc !== currentVideoSrc.current && !isHovering && !isPlaying) {
+      currentVideoSrc.current = videoSrc;
+      // If the video element doesn't have a loaded source or the source has changed since the
+      // last time we played the video, make sure to force the video to load the most up-to-date sources
+      videoElement.load();
+      // Reset the next start time to the start of the video
+      nextVideoStartTimeRef.current = playbackRangeStart || 0;
+    }
+  }, [videoSrc, isHovering, isPlaying, playbackRangeStart]);
 
   // If the video's sources should be unloaded when it's paused and the video is not currently active, we can unload the video's sources.
   // We will remove the video's <source> tags in this render and then call video.load() in an effect to
@@ -306,11 +300,9 @@ export default function HoverVideoPlayer({
   const shouldUnloadVideo = unloadVideoOnPaused && !isHovering && !isPlaying;
 
   useEffect(() => {
-    // If shouldUnloadVideo is true, this effect is being run after the video's
-    // sources have been removed, so call load on the video to unload any sources it currently has loaded
     if (shouldUnloadVideo) {
-      const videoElement = videoRef.current;
-      videoElement.load();
+      // Re-load the video with the sources removed so we unload everything from memory
+      videoRef.current?.load();
     }
   }, [shouldUnloadVideo]);
 
@@ -321,6 +313,10 @@ export default function HoverVideoPlayer({
 
   const isUsingPlaybackRange =
     playbackRangeStart !== null || playbackRangeEnd !== null;
+
+  const hasLoadingOverlay = Boolean(loadingOverlay);
+
+  console.log('isPlaying', isPlaying);
 
   return (
     <div
@@ -389,6 +385,11 @@ export default function HoverVideoPlayer({
       ) : null}
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
+        src={
+          typeof currentVideoSrc.current === 'string' && !shouldUnloadVideo
+            ? currentVideoSrc.current
+            : undefined
+        }
         // If a playback range is set, the loop attribute will not work correctly so there's no point in setting it here;
         // in that case, we will manually implement this behavior
         loop={isUsingPlaybackRange ? false : loop}
@@ -405,16 +406,24 @@ export default function HoverVideoPlayer({
         controlsList={controlsList}
         className={videoClassName}
         id={videoId}
-        data-testid="video-element"
-        onPlaying={() => {
-          setIsPlaying(true);
+        onPlaying={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onEnded={() => setIsPlaying(false)}
+        onLoadStart={() => setIsLoading(true)}
+        onLoadedData={() => {
+          setIsLoading(
+            (videoRef.current?.readyState || 0) <
+              HTMLMediaElement.HAVE_ENOUGH_DATA
+          );
         }}
+        onAbort={() => setIsLoading(false)}
         onTimeUpdate={
           // If there's a playback range set, the traditional `loop` video prop won't work correctly so
           // we'll need watch the video's time as it plays and manually keep it within the bounds of the range
           isUsingPlaybackRange
             ? () => {
                 const videoElement = videoRef.current;
+                if (!videoElement) return;
 
                 const maxVideoTime = playbackRangeEnd || videoElement.duration;
                 const minVideoTime = playbackRangeStart || 0;
@@ -430,7 +439,7 @@ export default function HoverVideoPlayer({
                   // If the video is paused but the user is still hovering,
                   // meaning it should continue to play, call play() to keep it going
                   if (isHovering && isVideoElementPaused(videoElement)) {
-                    videoElement.play();
+                    playVideo();
                   }
                 } else if (currentTime > maxVideoTime) {
                   // If the video shouldn't loop but we've exceeded the max video time,
@@ -443,26 +452,13 @@ export default function HoverVideoPlayer({
                   videoElement.currentTime = minVideoTime;
                 }
               }
-            : null
+            : undefined
         }
       >
-        {!shouldUnloadVideo &&
-          // Only render sources for the video if it is not unloaded
-          formattedVideoSources.map(({ src, type }) => (
-            <source key={src} src={src} type={type} />
-          ))}
-        {formattedVideoCaptions.map(
-          ({ src, srcLang, label, kind, default: isDefault }) => (
-            <track
-              key={src}
-              kind={kind}
-              src={src}
-              srcLang={srcLang}
-              label={label}
-              default={isDefault}
-            />
-          )
-        )}
+        {shouldUnloadVideo || typeof currentVideoSrc.current === 'string'
+          ? null
+          : currentVideoSrc.current}
+        {videoCaptions}
       </video>
     </div>
   );

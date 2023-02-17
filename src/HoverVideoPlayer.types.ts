@@ -1,70 +1,22 @@
-export interface VideoSource {
-  /**
-   * The src URL string to use for a video player source
-   */
-  src: string;
-  /**
-   * The media type of the video, ie 'video/mp4'
-   */
-  type: string;
-}
-
-/**
- * One or an array of URL strings and/or VideoSource objects describing sources that the video
- * should choose to load and play from.
- * @typedef {(string|string[]|VideoSource|VideoSource[])} VideoSrcProp
- */
-export type VideoSrcProp = string | string[] | VideoSource | VideoSource[];
-
-export interface VideoCaptionsTrack {
-  /**
-   * The src URL string for the captions track file
-   */
-  src: string;
-  /**
-   * The language code for the language that these captions are in
-   */
-  srcLang: string;
-  /**
-   * The title of the captions track
-   */
-  label: string;
-  /**
-   * The kind of captions that this captions track represents (ie, "subtitles", "captions", "descriptions")
-   * @defaultValue "captions"
-   */
-  kind?: string;
-  /**
-   * Whether this track should be used by default if the user's preferences don't match an available srcLang
-   * @defaultValue "false"
-   */
-  default?: boolean;
-}
-
-/**
- * One or an array of VideoCaptionsTrack objects describing closed captions that can be loaded and displayed
- * on the video for accessibility.
- * @typedef {VideoCaptionsTrack|VideoCaptionsTrack[]} VideoCaptionsProp
- */
-export type VideoCaptionsProp = VideoCaptionsTrack | VideoCaptionsTrack[];
-
 /**
  * Node, callback function that returns a node, or a React ref which can resolve to the desired
  * DOM Node to use as the target to attach hover interaction events to
  */
 export type HoverTarget = Node | (() => Node) | React.RefObject<Node>;
 
+type VideoProps = React.ComponentPropsWithoutRef<'video'>;
+
 export interface HoverVideoPlayerProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+  extends React.ComponentPropsWithoutRef<'div'> {
   /**
    * Source(s) to load from and play in the video player.
    */
-  videoSrc: VideoSrcProp;
+  videoSrc: string | React.ReactNode;
   /**
    * Captions track(s) to load and display on the video player for accessibility.
    * @defaultValue null
    */
-  videoCaptions?: VideoCaptionsProp;
+  videoCaptions?: React.ReactNode;
   /**
    * Offers a prop interface for forcing the video to start/stop without DOM events.
    * When set to true, the video will begin playing and any events that would normally
@@ -84,33 +36,33 @@ export interface HoverVideoPlayerProps
    * The component's container div element will be used by default if no hover target is provided.
    * @defaultValue null
    */
-  hoverTarget?: HoverTarget;
+  hoverTarget?: Node | (() => Node) | React.RefObject<Node> | null;
   /**
    * Callback fired when the user starts hovering on the player's hover target
    * @defaultValue null
    */
-  onHoverStart?: () => void;
+  onHoverStart?: (() => void) | null;
   /**
    * Callback fired when the user stops hovering on the player's hover target
    * @defaultValue null
    */
-  onHoverEnd?: () => void;
+  onHoverEnd?: (() => void) | null;
   /**
    * Contents to render over the video while the user is hovering over the player.
    * @defaultValue null
    */
-  hoverOverlay?: JSX.Element;
+  hoverOverlay?: JSX.Element | null;
   /**
    * Contents to render over the video while it's not playing.
    * @defaultValue null
    */
-  pausedOverlay?: JSX.Element;
+  pausedOverlay?: JSX.Element | null;
   /**
    * Contents to render over the video while it's loading.
    * If a `pausedOverlay` was provided, this will be overlaid on top of that.
    * @defaultValue null
    */
-  loadingOverlay?: JSX.Element;
+  loadingOverlay?: JSX.Element | null;
   /**
    * Duration in ms to wait after attempting to start the video before showing the loading overlay.
    * @defaultValue 200
@@ -148,19 +100,19 @@ export interface HoverVideoPlayerProps
    * be played from the start.
    * @defaultValue null
    */
-  playbackRangeStart?: number;
+  playbackRangeStart?: number | null;
   /**
    * The maximum time in seconds that we can load/play the video to using the
    * playback range media fragment identifier. If not specified, the video
    * will play through to the end.
    * @defaultValue null
    */
-  playbackRangeEnd?: number;
+  playbackRangeEnd?: number | null;
   /**
    * Whether the video's audio should be muted.
    * @defaultValue true
    */
-  muted?: boolean;
+  muted?: VideoProps['muted'];
   /**
    * The volume that the video's audio should play at, on a scale from 0-1.
    * This will only work if the muted prop is also set to false.
@@ -171,7 +123,7 @@ export interface HoverVideoPlayerProps
    * Whether the video player should loop when it reaches the end.
    * @defaultValue true
    */
-  loop?: boolean;
+  loop?: VideoProps['loop'];
   /**
    * Sets how much information the video element should preload before being played.
    * Accepts one of the following values:
@@ -181,9 +133,9 @@ export interface HoverVideoPlayerProps
    *
    * By default, the video's preload behavior will be left up to the browser; the official spec recommends
    * defaulting to "metadata", but many browsers don't follow that standard.
-   * @defaultValue null
+   * @defaultValue undefined
    */
-  preload?: 'none' | 'metadata' | 'auto';
+  preload?: VideoProps['preload'];
   /**
    * Sets how the video element should handle CORS requests.
    * Accepts one of the following values:
@@ -191,9 +143,9 @@ export interface HoverVideoPlayerProps
    *    This is the browser default and usually all you need for most purposes.
    * - **"use-credentials"**: The video element will send cross-origin requests with credentials.
    *
-   * @defaultValue null
+   * @defaultValue undefined
    */
-  crossOrigin?: 'anonymous' | 'use-credentials';
+  crossOrigin?: VideoProps['crossOrigin'];
   /**
    * Sets whether the video element should have the browser's video playback controls enabled.
    * @defaultValue false
@@ -205,9 +157,9 @@ export interface HoverVideoPlayerProps
    * Accepts a string with the following values, separated by spaces if using more than one:
    * - **"nodownload"**: Removes the download button from the video's controls
    * - **"nofullscreen"**: Removes the fullscreen button from the video's controls
-   * @defaultValue null
+   * @defaultValue undefined
    */
-  controlsList?: string;
+  controlsList?: VideoProps['controlsList'];
   /**
    * Prevents the browser from showing controls to cast the video.
    * @defaultValue true
@@ -220,59 +172,59 @@ export interface HoverVideoPlayerProps
   disablePictureInPicture?: boolean;
   /**
    * Style object to apply custom inlined styles to the component's container div element.
-   * @defaultValue null
+   * @defaultValue undefined
    */
   style?: React.CSSProperties;
   /**
    * Optional className to apply custom styling to the div element wrapping the `hoverOverlay` contents.
-   * @defaultValue null
+   * @defaultValue undefined
    */
   hoverOverlayWrapperClassName?: string;
   /**
    * Style object to apply custom inlined styles to the div element wrapping the `hoverOverlay` contents.
-   * @defaultValue null
+   * @defaultValue undefined
    */
   hoverOverlayWrapperStyle?: React.CSSProperties;
   /**
    * Optional className to apply custom styling to the div element wrapping the `pausedOverlay` contents.
-   * @defaultValue null
+   * @defaultValue undefined
    */
   pausedOverlayWrapperClassName?: string;
   /**
    * Style object to apply custom inlined styles to the div element wrapping the `pausedOverlay` contents.
-   * @defaultValue null
+   * @defaultValue undefined
    */
   pausedOverlayWrapperStyle?: React.CSSProperties;
   /**
    * Optional className to apply custom styling to the div element wrapping the `loadingOverlay` contents.
-   * @defaultValue null
+   * @defaultValue undefined
    */
   loadingOverlayWrapperClassName?: string;
   /**
    * Style object to apply custom inlined styles to the div element wrapping the `loadingOverlay` contents.
-   * @defaultValue null
+   * @defaultValue undefined
    */
   loadingOverlayWrapperStyle?: React.CSSProperties;
   /**
    * React ref to forward to the video element rendered by HoverVideoPlayer.
    * @defaultValue null
    */
-  videoRef?: React.Ref<HTMLVideoElement>;
+  videoRef?: React.Ref<HTMLVideoElement> | null;
   /**
    * Optional unique ID to apply to the video element.
    * This can be useful for scenarios where you need to manually access
    * and manipulate the video element via `getElementById`.
-   * @defaultValue null
+   * @defaultValue undefined
    */
   videoId?: string;
   /**
    * Optional className to apply custom styling to the video element.
-   * @defaultValue null
+   * @defaultValue undefined
    */
   videoClassName?: string;
   /**
    * Style object to apply custom inlined styles to the video element.
-   * @defaultValue null
+   * @defaultValue undefined
    */
   videoStyle?: React.CSSProperties;
   /**
@@ -287,14 +239,4 @@ export interface HoverVideoPlayerProps
    * @defaultValue "video"
    */
   sizingMode?: 'video' | 'overlay' | 'container' | 'manual';
-  /**
-   * Whether "the play() request was interrupted" errors should be suppressed.
-   * It's almost never that big of a deal when these errors are thrown, and in some cases it's
-   * unavoidable, ie if a HoverVideoPlayer element is unmounted while a play() promise is in progress.
-   * This prop allows you to suppress those errors so they don't clutter your console with
-   * unhelpful error messages unless you want to see them.
-   *
-   * @defaultValue true
-   */
-  shouldSuppressPlaybackInterruptedErrors?: boolean;
 }

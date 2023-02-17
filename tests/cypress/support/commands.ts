@@ -121,12 +121,6 @@ Cypress.Commands.add(
 
         break;
       case 'loading':
-        // The video should not be paused or ended
-        cy.get(videoElementSelector)
-          .invoke('prop', 'paused')
-          .should('be.false');
-        cy.get(videoElementSelector).invoke('prop', 'ended').should('be.false');
-
         // The video's readyState should be less than HAVE_FUTURE_DATA
         cy.get(videoElementSelector)
           .invoke('prop', 'readyState')

@@ -19,6 +19,7 @@ export default function useSetAdditionalAttributesOnVideo(
 ): void {
   useEffect(() => {
     const videoElement = videoRef.current;
+    if (!videoElement) return;
 
     // Manually setting the `muted` attribute on the video element via an effect in order
     // to avoid a know React issue with the `muted` prop not applying correctly on initial render
@@ -31,6 +32,7 @@ export default function useSetAdditionalAttributesOnVideo(
 
   useEffect(() => {
     const videoElement = videoRef.current;
+    if (!videoElement) return;
 
     // React does not support directly setting disableRemotePlayback or disablePictureInPicture directly
     // via the video element's props, so we have to manually set them in an effect

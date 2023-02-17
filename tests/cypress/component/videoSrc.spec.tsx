@@ -14,36 +14,8 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
 
     mount(<HoverVideoPlayer videoSrc={videoSrc} />);
 
-    cy.get(videoElementSelector)
-      .children()
-      .should('have.length', 1)
-      .first()
-      .should('have.attr', 'src', videoSrc)
-      .should('not.have.attr', 'type');
-
-    cy.get(videoElementSelector)
-      .invoke('prop', 'currentSrc')
-      .should('eq', `${window.location.origin}${videoSrc}`);
-  });
-
-  it('takes an array of url strings for videoSrc', () => {
-    const videoSrc = makeMockVideoSrc();
-
-    mount(<HoverVideoPlayer videoSrc={['this-path-404s.mp4', videoSrc]} />);
-
-    cy.get(videoElementSelector)
-      .children()
-      .should('have.length', 2)
-      .first()
-      .should('have.attr', 'src', 'this-path-404s.mp4')
-      .should('not.have.attr', 'type');
-
-    cy.get(videoElementSelector)
-      .children()
-      .eq(1)
-      .should('have.attr', 'src', videoSrc)
-      .should('not.have.attr', 'type');
-
+    cy.get(videoElementSelector).children().should('have.length', 0);
+    cy.get(videoElementSelector).should('have.attr', 'src', videoSrc);
     cy.get(videoElementSelector)
       .invoke('prop', 'currentSrc')
       .should('eq', `${window.location.origin}${videoSrc}`);
@@ -54,15 +26,15 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
 
     mount(
       <HoverVideoPlayer
-        videoSrc={[
-          {
-            src: 'this-path-404s.mp4',
-            type: 'video/fake',
-          },
-          { src: videoSrc, type: 'video/mp4' },
-        ]}
+        videoSrc={
+          <>
+            <source src="this-path-404s.mp4" type="video/fake" />
+            <source src={videoSrc} type="video/mp4" />
+          </>
+        }
       />
     );
+    cy.get(videoElementSelector).should('not.have.attr', 'src');
 
     cy.get(videoElementSelector)
       .children()
@@ -80,71 +52,6 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
     cy.get(videoElementSelector)
       .invoke('prop', 'currentSrc')
       .should('eq', `${window.location.origin}${videoSrc}`);
-  });
-
-  it('adds a correctly constructed media fragment identifier to the video src if only playbackRangeStart is set', () => {
-    const videoSrc = makeMockVideoSrc();
-
-    mount(<HoverVideoPlayer videoSrc={videoSrc} playbackRangeStart={1.2} />);
-
-    cy.get(videoElementSelector)
-      .invoke('prop', 'currentSrc')
-      .should('eq', `${window.location.origin}${videoSrc}#t=1.2`);
-  });
-
-  it('adds a correctly constructed media fragment identifier to the video src if only playbackRangeEnd is set', () => {
-    const videoSrc = makeMockVideoSrc();
-
-    mount(<HoverVideoPlayer videoSrc={videoSrc} playbackRangeEnd={2.5} />);
-
-    cy.get(videoElementSelector)
-      .invoke('prop', 'currentSrc')
-      .should('eq', `${window.location.origin}${videoSrc}#t=,2.5`);
-  });
-
-  it('adds a correctly constructed media fragment identifier to the video src if both playbackRangeStart and playbackRangeEnd are set', () => {
-    const videoSrc = makeMockVideoSrc();
-
-    mount(
-      <HoverVideoPlayer
-        videoSrc={videoSrc}
-        playbackRangeStart={1}
-        playbackRangeEnd={2.5}
-      />
-    );
-
-    cy.get(videoElementSelector)
-      .invoke('prop', 'currentSrc')
-      .should('eq', `${window.location.origin}${videoSrc}#t=1,2.5`);
-  });
-
-  it('logs an error if no value is provided for the videoCaptions prop', () => {
-    // Spy on console.error so we can check that it is being called correctly
-    cy.spy(console, 'error').as('consoleError');
-
-    mount(<HoverVideoPlayer />);
-
-    cy.get(videoElementSelector).should('not.have.descendants', 'source');
-
-    cy.get('@consoleError').should(
-      'have.been.calledWith',
-      "Error: 'videoSrc' prop is required for HoverVideoPlayer component"
-    );
-  });
-
-  it('logs an error if an invalid value is provided for the videoCaptions prop', () => {
-    // Spy on console.error so we can check that it is being called correctly
-    cy.spy(console, 'error').as('consoleError');
-
-    mount(<HoverVideoPlayer videoSrc={{ bad: 'value' }} />);
-
-    cy.get(videoElementSelector).should('not.have.descendants', 'source');
-
-    cy.get('@consoleError').should(
-      'have.been.calledWith',
-      "Error: invalid value provided to HoverVideoPlayer prop 'videoSrc':",
-      { bad: 'value' }
-    );
   });
 
   it('reloads correctly if a single string videoSrc changes', () => {
@@ -165,83 +72,103 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
       videoElement.addEventListener('emptied', onVideoReloaded);
     });
 
-    cy.get(videoElementSelector)
-      .children()
-      .should('have.length', 1)
-      .first()
-      .should('have.attr', 'src', videoSrc1);
+    // The src is set as an attribute, not via child <source> elements
+    cy.get(videoElementSelector).children().should('have.length', 0);
 
+    // The first videoSrc should be loaded
+    cy.get(videoElementSelector).should('have.attr', 'src', videoSrc1);
     cy.get(videoElementSelector)
       .invoke('prop', 'currentSrc')
       .should('eq', `${window.location.origin}${videoSrc1}`);
 
     cy.get('@onVideoReloaded').should('not.have.been.called');
 
-    cy.get('[data-testid="toggle-video-src-button"]').click();
+    cy.window().then((win) => {
+      window.dispatchEvent(new win.Event('hvp:switchVideoSrc'));
+    });
 
     cy.get('@onVideoReloaded').should('have.been.calledOnce');
 
-    cy.get(videoElementSelector)
-      .children()
-      .should('have.length', 1)
-      .first()
-      .should('have.attr', 'src', videoSrc2);
-
+    // The second videoSrc should be loaded
+    cy.get(videoElementSelector).should('have.attr', 'src', videoSrc2);
     cy.get(videoElementSelector)
       .invoke('prop', 'currentSrc')
       .should('eq', `${window.location.origin}${videoSrc2}`);
-
-    // Mouse over the container to start loading/playing
-    cy.triggerEventOnPlayer('mouseenter');
-    cy.checkVideoPlaybackState('playing');
-
-    cy.get('[data-testid="toggle-video-src-button"]').click();
-
-    // We shouldn't have reloaded a second time because the video is still playing
-    cy.get('@onVideoReloaded').should('have.been.calledOnce');
-
-    // The <source> tag should have updated but the video element hasn't reloaded yet because it's still playing
-    cy.get(videoElementSelector)
-      .children()
-      .should('have.length', 1)
-      .first()
-      .should('have.attr', 'src', videoSrc1);
-
-    cy.get(videoElementSelector)
-      .invoke('prop', 'currentSrc')
-      .should('eq', `${window.location.origin}${videoSrc2}`);
-
-    // Mouse out to allow the video to pause and reload with the new source
-    cy.triggerEventOnPlayer('mouseleave');
-
-    cy.get('@onVideoReloaded').should('have.been.calledTwice');
-
-    cy.get(videoElementSelector)
-      .invoke('prop', 'currentSrc')
-      .should('eq', `${window.location.origin}${videoSrc1}`);
   });
 
-  it('reloads correctly if a videoSrc array changes', () => {
+  it('waits until the video is paused to reload if a string src changes while playing', () => {
     const videoSrc1 = makeMockVideoSrc();
     const videoSrc2 = makeMockVideoSrc();
 
-    const videoSrcArray1 = [
-      {
-        src: videoSrc1,
-        type: 'video/mp4',
-      },
-    ];
+    mount(
+      <HoverVideoPlayerWithToggleVideoSrcButton
+        videoSrc1={videoSrc1}
+        videoSrc2={videoSrc2}
+      />
+    );
 
-    const videoSrcArray2 = [
-      {
-        src: videoSrc2,
-        type: 'video/mp4',
-      },
-      {
-        src: videoSrc1,
-        type: 'video/mp4',
-      },
-    ];
+    cy.get(videoElementSelector).then(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
+
+      const onVideoLoaded = cy.stub().as('onVideoLoaded');
+      videoElement.addEventListener('emptied', onVideoLoaded);
+    });
+
+    // The src is set as an attribute, not via child <source> elements
+    cy.get(videoElementSelector).children().should('have.length', 0);
+
+    cy.log('The first videoSrc should be loaded initially');
+    cy.get(videoElementSelector).should('have.attr', 'src', videoSrc1);
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc1}`);
+
+    cy.get('@onVideoLoaded').should('not.have.been.called');
+
+    cy.log('Start playing the video');
+    cy.triggerEventOnPlayer('mouseenter');
+    cy.checkVideoPlaybackState('playing');
+
+    cy.log('video.load() was called in the process of playing the video');
+    cy.get('@onVideoLoaded').should('to.have.been.calledOnce');
+
+    cy.window().then((win) => {
+      window.dispatchEvent(new win.Event('hvp:switchVideoSrc'));
+    });
+
+    cy.get(videoElementSelector).should('have.attr', 'src', videoSrc1);
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc1}`);
+
+    cy.log('Pause the video');
+    cy.triggerEventOnPlayer('mouseleave');
+    cy.checkVideoPlaybackState('paused');
+
+    cy.get('@onVideoLoaded').should('have.been.calledOnce');
+
+    cy.get(videoElementSelector).should('have.attr', 'src', videoSrc2);
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc2}`);
+  });
+
+  it('reloads correctly if a set of <source> tags changes', () => {
+    const videoSrc1 = makeMockVideoSrc();
+    const videoSrc2 = makeMockVideoSrc();
+
+    const videoSrcArray1 = (
+      <>
+        <source src={videoSrc1} type="video/mp4" />
+      </>
+    );
+
+    const videoSrcArray2 = (
+      <>
+        <source src={videoSrc2} type="video/mp4" />
+        <source src={videoSrc1} type="video/mp4" />
+      </>
+    );
 
     mount(
       <HoverVideoPlayerWithToggleVideoSrcButton
@@ -270,7 +197,9 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
 
     cy.get('@onVideoReloaded').should('not.have.been.called');
 
-    cy.get('[data-testid="toggle-video-src-button"]').click();
+    cy.window().then((win) => {
+      window.dispatchEvent(new win.Event('hvp:switchVideoSrc'));
+    });
 
     // video.load() should have been called after changing the source
     cy.get('@onVideoReloaded').should('have.been.calledOnce');
@@ -296,8 +225,8 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
     mount(
       <HoverVideoPlayerWithToggleVideoSrcButton
         // videoSrc1 and videoSrc2 are deeply equal but not referentially equal
-        videoSrc1={{ src: videoSrc, type: 'video/mp4' }}
-        videoSrc2={[{ type: 'video/mp4', src: `${videoSrc}` }]}
+        videoSrc1={<source src={videoSrc} type="video/mp4" />}
+        videoSrc2={<source type="video/mp4" src={videoSrc} />}
       />
     );
 
@@ -312,12 +241,57 @@ describe('Video sources are formatted and rendered correctly from the videoSrc p
       .invoke('prop', 'currentSrc')
       .should('eq', `${window.location.origin}${videoSrc}`);
 
-    cy.get('[data-testid="toggle-video-src-button"]').click();
+    cy.window().then((win) => {
+      window.dispatchEvent(new win.Event('hvp:switchVideoSrc'));
+    });
+
+    cy.get('@onVideoReloaded').should('not.have.been.called');
+
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc}`);
+  });
+
+  it('reloads if the videoSrc changes from a string to a <source> tag and vice versa', () => {
+    const videoSrc = makeMockVideoSrc();
+
+    mount(
+      <HoverVideoPlayerWithToggleVideoSrcButton
+        // videoSrc1 and videoSrc2 are the same source, but in different formats
+        videoSrc1={videoSrc}
+        videoSrc2={<source src={videoSrc} type="video/mp4" />}
+      />
+    );
+
+    cy.get(videoElementSelector).then(($video: JQuery<HTMLVideoElement>) => {
+      const videoElement = $video[0];
+
+      const onVideoReloaded = cy.stub().as('onVideoReloaded');
+      videoElement.addEventListener('emptied', onVideoReloaded);
+    });
 
     cy.get(videoElementSelector)
       .invoke('prop', 'currentSrc')
       .should('eq', `${window.location.origin}${videoSrc}`);
 
-    cy.get('@onVideoReloaded').should('not.have.been.called');
+    cy.window().then((win) => {
+      window.dispatchEvent(new win.Event('hvp:switchVideoSrc'));
+    });
+
+    cy.get('@onVideoReloaded').should('have.been.calledOnce');
+
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc}`);
+
+    cy.window().then((win) => {
+      window.dispatchEvent(new win.Event('hvp:switchVideoSrc'));
+    });
+
+    cy.get('@onVideoReloaded').should('have.been.calledTwice');
+
+    cy.get(videoElementSelector)
+      .invoke('prop', 'currentSrc')
+      .should('eq', `${window.location.origin}${videoSrc}`);
   });
 });

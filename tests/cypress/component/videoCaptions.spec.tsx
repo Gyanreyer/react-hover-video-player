@@ -21,13 +21,15 @@ describe('Caption tracks are formatted and rendered correctly from the videoCapt
     mount(
       <HoverVideoPlayer
         videoSrc={videoSrc}
-        videoCaptions={{
-          src: '/captions.vtt',
-          srcLang: 'en',
-          label: 'English',
-          // The caption track should be visible by default
-          default: true,
-        }}
+        videoCaptions={
+          <track
+            src="/captions.vtt"
+            srcLang="en"
+            label="English"
+            kind="captions"
+            default
+          />
+        }
       />
     );
 
@@ -88,20 +90,22 @@ describe('Caption tracks are formatted and rendered correctly from the videoCapt
     mount(
       <HoverVideoPlayer
         videoSrc={videoSrc}
-        videoCaptions={[
-          {
-            src: '/captions.vtt',
-            srcLang: 'en',
-            label: 'English',
-            kind: 'captions',
-          },
-          {
-            src: '/captions-ga.vtt',
-            srcLang: 'ga',
-            label: 'Gaelic (Irish)',
-            kind: 'subtitles',
-          },
-        ]}
+        videoCaptions={
+          <>
+            <track
+              src="/captions.vtt"
+              srcLang="en"
+              label="English"
+              kind="captions"
+            />
+            <track
+              src="/captions-ga.vtt"
+              srcLang="ga"
+              label="Gaelic (Irish)"
+              kind="subtitles"
+            />
+          </>
+        }
         controls
       />
     );
@@ -165,31 +169,5 @@ describe('Caption tracks are formatted and rendered correctly from the videoCapt
 
       expect(cue.text).to.equal('Seo roinnt téacs fotheidil');
     });
-  });
-
-  it('logs an error if an invalid value is provided for the videoCaptions prop', () => {
-    const videoSrc = makeMockVideoSrc();
-
-    // Spy on console.error so we can check that it is being called correctly
-    cy.spy(console, 'error').as('consoleError');
-
-    mount(
-      <HoverVideoPlayer
-        videoSrc={videoSrc}
-        videoCaptions={{
-          wrong: 'value',
-        }}
-      />
-    );
-
-    cy.get(videoElementSelector).should('not.have.descendants', 'track');
-
-    cy.get('@consoleError').should(
-      'have.been.calledWith',
-      "Error: invalid value provided to HoverVideoPlayer prop 'videoCaptions'",
-      {
-        wrong: 'value',
-      }
-    );
   });
 });

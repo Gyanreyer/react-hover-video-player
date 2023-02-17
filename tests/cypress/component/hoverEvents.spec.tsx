@@ -14,7 +14,7 @@ describe('Handles mouse and touch events correctly', () => {
   it('mouseEnter and mouseLeave events take the video through its play and pause flows correctly', () => {
     const videoSrc = makeMockVideoSrc({
       // Throttle loading the video to ensure we can step through its states as it loads
-      throttleKbps: 1000,
+      throttleKbps: 500,
     });
 
     mount(
@@ -94,7 +94,7 @@ describe('Handles mouse and touch events correctly', () => {
 
   it('touch events take the video through its play and pause flows correctly', () => {
     const videoSrc = makeMockVideoSrc({
-      throttleKbps: 1000,
+      throttleKbps: 500,
     });
 
     mount(

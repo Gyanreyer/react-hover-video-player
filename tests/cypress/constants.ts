@@ -1,4 +1,3 @@
-export const videoElementSelector = '[data-testid="video-element"]';
 export const pausedOverlayWrapperSelector =
   '[data-testid="paused-overlay-wrapper"]';
 export const loadingOverlayWrapperSelector =
@@ -7,3 +6,4 @@ export const hoverOverlayWrapperSelector =
   '[data-testid="hover-overlay-wrapper"]';
 export const playerContainerSelector =
   '[data-testid="hover-video-player-container"]';
+export const videoElementSelector = `${playerContainerSelector} video`;

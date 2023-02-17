@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import HoverVideoPlayer from 'react-hover-video-player';
-import {
-  HoverVideoPlayerProps,
-  VideoSrcProp,
-} from '../../src/HoverVideoPlayer.types';
+import { HoverVideoPlayerProps } from '../../src/HoverVideoPlayer.types';
+
+type VideoSrcProp = HoverVideoPlayerProps['videoSrc'];
 
 interface MockVideoSrcOptions {
   /**
@@ -127,19 +126,18 @@ export function HoverVideoPlayerWithToggleVideoSrcButton({
 }): JSX.Element {
   const [videoSrc, setVideoSrc] = useState(videoSrc1);
 
-  return (
-    <>
-      <button
-        onClick={() =>
-          setVideoSrc((currentVideoSrc) =>
-            currentVideoSrc === videoSrc1 ? videoSrc2 : videoSrc1
-          )
-        }
-        data-testid="toggle-video-src-button"
-      >
-        Toggle videoSrc
-      </button>
-      <HoverVideoPlayer videoSrc={videoSrc} />
-    </>
-  );
+  useEffect(() => {
+    const onSwitchVideoSrc = () => {
+      setVideoSrc((currentVideoSrc) =>
+        currentVideoSrc === videoSrc1 ? videoSrc2 : videoSrc1
+      );
+    };
+    window.addEventListener('hvp:switchVideoSrc', onSwitchVideoSrc);
+
+    return () => {
+      window.removeEventListener('hvp:switchVideoSrc', onSwitchVideoSrc);
+    };
+  }, [videoSrc1, videoSrc2]);
+
+  return <HoverVideoPlayer videoSrc={videoSrc} loop />;
 }
