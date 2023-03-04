@@ -6,11 +6,11 @@ import React, {
   useCallback,
 } from 'react';
 
-import useSetAdditionalAttributesOnVideo from '../hooks/useSetAdditionalAttributesOnVideo';
-import useHoverTargetElement from '../hooks/useHoverTargetElement';
-import useManageHoverEvents from '../hooks/useManageHoverEvents';
+import useSetAdditionalAttributesOnVideo from './hooks/useSetAdditionalAttributesOnVideo';
+import useHoverTargetElement from './hooks/useHoverTargetElement';
+import useManageHoverEvents from './hooks/useManageHoverEvents';
 
-import { isVideoElementPaused } from '../utils/videoElementPlaybackStates';
+import { isVideoElementPaused } from './utils/videoElementPlaybackStates';
 
 import {
   expandToFillContainerStyle,
@@ -19,7 +19,7 @@ import {
   videoSizingStyles,
 } from './HoverVideoPlayer.styles';
 
-import { HoverVideoPlayerProps } from '../HoverVideoPlayer.types';
+import { HoverVideoPlayerProps } from './HoverVideoPlayer.types';
 
 /**
  * @component HoverVideoPlayer
@@ -254,7 +254,7 @@ export default function HoverVideoPlayer({
           overlayTransitionDuration
         );
       } else {
-        setIsHovering(false);
+        pauseVideo();
       }
     }
   }, [
@@ -279,20 +279,26 @@ export default function HoverVideoPlayer({
   );
 
   const currentVideoSrc = useRef(videoSrc);
+  let shouldReloadVideoSrc = false;
+  if (videoSrc !== currentVideoSrc.current && !isHovering && !isPlaying) {
+    currentVideoSrc.current = videoSrc;
+    shouldReloadVideoSrc = true;
+  }
+
+  const hasStringSrc = typeof currentVideoSrc.current === 'string';
 
   useEffect(() => {
     const videoElement = videoRef.current;
     if (!videoElement) return;
 
-    if (videoSrc !== currentVideoSrc.current && !isHovering && !isPlaying) {
-      currentVideoSrc.current = videoSrc;
+    if (shouldReloadVideoSrc) {
       // If the video element doesn't have a loaded source or the source has changed since the
       // last time we played the video, make sure to force the video to load the most up-to-date sources
       videoElement.load();
       // Reset the next start time to the start of the video
       nextVideoStartTimeRef.current = playbackRangeStart || 0;
     }
-  }, [videoSrc, isHovering, isPlaying, playbackRangeStart]);
+  }, [playbackRangeStart, shouldReloadVideoSrc]);
 
   // If the video's sources should be unloaded when it's paused and the video is not currently active, we can unload the video's sources.
   // We will remove the video's <source> tags in this render and then call video.load() in an effect to
@@ -316,11 +322,9 @@ export default function HoverVideoPlayer({
 
   const hasLoadingOverlay = Boolean(loadingOverlay);
 
-  console.log('isPlaying', isPlaying);
-
   return (
     <div
-      data-testid="hover-video-player-container"
+      data-testid="hvp"
       ref={containerRef}
       style={{
         ...containerSizingStyles[sizingMode],
@@ -386,8 +390,8 @@ export default function HoverVideoPlayer({
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
         src={
-          typeof currentVideoSrc.current === 'string' && !shouldUnloadVideo
-            ? currentVideoSrc.current
+          hasStringSrc && !shouldUnloadVideo
+            ? (currentVideoSrc.current as string)
             : undefined
         }
         // If a playback range is set, the loop attribute will not work correctly so there's no point in setting it here;
@@ -455,9 +459,7 @@ export default function HoverVideoPlayer({
             : undefined
         }
       >
-        {shouldUnloadVideo || typeof currentVideoSrc.current === 'string'
-          ? null
-          : currentVideoSrc.current}
+        {shouldUnloadVideo || hasStringSrc ? null : currentVideoSrc.current}
         {videoCaptions}
       </video>
     </div>
