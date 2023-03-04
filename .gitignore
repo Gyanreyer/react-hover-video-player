@@ -9,5 +9,7 @@ npm-debug.log*
 /docs/.vuepress/dist
 /docs/.vuepress/.temp
 /docs/.vuepress/.cache
-/tests/cypress/videos
-/tests/cypress/screenshots
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/tests/index.js

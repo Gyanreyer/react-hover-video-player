@@ -3,7 +3,6 @@ version: 2.1
 orbs:
   cypress: cypress-io/cypress@1.29.0
   node: circleci/node@5.0.2
-  codecov: codecov/codecov@3.2.2
 executors:
   chrome-91:
     docker:
@@ -18,7 +17,6 @@ jobs:
       - run:
           name: Running end-to-end tests
           command: npm run test:smoke
-      - codecov/upload
   validate:
     executor: node/default
     steps:
