@@ -1,7 +1,7 @@
 import React from 'react';
-import HoverVideoPlayer from '../../src/HoverVideoPlayer';
+import HoverVideoPlayer from '../../../src/HoverVideoPlayer';
 
-import { mp4VideoSrc, webmVideoSrc } from '../constants';
+import { mp4VideoSrc, webmVideoSrc } from '../../constants';
 
 export default function VideoSrcTestPage(): JSX.Element {
   return (

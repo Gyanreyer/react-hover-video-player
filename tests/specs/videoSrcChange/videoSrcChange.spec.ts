@@ -5,7 +5,7 @@ import {
   mp4VideoSrcURL,
   webmVideoSrc,
   webmVideoSrcURL,
-} from '../constants';
+} from '../../constants';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/videoSrcChange');

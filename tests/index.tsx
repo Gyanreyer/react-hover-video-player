@@ -1,16 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import PlaybackTestPage from './specs/playback';
-import VideoSrcTestPage from './specs/videoSrc';
-import VideoSrcChangeTestPage from './specs/videoSrcChange';
+import OverlaysTestPage from "./specs/overlays";
+import PlaybackTestPage from "./specs/playback";
+import VideoSrcTestPage from "./specs/videoSrc";
+import VideoSrcChangeTestPage from "./specs/videoSrcChange";
 
 function App(): JSX.Element {
   return (
     <Router>
       <Routes>
+        <Route path="/overlays" element={<OverlaysTestPage />} />
         <Route path="/playback" element={<PlaybackTestPage />} />
         <Route path="/videoSrc" element={<VideoSrcTestPage />} />
         <Route path="/videoSrcChange" element={<VideoSrcChangeTestPage />} />
@@ -19,4 +21,4 @@ function App(): JSX.Element {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));

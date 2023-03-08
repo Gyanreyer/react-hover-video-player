@@ -1,16 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-import { mp4VideoSrcURL } from '../constants';
-
-test.use({
-  hasTouch: true,
-});
+import { mp4VideoSrcURL } from '../../constants';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/playback');
 });
 
-test('plays correctly when the user hovers with a touchscreen tap', async ({
+test('plays correctly when the user hovers with their mouse', async ({
   page,
 }) => {
   const hoverVideoPlayer = await page.locator('[data-testid="hvp"]');
@@ -18,8 +14,7 @@ test('plays correctly when the user hovers with a touchscreen tap', async ({
 
   await expect(video).toHaveJSProperty('paused', true);
 
-  // Tap on the player to start playing
-  await hoverVideoPlayer.tap();
+  await hoverVideoPlayer.hover();
 
   await Promise.all([
     expect(video).toHaveJSProperty('paused', false),
@@ -28,8 +23,8 @@ test('plays correctly when the user hovers with a touchscreen tap', async ({
     expect(video).not.toHaveJSProperty('currentTime', 0),
   ]);
 
-  // Tap on another element outside of the player to stop playing
-  await page.tap('h1');
+  // Move the mouse so we're no longer hovering
+  await page.mouse.move(0, 0);
 
   await expect(video).toHaveJSProperty('paused', true);
 });

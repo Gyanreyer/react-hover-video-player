@@ -74,8 +74,6 @@ http
     if (contentType.startsWith('video')) {
       const { size } = statSync(pathname);
 
-      console.log(`Serving ${pathname} with size ${size} bytes`);
-
       response.statusCode = 206;
       response.setHeader('Accept-Ranges', 'bytes');
       response.setHeader('Content-Length', size);

@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-import { mp4VideoSrcURL } from '../constants';
+import { mp4VideoSrcURL } from '../../constants';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/playback');
 });
 
-test('plays correctly when the user hovers with their mouse', async ({
+test('plays correctly when the user focuses the player with their keyboard', async ({
   page,
 }) => {
   const hoverVideoPlayer = await page.locator('[data-testid="hvp"]');
@@ -14,7 +14,7 @@ test('plays correctly when the user hovers with their mouse', async ({
 
   await expect(video).toHaveJSProperty('paused', true);
 
-  await hoverVideoPlayer.hover();
+  await hoverVideoPlayer.focus();
 
   await Promise.all([
     expect(video).toHaveJSProperty('paused', false),
@@ -24,7 +24,7 @@ test('plays correctly when the user hovers with their mouse', async ({
   ]);
 
   // Move the mouse so we're no longer hovering
-  await page.mouse.move(0, 0);
+  await hoverVideoPlayer.blur();
 
   await expect(video).toHaveJSProperty('paused', true);
 });

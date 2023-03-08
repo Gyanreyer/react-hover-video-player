@@ -1,1 +1,0 @@
-npx --no-install commitlint -x @commitlint/config-conventional --edit $1

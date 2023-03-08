@@ -1,8 +1,8 @@
 import React from 'react';
 
-import HoverVideoPlayer from '../../src/HoverVideoPlayer';
+import HoverVideoPlayer from '../../../src/HoverVideoPlayer';
 
-import { mp4VideoSrc, webmVideoSrc } from '../constants';
+import { mp4VideoSrc, webmVideoSrc } from '../../constants';
 
 const sourceOptions = {
   mp4String: mp4VideoSrc,
@@ -35,7 +35,10 @@ export default function VideoSrcChangeTestPage(): JSX.Element {
           </label>
         ))}
       </form>
-      <HoverVideoPlayer videoSrc={sourceOptions[selectedVideoSrc]} />
+      <HoverVideoPlayer
+        videoSrc={sourceOptions[selectedVideoSrc]}
+        data-testid="hvp"
+      />
     </div>
   );
 }

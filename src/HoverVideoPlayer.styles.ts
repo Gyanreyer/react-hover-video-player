@@ -63,3 +63,20 @@ export const videoSizingStyles: SizingModeStyle = {
   // Don't apply any preset styling to the video
   manual: null,
 };
+
+export const overlayTransitionDurationVar = "--hvp-overlay-transition-duration";
+
+export const visibleOverlayStyles: React.CSSProperties = {
+  visibility: 'visible',
+  opacity: 1,
+  transitionProperty: 'opacity',
+  transitionDuration: `var(${overlayTransitionDurationVar})`,
+};
+
+export const hiddenOverlayStyles: React.CSSProperties = {
+  visibility: 'hidden',
+  opacity: 0,
+  transitionProperty: 'opacity, visibility',
+  transitionDuration: `var(${overlayTransitionDurationVar}), 0s`,
+  transitionDelay: `0s, var(${overlayTransitionDurationVar})`,
+};

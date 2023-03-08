@@ -4,22 +4,25 @@ import React, {
   useEffect,
   useState,
   useCallback,
-} from 'react';
+} from "react";
 
-import useSetAdditionalAttributesOnVideo from './hooks/useSetAdditionalAttributesOnVideo';
-import useHoverTargetElement from './hooks/useHoverTargetElement';
-import useManageHoverEvents from './hooks/useManageHoverEvents';
+import useSetAdditionalAttributesOnVideo from "./hooks/useSetAdditionalAttributesOnVideo";
+import useHoverTargetElement from "./hooks/useHoverTargetElement";
+import useManageHoverEvents from "./hooks/useManageHoverEvents";
 
-import { isVideoElementPaused } from './utils/videoElementPlaybackStates';
+import { isVideoElementPaused } from "./utils/videoElementPlaybackStates";
 
 import {
   expandToFillContainerStyle,
   containerSizingStyles,
   pausedOverlayWrapperSizingStyles,
   videoSizingStyles,
-} from './HoverVideoPlayer.styles';
+  visibleOverlayStyles,
+  hiddenOverlayStyles,
+  overlayTransitionDurationVar,
+} from "./HoverVideoPlayer.styles";
 
-import { HoverVideoPlayerProps } from './HoverVideoPlayer.types';
+import { HoverVideoPlayerProps } from "./HoverVideoPlayer.types";
 
 /**
  * @component HoverVideoPlayer
@@ -65,7 +68,7 @@ export default function HoverVideoPlayer({
   videoClassName = undefined,
   videoRef: forwardedVideoRef = null,
   videoStyle = undefined,
-  sizingMode = 'video',
+  sizingMode = "video",
   ...spreadableProps
 }: HoverVideoPlayerProps): JSX.Element {
   // Element refs
@@ -150,12 +153,12 @@ export default function HoverVideoPlayer({
       setIsHovering(false);
     };
 
-    hoverTargetElement.addEventListener('hvp:hoverStart', onHoverStart);
-    hoverTargetElement.addEventListener('hvp:hoverEnd', onHoverEnd);
+    hoverTargetElement.addEventListener("hvp:hoverStart", onHoverStart);
+    hoverTargetElement.addEventListener("hvp:hoverEnd", onHoverEnd);
 
     return () => {
-      hoverTargetElement.removeEventListener('hvp:hoverStart', onHoverStart);
-      hoverTargetElement.removeEventListener('hvp:hoverEnd', onHoverEnd);
+      hoverTargetElement.removeEventListener("hvp:hoverStart", onHoverStart);
+      hoverTargetElement.removeEventListener("hvp:hoverEnd", onHoverEnd);
     };
   }, [
     cancelTimeouts,
@@ -177,9 +180,9 @@ export default function HoverVideoPlayer({
       //  don't count.
       // If the video isn't muted and playback failed with a `NotAllowedError`, this means the browser blocked
       // playing the video because the user hasn't clicked anywhere on the page yet.
-      if (!videoElement.muted && error.name === 'NotAllowedError') {
+      if (!videoElement.muted && error.name === "NotAllowedError") {
         console.warn(
-          'HoverVideoPlayer: Playback with sound was blocked by the browser. Attempting to play again with the video muted; audio will be restored if the user clicks on the page.'
+          "HoverVideoPlayer: Playback with sound was blocked by the browser. Attempting to play again with the video muted; audio will be restored if the user clicks on the page."
         );
         // Mute the video and attempt to play again
         videoElement.muted = true;
@@ -191,9 +194,9 @@ export default function HoverVideoPlayer({
           videoElement.muted = false;
 
           // Clean up the event listener so it is only fired once
-          document.removeEventListener('click', onClickDocument);
+          document.removeEventListener("click", onClickDocument);
         };
-        document.addEventListener('click', onClickDocument);
+        document.addEventListener("click", onClickDocument);
       } else {
         // Log any other playback errors with console.error
         console.error(`HoverVideoPlayer: ${error.message}`);
@@ -285,7 +288,7 @@ export default function HoverVideoPlayer({
     shouldReloadVideoSrc = true;
   }
 
-  const hasStringSrc = typeof currentVideoSrc.current === 'string';
+  const hasStringSrc = typeof currentVideoSrc.current === "string";
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -324,11 +327,11 @@ export default function HoverVideoPlayer({
 
   return (
     <div
-      data-testid="hvp"
       ref={containerRef}
       style={{
-        ...containerSizingStyles[sizingMode],
-        position: 'relative',
+        [overlayTransitionDurationVar]: `${overlayTransitionDuration}ms`,
+        ...containerSizingStyles,
+        position: "relative",
         ...style,
       }}
       {...spreadableProps}
@@ -338,14 +341,12 @@ export default function HoverVideoPlayer({
           style={{
             ...pausedOverlayWrapperSizingStyles[sizingMode],
             zIndex: 1,
-            opacity: shouldShowPausedOverlay ? 1 : 0,
-            transition: `opacity ${overlayTransitionDuration}ms`,
-            // Disable pointer events on the paused overlay when it's hidden
-            pointerEvents: shouldShowPausedOverlay ? 'auto' : 'none',
+            ...(shouldShowPausedOverlay
+              ? visibleOverlayStyles
+              : hiddenOverlayStyles),
             ...pausedOverlayWrapperStyle,
           }}
           className={pausedOverlayWrapperClassName}
-          data-testid="paused-overlay-wrapper"
         >
           {pausedOverlay}
         </div>
@@ -355,16 +356,15 @@ export default function HoverVideoPlayer({
           style={{
             ...expandToFillContainerStyle,
             zIndex: 2,
-            opacity: shouldShowLoadingOverlay ? 1 : 0,
-            transition: `opacity ${overlayTransitionDuration}ms ${
-              shouldShowLoadingOverlay ? loadingStateTimeout : 0
-            }ms`,
-            // Disable pointer events on the loading overlay when it's hidden
-            pointerEvents: shouldShowLoadingOverlay ? 'auto' : 'none',
+            transitionDelay: loadingStateTimeout
+              ? `${loadingStateTimeout}ms`
+              : undefined,
+            ...(shouldShowLoadingOverlay
+              ? visibleOverlayStyles
+              : hiddenOverlayStyles),
             ...loadingOverlayWrapperStyle,
           }}
           className={loadingOverlayWrapperClassName}
-          data-testid="loading-overlay-wrapper"
         >
           {loadingOverlay}
         </div>
@@ -375,14 +375,10 @@ export default function HoverVideoPlayer({
             ...expandToFillContainerStyle,
             zIndex: 3,
             // Show the hover overlay when the player is hovered/playing
-            opacity: isHovering ? 1 : 0,
-            transition: `opacity ${overlayTransitionDuration}ms`,
-            // Disable pointer events on the hover overlay when it's hidden
-            pointerEvents: isHovering ? 'auto' : 'none',
+            ...(isHovering ? visibleOverlayStyles : hiddenOverlayStyles),
             ...hoverOverlayWrapperStyle,
           }}
           className={hoverOverlayWrapperClassName}
-          data-testid="hover-overlay-wrapper"
         >
           {hoverOverlay}
         </div>
@@ -403,7 +399,7 @@ export default function HoverVideoPlayer({
         ref={videoRef}
         style={{
           ...videoSizingStyles[sizingMode],
-          objectFit: 'cover',
+          objectFit: "cover",
           ...videoStyle,
         }}
         controls={controls}
@@ -413,14 +409,24 @@ export default function HoverVideoPlayer({
         onPlaying={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onEnded={() => setIsPlaying(false)}
+        // Update state when the video starts loading
         onLoadStart={() => setIsLoading(true)}
+        // Update that we're no longer loading when the video has suspended loading data
+        onSuspend={() => setIsLoading(false)}
+        // Update that we are loading if the video is waiting for data to continue playing
+        onWaiting={() => setIsLoading(true)}
         onLoadedData={() => {
+          // As video data is loaded, check if we've loaded enough data to start playing the video
+          // and update state accordingly
           setIsLoading(
             (videoRef.current?.readyState || 0) <
               HTMLMediaElement.HAVE_ENOUGH_DATA
           );
         }}
-        onAbort={() => setIsLoading(false)}
+        onAbort={() => {
+          // If loading is aborted, update state
+          setIsLoading(false);
+        }}
         onTimeUpdate={
           // If there's a playback range set, the traditional `loop` video prop won't work correctly so
           // we'll need watch the video's time as it plays and manually keep it within the bounds of the range
