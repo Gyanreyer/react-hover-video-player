@@ -36,7 +36,7 @@ export interface HoverVideoPlayerProps
    * The component's container div element will be used by default if no hover target is provided.
    * @defaultValue null
    */
-  hoverTarget?: Node | (() => Node) | React.RefObject<Node> | null;
+  hoverTarget?: Node | (() => Node | null) | React.RefObject<Node> | null;
   /**
    * Callback fired when the user starts hovering on the player's hover target
    * @defaultValue null

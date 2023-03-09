@@ -37,7 +37,7 @@ test('loads single source element videoSrc', async ({ page }) => {
 
   await Promise.all([
     // The video should not have a src attribute set.
-    expect(video).not.toHaveAttribute('src', webmVideoSrc),
+    expect(await video.getAttribute("src")).toBeNull(),
     // The video should have one <source> element with the expected src attribute.
     expect(videoSource).toHaveCount(1),
     expect(videoSource).toHaveAttribute('src', webmVideoSrc),
@@ -55,7 +55,7 @@ test('loads multiple source element videoSrc', async ({ page }) => {
 
   await Promise.all([
     // The video should not have a src attribute set.
-    expect(video).not.toHaveAttribute('src', webmVideoSrc),
+    expect(await video.getAttribute("src")).toBeNull(),
     // The video should have two <source> elements with the expected src attributes.
     expect(videoSource).toHaveCount(2),
     expect(videoSource.nth(0)).toHaveAttribute('src', webmVideoSrc),

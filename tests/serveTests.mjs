@@ -1,33 +1,34 @@
-import http from 'node:http';
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import path from 'node:path';
-import url from 'node:url';
+import http from "node:http";
+import { existsSync, readFileSync, statSync } from "node:fs";
+import path from "node:path";
+import url from "node:url";
 
-import esbuild from 'esbuild';
+import esbuild from "esbuild";
 
 const port = 8080;
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const extensionContentTypeMap = {
-  mp4: 'video/mp4',
-  webm: 'video/webm',
-  jpg: 'image/jpeg',
-  jpeg: 'image/jpeg',
-  png: 'image/png',
-  js: 'text/javascript',
-  css: 'text/css',
-  html: 'text/html',
+  mp4: "video/mp4",
+  webm: "video/webm",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  js: "text/javascript",
+  css: "text/css",
+  html: "text/html",
+  vtt: "text/vtt",
 };
 
 // Build the test page
 await esbuild.build({
-  entryPoints: [path.resolve(__dirname, 'index.tsx')],
-  outfile: path.resolve(__dirname, './index.js'),
+  entryPoints: [path.resolve(__dirname, "index.tsx")],
+  outfile: path.resolve(__dirname, "./index.js"),
   bundle: true,
-  format: 'esm',
-  target: 'es6',
-  logLevel: 'info',
+  format: "esm",
+  target: "es6",
+  logLevel: "info",
 });
 
 const filePathRegex = /\.[a-z0-9]{2,4}$/;
@@ -38,7 +39,7 @@ http
     // otherwise, we'll assume it's a request for a page so we should just serve the index.html file.
     const requestPath = request.url.match(filePathRegex)
       ? request.url
-      : '/index.html';
+      : "/index.html";
 
     const pathname = `${__dirname}${requestPath}`;
 
@@ -54,30 +55,30 @@ http
     response.statusCode = 200;
 
     // Website you wish to allow to connect
-    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.setHeader("Access-Control-Allow-Origin", "*");
 
     // Request methods you wish to allow
-    response.setHeader('Access-Control-Allow-Methods', 'GET');
+    response.setHeader("Access-Control-Allow-Methods", "GET");
 
     // Request headers you wish to allow
     response.setHeader(
-      'Access-Control-Allow-Headers',
-      'X-Requested-With,content-type'
+      "Access-Control-Allow-Headers",
+      "X-Requested-With,content-type"
     );
 
-    const contentType = extensionContentTypeMap[pathname.split('.').pop()];
+    const contentType = extensionContentTypeMap[pathname.split(".").pop()];
 
-    response.setHeader('Content-Type', contentType);
+    response.setHeader("Content-Type", contentType);
 
     const fileData = readFileSync(pathname);
 
-    if (contentType.startsWith('video')) {
+    if (contentType.startsWith("video")) {
       const { size } = statSync(pathname);
 
       response.statusCode = 206;
-      response.setHeader('Accept-Ranges', 'bytes');
-      response.setHeader('Content-Length', size);
-      response.setHeader('Content-Range', `bytes 0-${size - 1}/${size}`);
+      response.setHeader("Accept-Ranges", "bytes");
+      response.setHeader("Content-Length", size);
+      response.setHeader("Content-Range", `bytes 0-${size - 1}/${size}`);
     }
 
     response.end(fileData);

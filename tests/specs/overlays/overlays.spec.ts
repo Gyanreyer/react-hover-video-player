@@ -101,6 +101,15 @@ test('pausedOverlay works as expected', async ({ page }) => {
 });
 
 test('loadingOverlay works as expected', async ({ page }) => {
+  // Apply an artificial delay to all video requests
+  // to make sure the loading timeout has time to
+  // kick in
+  await page.route("**/*.{mp4,webm}", (route) => {
+    setTimeout(() => {
+      route.continue();
+    }, 300);
+  });
+
   const hoverVideoPlayer = page.locator('[data-testid="loading-overlay-only"]');
   const video = hoverVideoPlayer.locator('video');
   const loadingOverlay = hoverVideoPlayer.locator(
@@ -112,7 +121,7 @@ test('loadingOverlay works as expected', async ({ page }) => {
     expect(video).toHaveJSProperty('paused', true),
     expect(
       await video.evaluate((element: HTMLVideoElement) => element.readyState),
-      'the video should be loading'
+      'the video should not be loaded yet'
     ).toBeLessThan(4),
     // The loading overlay should be hidden initially
     expectOverlayToBeHidden(loadingOverlay),
@@ -171,7 +180,17 @@ test('hoverOverlay works as expected', async ({ page }) => {
 });
 
 test('all overlays work together as expected', async ({ page }) => {
+  // Apply an artificial delay to all video requests
+  // to make sure the loading timeout has time to
+  // kick in
+  await page.route("**/*.{mp4,webm}", (route) => {
+    setTimeout(() => {
+      route.continue();
+    }, 300);
+  });
+
   const hoverVideoPlayer = page.locator('[data-testid="all-overlays"]');
+  const video = hoverVideoPlayer.locator('video');
   const pausedOverlay = hoverVideoPlayer.locator(
     '[data-testid="paused-overlay"]'
   );
@@ -200,15 +219,18 @@ test('all overlays work together as expected', async ({ page }) => {
     expectOverlayToBeVisible(pausedOverlay, {
       message: "the paused overlay should stay visible while the video is loading"
     }),
+    // The loading overlay should be "visible", but have 0 opacity until the loading timeout elapses
     expectOverlayToBeVisible(loadingOverlay, {
-      message: "the loading overlay should be visible while the video is loading",
+      message: "the loading overlay should be visible, although its opacity is 0",
       transitionDelay: '0.2s',
-      shouldPoll: true,
     }),
     expectOverlayToBeVisible(hoverOverlay, {
       message: "the hover overlay should be visible while the video is loading"
     }),
   ]);
+
+  // The video is done loading and should be playing now!
+  await expect(video).toHaveJSProperty('readyState', 4);
 
   await Promise.all([
     expectOverlayToBeHidden(pausedOverlay, {

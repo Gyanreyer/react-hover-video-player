@@ -330,7 +330,7 @@ export default function HoverVideoPlayer({
       ref={containerRef}
       style={{
         [overlayTransitionDurationVar]: `${overlayTransitionDuration}ms`,
-        ...containerSizingStyles,
+        ...containerSizingStyles[sizingMode],
         position: "relative",
         ...style,
       }}

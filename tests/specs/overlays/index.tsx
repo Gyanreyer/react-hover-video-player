@@ -1,12 +1,12 @@
-import React from 'react';
-import HoverVideoPlayer from '../../../src/HoverVideoPlayer';
+import React from "react";
+import HoverVideoPlayer from "../../../src/HoverVideoPlayer";
 
-import { mp4VideoSrc } from '../../constants';
+import { mp4VideoSrc, webmVideoSrc } from "../../constants";
 
 const PausedOverlay = () => (
   <div
     style={{
-      background: 'red',
+      background: "red",
     }}
     data-testid="paused-overlay"
   >
@@ -17,7 +17,7 @@ const PausedOverlay = () => (
 const LoadingOverlay = () => (
   <div
     style={{
-      background: 'yellow',
+      background: "yellow",
     }}
     data-testid="loading-overlay"
   >
@@ -28,7 +28,7 @@ const LoadingOverlay = () => (
 const HoverOverlay = () => (
   <div
     style={{
-      background: 'green',
+      background: "green",
     }}
     data-testid="hover-overlay"
   >
@@ -50,7 +50,7 @@ export default function OverlaysTestPage(): JSX.Element {
         loadingOverlay={<LoadingOverlay />}
         preload="none"
         style={{
-          aspectRatio: '16/9',
+          aspectRatio: "16/9",
           width: 500,
         }}
         data-testid="loading-overlay-only"
@@ -61,11 +61,15 @@ export default function OverlaysTestPage(): JSX.Element {
         data-testid="hover-overlay-only"
       />
       <HoverVideoPlayer
-        videoSrc={mp4VideoSrc}
+        videoSrc={webmVideoSrc}
         pausedOverlay={<PausedOverlay />}
         loadingOverlay={<LoadingOverlay />}
         hoverOverlay={<HoverOverlay />}
         preload="none"
+        style={{
+          aspectRatio: "16/9",
+          width: 500,
+        }}
         data-testid="all-overlays"
       />
     </div>

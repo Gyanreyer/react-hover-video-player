@@ -55,7 +55,7 @@ test('reloads when videoSrc changes from string to source element', async ({
   await page.getByLabel('webmSourceElement').check();
 
   await Promise.all([
-    expect(video).not.toHaveAttribute('src', webmVideoSrc),
+    expect(await video.getAttribute("src")).toBeNull(),
     expect(source).toHaveCount(1),
     expect(source).toHaveAttribute('src', webmVideoSrc),
     expect(video).toHaveJSProperty('currentSrc', webmVideoSrcURL),
@@ -81,7 +81,7 @@ test('reloads when videoSrc changes from source element to source element', asyn
   await page.getByLabel('mp4SourceElement').check();
 
   await Promise.all([
-    expect(video).not.toHaveAttribute('src', mp4VideoSrc),
+    expect(await video.getAttribute("src")).toBeNull(),
     expect(source).toHaveCount(1),
     expect(source).toHaveAttribute('src', mp4VideoSrc),
     expect(video).toHaveJSProperty('currentSrc', mp4VideoSrcURL),
@@ -91,7 +91,7 @@ test('reloads when videoSrc changes from source element to source element', asyn
   await page.getByLabel('webmSourceElement').check();
 
   await Promise.all([
-    expect(video).not.toHaveAttribute('src', webmVideoSrc),
+    expect(await video.getAttribute("src")).toBeNull(),
     expect(source).toHaveCount(1),
     expect(source).toHaveAttribute('src', webmVideoSrc),
     expect(video).toHaveJSProperty('currentSrc', webmVideoSrcURL),
