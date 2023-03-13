@@ -1,9 +1,9 @@
-import React from 'react';
-import { css } from 'emotion';
+import React from "react";
+import { css } from "emotion";
 
-import HoverVideoPlayer from '../src';
-import LoadingSpinnerOverlay from './utils/LoadingSpinnerOverlay';
-import ComponentProfiler from './utils/ComponentProfiler';
+import HoverVideoPlayer from "../src";
+import LoadingSpinnerOverlay from "./utils/LoadingSpinnerOverlay";
+import ComponentProfiler from "./utils/ComponentProfiler";
 
 interface TestComponentProps {
   videoSrc: string;

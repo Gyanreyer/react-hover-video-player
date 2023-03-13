@@ -10,8 +10,6 @@ import useSetAdditionalAttributesOnVideo from "./hooks/useSetAdditionalAttribute
 import useHoverTargetElement from "./hooks/useHoverTargetElement";
 import useManageHoverEvents from "./hooks/useManageHoverEvents";
 
-import { isVideoElementPaused } from "./utils/videoElementPlaybackStates";
-
 import {
   expandToFillContainerStyle,
   containerSizingStyles,
@@ -329,7 +327,7 @@ export default function HoverVideoPlayer({
     <div
       ref={containerRef}
       style={{
-        [overlayTransitionDurationVar]: `${overlayTransitionDuration}ms`,
+        [overlayTransitionDurationVar as string]: `${overlayTransitionDuration}ms`,
         ...containerSizingStyles[sizingMode],
         position: "relative",
         ...style,
@@ -448,7 +446,10 @@ export default function HoverVideoPlayer({
 
                   // If the video is paused but the user is still hovering,
                   // meaning it should continue to play, call play() to keep it going
-                  if (isHovering && isVideoElementPaused(videoElement)) {
+                  if (
+                    isHovering &&
+                    (videoElement.paused || videoElement.ended)
+                  ) {
                     playVideo();
                   }
                 } else if (currentTime > maxVideoTime) {

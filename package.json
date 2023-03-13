@@ -4,11 +4,16 @@
   "description": "React component which manages playing a video when the user hovers over it and pausing when they stop.",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
+  "exports": {
+    "require": "./dist/index.cjs",
+    "import": "./dist/index.mjs"
+  },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "node build.mjs",
+    "build:prod": "node build.mjs --clean --builds=all && npx tsc",
     "dev": "node dev.mjs",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
