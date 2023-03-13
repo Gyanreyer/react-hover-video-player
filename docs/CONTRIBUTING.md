@@ -1,53 +1,15 @@
 # Contributing
 
-## How to make a contribution
+## How to contribute to an open source project
 
 1. Click the "Fork" button on this library's [GitHub page](https://github.com/gyanreyer/react-hover-video-player) to make a copy of the repository in your account which you can work on.
 2. Clone your forked repo to your computer.
 3. Move into the root of this project's directory and run `npm install` to get all dependencies installed; this will also set up Husky commit hooks automatically.
 4. Start coding! Check out the "I want to..." sections below for guidance on where to start.
-5. Once you are confident that your work is done, push your changes up to your repository and click "Contribute" > "Open pull request". Fill out a description of your changes and then create the pull request.
-6. A maintainer will review your code and may give feedback on anything that should be changed. Once tests are passing and your changes are approved, they will be merged into the main repository and automatically deployed via CircleCI using [semantic-release](https://github.com/semantic-release/semantic-release).
+5. Once you are confident that your work is done, push your changes up to your repository and click "Contribute" > "Open pull request". Fill out a description of your changes and then create the pull request. Please be detailed about the what and why of your changes if you can!
+6. A maintainer will review your code and may give feedback on anything that should be changed. Once tests are passing and your changes are approved, they will be merged into the main repository and deployed in the next release.
 
 Thank you so much for your contribution ❤️
-
-## Commit messages
-
-This library strictly enforces following the [Angular commit guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines) for commit messages.
-
-To make things as easy as possible, it is recommended that you run
-`npm run commit` to commit staged changes; this will open [Commitizen](https://github.com/commitizen/cz-cli), a CLI tool which
-will walk you through writing your commit message and handle all of the formatting for you.
-
-However, if you prefer to manually write the commit message yourself, it should follow the following structure:
-
-```text
-<type>(<scope>): <subject>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-<footer>
-```
-
-### Accepted commit types
-
-This library uses [semantic-release](https://github.com/semantic-release/semantic-release) to determine how the package version should be incremented based on your commit message's `type`.
-
-| Type     | Description                                                                                            | Package Version Increment                                                                             |
-| -------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| feat     | A new feature                                                                                          | Minor version (+0.1.0)                                                                                |
-| fix      | A bug fix                                                                                              | Patch version (+0.0.1)                                                                                |
-| refactor | A code change that neither fixes a bug nor adds a feature                                              | Minor version (+0.1.0)                                                                                |
-| perf     | A code change that improves performance                                                                | Minor version (+0.1.0)                                                                                |
-| docs     | Documentation only changes                                                                             | No change unless the commit scope is `readme`, in which case it will publish a patch version (+0.0.1) |
-| style    | Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) | No change                                                                                             |
-| test     | Adding missing or correcting existing tests                                                            | No change                                                                                             |
-| chore    | Changes to the build process or auxiliary tools and libraries such as documentation generation         | No change                                                                                             |
-
-### Breaking changes
-
-If your commit contains breaking changes from the current package version (ie, removes a prop, fundamentally changes how a feature works, etc), the commit message needs to be marked as such. To do so, add `"BREAKING CHANGE: [description of breaking change]"` to the footer of your commit message.
-This will result in the package being incremented by a major version (+1.0.0).
 
 ## I want to update documentation
 
@@ -57,38 +19,28 @@ The documentation site at <https://react-hover-video-player.dev> uses [VuePress]
 
 To preview the documentation site locally, run `npm run docs:dev` to serve it at <http://localhost:8080>.
 
-When committing changes to the README, make sure you use the appropriate commit type and scope. Semantic-release normally skips commits of type `docs`, but this can result
-in the npm package page's README not getting updated to reflect changes that have been made to it.
-
-If the main purpose of your commit is to update the README, please use `docs` as your commit's type and `readme` as the scope; this indicates to semantic-release that the change
-should be published to the npm package as a patched version.
-An example commit message might look like `docs(readme): fix typo in readme`.
-
 ## I want to fix a bug or add a feature
 
 All component code can be found in the `src` directory.
 
-The HoverVideoPlayer component is defined in the `src/component/HoverVideoPlayer.tsx` file, so it is recommended that you start there.
+The HoverVideoPlayer component is defined in the `src/HoverVideoPlayer.tsx` file, so it is recommended that you start there.
 
 ### Automated testing
 
-This library uses [Cypress component tests](https://docs.cypress.io/guides/component-testing/introduction) for automated testing; all test files can be found in the `tests/cypress/component` directory.
+This library uses [Playwright](https://playwright.dev/) for automated testing; all tests can be found in the `tests/` directory. Your changes will not be accepted unless all existing tests are passing. If you add new functionality, it is highly suggested that you add a test to cover it.
 
-- `npm run test` will run all tests once and check the tests' code coverage. **100% code coverage is required**. If you make a change, you must add a test accordingly.
-  - To run a specific test file, use the `--spec` flag like so: `npm run test -- --spec tests/cypress/component/testFile.spec.tsx`
-  - To only run a single test within a specific test file, change `it()` to `it.only()` for the desired test
-- `npm run test-runner` will open the Cypress test runner; this will provide a nice interface which helps with debugging and will automatically re-run tests as you make changes.
-- `npm run test:smoke` will perform a production build and then run all tests against the built code in a Chrome browser window. This can be used to catch potential problems introduced by the rollup config, but is otherwise slower to run and therefore not recommended for usage during regular development.
+- `npm run test` will run all tests once
+  - To run a specific test file, you can provide the test file's name as an arg, like `npm run test -- videoSrc.spec.ts`; this will only run tests in the `tests/specs/videoSrc/videoSrc.spec.ts` file
+  - To only run a single test within a specific test file, change `test()` to `test.only()` for the desired test; all others will be skipped. Just make sure you revert that before committing!
 
 ### Development playground
 
 Along with automated tests, you can also test your changes in a live demo playground environment located in the `dev` directory.
 
-Running `npm run dev` will serve the contents of `dev/index.tsx` at <http://localhost:3000> with hot reloading.
+Running `npm run dev` will serve the contents of `dev/index.tsx` at <http://localhost:8080>.
 
 For the most part, you will likely want to focus on editing the `TestComponent.tsx` file when testing your changes.
-You may modify playground files however you want for testing purposes, but your changes should not be committed.
-That being said, if you think your changes really should be committed, you are welcome to make a case for it!
+You may modify playground files however you want for testing purposes, but please refrain from committing your changes unless you have a strong case for why they should be!
 
 ## Other miscellaneous things
 

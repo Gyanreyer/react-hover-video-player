@@ -19,15 +19,17 @@ A React component that makes it simple to set up a video that will play when the
 - Easily add custom thumbnails and loading states
 - Lightweight and fast
 - No dependencies
-- Cleanly handles edge cases that can arise from managing async video playback, including:
-  - Avoids play promise interruption errors whenever possible
-  - Gracefully uses fallback behavior if browser policies block a video from playing with sound on
+- Gracefully uses fallback behavior if browser policies block a video from playing with sound on
 
 ## How It Works
 
 This component will render a video element which will start playing when an `onMouseEnter`, `onTouchStart`, or `onFocus` event is fired on the [hover target](#hovertarget) and will accordingly be paused when an `onMouseLeave` or `onBlur` event is fired on the target, or an `onTouchStart` event is fired outside of the target. This default behavior can be [disabled, overridden, and customized](#hover-event-handling) as needed.
 
 Everything is written with extra care to cleanly handle the video element's state as it asynchronously loads and plays.
+
+## Contributing
+
+Want to help? Contributions are welcome! Check out the [contributing guide for details](./CONTRIBUTING.md)
 
 ## Upgrading to v10
 
