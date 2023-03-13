@@ -172,6 +172,12 @@ export default function HoverVideoPlayer({
     if (!videoElement) return;
 
     videoElement.play().catch((error: DOMException) => {
+      // Suppress logging for "AbortError" errors, which are thrown when the video is paused while it was trying to play.
+      // These errors are expected and happen often, so they can be safely ignored.
+      if (error.name === "AbortError") {
+        return;
+      }
+
       // Additional handling for when browsers block playback for unmuted videos.
       // This is unfortunately necessary because most modern browsers do not allow playing videos with audio
       //  until the user has "interacted" with the page by clicking somewhere at least once; mouseenter events

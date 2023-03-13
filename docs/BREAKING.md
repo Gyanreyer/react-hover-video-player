@@ -90,7 +90,7 @@ attributes on the `<track>` elements:
 
 ### Removes `shouldSuppressPlaybackInterruptedErrors` prop
 
-After some rewrites, the `shouldSuppressPlaybackInterruptedErrors` is not as necessary as it used to be, so it is being removed.
+The `shouldSuppressPlaybackInterruptedErrors` prop is being removed, as it is not really needed anymore.
 
 This prop defaulted to `true` and was not commonly used, so will likely not impact many people. You can simply remove the prop and things will continue functioning as normal.
 
