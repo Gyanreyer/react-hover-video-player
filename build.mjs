@@ -21,7 +21,6 @@ const sharedOptions = {
   entryPoints: ["src/index.ts"],
   sourcemap: true,
   bundle: true,
-  minify: true,
   packages: "external",
   target: "es6",
   logLevel: "info",

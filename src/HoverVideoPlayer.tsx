@@ -6,10 +6,6 @@ import React, {
   useCallback,
 } from "react";
 
-import useSetAdditionalAttributesOnVideo from "./hooks/useSetAdditionalAttributesOnVideo";
-import useHoverTargetElement from "./hooks/useHoverTargetElement";
-import useManageHoverEvents from "./hooks/useManageHoverEvents";
-
 import {
   expandToFillContainerStyle,
   containerSizingStyles,
@@ -70,7 +66,7 @@ export default function HoverVideoPlayer({
   ...spreadableProps
 }: HoverVideoPlayerProps): JSX.Element {
   // Element refs
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   // Forward out local videoRef along to the videoRef prop
   useImperativeHandle(
@@ -78,14 +74,28 @@ export default function HoverVideoPlayer({
     () => videoRef.current as HTMLVideoElement
   );
 
-  // Effect sets attributes on the video which can't be done via props
-  useSetAdditionalAttributesOnVideo(
-    videoRef,
-    muted,
-    volume,
-    disableRemotePlayback,
-    disablePictureInPicture
-  );
+  // Effects set attributes on the video which can't be done via props
+  useEffect(() => {
+    // Manually setting the `muted` attribute on the video element via an effect in order
+    // to avoid a know React issue with the `muted` prop not applying correctly on initial render
+    // https://github.com/facebook/react/issues/10389
+    if (videoRef.current) videoRef.current.muted = muted;
+  }, [muted]);
+  useEffect(() => {
+    // Set the video's volume to match the `volume` prop
+    // Note that this will have no effect if the `muted` prop is set to true
+    if (videoRef.current) videoRef.current.volume = volume;
+  }, [volume]);
+  // React does not support directly setting disableRemotePlayback or disablePictureInPicture directly
+  // via the video element's props, so we have to manually set them in an effect
+  useEffect(() => {
+    if (videoRef.current)
+      videoRef.current.disableRemotePlayback = disableRemotePlayback;
+  }, [disableRemotePlayback]);
+  useEffect(() => {
+    if (videoRef.current)
+      videoRef.current.disablePictureInPicture = disablePictureInPicture;
+  }, [disablePictureInPicture]);
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -95,8 +105,33 @@ export default function HoverVideoPlayer({
     }
   }, [playbackRangeStart]);
 
-  // Get the hover target element from the hoverTarget prop, or default to the component's container div
-  const hoverTargetElement = useHoverTargetElement(hoverTarget || containerRef);
+  const [hoverTargetElement, setHoverTargetElement] = useState<Node | null>(
+    null
+  );
+
+  useEffect(() => {
+    // Default to the container element unless a hoverTarget prop is provided
+    let element: Node | null = containerRef.current;
+
+    if (hoverTarget) {
+      // Get the hover target element from the hoverTarget prop, or default to the component's container div
+      // A `hoverTarget` value could be a function, a DOM element, or a React ref, so
+      // figure out which one it is and get the hover target element out of it accordingly
+      if (typeof hoverTarget === "function") {
+        element = hoverTarget();
+      } else if (hoverTarget instanceof Node) {
+        element = hoverTarget;
+      } else if (hoverTarget && hoverTarget.hasOwnProperty("current")) {
+        element = hoverTarget.current;
+      } else {
+        console.error(
+          "HoverVideoPlayer was unable to get a usable hover target element. Please check your usage of the `hoverTarget` prop."
+        );
+      }
+    }
+
+    setHoverTargetElement(element);
+  }, [hoverTarget]);
 
   // Keep a ref for the time which the video should be started from next time it is played
   // This is useful if the video gets unloaded and we want to restore it to the time it was
@@ -277,13 +312,90 @@ export default function HoverVideoPlayer({
   // Effect cancels any pending timeouts when the component unmounts
   useEffect(() => () => cancelTimeouts(), [cancelTimeouts]);
 
-  useManageHoverEvents(
-    hoverTargetElement,
-    focused,
-    disableDefaultEventHandling,
-    onHoverStart,
-    onHoverEnd
-  );
+  // Keeping hover callbacks as refs because we want to be able to access them from within our
+  // onHoverStart and onHoverEnd event listeners without needing to re-run the
+  // event setup effect every time they change
+  const onHoverStartCallbackRef = useRef<typeof onHoverStart>();
+  onHoverStartCallbackRef.current = onHoverStart;
+
+  const onHoverEndCallbackRef = useRef<typeof onHoverEnd>();
+  onHoverEndCallbackRef.current = onHoverEnd;
+
+  // Effect sets up event listeners for hover events on hover target
+  useEffect(() => {
+    // If default event handling is disabled, we shouldn't check for touch events outside of the player
+    if (disableDefaultEventHandling || !hoverTargetElement) return undefined;
+
+    const onHoverStart = () => {
+      hoverTargetElement.dispatchEvent(new Event("hvp:hoverStart"));
+      onHoverStartCallbackRef.current?.();
+    };
+    const onHoverEnd = () => {
+      hoverTargetElement.dispatchEvent(new Event("hvp:hoverEnd"));
+      onHoverEndCallbackRef.current?.();
+    };
+
+    // Mouse events
+    hoverTargetElement.addEventListener("mouseenter", onHoverStart);
+    hoverTargetElement.addEventListener("mouseleave", onHoverEnd);
+
+    // Focus/blur
+    hoverTargetElement.addEventListener("focus", onHoverStart);
+    hoverTargetElement.addEventListener("blur", onHoverEnd);
+
+    // Touch events
+    const touchStartListenerOptions = { passive: true };
+
+    hoverTargetElement.addEventListener(
+      "touchstart",
+      onHoverStart,
+      touchStartListenerOptions
+    );
+    // Event listener pauses the video when the user touches somewhere outside of the player
+    const onWindowTouchStart = (event: TouchEvent) => {
+      if (
+        !(event.target instanceof Node) ||
+        !hoverTargetElement.contains(event.target)
+      ) {
+        onHoverEnd();
+      }
+    };
+
+    window.addEventListener(
+      "touchstart",
+      onWindowTouchStart,
+      touchStartListenerOptions
+    );
+
+    // Return a cleanup function that removes all event listeners
+    return () => {
+      hoverTargetElement.removeEventListener("mouseenter", onHoverStart);
+      hoverTargetElement.removeEventListener("mouseleave", onHoverEnd);
+      hoverTargetElement.removeEventListener("focus", onHoverStart);
+      hoverTargetElement.removeEventListener("blur", onHoverEnd);
+      hoverTargetElement.removeEventListener("touchstart", onHoverStart);
+      window.removeEventListener("touchstart", onWindowTouchStart);
+    };
+  }, [disableDefaultEventHandling, hoverTargetElement]);
+
+  // Defaulting the ref to false rather than the initial value of the focused prop because
+  // if focused is true initially, we want to run the effect, but if it's false, we don't
+  const previousFocusedRef = useRef<boolean>(false);
+
+  // Effect dispatches hover start/end events on the target element when the focused prop changes
+  useEffect(() => {
+    if (!hoverTargetElement) return;
+
+    if (previousFocusedRef.current !== focused) {
+      previousFocusedRef.current = focused;
+
+      if (focused) {
+        hoverTargetElement.dispatchEvent(new Event("hvp:hoverStart"));
+      } else {
+        hoverTargetElement.dispatchEvent(new Event("hvp:hoverEnd"));
+      }
+    }
+  }, [hoverTargetElement, focused]);
 
   const currentVideoSrc = useRef(videoSrc);
   let shouldReloadVideoSrc = false;
