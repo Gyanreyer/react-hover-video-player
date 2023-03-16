@@ -1,5 +1,6 @@
 name: Publish to react-hover-video-player.dev
 on:
+  workflow_dispatch:
   push:
     branches: [main]
 jobs:
