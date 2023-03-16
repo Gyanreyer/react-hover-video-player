@@ -1,9 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { css } from 'emotion';
+import React from "react";
+import ReactDOM from "react-dom";
+import { css } from "emotion";
 
-import TestComponent from './TestComponent';
-import testVideos from './constants/testVideos';
+import TestComponent from "./TestComponent";
+import testVideos from "./constants/testVideos";
 
 const DevPage = (): JSX.Element => (
   <main
@@ -30,7 +30,7 @@ const DevPage = (): JSX.Element => (
   </main>
 );
 
-const rootElement = document.createElement('div');
+const rootElement = document.createElement("div");
 document.body.appendChild(rootElement);
 
 ReactDOM.render(<DevPage />, rootElement);

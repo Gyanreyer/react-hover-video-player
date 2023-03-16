@@ -1,9 +1,9 @@
-import React from 'react';
-import { css } from 'emotion';
+import React from "react";
+import { css } from "emotion";
 
-import HoverVideoPlayer from '../src';
-import LoadingSpinnerOverlay from './utils/LoadingSpinnerOverlay';
-import ComponentProfiler from './utils/ComponentProfiler';
+import HoverVideoPlayer from "../src";
+import LoadingSpinnerOverlay from "./utils/LoadingSpinnerOverlay";
+import ComponentProfiler from "./utils/ComponentProfiler";
 
 interface TestComponentProps {
   videoSrc: string;
@@ -27,7 +27,7 @@ const TestComponent = ({
     <ComponentProfiler profilerID={videoSrc}>
       {/* TEST COMPONENT HERE */}
       <HoverVideoPlayer
-        videoSrc={videoSrc}
+        videoSrc={<source src={videoSrc} />}
         pausedOverlay={
           <img
             src={thumbnailImageSrc}
@@ -44,6 +44,7 @@ const TestComponent = ({
           padding-top: 75%;
         `}
         sizingMode="container"
+        preload="none"
         unloadVideoOnPaused
         restartOnPaused
       />

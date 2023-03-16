@@ -2,7 +2,6 @@
 
 [![npm version](https://badgen.net/npm/v/react-hover-video-player)](https://www.npmjs.com/package/react-hover-video-player)
 [![minzipped size](https://badgen.net/bundlephobia/minzip/react-hover-video-player)](https://bundlephobia.com/result?p=react-hover-video-player)
-[![code coverage](https://codecov.io/gh/Gyanreyer/react-hover-video-player/branch/main/graph/badge.svg)](https://codecov.io/gh/Gyanreyer/react-hover-video-player)
 [![CircleCI](https://circleci.com/gh/Gyanreyer/react-hover-video-player/tree/main.svg?style=svg)](https://circleci.com/gh/Gyanreyer/react-hover-video-player/tree/main)
 [![license](https://img.shields.io/npm/l/react-hover-video-player)](https://github.com/Gyanreyer/react-hover-video-player/blob/main/LICENSE)
 
@@ -20,15 +19,21 @@ A React component that makes it simple to set up a video that will play when the
 - Easily add custom thumbnails and loading states
 - Lightweight and fast
 - No dependencies
-- Cleanly handles edge cases that can arise from managing async video playback, including:
-  - Avoids play promise interruption errors whenever possible
-  - Gracefully uses fallback behavior if browser policies block a video from playing with sound on
+- Gracefully uses fallback behavior if browser policies block a video from playing with sound on
 
 ## How It Works
 
 This component will render a video element which will start playing when an `onMouseEnter`, `onTouchStart`, or `onFocus` event is fired on the [hover target](#hovertarget) and will accordingly be paused when an `onMouseLeave` or `onBlur` event is fired on the target, or an `onTouchStart` event is fired outside of the target. This default behavior can be [disabled, overridden, and customized](#hover-event-handling) as needed.
 
 Everything is written with extra care to cleanly handle the video element's state as it asynchronously loads and plays.
+
+## Contributing
+
+Want to help? Contributions are welcome! Check out the [contributing guide for details](./CONTRIBUTING.md)
+
+## Upgrading to v10
+
+**react-hover-video-player 10.0.0 includes some breaking API changes. [See here](./BREAKING.md) for a breakdown of the changes and how to migrate.**
 
 ## Get Started
 
@@ -73,9 +78,9 @@ function MyComponent() {
 
 ### videoSrc
 
-**Type**: `string` or `array` of strings and/or objects | **This prop is required**
+**Type**: `string` or a React node | **This prop is required**
 
-`videoSrc` accepts one or multiple values descibing the video source file(s) that should be used for the video player.
+`videoSrc` accepts a string or a React node containing a set of `<source>` elements for the video source file(s) which should be used for the video player.
 
 If you only have **one video source**, you can simply provide a single string for the URL path to the video file like so:
 
@@ -83,75 +88,73 @@ If you only have **one video source**, you can simply provide a single string fo
 <HoverVideoPlayer videoSrc="path/video-file.mp4" />
 ```
 
-If you have **multiple video sources**, you can provide all of them in an array of strings or objects with the shape:
-
-```js
-{
-  // The URL path string for this source
-  src: 'path/video-file.mp4',
-  // The MIME type of this source
-  type: 'video/mp4',
-}
-```
-
-In practice this looks like:
+If you have **multiple video sources**, you can provide all of them as `<source>` elements wrapped in a React fragment:
 
 ```jsx
 <HoverVideoPlayer
-  videoSrc={[
-    { src: 'video.webm', type: 'video/webm' },
-    { src: 'video.mp4', type: 'video/mp4' },
-  ]}
+  videoSrc={(
+    <>
+      <source src="video.webm" type="video/webm" />
+      <source src="video.mp4" type="video/mp4" />
+    </>
+  )}
 />
 ```
 
-If you have multiple video sources, make sure you order your `videoSrc` array by ascending file size so that the smallest video file is first; browsers will always simply pick the first source in the list that they support.
+If you have multiple video sources, make sure you order them by ascending file size so that the smallest video file is first; browsers will always simply pick the first source that they support.
 
 ### videoCaptions
 
 **Type**: `object` or `array` of objects | **Default**: `null`
 
-`videoCaptions` accepts one or multiple objects descibing the caption track sources to use if you wish to add closed captions to the video for accessibility.
+`videoCaptions` accepts a React node containing one or more `<track>` elements descibing the caption track sources to use in order to apply closed captions to the video for accessibility.
 
-A caption track object should follow the shape:
+If you have a single caption track, you can apply it like so:
 
-```js
-{
-  // The URL string for the captions track file
-  src: 'path-to/captions-track.vtt',
-  // The code for the language that the captions are in
-  srcLang: 'en',
-  // The title of the captions track
-  label: 'English',
-  // OPTIONAL: the kind of captions that this captions track represents (ie, "subtitles", "captions", "descriptions")
-  kind: 'captions',
-  // OPTIONAL: whether this track should be applied by default without requiring any interaction from the user
-  default: true,
-}
+```tsx
+<HoverVideoPlayer
+  videoSrc="video.mp4"
+  videoCaptions={(
+    <track
+      // The URL string for the captions track file
+      src="path-to/captions-track.vtt"
+      // The code for the language that the captions are in
+      srcLang="en"
+      // The title of the captions track which will be visible in the captions selection controls
+      label="English"
+      // OPTIONAL: the kind of captions that this captions track represents (ie, "subtitles", "captions", "descriptions")
+      kind="captions"
+      // OPTIONAL: whether this track should be applied by default without requiring interaction from the user
+      default
+    />
+  )}
+/>
 ```
 
-Note that if you do not set `default: true` or have more than one track, it is recommended that you set the [controls](#controls) prop to `true` so that the user may enable the captions or choose the correct captions for their desired language.
+Note that if you do not set `default` or have more than one track, it is recommended that you set the [controls](#controls) prop to `true` so that the user may enable the captions or choose the correct captions for their desired language.
 
-In practice this looks like:
+If you have more than one track, you can wrap them in a React fragment like so:
 
 ```jsx
 <HoverVideoPlayer
   videoSrc="video.mp4"
-  videoCaptions={[
-    {
-      src: 'captions/english.vtt',
-      srcLang: 'en',
-      label: 'English',
-      kind: 'captions',
-      default: true,
-    },
-    {
-      src: 'captions/french.vtt',
-      srcLang: 'fr',
-      label: 'French',
-      kind: 'subtitles',
-    },
-  ]}
+  videoCaptions={(
+    <>
+      <track
+        src="captions/english.vtt"
+        srcLang="en"
+        label="English"
+        kind="captions"
+        default
+      />
+      <track
+        src="captions/french.vtt"
+        srcLang="fr"
+        label="Francais"
+        kind="subtitles"
+      />
+    </>
+  )}
   // Enable the video's controls so that the user can select the caption track they want or toggle captions on and off
   controls
 />
@@ -743,23 +746,5 @@ Be aware that this feature [is not currently supported across all major browsers
   videoSrc="video.mp4"
   // Show controls for playing this video in picture-in-picture mode
   disablePictureInPicture={false}
-/>
-```
-
-## Developer Experience
-
-### shouldSuppressPlaybackInterruptedErrors
-
-**Type**: `boolean` | **Default**: `true`
-
-`shouldSuppressPlaybackInterruptedErrors` toggles whether "play() request was interrupted" video errors should be suppressed rather than being logged.
-A majority of the time, when one of these errors is thrown from the HoverVideoPlayer component, it is both unavoidable and nothing to worry about, so the error just ends up cluttering your console logs.
-If for whatever reason you want to see these errors in your console, you can simply set `shouldSuppressPlaybackInterruptedErrors` to `false` in order to opt into them.
-
-```jsx
-<HoverVideoPlayer
-  videoSrc="video.mp4"
-  // Log "play() request was interrupted" errors
-  shouldSuppressPlaybackInterruptedErrors={false}
 />
 ```
