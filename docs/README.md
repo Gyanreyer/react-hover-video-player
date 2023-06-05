@@ -2,7 +2,6 @@
 
 [![npm version](https://badgen.net/npm/v/react-hover-video-player)](https://www.npmjs.com/package/react-hover-video-player)
 [![minzipped size](https://badgen.net/bundlephobia/minzip/react-hover-video-player)](https://bundlephobia.com/result?p=react-hover-video-player)
-[![CircleCI](https://circleci.com/gh/Gyanreyer/react-hover-video-player/tree/main.svg?style=svg)](https://circleci.com/gh/Gyanreyer/react-hover-video-player/tree/main)
 [![license](https://img.shields.io/npm/l/react-hover-video-player)](https://github.com/Gyanreyer/react-hover-video-player/blob/main/LICENSE)
 
 ![demo](./assets/images/heading_demo.gif?raw=true)
