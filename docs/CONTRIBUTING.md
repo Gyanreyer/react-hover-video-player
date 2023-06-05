@@ -42,6 +42,16 @@ Running `npm run dev` will serve the contents of `dev/index.tsx` at <http://loca
 For the most part, you will likely want to focus on editing the `TestComponent.tsx` file when testing your changes.
 You may modify playground files however you want for testing purposes, but please refrain from committing your changes unless you have a strong case for why they should be!
 
+## Releases
+
+The process for publishing new releases to npm is fairly standard:
+
+1. `npm run test` - Make sure all tests are passing first!
+1. Update the version number in the `package.json` as is appropriate.
+1. `npm run build:prod`
+1. `npm publish`
+1. Create a release in the GitHub repo describing the new changes.
+
 ## Other miscellaneous things
 
 ### Recommended process for creating an example gif for documentation
